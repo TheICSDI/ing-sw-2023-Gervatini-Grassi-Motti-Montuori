@@ -51,7 +51,7 @@ public class Main {
                             //Thread(?)
                             Game game=new Game(players,nPlayers);
 
-                            //startGame(players,nPlayers);
+                            game.startGame();
                         }
                     }
                     break;
@@ -66,7 +66,5 @@ public class Main {
             l.Show();
         }
     }
-    public static void startGame(List<Player> players, int nPlayers){
 
-    }
 }
