@@ -13,7 +13,7 @@ public class Game {
     List<CommonCard> ccPescate= new ArrayList<>(); //carte comuni pescate per il game
     int idTurn;
     int nPlayers;
-    List<Player> players= new ArrayList<>();
+    List<Player> players = new ArrayList<>();
 
 
     public Game(List<Player> players,int nPlayers){
