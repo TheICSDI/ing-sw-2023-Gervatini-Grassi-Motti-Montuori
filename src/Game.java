@@ -56,8 +56,8 @@ public class Game {
             for(int i=0;i<nPlayers;i++){
                 for (Player p:
                      players) {
-                    if(p.endToken){
-                        endGame=true;
+                    if(p.isEndToken()){
+                        p.setEndToken(true);
                     }
                 }
                 int playerTurn=(firstToPlay+i)%nPlayers;

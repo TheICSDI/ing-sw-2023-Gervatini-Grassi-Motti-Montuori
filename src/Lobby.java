@@ -15,7 +15,7 @@ public class Lobby {
     public void Show(){
         System.out.print("Lobby"+this.lobbyNumber + ":");
         for (Player p: Players) {
-            System.out.print(" " +p.Nickname);
+            System.out.print(" " + p.getNickname());
         }
         System.out.println("");
     }

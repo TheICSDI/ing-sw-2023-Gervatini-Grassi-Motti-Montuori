@@ -2,7 +2,7 @@ import java.util.*;
 public class Turns {
     Board board;
     List<Player> players=new ArrayList<>();
-    int nPlayers;
+    private int nPlayers;
     public Turns(Board board,List<Player> players, int nPlayers){
         this.board=board;
         this.players=players;
@@ -12,8 +12,8 @@ public class Turns {
     public void nextHasTokenEnd(Player player){
         for (Player p:
                 players) {
-            if (!p.endToken) {
-                player.endToken = true;
+            if (!p.isEndToken()) {
+                player.setEndToken(true);
             }
         }
     }
