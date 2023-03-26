@@ -1,0 +1,72 @@
+[
+	{
+		"id": 0,
+		"tiles": [
+			{
+				"x": 0,
+				"y": 0,
+				"type": "plant"
+			},
+			{
+				"x": 0,
+				"y": 2,
+				"type": "frames"
+			},
+			{
+				"x": 1,
+				"y": 4,
+				"type": "cat"
+			},
+			{
+				"x": 2,
+				"y": 3,
+				"type": "books"
+			},
+			{
+				"x": 3,
+				"y": 1,
+				"type": "games"
+			},
+			{
+				"x": 5,
+				"y": 2,
+				"type": "trophies"
+			}
+		]
+	},
+	{
+		"id": 1,
+		"tiles": [
+			{
+				"x": 1,
+				"y": 3,
+				"type": "plant"
+			},
+			{
+				"x": 3,
+				"y": 2,
+				"type": "frames"
+			},
+			{
+				"x": 1,
+				"y": 4,
+				"type": "cat"
+			},
+			{
+				"x": 4,
+				"y": 4,
+				"type": "books"
+			},
+			{
+				"x": 2,
+				"y": 3,
+				"type": "games"
+			},
+			{
+				"x": 1,
+				"y": 3,
+				"type": "trophies"
+			}
+		]
+	}
+]
