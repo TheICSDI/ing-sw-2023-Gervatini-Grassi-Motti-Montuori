@@ -10,16 +10,18 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
-import src.Tiles.*;  // for now ".*" and I don't understand how to import a class in his parent folder
+import Tile.*;
+
 public class personalCard implements Card
 {
     private final int id;       //each card has unique id
-    public Tiles[][] card;
+    public Tile[][] card;
 
     public personalCard(int uid)
     {
         this.id = uid;
-        this.card = new Tiles[6][5]; //fixed size
+        this.card = new Tile[6][5]; //fixed size
+
         personalCardParser();
     }
     private void personalCardParser()   //using the json file to card
