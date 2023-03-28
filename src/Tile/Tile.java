@@ -30,6 +30,11 @@ public class Tile {
 				case "trophies":
 					this.category = type.PLANTS;
 					break;
+
+				case "not_accessible":
+					this.category = type.NOT_ACCESSIBLE;
+					break;
+			}
 			}
 
     }
