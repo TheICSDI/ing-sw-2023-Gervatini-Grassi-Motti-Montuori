@@ -12,23 +12,28 @@ import java.io.InputStreamReader;
 
 import Tile.*;
 
-public class personalCard implements Card
+public class PersonalCard implements Card
 {
-    private final int id;       //each card has unique id
+    private int id;       //each card has unique id
     public Tile[][] card;
 
-    public personalCard(int uid)
+    /*
+    All'inizio della partita vengono generate #giocatori interi DIVERSI che tramite questo costruttore crea la carta
+    dalla pool di carte presenti nel file personal_card.json per poi assegnarli al giocatore
+     */
+    public PersonalCard(int uid)
     {
         this.id = uid;
         this.card = new Tile[6][5]; //fixed size
 
         personalCardParser();
     }
-    private void personalCardParser()   //using the json file to card
+    private void personalCardParser()   //using the json file
     {
 
         JSONParser parser = new JSONParser();
         JSONArray personalCardFile = null;
+        Tile temp;
 
         try
         {
@@ -48,8 +53,8 @@ public class personalCard implements Card
         for(int j = 0; j < cardTiles.size(); j++)
         {
             JSONObject coordinate = (JSONObject) cardTiles.get(j);
-            //need to fix the type of coordinate.get("type") from Object to Tiles
-            this.card[Integer.parseInt(coordinate.get("x").toString())][Integer.parseInt(coordinate.get("y").toString())] = coordinate.get("type");
+            temp = new Tile(coordinate.get("type").toString());
+            this.card[Integer.parseInt(coordinate.get("x").toString())][Integer.parseInt(coordinate.get("y").toString())] = temp;
         }
     }
     public int calculatePoints(){return 0;}

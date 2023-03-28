@@ -10,7 +10,7 @@ public class Player {
     private Tile[][] Shelf= new Tile[5][6]; // Controllare la dimensione
     //@see Cards.*
 
-    Card PersonalCard= new personalCard(); // servirebbe un assegna_personalCard()
+    Card PersonalCard= new PersonalCard(); // servirebbe un assegna_personalCard()
 
     private boolean firstToken, endToken;
     private boolean scoreToken1, scoreToken2; //Credo sia meglio averli come integer

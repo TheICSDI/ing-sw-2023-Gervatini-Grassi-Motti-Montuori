@@ -5,7 +5,7 @@
 			{
 				"x": 0,
 				"y": 0,
-				"type": "plant"
+				"type": "plants"
 			},
 			{
 				"x": 0,
@@ -15,7 +15,7 @@
 			{
 				"x": 1,
 				"y": 4,
-				"type": "cat"
+				"type": "cats"
 			},
 			{
 				"x": 2,
@@ -40,7 +40,7 @@
 			{
 				"x": 1,
 				"y": 3,
-				"type": "plant"
+				"type": "plants"
 			},
 			{
 				"x": 3,
@@ -50,7 +50,7 @@
 			{
 				"x": 1,
 				"y": 4,
-				"type": "cat"
+				"type": "cats"
 			},
 			{
 				"x": 4,
