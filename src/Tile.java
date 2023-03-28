@@ -4,7 +4,8 @@ enum type {
     GAMES,
     FRAMES,
     TROPHIES,
-    PLANTS;
+    PLANTS,
+    NOT_ACCESSIBLE;
 }
 
 public class Tile {
