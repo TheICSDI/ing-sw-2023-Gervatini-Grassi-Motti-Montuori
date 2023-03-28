@@ -1,18 +1,25 @@
 import java.util.*;
+import Tile.*;
 public class Board {
     private final int numCols = 9;
     private final int numRows = 9;
     private final int numTiles = 120;
     public Tile board[][];
-    //deve restare una matrice per poterla indicizzare nei confronti durante il "prelievo di tiles"
+    //diventerà una mappa
     private List<Tile> tilesList[];
-    //per riempire correttamente la board posso fare una map che mappa ogni coppia di indici (casella della board) al
+    //per riempire correttamente la board posso fare una map che mappa ogni coppai di indici (casella della board) al
     //corrispondente numero di giocatori.
     //la map deve essere final e private, ed essere inizializzata una volta soltanto
 
     //alcune caselle saranno vuote di default, magari un placeholder che identifica casella non accessibile
     //visto che la board non è quadrata
 
+    //forse è meglio utilizzare una map anche per la board
+    //map(K, T, N), con
+    //      K (key) l'indice numerato (da noi) della plancia
+    //      T (tiles) il contenuto effettivo della plancia
+    //      N (numPlayers) il numero di giocatori necessari per "riempire" quell'indice
+    // oppure due mappe, una per le tiles e una per il numero di giocatori
     public Board(){
         board = new Tile[numCols][numRows];
         tilesList = new ArrayList<>[numTiles];
@@ -33,11 +40,11 @@ public class Board {
         for(int i=0; i<numCols-1; i++){
             for(int j=0; i<numRows-1; j++){
                 //se l'oggetto è accessbile e non vuoto
-                if(!board[i][j].equals(type.NOT_ACCESSIBLE) && board[i][j] != null){
+                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j] != null){
                     //se l'oggetto nella colonna adiacente o nella riga sottostante è accessibile e non vuoto
                     //metto value=false (posso prendere queste tiles)
-                    if((!board[i+1][j].equals(type.NOT_ACCESSIBLE) && board[i+1][j] != null) ||
-                            (!board[i][j+1].equals(type.NOT_ACCESSIBLE) && board[i][j+1] != null)){
+                    if((!board[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i+1][j] != null) ||
+                            (!board[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j+1] != null)){
                         value=false;
                     }
                 }
@@ -49,17 +56,7 @@ public class Board {
     //ritorna una lista di tiles (in ordine da start ad end)
     //controlla che le tiles da start a end siano effetivamente "prendibili" dalla board (throws illegalArgumentexp (?))
     //rimuove le tiles selezionate dalla board sostituendole con un placeholder (magari null)
-
-    //il controllo sullo spazio nella libreria del giocatore si fa direttamente alla scelta di start e end
-    // prima di chiamare questa funzione
     public List<Tile> getTiles(Position start, Position end){
-        List<Tile> result = null;
-        if(board[start.x][start.y] != null && !board[start.x][start.y].equals(type.NOT_ACCESSIBLE)){
-            if(board[end.x][end.y] != null && !board[end.x][end.y].equals(type.NOT_ACCESSIBLE)){
-                result.add(board[start.x][start.y]);
-            }
-        }
-
         return null;
     }
 }
