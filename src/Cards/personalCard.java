@@ -24,11 +24,12 @@ public class personalCard implements Card
 
         personalCardParser();
     }
-    private void personalCardParser()   //using the json file to card
+    private void personalCardParser()   //using the json file
     {
 
         JSONParser parser = new JSONParser();
         JSONArray personalCardFile = null;
+        Tile temp;
 
         try
         {
@@ -48,8 +49,8 @@ public class personalCard implements Card
         for(int j = 0; j < cardTiles.size(); j++)
         {
             JSONObject coordinate = (JSONObject) cardTiles.get(j);
-            //need to fix the type of coordinate.get("type") from Object to Tiles
-            this.card[Integer.parseInt(coordinate.get("x").toString())][Integer.parseInt(coordinate.get("y").toString())] = coordinate.get("type");
+            temp = new Tile(coordinate.get("type").toString());
+            this.card[Integer.parseInt(coordinate.get("x").toString())][Integer.parseInt(coordinate.get("y").toString())] = temp;
         }
     }
     public int calculatePoints(){return 0;}
