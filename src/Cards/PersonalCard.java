@@ -14,9 +14,13 @@ import Tile.*;
 
 public class PersonalCard implements Card
 {
-    private final int id;       //each card has unique id
+    private int id;       //each card has unique id
     public Tile[][] card;
 
+    /*
+    All'inizio della partita vengono generate #giocatori interi DIVERSI che tramite questo costruttore crea la carta
+    dalla pool di carte presenti nel file personal_card.json per poi assegnarli al giocatore
+     */
     public PersonalCard(int uid)
     {
         this.id = uid;
