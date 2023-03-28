@@ -1,6 +1,7 @@
 package Tile;
 
 public class Tile {
+    //category is final, it can't be changed
     private final type category;
 
     public Tile(String t)
