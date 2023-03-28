@@ -12,12 +12,12 @@ import java.io.InputStreamReader;
 
 import Tile.*;
 
-public class personalCard implements Card
+public class PersonalCard implements Card
 {
     private final int id;       //each card has unique id
     public Tile[][] card;
 
-    public personalCard(int uid)
+    public PersonalCard(int uid)
     {
         this.id = uid;
         this.card = new Tile[6][5]; //fixed size
