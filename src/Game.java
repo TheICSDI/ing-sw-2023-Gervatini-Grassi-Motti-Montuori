@@ -1,6 +1,5 @@
 import java.util.*;
 import Cards.*;
-import Tile.type;
 
 
 public class Game {
@@ -9,7 +8,7 @@ public class Game {
 
     String id;
     Board board=new Board();
-    List<personalCard> personalCards=new ArrayList<>();
+    List<PersonalCard> personalCards=new ArrayList<>();
     List<CommonCard> commonCards=new ArrayList<>();
     List<CommonCard> ccPescate= new ArrayList<>(); //carte comuni pescate per il game
     int idTurn;
@@ -73,7 +72,7 @@ public class Game {
     public void leaveGame(){}
 
     public void resetCC(List<CommonCard> cc){} //"Rimette tutte le carte comuni disponibili come di default"
-    public void resetPC(List<personalCard> pc){} // stessa cosa per le personali
+    public void resetPC(List<PersonalCard> pc){} // stessa cosa per le personali
 
     public void showBoard(Board board){
         for(int i=0;i<board.getNumRows();i++){

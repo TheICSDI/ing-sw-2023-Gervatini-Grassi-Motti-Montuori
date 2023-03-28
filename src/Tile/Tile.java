@@ -1,12 +1,10 @@
 package Tile;
 
 public class Tile {
-    //category is final, it can't be changed
-    private final type category;
+    private type category;
 
-    public Tile(String t)
+    public Tile(String any)
 		{
-			Tile = temp;
 			switch (any)
 			{
 				case "plants":
