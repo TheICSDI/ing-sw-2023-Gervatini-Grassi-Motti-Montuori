@@ -59,4 +59,12 @@ public class Board {
     public List<Tile> getTiles(Position start, Position end){
         return null;
     }
+    public int getNumCols() {
+        return numCols;
+    }
+
+    public int getNumRows() {
+        return numRows;
+    }
+
 }
