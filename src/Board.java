@@ -15,9 +15,6 @@ public class Board {
     private final int numTiles = 120;
     public Tile body[][];
     //diventerà una mappa
-    private List<Tile> tilesList[];
-    public Tile[][] body;
-
     private List<Tile>[] tilesList;
     //per riempire correttamente la board posso fare una map che mappa ogni coppai di indici (casella della board) al
     //corrispondente numero di giocatori.
