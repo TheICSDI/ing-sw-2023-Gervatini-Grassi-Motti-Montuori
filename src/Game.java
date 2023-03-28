@@ -1,6 +1,6 @@
 import java.util.*;
 import Cards.*;
-import Tile.type;
+import Tile.Tile;
 
 
 public class Game {
@@ -61,7 +61,12 @@ public class Game {
                         p.setEndToken(true);
                     }
                 }
-
+                displayGrid(board.body, board.getNumRows(), board.getNumCols());
+                for (Player pl:
+                     players) {
+                    System.out.println(pl.getNickname());
+                    displayGrid(pl.getShelf(), 5, 6);
+                }
                 int playerTurn=(firstToPlay+i)%nPlayers;
                 turn.play(playerTurn);
 
@@ -75,21 +80,23 @@ public class Game {
     public void resetCC(List<CommonCard> cc){} //"Rimette tutte le carte comuni disponibili come di default"
     public void resetPC(List<personalCard> pc){} // stessa cosa per le personali
 
-    public void showBoard(Board board){
-        for(int i=0;i<board.getNumRows();i++){
-            for(int j=0;j<board.getNumCols();j++){
-                if(board.board[i][j]==null){
-                    System.out.print(" ");
+    public void displayGrid(Tile[][] board, int rows, int columns){
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<columns;j++){
+                if(board[i][j]==null){
+                    System.out.print("  ");
                 }
-                switch (board.board[i][j].getCategory()) {
-                    case NOT_ACCESSIBLE -> System.out.println("-");
-                    case GAMES -> System.out.println("G");
-                    case CATS -> System.out.println("C");
-                    case BOOKS -> System.out.println("B");
-                    case FRAMES -> System.out.println("F");
-                    case PLANTS -> System.out.println("P");
-                    case TROPHIES -> System.out.println("T");
+                switch (board[i][j].getCategory()) {
+                    case NOT_ACCESSIBLE -> System.out.print(" -");
+                    case GAMES -> System.out.print(" G");
+                    case CATS -> System.out.print(" C");
+                    case BOOKS -> System.out.print(" B");
+                    case FRAMES -> System.out.print(" F");
+                    case PLANTS -> System.out.print(" P");
+                    case TROPHIES -> System.out.print(" T");
                 }
+                System.out.println("");
+
             }
         }
     }

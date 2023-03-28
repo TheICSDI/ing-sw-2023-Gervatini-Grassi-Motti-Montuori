@@ -4,7 +4,7 @@ public class Board {
     private final int numCols = 9;
     private final int numRows = 9;
     private final int numTiles = 120;
-    public Tile board[][];
+    public Tile body[][];
     //diventerà una mappa
     private List<Tile> tilesList[];
     //per riempire correttamente la board posso fare una map che mappa ogni coppai di indici (casella della board) al
@@ -21,7 +21,7 @@ public class Board {
     //      N (numPlayers) il numero di giocatori necessari per "riempire" quell'indice
     // oppure due mappe, una per le tiles e una per il numero di giocatori
     public Board(){
-        board = new Tile[numCols][numRows];
+        body = new Tile[numCols][numRows];
         tilesList = new ArrayList<>[numTiles];
         //nel costruttore devo già riempire tilesList con tutte le possibili tiles del gioco
         //magari da un file con tutte le possbili tessere
@@ -40,11 +40,11 @@ public class Board {
         for(int i=0; i<numCols-1; i++){
             for(int j=0; i<numRows-1; j++){
                 //se l'oggetto è accessbile e non vuoto
-                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j] != null){
+                if(!body[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && body[i][j] != null){
                     //se l'oggetto nella colonna adiacente o nella riga sottostante è accessibile e non vuoto
                     //metto value=false (posso prendere queste tiles)
-                    if((!board[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i+1][j] != null) ||
-                            (!board[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j+1] != null)){
+                    if((!body[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE) && body[i+1][j] != null) ||
+                            (!body[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE) && body[i][j+1] != null)){
                         value=false;
                     }
                 }
