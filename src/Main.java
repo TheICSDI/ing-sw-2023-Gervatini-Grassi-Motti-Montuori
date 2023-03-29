@@ -1,5 +1,7 @@
 
-import java.io.*;
+import Model.Game;
+import Model.Player;
+
 import java.util.*;
 
 public class Main {
@@ -40,7 +42,7 @@ public class Main {
                     availableLobbies(Lobbies);
                     break;
                 case "Start":
-                    System.out.println("Games Started");//Create Game, rimuovi lobby dalla lista
+                    System.out.println("Games Started");//Create Model.Game, rimuovi lobby dalla lista
 
                     for (Lobby l:
                          Lobbies) {

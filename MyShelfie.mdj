@@ -231,7 +231,7 @@
 													"top": 4828,
 													"width": 263,
 													"height": 13,
-													"text": "+joinGame(IdGame: String, p: Player)",
+													"text": "+joinGame(IdGame: String, p: Model.Player)",
 													"horizontalAlignment": 0
 												},
 												{
@@ -391,7 +391,7 @@
 													"top": 4063,
 													"width": 287,
 													"height": 13,
-													"text": "Player"
+													"text": "Model.Player"
 												},
 												{
 													"_type": "LabelView",
@@ -633,7 +633,7 @@
 													"top": 4229,
 													"width": 287,
 													"height": 13,
-													"text": "+Player(nickname: String)",
+													"text": "+Model.Player(nickname: String)",
 													"horizontalAlignment": 0
 												},
 												{
@@ -877,7 +877,7 @@
 													"top": 4431,
 													"width": 311,
 													"height": 13,
-													"text": "Game"
+													"text": "Model.Game"
 												},
 												{
 													"_type": "LabelView",
@@ -983,7 +983,7 @@
 													"top": 4484,
 													"width": 311,
 													"height": 13,
-													"text": "+board: Board",
+													"text": "+board: Model.Board",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1085,7 +1085,7 @@
 													"top": 4567,
 													"width": 311,
 													"height": 13,
-													"text": "+Game(String Id, int numPlayers): void",
+													"text": "+Model.Game(String Id, int numPlayers): void",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1102,7 +1102,7 @@
 													"top": 4582,
 													"width": 311,
 													"height": 13,
-													"text": "+leaveGame(p: Player): void",
+													"text": "+leaveGame(p: Model.Player): void",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1120,7 +1120,7 @@
 													"top": 4597,
 													"width": 311,
 													"height": 13,
-													"text": "+nextHasTokenEnd(p: Player): void",
+													"text": "+nextHasTokenEnd(p: Model.Player): void",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1138,7 +1138,7 @@
 													"top": 4582,
 													"width": 311,
 													"height": 13,
-													"text": "+generateFirstPlayer(): Player",
+													"text": "+generateFirstPlayer(): Model.Player",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1740,7 +1740,7 @@
 													"top": 4695,
 													"width": 383.20458984375,
 													"height": 13,
-													"text": "Board"
+													"text": "Model.Board"
 												},
 												{
 													"_type": "LabelView",
@@ -1931,7 +1931,7 @@
 													"top": 4816,
 													"width": 383.20458984375,
 													"height": 13,
-													"text": "+getTiles(start: Position, end: Position): List<Tiles>",
+													"text": "+getTiles(start: Model.Position, end: Model.Position): List<Tiles>",
 													"horizontalAlignment": 0
 												}
 											],
@@ -4895,7 +4895,7 @@
 													"top": 4727,
 													"width": 118,
 													"height": 13,
-													"text": "Position"
+													"text": "Model.Position"
 												},
 												{
 													"_type": "LabelView",
@@ -6559,7 +6559,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Player",
+							"name": "Model.Player",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",
@@ -6794,7 +6794,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGG+k32nMj9+qI="
 									},
-									"name": "Player",
+									"name": "Model.Player",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -6977,7 +6977,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Game",
+							"name": "Model.Game",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",
@@ -7429,7 +7429,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGG+k32nMkWDuo="
 									},
-									"name": "Game",
+									"name": "Model.Game",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -7782,7 +7782,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Board",
+							"name": "Model.Board",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",
@@ -8193,7 +8193,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Position",
+							"name": "Model.Position",
 							"attributes": [
 								{
 									"_type": "UMLAttribute",

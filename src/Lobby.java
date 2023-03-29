@@ -1,10 +1,12 @@
+import Model.Player;
+
 import java.util.*;
 
 public class Lobby {
     int lobbyNumber;
     List<Player> Players = new ArrayList<>();
 
-    public Lobby(Player Creator,int name){
+    public Lobby(Player Creator, int name){
         lobbyNumber=name;
         Players.add(Creator);
     }

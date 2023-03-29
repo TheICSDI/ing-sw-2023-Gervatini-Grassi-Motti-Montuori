@@ -1,4 +1,6 @@
-import Tile.*;
+import Model.Board;
+import Model.Player;
+import Model.Tile.*;
 
 import java.util.*;
 public class Turns {
@@ -6,7 +8,7 @@ public class Turns {
     List<Player> players=new ArrayList<>();
     private int nPlayers;
     private List<Tile> TilesTaken= new ArrayList<>();
-    public Turns(Board board,List<Player> players, int nPlayers){
+    public Turns(Board board, List<Player> players, int nPlayers){
         this.board=board;
         this.players=players;
         this.nPlayers=nPlayers;
