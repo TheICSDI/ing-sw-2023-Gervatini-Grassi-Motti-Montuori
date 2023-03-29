@@ -1,9 +1,14 @@
+/** Represent the board of a game. It has to be declared in each game.
+ * @author Motti Caterina
+ */
+import java.util.*;
+import Tile.*;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-import Tile.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,56 +17,88 @@ import org.json.simple.parser.ParseException;
 public class Board {
     private final int numCols = 9;
     private final int numRows = 9;
-    private final int numTiles = 120;
     public Tile[][] board;
+    private final List<Tile> tilesList;
 
-    private List<Tile>[] tilesList;
-    //per riempire correttamente la board posso fare una map che mappa ogni coppai di indici (casella della board) al
-    //corrispondente numero di giocatori.
-    //la map deve essere final e private, ed essere inizializzata una volta soltanto
+    /** Gets the number of columns of the board */
+    public int getNumCols() {
+        return numCols;
+    }
 
-    public Board(){
+    /** Gets the number of rows of the board */
+    public int getNumRows() {
+        return numRows;
+    }
+
+    /** Create a board for a specified number of players.
+     *
+     * @param numPlayers number of players
+     */
+    public Board(int numPlayers){
         board = new Tile[numCols][numRows];
-        tilesList = new ArrayList<>[numTiles];
-        //nel costruttore devo già riempire tilesList con tutte le possibili tiles del gioco
-        //magari da un file con tutte le possbili tessere
-        boardParser();
+        tilesList = new ArrayList<>();
+        boardParser(numPlayers);
+        fillTilesList();
     }
 
-    //inizializza la board ogni volta che viene chiamata, in base al numero di giocatori
-    //prende le tiles in modo randomico dalla lista di tiles
-    //rimuove quindi le tiles prese dalla lista (per non avere ripetizioni)
-    public void fillBoard(int numPlayers){
-
+    /**
+     * Fills the empty cells of the board, if accessible.
+     * It randomically takes the tiles from tilesList, add them to the board and remove them from the list.
+     * In this way there is no possibility for a tile to be used two times in the same game.
+     */
+    public void fillBoard(){
+        Random r = new Random();
+        for(int i=0; i<numCols-1; i++) {
+            for (int j=0; j<numRows-1; j++) {
+                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j] == null){
+                    //Generate a random int between 0 (inclusive) and tilesList.size() (exclusive)
+                    int k = r.nextInt(0, tilesList.size());
+                    board[i][j] = tilesList.get(k);
+                    tilesList.remove(k);
+                }
+            }
+        }
     }
 
-    //ritorna true sse la board è da riempiere nuovamente, oppure è vuota (inizio partita)
+    /**
+     * Determine if the board has to be filled.
+     * @return  true only if the board has to be filled, false otherwise.
+     */
     public boolean isBoardEmpty(){
-        boolean value = true;
         for(int i=0; i<numCols-1; i++){
             for(int j=0; j<numRows-1; j++){
                 //if the object in the board is accessible and not null
                 if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j] != null){
-                    //se l'oggetto nella colonna adiacente o nella riga sottostante è accessibile e non vuoto
-                    //metto value=false (posso prendere queste tiles)
+                    //if the object in the right column or in the row below is accessible and not null then it means that
+                    //it is possible to "take" these tiles
                     if((!board[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i+1][j] != null) ||
                             (!board[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j+1] != null)){
-                        value=false;
+                        //in this case the board does not need to get filled, so it return false
+                        return false;
                     }
                 }
             }
         }
-        return value;
+        return true;
     }
 
-    //ritorna una lista di tiles (in ordine da start ad end)
-    //controlla che le tiles da start a end siano effetivamente "prendibili" dalla board (throws illegalArgumentexp (?))
-    //rimuove le tiles selezionate dalla board
-    public List<Tile> getTiles(Position start, Position end){
+    /** Returns a set of tiles that the player has selected, if it is a legal move.
+     * It removes those tiles from the board.
+     *
+     * @param start indicates the starting point on the board from which the player wants to take the tiles.
+     * @param end indicates the ending point on the board until which the player wants to take the tiles.
+     * @return a set of tiles.
+     */
+    public Set<Tile> getTiles(Position start, Position end){
         return null;
     }
 
-    private void boardParser(){
+    /** Parse board_na.jason. It initializes the board by making not accessible some cells according to the
+     * number of players that will use the board.
+     *
+     * @param numPlayers number of players, used to determine if an element of the board should be accessible or not
+     */
+    private void boardParser(int numPlayers){
         JSONParser parser = new JSONParser();
         JSONArray board_na_File = null;
 
@@ -78,14 +115,28 @@ public class Board {
             e.printStackTrace();
         }
 
-        for(int index=0; index < board_na_File.size(); index++) {
+        for(int index=0; index<board_na_File.size(); index++) {
             JSONObject tmp = (JSONObject) board_na_File.get(index);
 
             int indexRow = Integer.parseInt(tmp.get("x").toString());
             int indexCol = Integer.parseInt(tmp.get("y").toString());
-            this.board[indexRow][indexCol] = new Tile(tmp.get("type").toString());
+            int n = Integer.parseInt(tmp.get("type").toString());
+            if(n < numPlayers) {
+                this.board[indexRow][indexCol] = new Tile("not_accessible");
+            }
         }
+    }
 
-        //in base al numero di giocatori li metterli inaccessibili
+    /** Fill tilesList with all the possible tiles of the game: 22 tiles of each type (except not_accessible).
+     */
+    private void fillTilesList(){
+        for(type t: type.values()){
+            if(!t.equals(type.NOT_ACCESSIBLE)) {
+                for (int i = 0; i < 22; i++) {
+                    Tile tmp = new Tile(t.toString());
+                    this.tilesList.add(tmp);
+                }
+            }
+        }
     }
 }

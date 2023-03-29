@@ -5,14 +5,13 @@ import Cards.*;
 public class Game {
     private final int nCard=12; //numero di carte (personali e comuni) totali
     private final int nCC=2; //n carte comuni da pescare( si è sempre due ma almeno è estendibile)
-
+    int nPlayers;
     String id;
-    Board board=new Board();
+    Board board=new Board(nPlayers);
     List<PersonalCard> personalCards=new ArrayList<>();
     List<CommonCard> commonCards=new ArrayList<>();
     List<CommonCard> ccPescate= new ArrayList<>(); //carte comuni pescate per il game
     int idTurn;
-    int nPlayers;
     List<Player> players = new ArrayList<>();
 
 
@@ -22,7 +21,7 @@ public class Game {
 
     }
     public void startGame(){
-        board.fillBoard(nPlayers);
+        board.fillBoard();
         resetCC(commonCards);
         resetPC(personalCards);
         int index=0;
