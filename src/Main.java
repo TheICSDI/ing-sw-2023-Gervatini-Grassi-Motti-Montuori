@@ -1,5 +1,7 @@
 
-import java.io.*;
+import Model.Game;
+import Model.Player;
+
 import java.util.*;
 
 public class Main {
@@ -9,12 +11,12 @@ public class Main {
 
         Player Player1=new Player("Mayhem");
         Scanner in = new Scanner(System.in);
-        String x;
+        String Interation_Prompt;
         List<Lobby> Lobbies=new ArrayList<>();
         System.out.print("Enter: ");
-        x=in.nextLine();
-        while(!x.equals("Close")){
-            switch (x){
+        Interation_Prompt=in.nextLine();
+        while(!Interation_Prompt.equals("Close")){
+            switch (Interation_Prompt){
                 case "Create":
                     numLobby++;
                     Lobbies.add(new Lobby(Player1,numLobby));
@@ -40,7 +42,7 @@ public class Main {
                     availableLobbies(Lobbies);
                     break;
                 case "Start":
-                    System.out.println("Games Started");//Create Game, rimuovi lobby dalla lista
+                    System.out.println("Games Started");//Create Model.Game, rimuovi lobby dalla lista
 
                     for (Lobby l:
                          Lobbies) {
@@ -57,7 +59,7 @@ public class Main {
                     break;
             }
 
-            x=in.nextLine();
+            Interation_Prompt=in.nextLine();
         }
     }
 
