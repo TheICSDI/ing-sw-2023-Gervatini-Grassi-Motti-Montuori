@@ -1,6 +1,6 @@
+package Model;
 import java.util.*;
-import Cards.*;
-
+import Model.Cards.*;
 
 public class Game {
     private final int nCard=12; //numero di carte (personali e comuni) totali

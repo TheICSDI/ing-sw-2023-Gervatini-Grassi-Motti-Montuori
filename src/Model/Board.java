@@ -1,8 +1,9 @@
+package Model;
 /** Represent the board of a game. It has to be declared in each game.
  * @author Motti Caterina
  */
 import java.util.*;
-import Tile.*;
+import Model.Tile.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
