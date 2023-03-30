@@ -35,6 +35,10 @@ public class Tile
 			case "not_accessible":
 				this.category = type.NOT_ACCESSIBLE;
 				break;
+
+			case "empty":
+				this.category = type.EMPTY;
+				break;
 		}
 	}
 

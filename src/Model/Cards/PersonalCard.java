@@ -17,7 +17,9 @@ import Model.Tile.*;
 
 public class PersonalCard implements Card {
 	private int id;       //each card has unique id
-	public Tile[][] card;
+
+
+	private Tile[][] card;
 
 	/*
 	 * At the start of the game, depending on the number of player, different integers will be generated
@@ -62,7 +64,7 @@ public class PersonalCard implements Card {
 
 		for (int i = 0; i < this.card.length; i++) {
 			for (int j = 0; j < this.card[0].length; j++) {
-				this.card[i][j] = new Tile("not_accessible"); // filling the rest of the matrix with the NOT_ACCESSIBLE type
+				this.card[i][j] = new Tile("empty"); // filling the rest of the matrix with the NOT_ACCESSIBLE type
 			}
 		}
 
@@ -121,6 +123,10 @@ public class PersonalCard implements Card {
 				score = 12;
 		}
 		return score;
+	}
+
+	public Tile[][] getCard() {
+		return card;
 	}
 }
 	/*
