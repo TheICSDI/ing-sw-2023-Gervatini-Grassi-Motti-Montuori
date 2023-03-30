@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 
 import Model.Tile.*;
 
-public class PersonalCard implements Card {
+public class PersonalCard {
 	private int id;       //each card has unique id
 	public Tile[][] card;
 
@@ -25,10 +25,8 @@ public class PersonalCard implements Card {
 	 */
 
 	/**
-	 * Create the card
 	 *
-	 * @param uid Unique id of the card
-	 * @see personalCardParser that fills this.card
+	 * @param uid
 	 */
 	public PersonalCard(int uid)
 	{
@@ -81,7 +79,6 @@ public class PersonalCard implements Card {
 		 * @param shelf the player's shelf
 		 * @return the points corrisponding the matches between the shelf and cads
 		 */
-		@Override
 	public int calculatePoints(Tile[][] shelf)
 	{
 		int matches = 0, score = 0, count = 0;

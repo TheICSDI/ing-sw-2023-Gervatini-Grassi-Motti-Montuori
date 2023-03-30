@@ -14,10 +14,10 @@ public class Player {
     private Tile[][] Shelf= new Tile[5][6]; // Controllare la dimensione
     //@see Model.Cards.*
 
-    Card PersonalCard= new PersonalCard(); // servirebbe un assegna_personalCard()
+    PersonalCard PersonalCard = new PersonalCard(); // servirebbe un assegna_personalCard()
 
     private boolean firstToken, endToken;
-    private boolean scoreToken1, scoreToken2; //Credo sia meglio averli come integer
+    private int scoreToken1, scoreToken2; //Credo sia meglio averli come integer
     private int totalPoints;
 
     public Player(String nick){
@@ -110,7 +110,7 @@ public class Player {
         return Shelf;
     }
 
-    public Card getPersonalCard() {
+    public PersonalCard getPersonalCard() {
         return PersonalCard;
     }
 
@@ -118,11 +118,11 @@ public class Player {
         return firstToken;
     }
 
-    public boolean isScoreToken1() {
+    public int isScoreToken1() {
         return scoreToken1;
     }
 
-    public boolean isScoreToken2() {
+    public int isScoreToken2() {
         return scoreToken2;
     }
 
@@ -138,11 +138,11 @@ public class Player {
         this.firstToken = firstToken;
     }
 
-    public void setScoreToken1(boolean scoreToken1) {
+    public void setScoreToken1(int scoreToken1) {
         this.scoreToken1 = scoreToken1;
     }
 
-    public void setScoreToken2(boolean scoreToken2) {
+    public void setScoreToken2(int scoreToken2) {
         this.scoreToken2 = scoreToken2;
     }
 

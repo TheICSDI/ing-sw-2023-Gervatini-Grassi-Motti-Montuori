@@ -1,5 +1,6 @@
 package Model.Cards;
 
-public interface CommonCardStrategy {
+public interface CCStrategy {
     public int isCompleted();
+
 }

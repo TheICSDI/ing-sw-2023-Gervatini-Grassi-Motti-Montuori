@@ -1,6 +1,6 @@
 package Model.Cards;
 
-public class CommonCard_6 extends CommonCard implements CommonCardStrategy {
+public class CC_10  implements CCStrategy {
     //serve un check che i punti token del giocatore siano =0 per fare i controlli.
     private int current_points = 8;
 

@@ -1,18 +1,27 @@
 package Model.Cards;
 
-public class CommonCard_2 extends CommonCard implements CommonCardStrategy {
+import Model.Tile.Tile;
+import Model.Tile.type;
+
+public class CC_06 implements CCStrategy {
     //serve un check che i punti token del giocatore siano =0 per fare i controlli.
     private int current_points = 8;
 
-    public int Mission_1(){
-        /**/
-        return 1;
+    public int Mission_6(Tile[][] Shelf){
+        int i=0,j=0;
+        int esito = 0;
+        int max_color=0;
+        for(type current_type: )
+        return esito;
     }
 
     @Override
     public int isCompleted(){
-        return Mission_1();
-        // se la condizione e' soddisfatta chiama riscale
+        int esito = Mission_6();
+        if(esito == 1){
+            rescale();
+        }
+        return esito;
     }
     /*
     Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
