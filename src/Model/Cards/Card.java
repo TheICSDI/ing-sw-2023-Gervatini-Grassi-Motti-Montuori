@@ -1,5 +1,7 @@
 package Model.Cards;
 
+import Model.Tile.Tile;
+
 public interface Card {
-    int calculatePoints();
+    int calculatePoints(Tile[][] shelf);
 }

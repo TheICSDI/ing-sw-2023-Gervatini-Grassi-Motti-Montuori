@@ -1,9 +1,15 @@
 package Model.Cards;
 
+import Model.Tile.Tile;
+
 public class CommonCard implements Card{
 
     private int[] whoCompleted; // sorted list by who completed the common goal
-    public int calculatePoints(){return 0;}
+
+    @Override
+    public int calculatePoints(Tile[][] shelf) {
+        return 0;
+    }
     /*
     Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
     conteggio dei punti, le categoria sono così divise:
