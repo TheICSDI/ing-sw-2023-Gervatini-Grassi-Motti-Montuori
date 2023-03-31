@@ -9,6 +9,12 @@ import java.util.*;
 public class Player {
 
     private final String Nickname;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
     private int id;
 
     private Tile[][] Shelf = new Tile[5][6]; // Controllare la dimensione
@@ -148,5 +154,8 @@ public class Player {
 
     public void setShelf(Tile[][] shelf) {
         Shelf = shelf;
+    }
+    public void setPersonalCard(int n){
+        PersonalCard=new PersonalCard(n);
     }
 }

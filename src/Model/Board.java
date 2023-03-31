@@ -2,13 +2,12 @@ package Model;
 /** Represent the board of a game. It has to be declared in each game.
  * @author Motti Caterina
  */
+import java.io.*;
 import java.util.*;
 import Model.Tile.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import Model.Tile.*;
+
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,6 +37,12 @@ public class Board {
     public Board(int numPlayers){
         board = new Tile[numCols][numRows];
         tilesList = new ArrayList<>();
+        for (int i = 0; i < numCols; i++) {
+            for (int j = 0; j < numRows; j++) {
+                this.board[i][j]=new Tile("empty");
+            }
+
+        }
         boardParser(numPlayers);
         fillTilesList();
     }
@@ -49,9 +54,9 @@ public class Board {
      */
     public void fillBoard(){
         Random r = new Random();
-        for(int i=0; i<numCols-1; i++) {
-            for (int j=0; j<numRows-1; j++) {
-                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j] == null){
+        for(int i=0; i<numCols; i++) {
+            for (int j=0; j<numRows; j++) {
+                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j].equals(type.EMPTY)){
                     //Generate a random int between 0 (inclusive) and tilesList.size() (exclusive)
                     int k = r.nextInt(0, tilesList.size());
                     board[i][j] = tilesList.get(k);
@@ -66,18 +71,21 @@ public class Board {
      * @return  true only if the board has to be filled, false otherwise.
      */
     public boolean isBoardEmpty(){
-        for(int i=0; i<numCols-1; i++){
-            for(int j=0; j<numRows-1; j++){
+        for(int i=0; i<numCols; i++){
+            for(int j=0; j<numRows; j++){
                 //if the object in the board is accessible and not null
-                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j] != null){
-                    //if the object in the right column or in the row below is accessible and not null then it means that
-                    //it is possible to "take" these tiles
-                    if((!board[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i+1][j] != null) ||
-                            (!board[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j+1] != null)){
-                        //in this case the board does not need to get filled, so it return false
-                        return false;
+                try {
+                    if (!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i][j].getCategory().equals(type.EMPTY)) {
+                        //if the object in the right column or in the row below is accessible and not null then it means that
+                        //it is possible to "take" these tiles
+                        if ((!board[i + 1][j].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i + 1][j].getCategory().equals(type.EMPTY)) ||
+                                (!board[i][j + 1].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i][j + 1].getCategory().equals(type.EMPTY))) {
+                            //in this case the board does not need to get filled, so it return false
+                            return false;
+                        }
                     }
-                }
+                }catch (IndexOutOfBoundsException ignored){}// Not sure if it works 100% of the times
+
             }
         }
         return true;
@@ -132,7 +140,7 @@ public class Board {
      */
     private void fillTilesList(){
         for(type t: type.values()){
-            if(!t.equals(type.NOT_ACCESSIBLE)) {
+            if(!t.equals(type.NOT_ACCESSIBLE) && !t.equals(type.EMPTY)) {
                 for (int i = 0; i < 22; i++) {
                     Tile tmp = new Tile(t.toString());
                     this.tilesList.add(tmp);

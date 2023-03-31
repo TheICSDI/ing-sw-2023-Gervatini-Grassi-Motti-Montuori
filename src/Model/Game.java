@@ -2,6 +2,8 @@ package Model;
 import java.util.*;
 import Model.Cards.*;
 
+
+
 public class Game {
     private final int nCard=12; //numero di carte (personali e comuni) totali
     private final int nCC=2; //n carte comuni da pescare( si è sempre due ma almeno è estendibile)
@@ -13,6 +15,7 @@ public class Game {
     List<CommonCard> ccPescate= new ArrayList<>(); //carte comuni pescate per il game
     int idTurn;
     List<Player> players = new ArrayList<>();
+    List<Integer> nPC=new ArrayList<>(); //numero carte personali
 
 
     public Game(List<Player> players,int nPlayers){
@@ -20,29 +23,31 @@ public class Game {
         this.players=players;
 
     }
-    public void startGame(){
-        board.fillBoard();
-        resetCC(commonCards);
-        resetPC(personalCards);
-        int index=0;
 
-        //Assegnazioni carte personali casuale, diverse fra loro
-        for (Player p:
-             players) {
-            int temp=(int) (Math.random() * (nCard - index));
-            p.PersonalCard= personalCards.get(temp);
-            personalCards.remove(temp);
-            index++;
+    /**
+     * Starts game, initializes Board, give players their personal cards, draw 2 commons
+     */
+    public void startGame(){
+
+        board.fillBoard(); //funzione che inizializza la board
+        boolean endGame=false;//end game token non pescato
+        for(int i=0;i<nCard;i++){
+            nPC.add(i);
         }
-        //Pescata carte comuni
-        for (int i=0; i<nCC;i++){
-            int temp=(int) (Math.random() * (nCard - i));
-            ccPescate.add(commonCards.get(temp));
-            commonCards.remove(temp);
+        Collections.shuffle(nPC);
+        Collections.shuffle(players);//mischia la lista dei players
+        //aggiungere nickname del player
+        for(int i=0;i<nPlayers;i++){ //assegna l'id in base al loro turno e una carta personale random diversa dalle altre
+            players.get(i).setId(i);
+            players.get(i).setPersonalCard(nPC.get(i));
         }
-        boolean endGame=false;
-        int firstToPlay=(int)(Math.random()*nPlayers);
-        Turns turn=new Turns(board,players,nPlayers);
+
+
+        // Add Common card drawing, fix turnations
+
+
+
+        //Turns turn=new Turns(board,players,nPlayers);
         int nTurno=1;
         /*Gestione turni
         * Ogni turno considera la mossa di ognuno dei player,
@@ -59,14 +64,14 @@ public class Game {
                         p.setEndToken(true);
                     }
                 }
+                //tocca sistemare
 
-                int playerTurn=(firstToPlay+i)%nPlayers;
-                turn.play(playerTurn);
+                /*int playerTurn=(firstToPlay+i)%nPlayers;
+                turn.play(playerTurn);*/
 
             }
             nTurno++;
         }
-
     }
     public void leaveGame(){}
 

@@ -1,9 +1,10 @@
 package Model.Tile;
 
-public class Tile 
+import java.lang.reflect.Type;
+
+public class Tile
 {
 	private type category;
-
 	public Tile(String any)
 	{
 		switch (any)
