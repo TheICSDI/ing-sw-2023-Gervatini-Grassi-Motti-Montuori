@@ -38,7 +38,6 @@ public class Game {
         }
         Collections.shuffle(nPC);
         Collections.shuffle(players);//mischia la lista dei players
-        //aggiungere nickname del player
         for(int i=0;i<nPlayers;i++){ //assegna l'id in base al loro turno e una carta personale random diversa dalle altre
             players.get(i).setId(i);
             players.get(i).setPersonalCard(nPC.get(i));
@@ -68,12 +67,8 @@ public class Game {
         int nTurno=1;
 
         while(!endGame){
-            //System.out.println("Turno "+nTurno+": ");
+            //System.out.println("Turno "+nTurno+": "); commentato perchè non so cosa dobbiamo fare con la cli
             for (Player p:  players) {
-                if(p.isEndToken()){
-                    p.setTotalPoints(p.getTotalPoints()+1);
-                    endGame=true;
-                }
                 p.PickTiles();
                 if(board.isBoardEmpty()){
                     board.fillBoard();
@@ -84,6 +79,10 @@ public class Game {
                 if(CommonCards.get(1).DoControl(p)){
                     CommonCards.get(1).CalculatePoints(p);
                 }
+                if(p.isEndToken()){
+                    p.setTotalPoints(p.getTotalPoints()+1);
+                    endGame=true;
+                }
             }
             nTurno++;
         }
@@ -93,7 +92,7 @@ public class Game {
     public void leaveGame(){}
 
     /**
-     * Iniatilizes all common cards
+     * Initializes all common cards
      *
      * @see CCStrategy
      */

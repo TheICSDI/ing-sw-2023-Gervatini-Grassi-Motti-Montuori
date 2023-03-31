@@ -1,13 +1,30 @@
 package Model.Cards;
 
 import Model.Player;
+import Model.Tile.*;
 
 public class CC_11 implements CCStrategy {
     public boolean isCompleted(Player p) {
-        /*
-        inserire alg
-         */
-        return true;
+        Tile[][] curr_shelf=p.getShelf();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                if(curr_shelf[i][j].getCategory()!=type.EMPTY) {
+                    type curr_type = curr_shelf[i][j].getCategory();
+                    if(curr_shelf[i+2][j].getCategory()==curr_type &&
+                        curr_shelf[i][j+2].getCategory()==curr_type &&
+                        curr_shelf[i+1][j+1].getCategory()==curr_type &&
+                        curr_shelf[i+2][j+2].getCategory()==curr_type
+                        /*&& curr_shelf[i+1][j].getCategory()!=curr_type        Dobbiamo vedere se la x deve essere isolata
+                        * && curr_shelf[i][j+1].getCategory()!=curr_type        o per esempio un blocco 3x3 andrebbe bene
+                        * && curr_shelf[i+1][j+2].getCategory()!=curr_type
+                        * && curr_shelf[i+2][j+1].getCategory()!=curr_type
+                        * */){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
     /*
     Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
