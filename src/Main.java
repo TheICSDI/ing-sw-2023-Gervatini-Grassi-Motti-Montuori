@@ -53,7 +53,7 @@ public class Main {
                             //Thread(?)
                             Game game=new Game(players,nPlayers);
 
-                            game.startGame();
+                            game.createGame();
                         }
                     }
                     break;

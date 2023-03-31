@@ -6,7 +6,7 @@ import Model.Tile.type;
 
 public class CC_06 implements CCStrategy {
     @Override
-    public int isCompleted(Player p) {
+    public boolean isCompleted(Player p) {
         int i=0,j=0,count,limit=8;
         Tile[][] current_shelf = p.getShelf();
         for(type t : type.values()){
@@ -23,10 +23,10 @@ public class CC_06 implements CCStrategy {
                 assuming that the rule not accept a shelf with more tiles of the same color compared to the number requested.
                  */
                 if(count == limit){
-                    return 1;
+                    return true;
                 }
             }
         }
-        return 0;
+        return false;
     }
 }

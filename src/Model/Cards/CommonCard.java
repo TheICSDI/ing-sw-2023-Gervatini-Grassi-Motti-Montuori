@@ -4,31 +4,34 @@ import Model.Player;
 
 public class CommonCard{
     private int points = 8;
-    private int first_card;
+    private boolean first_card;
     private CCStrategy strategy;
 
-    public CommonCard(CCStrategy current_strategy, int first){
+    public CommonCard(CCStrategy current_strategy, boolean first){
         this.strategy = current_strategy;
         this.first_card = first;
     }
-    public int DoControl(Player p){
+    public boolean DoControl(Player p){
         return strategy.isCompleted(p);
     }
 
     public void CalculatePoints(Player p){
         if(getPoints()>0){
-            if(DoControl(p) == 1){
-                if(getFirst_card()==1){
+            if(DoControl(p)){
+                if(isFirst_card()){
                     if(p.isScoreToken1() == 0){
                         p.setScoreToken1(points);
+                        setPoints(points-2);       //Diviso in due righe uguali per far si che abbassi i punti solo la prima volta che
+                                                    // completa la common
                     }
                 }
                 else{
                     if(p.isScoreToken2()==0){
                         p.setScoreToken2(points);
+                        setPoints(points-2);
                     }
                 }
-                setPoints(points-2);
+
 
             }
         }
@@ -42,11 +45,11 @@ public class CommonCard{
         this.points = points;
     }
 
-    public int getFirst_card() {
+    public boolean isFirst_card() {
         return first_card;
     }
 
-    public void setFirst_card(int first_card) {
+    public void setFirst_card(boolean first_card) {
         this.first_card = first_card;
     }
 }

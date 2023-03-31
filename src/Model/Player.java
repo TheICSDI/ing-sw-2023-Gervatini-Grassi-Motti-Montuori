@@ -19,7 +19,7 @@ public class Player {
 
     private Tile[][] Shelf = new Tile[5][6];
 
-    PersonalCard PersonalCard = new PersonalCard(); // servirebbe un assegna_personalCard()
+    PersonalCard PersonalCard; // servirebbe un assegna_personalCard()
 
     private boolean firstToken, endToken;
     private int scoreToken1, scoreToken2; //Credo sia meglio averli come integer

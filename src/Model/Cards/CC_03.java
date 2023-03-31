@@ -3,11 +3,11 @@ package Model.Cards;
 import Model.Player;
 
 public class CC_03 implements CCStrategy {
-    public int isCompleted(Player p) {
+    public boolean isCompleted(Player p) {
         /*
         inserire alg
          */
-        return 1;
+        return true;
     }
     /*
     Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
