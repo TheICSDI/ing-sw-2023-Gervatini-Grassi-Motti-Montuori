@@ -41,7 +41,6 @@ public class Board {
             for (int j = 0; j < numRows; j++) {
                 this.board[i][j]=new Tile("empty");
             }
-
         }
         boardParser(numPlayers);
         fillTilesList();
@@ -84,8 +83,7 @@ public class Board {
                             return false;
                         }
                     }
-                }catch (IndexOutOfBoundsException ignored){}// Not sure if it works 100% of the times
-
+                } catch (IndexOutOfBoundsException ignored){}// Not sure if it works 100% of the times
             }
         }
         return true;
@@ -136,8 +134,7 @@ public class Board {
         }
     }
 
-    /** Fill tilesList with all the possible tiles of the game: 22 tiles of each type (except not_accessible).
-     */
+    /** Fill tilesList with all the possible tiles of the game: 22 tiles of each type (except not_accessible). */
     private void fillTilesList(){
         for(type t: type.values()){
             if(!t.equals(type.NOT_ACCESSIBLE) && !t.equals(type.EMPTY)) {

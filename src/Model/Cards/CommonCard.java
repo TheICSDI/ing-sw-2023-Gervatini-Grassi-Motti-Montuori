@@ -19,14 +19,14 @@ public class CommonCard{
         if(getPoints()>0){
             if(DoControl(p)){
                 if(isFirst_card()){
-                    if(p.isScoreToken1() == 0){
+                    if(p.getScoreToken1() == 0){
                         p.setScoreToken1(points);
                         setPoints(points-2);       //Diviso in due righe uguali per far si che abbassi i punti solo la prima volta che
                                                     // completa la common
                     }
                 }
                 else{
-                    if(p.isScoreToken2()==0){
+                    if(p.getScoreToken2()==0){
                         p.setScoreToken2(points);
                         setPoints(points-2);
                     }

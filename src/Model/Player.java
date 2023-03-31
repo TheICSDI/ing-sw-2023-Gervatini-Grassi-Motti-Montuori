@@ -1,38 +1,43 @@
+/** Represents a player.
+ *  Each player has a shelf and a personal card.
+ */
 package Model;
 
 import Model.Cards.*;
 import Model.Tile.*;
 import exceptions.NotValidColumnException;
-
 import java.util.*;
 
 public class Player {
-
-    private final String Nickname;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
-    private int id;
-
-    private Tile[][] Shelf = new Tile[5][6];
-
-    PersonalCard PersonalCard; // servirebbe un assegna_personalCard()
-
+    private String nickname;
+    private final int id;
+    private final int numRows = 5;
+    private final int numCols = 6;
+    private Tile[][] Shelf;
+    private PersonalCard PersonalCard; // servirebbe un assegna_personalCard()
     private boolean firstToken, endToken;
     private int scoreToken1, scoreToken2; //Credo sia meglio averli come integer
     private int totalPoints;
 
-    public Player(String nick){
-        this.Nickname=nick;
-    }
-    public List<Tile> PickTiles(){
-        /* it has to be in the controller architecture*/
-        return null;
+    /** Create a player with a specified id and nickname.
+     * The id is final, so it can't be changed, otherwise the nickname can be changed using the setter.
+     * It initializes total points to 0.
+     * It initializes all tiles in shelf to "empty".
+     */
+    public Player(int id, String nick){
+        this.id=id;
+        this.nickname=nick;
+        this.totalPoints = 0;
+        this.Shelf = new Tile[numRows][numCols];
+        for(int i=0; i<numRows; i++){
+            for(int j=0; j<numCols; j++){
+                Shelf[i][j] = new Tile("empty");
+            }
+        }
     }
 
+    //A cosa serve ??
+    // in ogni caso va privato questo metodo
     /**
      * order the selected tiles
      * @param selected
@@ -54,13 +59,10 @@ public class Player {
      * @param numcol
      * @throws NotValidColumnException
      */
-    public void  check_Column(int numTiles,int numcol) throws NotValidColumnException{
-        Tile[][] current_shelf = getShelf();
-        int valid =1,first_free_row=0;
-        Scanner keyboard = new Scanner(System.in);
-        //System.out.println("enter an integer");
+    private void check_Column(int numTiles, int numcol) throws NotValidColumnException{
+        int valid=1,first_free_row=0;
         while(valid==1) {
-            while(current_shelf[first_free_row][numcol]!=null){// maybe null will not be the standard for blank space in shelf
+            while(this.Shelf[first_free_row][numcol]!=null){// maybe null will not be the standard for blank space in shelf
                 first_free_row++;
             }
             if(first_free_row + numTiles > 5) {
@@ -72,8 +74,10 @@ public class Player {
         }
     }
 
+    //A cosa serve ??
+    // e poi all'interno della tua stesssa classe non devi usare i setter o i getter, ma puoi direttamente modificare i
+    // tuoi attributi
     public void changeShelf(int numCol, List<Tile> toInsert){
-
         int first_free_row=0,i=0,size;
         Tile[][] current_shelf = getShelf();
         size=toInsert.size();
@@ -86,25 +90,38 @@ public class Player {
             i++;
         }
         setShelf(current_shelf);
-
-
     }
 
+    private void setShelf(Tile[][] shelf) {
+        Shelf = shelf;
+    }
 
+    /**
+     * Update the total points of the player.
+     * @param toSum points to be summed to the total of the player
+     */
     public void addPoints(int toSum){
-        setTotalPoints(getTotalPoints()+toSum);
+        this.totalPoints += toSum;
     }
 
-    public boolean isEndToken() {
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public boolean getEndToken() {
         return endToken;
     }
 
-    public void setEndToken(boolean endToken) {
-        this.endToken = endToken;
+    public void setEndToken(boolean value) {
+        this.endToken = value;
+    }
+
+    public void setNickname(String nick) {
+        this.nickname = nick;
     }
 
     public String getNickname() {
-        return Nickname;
+        return nickname;
     }
 
     public int getId() {
@@ -115,46 +132,45 @@ public class Player {
         return Shelf;
     }
 
+    //Probabilmente la personal card non la rappresentiamo con un oggetto, bensì con un id tra 0 e 11
+    //da rivedere
     public PersonalCard getPersonalCard() {
         return PersonalCard;
     }
 
-    public boolean isFirstToken() {
+    public void setPersonalCard(int n){
+        PersonalCard = new PersonalCard(n);
+    }
+
+    public void setFirstToken(boolean value) {
+        this.firstToken = value;
+    }
+
+    public boolean getFirstToken() {
         return firstToken;
     }
 
-    public int isScoreToken1() {
+    public void setScoreToken1(int value) {
+        this.scoreToken1 = value;
+    }
+
+    public int getScoreToken1() {
         return scoreToken1;
     }
 
-    public int isScoreToken2() {
+    public void setScoreToken2(int value) {
+        this.scoreToken2 = value;
+    }
+
+    public int getScoreToken2() {
         return scoreToken2;
     }
 
-    public int getTotalPoints() {
-        return totalPoints;
+    public int getNumRows() {
+        return numRows;
     }
 
-    public void setTotalPoints(int totalPoints) {
-        this.totalPoints = totalPoints;
-    }
-
-    public void setFirstToken(boolean firstToken) {
-        this.firstToken = firstToken;
-    }
-
-    public void setScoreToken1(int scoreToken1) {
-        this.scoreToken1 = scoreToken1;
-    }
-
-    public void setScoreToken2(int scoreToken2) {
-        this.scoreToken2 = scoreToken2;
-    }
-
-    public void setShelf(Tile[][] shelf) {
-        Shelf = shelf;
-    }
-    public void setPersonalCard(int n){
-        PersonalCard=new PersonalCard(n);
+    public int getNumCols() {
+        return numCols;
     }
 }
