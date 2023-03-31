@@ -11,13 +11,13 @@ public class CommonCard{
         this.strategy = current_strategy;
         this.first_card = first;
     }
-    public int DoControl(){
-        return strategy.isCompleted();
+    public int DoControl(Player p){
+        return strategy.isCompleted(p);
     }
 
     public void CalculatePoints(Player p){
         if(getPoints()>0){
-            if(DoControl() == 1){
+            if(DoControl(p) == 1){
                 if(getFirst_card()==1){
                     if(p.isScoreToken1() == 0){
                         p.setScoreToken1(points);

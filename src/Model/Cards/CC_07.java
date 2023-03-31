@@ -1,18 +1,13 @@
 package Model.Cards;
 
+import Model.Player;
+
 public class CC_07 implements CCStrategy {
-    //serve un check che i punti token del giocatore siano =0 per fare i controlli.
-    private int current_points = 8;
-
-    public int Mission_1(){
-        /**/
+    public int isCompleted(Player p) {
+        /*
+        inserire alg
+         */
         return 1;
-    }
-
-    @Override
-    public int isCompleted(){
-        return Mission_1();
-        // se la condizione e' soddisfatta chiama riscale
     }
     /*
     Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il

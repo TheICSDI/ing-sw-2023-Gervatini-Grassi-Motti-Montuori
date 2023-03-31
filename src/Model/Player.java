@@ -17,8 +17,7 @@ public class Player {
 
     private int id;
 
-    private Tile[][] Shelf = new Tile[5][6]; // Controllare la dimensione
-    //@see Model.Cards.*
+    private Tile[][] Shelf = new Tile[5][6];
 
     PersonalCard PersonalCard = new PersonalCard(); // servirebbe un assegna_personalCard()
 
