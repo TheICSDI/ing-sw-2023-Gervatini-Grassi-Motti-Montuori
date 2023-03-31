@@ -92,7 +92,7 @@ public class Game {
     public void leaveGame(){}
 
     /**
-     * Iniatilizes all common cards
+     * Initializes all common cards
      *
      * @see CCStrategy
      */
