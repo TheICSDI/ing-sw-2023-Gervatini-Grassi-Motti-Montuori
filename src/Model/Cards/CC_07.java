@@ -1,28 +1,57 @@
 package Model.Cards;
 
 import Model.Player;
+import Model.Tile.Tile;
+import Model.Tile.type;
 
 public class CC_07 implements CCStrategy {
     public boolean isCompleted(Player p) {
+        Tile[][] current_shelf = p.getShelf();
+        int i,j,count;
+        boolean end=false;
         /*
-        inserire alg
+        four possible existing diagonals and so four loop to check the state of the shelf.
          */
-        return true;
+        for(i=0,j=0,count =0;i<5 && j<5 && !end;i++,j++){
+            if(current_shelf[i][j].getCategory() == current_shelf[0][0].getCategory() ||
+                current_shelf[i][j].getCategory() == type.EMPTY &&
+                current_shelf[i][j].getCategory() == type.NOT_ACCESSIBLE){
+                count++;
+            }
+            if(count == 5){
+                end = true;
+            }
+        }
+        for(i=0,j=1,count =0;i<5 && j<6 && !end;i++,j++){
+            if(current_shelf[i][j].getCategory() == current_shelf[0][0].getCategory() ||
+                current_shelf[i][j].getCategory() == type.EMPTY &&
+                current_shelf[i][j].getCategory() == type.NOT_ACCESSIBLE){
+                count++;
+            }
+            if(count == 5){
+                end = true;
+            }
+        }
+        for(i=4,j=0,count =0;i>0 && j<5 && !end;i--,j++){
+            if(current_shelf[i][j].getCategory() == current_shelf[0][0].getCategory() ||
+                current_shelf[i][j].getCategory() == type.EMPTY &&
+                current_shelf[i][j].getCategory() == type.NOT_ACCESSIBLE){
+                count++;
+            }
+            if(count == 5){
+                end = true;
+            }
+        }
+        for(i=4,j=1,count =0;i<5 && j<6 && !end;i--,j++){
+            if(current_shelf[i][j].getCategory() == current_shelf[0][0].getCategory() ||
+                current_shelf[i][j].getCategory() == type.EMPTY &&
+                current_shelf[i][j].getCategory() == type.NOT_ACCESSIBLE){
+                count++;
+            }
+            if(count == 5){
+                end = true;
+            }
+        }
+        return end;
     }
-    /*
-    Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
-    conteggio dei punti, le categoria sono così divise:
-    1. Numero di adiacenze ripetute n volte dello stesso tipo di tessere (n. 1, 3)
-    2. Posizione relativa fissa ripetute n volte dello stesso tipo di tessere (n. 2, 4, ,7, 9, 10, 11)
-    3. Posizione relativa fissa ripetute n volte anche di tipo tiverso di tessere (n. 5, 8)
-    4. Tessera singola n. 6
-    5. Tessera singola n. 12
-     */
-    /*
-    Per la categoria 4 e 5 si nel detta gli la struttura richiesta
-    Per la categoria 1 si cercano il numero di adiacenze e le sue ripetute tenendo fisso il tipo di tessera
-    Per la categoria 2 si cerca la struttura relativa e le sue ripetute tenendo fisso il tipo di tessera
-    Per la categoria 3 si cercano la struttura relativa e le sue ripetute tenendo variabile il nunero di tessera
-     */
-    //probabilmente la categoria 2,3 possono essere unite
 }

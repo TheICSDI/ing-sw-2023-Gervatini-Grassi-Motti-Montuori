@@ -7,9 +7,12 @@ import Model.Tile.type;
 public class CC_06 implements CCStrategy {
     @Override
     public boolean isCompleted(Player p) {
-        int i=0,j=0,count,limit=8;
+        int i,j,count,limit=8;
         Tile[][] current_shelf = p.getShelf();
         for(type t : type.values()){
+            /*
+            not accessible is impossible to have in a shelf but however...
+             */
             if(t != type.NOT_ACCESSIBLE && t !=  type.EMPTY){
                 count =0;
                 for(i=0;i<5;i++){

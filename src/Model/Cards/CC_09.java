@@ -1,28 +1,42 @@
 package Model.Cards;
-
 import Model.Player;
+import Model.Tile.Tile;
+import Model.Tile.type;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CC_09 implements CCStrategy {
     public boolean isCompleted(Player p) {
+        Tile[][] current_shelf = p.getShelf();
+        type current_tile_color;
+        List<type> current_column_colors = new ArrayList<>();
+        int ok_column=0,i,j;
+        boolean end= false;
         /*
-        inserire alg
+        assuming that the ok_columns have to be exactly 2 and no more.
          */
-        return true;
+        for(i=0;i<5;i++){
+            for(j=0;j<6;j++){
+                current_tile_color = current_shelf[i][j].getCategory();
+                if(current_tile_color!= type.EMPTY &&
+                        current_tile_color!= type.NOT_ACCESSIBLE &&
+                        ! current_column_colors.contains(current_tile_color)){
+                    current_column_colors.add(current_tile_color);
+
+                }
+            }
+            /*
+            other case in which tile can't be of the NOT_ACCESSIBLE type.
+             */
+            if(current_column_colors.size() == 6){
+                ok_column++;
+            }
+            current_column_colors.clear();
+        }
+        if(ok_column == 2){
+            end= true;
+        }
+        return end;
     }
-    /*
-    Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
-    conteggio dei punti, le categoria sono così divise:
-    1. Numero di adiacenze ripetute n volte dello stesso tipo di tessere (n. 1, 3)
-    2. Posizione relativa fissa ripetute n volte dello stesso tipo di tessere (n. 2, 4, ,7, 9, 10, 11)
-    3. Posizione relativa fissa ripetute n volte anche di tipo tiverso di tessere (n. 5, 8)
-    4. Tessera singola n. 6
-    5. Tessera singola n. 12
-     */
-    /*
-    Per la categoria 4 e 5 si nel detta gli la struttura richiesta
-    Per la categoria 1 si cercano il numero di adiacenze e le sue ripetute tenendo fisso il tipo di tessera
-    Per la categoria 2 si cerca la struttura relativa e le sue ripetute tenendo fisso il tipo di tessera
-    Per la categoria 3 si cercano la struttura relativa e le sue ripetute tenendo variabile il nunero di tessera
-     */
-    //probabilmente la categoria 2,3 possono essere unite
 }
