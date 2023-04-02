@@ -28,7 +28,7 @@ public class CC_10  implements CCStrategy {
             }
             if(Types.size()==5){
                 ValidRows++;
-                if(ValidRows==2){
+                if(ValidRows>=2){
                     return true;
                 }
             }

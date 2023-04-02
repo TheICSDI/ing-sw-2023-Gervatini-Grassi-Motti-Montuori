@@ -31,7 +31,7 @@ public class CC_08 implements CCStrategy {
             }
             if(Valid){
                 ValidRows++;
-                if(ValidRows ==4){
+                if(ValidRows >=4){
                     return true;
                 }
             }
