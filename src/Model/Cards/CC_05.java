@@ -30,6 +30,7 @@ public class CC_05 implements CCStrategy {
                 for (int k = 0; k < index; k++) {
                       if(p.getShelf()[i][j].getCategory()==Types[k]){
                           NewType=false; //Se il tipo della tile presa in considerazione è già in tyles non è nuova
+                          break;
                       }
                 }
                 if(NewType){            // Se il tipo della tile è nuovo
