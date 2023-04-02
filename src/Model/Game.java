@@ -38,8 +38,9 @@ public class Game {
         }
         Collections.shuffle(nPC);
         Collections.shuffle(players);//mischia la lista dei players
+        players.get(0).setFirstToken(true);
         for(int i=0;i<nPlayers;i++){ //assegna l'id in base al loro turno e una carta personale random diversa dalle altre
-            players.get(i).setId(i);
+            players.get(i).setTurn(i);
             players.get(i).setPersonalCard(nPC.get(i));
         }
 
@@ -79,8 +80,8 @@ public class Game {
                 if(CommonCards.get(1).DoControl(p)){
                     CommonCards.get(1).CalculatePoints(p);
                 }
-                if(p.isEndToken()){
-                    p.setTotalPoints(p.getTotalPoints()+1);
+                if(p.getEndToken()){
+                    p.addPoints(1);
                     endGame=true;
                 }
             }

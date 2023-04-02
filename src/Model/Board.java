@@ -114,11 +114,7 @@ public class Board {
             FileInputStream pathFile = new FileInputStream("JSON/board_na.json");
             board_na_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ParseException e){
-            e.printStackTrace();
-        } catch (IOException e){
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
 

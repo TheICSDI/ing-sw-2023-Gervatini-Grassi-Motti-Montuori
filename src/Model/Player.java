@@ -18,6 +18,7 @@ public class Player {
     private boolean firstToken, endToken;
     private int scoreToken1, scoreToken2; //Credo sia meglio averli come integer
     private int totalPoints;
+    private int turn;
 
     /** Create a player with a specified id and nickname.
      * The id is final, so it can't be changed, otherwise the nickname can be changed using the setter.
@@ -91,6 +92,10 @@ public class Player {
         }
         setShelf(current_shelf);
     }
+
+
+    //Da fare
+    public void PickTiles(){}
 
     private void setShelf(Tile[][] shelf) {
         Shelf = shelf;
@@ -172,5 +177,12 @@ public class Player {
 
     public int getNumCols() {
         return numCols;
+    }
+    public int getTurn() {
+        return turn;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 }

@@ -1,13 +1,59 @@
 package Model.Cards;
 
 import Model.Player;
+import Model.Tile.*;
 
 public class CC_05 implements CCStrategy {
+    private int ValidColumns, DiffTypes, index;
+    private type[] Types;
+    private boolean NewType,Valid;
+
+    /**
+     * Counts complete columns that have 3 or less different tile types in them.
+     * @param p
+     * @return true as soon as it finds 3 valid columns
+     */
     public boolean isCompleted(Player p) {
-        /*
-        inserire alg
-         */
-        return true;
+        ValidColumns=0; //Numero colonne Valide
+        for (int j = 0; j < 5; j++) { //ciclo per le colonne
+            DiffTypes=0; //Numero di tipi diversi in una singola colonna
+            Types=new type[3]; //Lista di tipi diversi già incontrati in una colonna
+            index=0;
+            Valid=true;
+            for (int i = 0; i < 6; i++) {
+                if(p.getShelf()[i][j].getCategory()==type.EMPTY){
+                    Valid=false;
+                    break;
+                }//se la colonna non è piena, non è valida automaticamente
+
+                NewType=true;
+                for (int k = 0; k < index; k++) {
+                      if(p.getShelf()[i][j].getCategory()==Types[k]){
+                          NewType=false; //Se il tipo della tile presa in considerazione è già in tyles non è nuova
+                      }
+                }
+                if(NewType){            // Se il tipo della tile è nuovo
+                    if(DiffTypes<3) {   // e ho trovato meno di 3 tipi diversi
+                        Types[index] = p.getShelf()[i][j].getCategory(); //aggiungo il tipo a tile
+                        index++;
+                        DiffTypes++;    // e conto un tipo diverso in più
+                    }else{              //se ho già trovato tre tipi non è valida
+                        Valid=false;
+                        break;
+                    }
+                }
+
+            }
+            if(Valid){ // se la colonna non ha trovato problemi la aggiungo a quelle valide
+                ValidColumns++;
+                if(ValidColumns==3){ // basta chiudere quà il ciclo perchè non potendo chiudere due righe alla volta
+                                    // il caso con esattamente 3 colonne giuste verrà trovato il turno in cui succede
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
     /*
     Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
