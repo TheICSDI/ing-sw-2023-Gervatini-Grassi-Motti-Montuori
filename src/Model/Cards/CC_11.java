@@ -13,12 +13,7 @@ public class CC_11 implements CCStrategy {
                     if(curr_shelf[i+2][j].getCategory()==curr_type &&
                         curr_shelf[i][j+2].getCategory()==curr_type &&
                         curr_shelf[i+1][j+1].getCategory()==curr_type &&
-                        curr_shelf[i+2][j+2].getCategory()==curr_type
-                        /*&& curr_shelf[i+1][j].getCategory()!=curr_type        Dobbiamo vedere se la x deve essere isolata
-                        * && curr_shelf[i][j+1].getCategory()!=curr_type        o per esempio un blocco 3x3 andrebbe bene
-                        * && curr_shelf[i+1][j+2].getCategory()!=curr_type
-                        * && curr_shelf[i+2][j+1].getCategory()!=curr_type
-                        * */){
+                        curr_shelf[i+2][j+2].getCategory()==curr_type){
                         return true;
                     }
                 }
