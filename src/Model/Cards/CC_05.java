@@ -10,7 +10,7 @@ public class CC_05 implements CCStrategy {
 
     /**
      * Counts complete columns that have 3 or less different tile types in them.
-     * @param p
+     * @param p Checks if player p's shelf meets common card 5 mission
      * @return true as soon as it finds 3 valid columns
      */
     public boolean isCompleted(Player p) {

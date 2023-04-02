@@ -9,9 +9,9 @@ public class CC_08 implements CCStrategy {
     private boolean NewType,Valid;
 
     /**
-     * Counts complete columns that have 3 or less different tile types in them.
-     * @param p
-     * @return true as soon as it finds 3 valid columns
+     * Counts complete rows that have 3 or less different tile types in them.
+     * @param p Checks if player p's shelf meets common card 8 mission
+     * @return true as soon as it finds 4 valid columns
      */
     public boolean isCompleted(Player p) {
         ValidColumns=0; //Numero colonne Valide
