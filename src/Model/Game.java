@@ -7,14 +7,12 @@ import Model.Cards.*;
 
 public class Game {
     private final int nCard=12; //numero di carte (personali e comuni) totali
-    private final int nCC=2; //n carte comuni da pescare( si è sempre due ma almeno è estendibile)
-    int nPlayers;
     String id;
+    int nPlayers;
     Board board=new Board(nPlayers);
-    List<PersonalCard> personalCards=new ArrayList<>();
     List<CCStrategy> allCC;
     List<CommonCard> CommonCards =new ArrayList<>();//carte comuni pescate per il game
-    List<Player> players = new ArrayList<>();
+    List<Player> players;
     List<Integer> nPC=new ArrayList<>(); //numero carte personali
 
 
@@ -65,7 +63,7 @@ public class Game {
      */
     public void startGame(){
         boolean endGame=false;//end game token non pescato
-        int nTurno=1;
+        //int nTurno=1;
 
         while(!endGame){
             //System.out.println("Turno "+nTurno+": "); commentato perchè non so cosa dobbiamo fare con la cli
@@ -85,7 +83,7 @@ public class Game {
                     endGame=true;
                 }
             }
-            nTurno++;
+            //nTurno++;
         }
 
         //Manca solo il conteggio dei punti finale(Personal cards e same type tiles adiacenti)

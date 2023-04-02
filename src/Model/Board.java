@@ -6,9 +6,6 @@ import java.io.*;
 import java.util.*;
 import Model.Tile.*;
 
-import Model.Tile.*;
-
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -55,7 +52,7 @@ public class Board {
         Random r = new Random();
         for(int i=0; i<numCols; i++) {
             for (int j=0; j<numRows; j++) {
-                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j].equals(type.EMPTY)){
+                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j].getCategory().equals(type.EMPTY)){
                     //Generate a random int between 0 (inclusive) and tilesList.size() (exclusive)
                     int k = r.nextInt(0, tilesList.size());
                     board[i][j] = tilesList.get(k);
@@ -130,7 +127,7 @@ public class Board {
         }
     }
 
-    /** Fill tilesList with all the possible tiles of the game: 22 tiles of each type (except not_accessible). */
+    /** Fill tilesList with all the possible tiles of the game: 22 tiles of each type (except not_accessible and empty). */
     private void fillTilesList(){
         for(type t: type.values()){
             if(!t.equals(type.NOT_ACCESSIBLE) && !t.equals(type.EMPTY)) {
