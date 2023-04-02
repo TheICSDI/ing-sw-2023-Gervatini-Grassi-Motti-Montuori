@@ -37,17 +37,31 @@ public class Player {
         }
     }
 
-    //A cosa serve ??
-    // in ogni caso va privato questo metodo
     /**
-     * order the selected tiles
-     * @param selected
-     * @param order
+     * order the selected tiles as order say, order is a preferences passed from the client.
+     * @param selected list of selected tiles to order
+     * @param order represents the order in which the tiles have to be put on the shelf
      * @return ordered_selected
      */
-    public List<Tile> order_tiles(List<Tile> selected,List<Integer> order){
+    private List<Tile> order_tiles(List<Tile> selected,List<Integer> order){
         List<Tile> ordered_selected = new ArrayList<>();
-        while(order.get(0)!=null) {
+        /*order is formalized as follows
+        the player see a list of the tiles he chose like
+        1 cats
+        2 books
+        3 plants
+        and write the sequence in which he wants to insert them, like
+        213, where the first corresponds to the lower he will position in his shelf column
+        2->1->3 is the arraylist passed under order name.
+        here aren't controls over order, like size and range of values.
+         */
+        /* in ordered_select append the next value from selected, the tile chosen is determined
+        by the first element of order, in the example the first new element has to be the second of the old list
+        that, the head of order is removed, and then the second element to place is the first element of the original
+        list and so on.
+        it continues until the order list is empty (which appropriate controls it shouldn't be more than three iterations).
+        */
+        while(order.isEmpty()) {
             ordered_selected.add(selected.get(order.get(0)));
             order.remove(0);
         }
@@ -55,7 +69,7 @@ public class Player {
     }
 
     /**
-     * check if the choose column has enough space
+     * check if the chosen column has enough space
      * @param numTiles
      * @param numcol
      * @throws NotValidColumnException
@@ -63,7 +77,7 @@ public class Player {
     private void check_Column(int numTiles, int numcol) throws NotValidColumnException{
         int valid=1,first_free_row=0;
         while(valid==1) {
-            while(this.Shelf[first_free_row][numcol]!=null){// maybe null will not be the standard for blank space in shelf
+            while(this.Shelf[first_free_row][numcol].getCategory() != type.EMPTY){
                 first_free_row++;
             }
             if(first_free_row + numTiles > 5) {
@@ -75,16 +89,25 @@ public class Player {
         }
     }
 
-    //A cosa serve ??
-    // e poi all'interno della tua stesssa classe non devi usare i setter o i getter, ma puoi direttamente modificare i
-    // tuoi attributi
+    /**
+     * modifier method that permits to change the state of the shelf, changing the empty tiles to another type of tiles.
+     * every change is made taking care about the rules about insertion, in detail it ensures that every tile is put
+     * in the lower empty place of the column, and that for a single insertion of multiple tiles these are always in
+     * a single column.
+     * The method assumes that the tiles have already a order, and that the selected column have enough space to place
+     * them.
+     * @param numCol
+     * @param toInsert
+     */
     public void changeShelf(int numCol, List<Tile> toInsert){
         int first_free_row=0,i=0,size;
         Tile[][] current_shelf = getShelf();
         size=toInsert.size();
-        while(current_shelf[first_free_row][numCol]!=null){// maybe null will not be the standard for blank space in shelf
+        //find the first empty card of the column.
+        while(current_shelf[first_free_row][numCol].getCategory() != type.EMPTY){// maybe null will not be the standard for blank space in shelf
             first_free_row++;
         }
+        //place the ordered tiles on above the other in the selected column (the check is done in another method)
         while(i<size){
             current_shelf[first_free_row][numCol] = toInsert.get(0);
             toInsert.remove(0);
@@ -98,6 +121,7 @@ public class Player {
     public void PickTiles(){}
 
     private void setShelf(Tile[][] shelf) {
+        //maybe should be public for the additional feature of backup of the game.
         Shelf = shelf;
     }
 

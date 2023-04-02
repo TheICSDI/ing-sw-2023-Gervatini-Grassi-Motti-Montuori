@@ -40,6 +40,7 @@ public class Tile
 			case "empty":
 				this.category = type.EMPTY;
 				break;
+			//should we add a default options of NOT_ACCESSIBLE ?
 		}
 	}
 
