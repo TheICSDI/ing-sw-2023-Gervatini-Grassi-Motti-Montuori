@@ -1,28 +1,60 @@
 package Model.Cards;
 
+import Model.Tile.Tile;
+import Model.Tile.type;
 import Model.Player;
 
+/**
+ * CC_04 class implements the logic for checking if the fourth common goal card is completed by a player.
+ * The fourth common goal card requires the player to have two groups, each containing four tiles of the same type in a 2x2 square.
+ */
 public class CC_04 implements CCStrategy {
-    public boolean isCompleted(Player p) {
-        /*
-        inserire alg
-         */
-        return true;
+    /**
+     * Checks if the common goal is completed.
+     * @param p Player
+     * @return a boolean value true if exactly two 2x2 squares are found
+     */
+    public boolean isCompleted(Player p)
+    {
+        Tile[][] current_shelf = p.getShelf();
+        int num_row = current_shelf.length;
+        int num_col = current_shelf[0].length;
+        int count = 0;
+        type current_tile;
+
+        for (int i = 0; i < num_row - 1; i++)
+        {
+            for (int j = 0; j < num_col - 1 && current_shelf[i][j].getCategory() != type.EMPTY; j++)
+            {
+                current_tile = current_shelf[i][j].getCategory();
+
+                //Check if there is a 2x2 square
+                if (current_tile == current_shelf[i][j + 1].getCategory()               // Tile right
+                        && current_tile == current_shelf[i + 1][j].getCategory()        // Tile down
+                        && current_tile == current_shelf[i + 1][j + 1].getCategory())   // Tile down-right
+                {
+
+                    // Check if there are no additional adjacent tiles of the same type
+                    if ( !(
+                            (i > 0 && current_tile == current_shelf[i - 1][j].getCategory())                    // Tile up
+                            || (i > 0 && current_tile == current_shelf[i - 1][j + 1].getCategory())             // Tile up-right
+                            || (j < num_col - 2 && current_tile == current_shelf[i][j + 2].getCategory())       // Tile right-right
+                            || (j < num_col - 2 && current_tile == current_shelf[i + 1][j + 2].getCategory())   // Tile down-right-right
+                            || (i < num_row - 2 && current_tile == current_shelf[i + 2][j + 1].getCategory())   // Tile down-down-right
+                            || (i < num_row - 2 && current_tile == current_shelf[i + 2][j].getCategory())       // Tile down-down
+                            || (j > 0 && current_tile == current_shelf[i + 1][j - 1].getCategory()))            // Tile down-left
+                            || (j > 0 && current_tile == current_shelf[i][j - 1].getCategory()) )               // Tile left
+					{
+						count++;
+                    }
+                }
+
+                if (count == 2) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
-    /*
-    Le carte possono essere classificare in 5 macro categorie in modo da creare algoritmi diversi per il
-    conteggio dei punti, le categoria sono così divise:
-    1. Numero di adiacenze ripetute n volte dello stesso tipo di tessere (n. 1, 3)
-    2. Posizione relativa fissa ripetute n volte dello stesso tipo di tessere (n. 2, 4, ,7, 9, 10, 11)
-    3. Posizione relativa fissa ripetute n volte anche di tipo tiverso di tessere (n. 5, 8)
-    4. Tessera singola n. 6
-    5. Tessera singola n. 12
-     */
-    /*
-    Per la categoria 4 e 5 si nel detta gli la struttura richiesta
-    Per la categoria 1 si cercano il numero di adiacenze e le sue ripetute tenendo fisso il tipo di tessera
-    Per la categoria 2 si cerca la struttura relativa e le sue ripetute tenendo fisso il tipo di tessera
-    Per la categoria 3 si cercano la struttura relativa e le sue ripetute tenendo variabile il nunero di tessera
-     */
-    //probabilmente la categoria 2,3 possono essere unite
 }
