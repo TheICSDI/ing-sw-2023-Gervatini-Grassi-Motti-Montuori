@@ -151,6 +151,11 @@ public class Player {
         changeShelf(ChosenTiles, col);
     }
 
+    /** Gets the shelf of the player. */
+    public Tile[][] getShelf() {
+        return Shelf;
+    }
+
     /**
      * Update the total points of the player.
      *

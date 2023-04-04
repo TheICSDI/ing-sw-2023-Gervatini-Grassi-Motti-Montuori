@@ -48,7 +48,7 @@ public class Main {
                             List<Player> players =l.Players;
                             Lobbies.remove(l);
                             //Thread(?)
-                            Game game=new Game("G1", players);
+                            Game game = new Game("G1", players);
                         }
                     }
                     break;
