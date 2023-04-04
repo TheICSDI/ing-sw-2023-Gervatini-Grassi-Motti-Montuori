@@ -1,8 +1,12 @@
 package main.java.it.polimi.ingsw.model.Tile;
-
+/** Represents a tile of the game.
+ * @author Marco Gervatini, Giulio Montuori.
+ */
 public class Tile
 {
 	private type category;
+
+	/** Creates a tile according to a given type. */
 	public Tile(String any)
 	{
 		switch (any)
@@ -38,10 +42,10 @@ public class Tile
 			case "empty":
 				this.category = type.EMPTY;
 				break;
-			//should we add a default options of NOT_ACCESSIBLE ?
 		}
 	}
 
+	/** Gets the category of the tile. */
 	public type getCategory() {
         return category;
   }

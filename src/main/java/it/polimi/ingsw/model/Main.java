@@ -7,7 +7,7 @@ public class Main {
         int numLobby=0;
         int joinLobby;
 
-        Player Player1=new Player("Mayhem");
+        Player Player1=new Player(1, "Mayhem");
         Scanner in = new Scanner(System.in);
         String Interation_Prompt;
         List<Lobby> Lobbies=new ArrayList<>();
@@ -46,12 +46,9 @@ public class Main {
                          Lobbies) {
                         if(l.Players.contains(Player1)){
                             List<Player> players =l.Players;
-                            int nPlayers=l.Players.size();
                             Lobbies.remove(l);
                             //Thread(?)
-                            Game game=new Game(players,nPlayers);
-
-                            game.createGame();
+                            Game game=new Game("G1", players);
                         }
                     }
                     break;

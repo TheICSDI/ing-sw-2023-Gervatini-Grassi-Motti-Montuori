@@ -1,13 +1,12 @@
 package main.java.it.polimi.ingsw.model;
 /** Represent the board of a game. It has to be declared in each game.
- * @author Motti Caterina
+ * @author Caterina Motti.
  */
 import java.io.*;
 import java.util.*;
 
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.model.Tile.*;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,6 +30,8 @@ public class Board {
     }
 
     /** Create a board for a specified number of players.
+     * It initializes the board with empty tiles.
+     * It initializes tilesList with all the possible tiles.
      *
      * @param numPlayers number of players
      */
@@ -39,7 +40,7 @@ public class Board {
         tilesList = new ArrayList<>();
         for (int i = 0; i < numCols; i++) {
             for (int j = 0; j < numRows; j++) {
-                this.board[i][j]=new Tile("empty");
+                this.board[i][j] = new Tile("empty");
             }
         }
         boardParser(numPlayers);
@@ -53,8 +54,8 @@ public class Board {
      */
     public void fillBoard(){
         Random r = new Random();
-        for(int i=0; i<numCols; i++) {
-            for (int j=0; j<numRows; j++) {
+        for(int i=0; i < numCols; i++) {
+            for (int j=0; j < numRows; j++) {
                 if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j].getCategory().equals(type.EMPTY)){
                     //Generate a random int between 0 (inclusive) and tilesList.size() (exclusive)
                     int k = r.nextInt(0, tilesList.size());
@@ -70,8 +71,8 @@ public class Board {
      * @return  true only if the board has to be filled, false otherwise.
      */
     public boolean isBoardEmpty(){
-        for(int i=0; i<numCols; i++){
-            for(int j=0; j<numRows; j++){
+        for(int i=0; i < numCols; i++){
+            for(int j=0; j < numRows; j++){
                 //if the object in the board is accessible and not null
                 try {
                     if (!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i][j].getCategory().equals(type.EMPTY)) {
@@ -89,18 +90,7 @@ public class Board {
         return true;
     }
 
-    /** Returns a set of tiles that the player has selected, if it is a legal move.
-     * It removes those tiles from the board.
-     *
-     * @param start indicates the starting point on the board from which the player wants to take the tiles.
-     * @param end indicates the ending point on the board until which the player wants to take the tiles.
-     * @return a set of tiles.
-     */
-    public Set<Tile> getTiles(Position start, Position end){
-        return null;
-    }
-
-    /** Parse board_na.jason. It initializes the board by making not accessible some cells according to the
+    /** Parse board_na.JSON. It initializes the board by making not accessible some cells according to the
      * number of players that will use the board.
      *
      * @param numPlayers number of players, used to determine if an element of the board should be accessible or not
@@ -142,35 +132,39 @@ public class Board {
         }
     }
 
+    /** Returns a set of positions in which the tiles can be picked from the player.
+     * A tile can be picked if it has an empty or not accessible side on the board.
+     *
+     * @return a set of available positions.
+     */
     public Set<Position> AvailableTiles(){
-        Set<Position> Available=new HashSet<>();
+        Set<Position> Available = new HashSet<>();
         for (int i = 0; i < numCols; i++) {
             for (int j = 0; j < numRows; j++) {
-                try{
-                    if(!board[i][j].getCategory().equals(type.EMPTY)  //Condizione orribile ma stacce non vedo altro
-                       && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)){
-                        if(board[i-1][j].getCategory().equals(type.EMPTY) ||
-                                board[i+1][j].getCategory().equals(type.EMPTY) ||
-                                board[i][j+1].getCategory().equals(type.EMPTY) ||
-                                board[i][j-1].getCategory().equals(type.EMPTY) ||
-                                board[i-1][j].getCategory().equals(type.NOT_ACCESSIBLE) ||
-                                board[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE) ||
-                                board[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE) ||
-                                board[i][j-1].getCategory().equals(type.NOT_ACCESSIBLE)){
-                            Available.add(new Position(i,j));
-                            }
-                        }
-                    }catch(IndexOutOfBoundsException ignored){}
+                if(!board[i][j].getCategory().equals(type.EMPTY)
+                        && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)) {
+                    if( ((i>0) && (board[i-1][j].getCategory().equals(type.EMPTY) || board[i-1][j].getCategory().equals(type.NOT_ACCESSIBLE)))
+                            || ((i < numCols - 1)
+                                && (board[i + 1][j].getCategory().equals(type.EMPTY) || board[i + 1][j].getCategory().equals(type.NOT_ACCESSIBLE)))
+                            || ((j < numCols - 1)
+                                && (board[i][j + 1].getCategory().equals(type.EMPTY) || board[i][j + 1].getCategory().equals(type.NOT_ACCESSIBLE)))
+                            || ((j > 0)
+                                && (board[i][j - 1].getCategory().equals(type.EMPTY) || board[i][j - 1].getCategory().equals(type.NOT_ACCESSIBLE)))) {
+                        Available.add(new Position(i,j));
+                    }
+                }
             }
-
         }
         return Available;
     }
 
+    /** Remove tiles from the board indexed by the given positions.
+     *
+     * @param ToRemove a set of positions.
+     */
     public void RemoveTiles(Set<Position> ToRemove){
-        for (Position p:
-             ToRemove) {
-            board[p.getX()][p.getY()]=new Tile("empty");
+        for (Position p: ToRemove) {
+            board[p.getX()][p.getY()] = new Tile("empty");
         }
     }
 }

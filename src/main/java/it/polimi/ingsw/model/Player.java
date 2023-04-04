@@ -1,5 +1,6 @@
 /** Represents a player.
- *  Each player has a shelf and a personal card.
+ *  Each player has a shelf and a personal goal card.
+ * @Author Marco Gervatini, Caterina Motti, Andrea Grassi
  */
 package main.java.it.polimi.ingsw.model;
 
@@ -7,11 +8,8 @@ import main.java.it.polimi.ingsw.model.Cards.PersonalCard;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
 import main.java.it.polimi.ingsw.controller.Controller;
-import main.java.polimi.ingsw.Model.Cards.*;
-import main.java.polimi.ingsw.Model.Tile.*;
 import main.java.it.polimi.ingsw.exceptions.NotValidColumnException;
 import java.util.*;
-import Controller.*;
 
 public class Player {
     private String nickname;
@@ -19,9 +17,9 @@ public class Player {
     private final int numRows = 5;
     private final int numCols = 6;
     private Tile[][] Shelf;
-    private main.java.it.polimi.ingsw.model.Cards.PersonalCard PersonalCard; // servirebbe un assegna_personalCard()
+    private PersonalCard PersonalCard;
     private boolean firstToken, endToken;
-    private int scoreToken1, scoreToken2; //Credo sia meglio averli come integer
+    private int scoreToken1, scoreToken2;
     private int totalPoints;
     private int turn;
 
@@ -29,10 +27,13 @@ public class Player {
      * The id is final, so it can't be changed, otherwise the nickname can be changed using the setter.
      * It initializes total points to 0.
      * It initializes all tiles in shelf to "empty".
+     *
+     * @param id id of the player.
+     * @param nick nickname of the player.
      */
     public Player(int id, String nick){
-        this.id=id;
-        this.nickname=nick;
+        this.id = id;
+        this.nickname = nick;
         this.totalPoints = 0;
         this.Shelf = new Tile[numRows][numCols];
         for(int i=0; i<numRows; i++){
@@ -43,13 +44,14 @@ public class Player {
     }
 
     /**
-     * order the selected tiles as order say, order is a preferences passed from the client.
-     * @param selected list of selected tiles to order
-     * @param order represents the order in which the tiles have to be put on the shelf
-     * @return ordered_selected
+     * Orders the selected tiles as order passed as a parameter.
+     *
+     * @param selected list of selected tiles to order.
+     * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
+     * @return orderedTiles list of selected tiles in order.
      */
-    private List<Tile> order_tiles(List<Tile> selected,List<Integer> order){
-        List<Tile> ordered_selected = new ArrayList<>();
+    private List<Tile> orderTiles(List<Tile> selected, List<Integer> order){
+        List<Tile> orderedTiles = new ArrayList<>();
         /*order is formalized as follows
         the player see a list of the tiles he chose like
         1 cats
@@ -59,146 +61,151 @@ public class Player {
         213, where the first corresponds to the lower he will position in his shelf column
         2->1->3 is the arraylist passed under order name.
         here aren't controls over order, like size and range of values.
-         */
-        /* in ordered_select append the next value from selected, the tile chosen is determined
+
+        In ordered_select append the next value from selected, the tile chosen is determined
+
         by the first element of order, in the example the first new element has to be the second of the old list
         that, the head of order is removed, and then the second element to place is the first element of the original
         list and so on.
         it continues until the order list is empty (which appropriate controls it shouldn't be more than three iterations).
         */
         while(order.isEmpty()) {
-            ordered_selected.add(selected.get(order.get(0)));
+            orderedTiles.add(selected.get(order.get(0)));
             order.remove(0);
         }
-        return ordered_selected;
+        return orderedTiles;
     }
 
     /**
-     * check if the chosen column has enough space
-     * @param numTiles
-     * @param numcol
-     * @throws NotValidColumnException
+     * Check if the chosen column has enough space for the given tiles.
+     *
+     * @param numTiles number of tiles to be inserted.
+     * @param col chosen column from the player. It goes from 0 to 5.
+     * @throws NotValidColumnException if the parameter col is out of bound.
+     * @return true only if the shelf has enough space for the given tiles, false otherwise.
      */
-    private boolean check_Column(int numTiles, int numcol) /*throws NotValidColumnException*/{
-        /*int valid=1,first_free_row=0;
-        while(valid==1) {
-            while(this.Shelf[first_free_row][numcol].getCategory() != type.EMPTY){
-                first_free_row++;
+    private boolean checkColumn(int numTiles, int col) throws NotValidColumnException{
+        if(col < 0 || col >= numCols){
+            throw new NotValidColumnException("Selected column is out of bound!");
+        } else {
+            for(int j = 0; j < numRows; j++){
+                //Check how many empty spaces there are in the selected column
+                if(Shelf[col][j].getCategory().equals(type.EMPTY)) {
+                    //For each empty space it decreases numTiles
+                    numTiles --;
+                    //If numTiles < 0 then there is no enough space
+                    if(numTiles < 0) return false;
+                }
             }
-            if(first_free_row + numTiles > 5) {
-                valid = 0;
-            }
+            return true;
         }
-        if (valid == 0) {
-            throw new NotValidColumnException("Not enough space in the column!");
-        }*/ // DA RIGUARDARE
-        return true;
     }
 
+    /** Inserts the selected tiles in a single column of the shelf.
+     * The tiles are already ordered, from the bottom to the top: the first tile (index 0) goes in the first empty spot.
+     *
+     * @param toInsert a list of tiles, ordered, to be put in Shelf.
+     * @param col chosen column.
+     * @throws NotValidColumnException if the selected column has no enough space.
+     */
+    public void changeShelf(List<Tile> toInsert, int col) throws NotValidColumnException {
+        if(!checkColumn(toInsert.size(), col)){
+            throw new NotValidColumnException("Selected column has no enough space!");
+        } else {
+            //For each tile in toInsert
+            for (Tile t: toInsert){
+                for(int j = 0; j < numCols; j++){
+                    //If the element in the selected column is empty then it put the new tile
+                    if(Shelf[col][j].getCategory().equals(type.EMPTY)) {
+                        Shelf[col][j] = t;
+                    }
+                }
+            }
+        }
+    }
+
+    //DA rivedere la parte del controller
     /**
-     * modifier method that permits to change the state of the shelf, changing the empty tiles to another type of tiles.
-     * every change is made taking care about the rules about insertion, in detail it ensures that every tile is put
-     * in the lower empty place of the column, and that for a single insertion of multiple tiles these are always in
-     * a single column.
-     * The method assumes that the tiles have already a order, and that the selected column have enough space to place
-     * them.
-     * @param numCol
-     * @param toInsert
+     *
+     * @param b board from which the player can take the tiles.
      */
-    public void changeShelf(int numCol, List<Tile> toInsert){
-        int first_free_row=0,i=0,size;
-        Tile[][] current_shelf = getShelf();
-        size=toInsert.size();
-        //find the first empty card of the column.
-        while(current_shelf[first_free_row][numCol].getCategory() != type.EMPTY){// maybe null will not be the standard for blank space in shelf
-            first_free_row++;
-        }
-        //place the ordered tiles on above the other in the selected column (the check is done in another method)
-        while(i<size){
-            current_shelf[first_free_row][numCol] = toInsert.get(0);
-            toInsert.remove(0);
-            i++;
-        }
-        setShelf(current_shelf);
-    }
-
-
-    //Da fare
-    public void PickTiles(Board board){
-        Set<Position> Chosen;//posizioni delle carte da prendere
+    public void pickTiles(Board b) throws NotValidColumnException {
+        //Position chosen by the player
+        Set<Position> chosen;
         do{
-            Chosen= Controller.Choose();
-        }while(!board.AvailableTiles().containsAll(Chosen));
-        List<Tile> ChosenTiles=new ArrayList<>();
-        for (Position p:
-             Chosen) {
-            ChosenTiles.add(board.board[p.getX()][p.getY()]);
-        }
-        board.RemoveTiles(Chosen);
-        List<Integer> order=Controller.ChooseOrder();
-        order_tiles(ChosenTiles,order);
-        int Column;
-        do{
-            Column=Controller.ChooseColumn();
-        }while(check_Column(ChosenTiles.size(),Column));
-        changeShelf(Column,ChosenTiles);
-    }
+            chosen = Controller.Choose();
+        } while(!b.AvailableTiles().containsAll(chosen));
 
-    private void setShelf(Tile[][] shelf) {
-        //maybe should be public for the additional feature of backup of the game.
-        Shelf = shelf;
+        List<Tile> ChosenTiles = new ArrayList<>();
+        for (Position p: chosen) {
+            ChosenTiles.add(b.board[p.getX()][p.getY()]);
+        }
+        b.RemoveTiles(chosen);
+
+        List<Integer> order = Controller.ChooseOrder();
+        orderTiles(ChosenTiles,order);
+        int col;
+        do{
+            col = Controller.ChooseColumn();
+        } while(checkColumn(ChosenTiles.size(),col));
+        changeShelf(ChosenTiles, col);
     }
 
     /**
      * Update the total points of the player.
+     *
      * @param toSum points to be summed to the total of the player
      */
     public void addPoints(int toSum){
         this.totalPoints += toSum;
     }
 
+    /** Gets the total points of the player */
     public int getTotalPoints() {
         return totalPoints;
     }
 
+    /** @return true only if the player has the end token, false otherwise. */
     public boolean getEndToken() {
         return endToken;
     }
 
+    /** Sets the value of end token of the player. */
     public void setEndToken(boolean value) {
         this.endToken = value;
     }
 
+    /** Sets a new nickname for the player. */
     public void setNickname(String nick) {
         this.nickname = nick;
     }
 
+    /** Gets the nickname of the player. */
     public String getNickname() {
         return nickname;
     }
 
+    /** Gets the id of the player. */
     public int getId() {
         return id;
     }
 
-    public Tile[][] getShelf() {
-        return Shelf;
-    }
-
-    //Probabilmente la personal card non la rappresentiamo con un oggetto, bensì con un id tra 0 e 11
-    //da rivedere
+    /** Gets the personal card of the player. */
     public PersonalCard getPersonalCard() {
         return PersonalCard;
     }
 
-    public void setPersonalCard(int n){
-        PersonalCard = new PersonalCard(n);
+    /** Sets the personal card of the player according to the parameter id. */
+    public void setPersonalCard(int id){
+        PersonalCard = new PersonalCard(id);
     }
 
+    /** Sets the value of end token of the player. */
     public void setFirstToken(boolean value) {
         this.firstToken = value;
     }
 
+    /** @return true only if the player has the end token, false otherwise. */
     public boolean getFirstToken() {
         return firstToken;
     }
@@ -219,17 +226,22 @@ public class Player {
         return scoreToken2;
     }
 
+    /** Gets the number of rows of the shelf. */
     public int getNumRows() {
         return numRows;
     }
 
+    /** Gets the number of columns of the shelf. */
     public int getNumCols() {
         return numCols;
     }
+
+    /** Gets the number of turn of the player. */
     public int getTurn() {
         return turn;
     }
 
+    /** Sets the number of turn of the player. */
     public void setTurn(int turn) {
         this.turn = turn;
     }

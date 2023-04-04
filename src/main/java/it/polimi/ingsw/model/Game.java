@@ -1,56 +1,56 @@
+/** Represents a game. It is identified by a unique id.
+ * Each game has some players (from 2 to 4), a board, 12 common goal cards and 12 personal goal cards.
+ * @author Andrea Grassi, Caterina Motti
+ */
 package main.java.it.polimi.ingsw.model;
 import java.util.*;
 
+import main.java.it.polimi.ingsw.exceptions.NotValidColumnException;
 import main.java.it.polimi.ingsw.model.Cards.*;
-import main.java.polimi.ingsw.Model.Cards.*;
-
-
 
 public class Game {
-    private final int nCard=12; //numero di carte (personali e comuni) totali
-    String id;
-    int nPlayers;
-    Board board=new Board(nPlayers);
-    List<CCStrategy> allCC;
-    List<CommonCard> CommonCards =new ArrayList<>();//carte comuni pescate per il game
-    List<Player> players;
-    List<Integer> nPC=new ArrayList<>(); //numero carte personali
+    private String id;
+    private int nPlayers;
+    private List<Player> players;
+    private Board board;
+    private List<CCStrategy> allCC;
+    private final List<CommonCard> CommonCards = new ArrayList<>();
+    private final List<Integer> nPC = new ArrayList<>();
 
-
-    public Game(List<Player> players,int nPlayers){
-        this.nPlayers=nPlayers;
-        this.players=players;
-
-    }
-
-    /**
-     * Fills board for the first time, give players their random personal cards, draw 2 random commons,
-     * sort players list in their turn order
-     *
-     * @see Board,CommonCard,CCStrategy, PersonalCard ,Player
-     *
+    /** Creates a game given a list of players.
+     * It initializes the board for the first time.
+     * It picks the first player and give randomically each player a personal goal card.
+     * It randomically choose two common goal cards.
      */
-    public void createGame(){
-        board.fillBoard(); //funzione che inizializza la board
-        for(int i=0;i<nCard;i++){
-            nPC.add(i);
-        }
-        Collections.shuffle(nPC);
-        Collections.shuffle(players);//mischia la lista dei players
+    public Game(String id, List<Player> players){
+        //Each game is represented by a unique id that can't be changed
+        this.id = id;
+        this.nPlayers = players.size();
+        this.players = players;
+
+        //Initializes the new board
+        board = new Board(nPlayers);
+        board.fillBoard();
+
+        //Initializes the common and personal goal cards
+        resetCards();
+
+        //Shuffle the list of players in order to randomically pick the first one
+        Collections.shuffle(players);
         players.get(0).setFirstToken(true);
-        for(int i=0;i<nPlayers;i++){ //assegna l'id in base al loro turno e una carta personale random diversa dalle altre
+        //Shuffle the personal goal cards in order to randomically give them to the players
+        Collections.shuffle(nPC);
+        for(int i = 0; i < nPlayers; i++){
+            //Sets the turn of each player
             players.get(i).setTurn(i);
             players.get(i).setPersonalCard(nPC.get(i));
         }
 
-        //Common cards random draw *Non è estendibile così dato che comunque sono sempre solo 2 carte e il resto del programma
-        //                          non è estindibile di base, lascio così?*
-        resetCC();
+        //Shuffle the common goal cards to randomically draws two of them
         Collections.shuffle(allCC);
         CommonCards.add(new CommonCard(allCC.get(0),true));
         CommonCards.add(new CommonCard(allCC.get(1),false));
     }
-
 
     /*Double loop to have the game continue until someone gets the EndGameToken and is the turn of the player
     * with the FirstPlayerSit again, turn order is the same as the order in players list, firstPlayer is
@@ -62,14 +62,14 @@ public class Game {
      *
      * @see Player,CommonCard,PersonalCard
      */
-    public void startGame(){
-        boolean endGame=false;//end game token non pescato
+    public void startGame() throws NotValidColumnException {
+        boolean endGame = false;//end game token non pescato
         //int nTurno=1;
 
         while(!endGame){
             //System.out.println("Turno "+nTurno+": "); commentato perchè non so cosa dobbiamo fare con la cli
             for (Player p:  players) {
-                p.PickTiles(board);
+                p.pickTiles(board);
                 if(board.isBoardEmpty()){
                     board.fillBoard();
                 }
@@ -89,14 +89,13 @@ public class Game {
 
         //Manca solo il conteggio dei punti finale(Personal cards e same type tiles adiacenti)
     }
-    public void leaveGame(){}
 
     /**
-     * Initializes all common cards
-     *
-     * @see CCStrategy
+     * Initializes all common and personal goal cards.
+     * Each personal goal card is represented by an index between 0 and 11.
+     * In this way each game has its own set of cards.
      */
-    public void resetCC(){ //"Rimette tutte le carte comuni disponibili come di default"
+    private void resetCards(){
         allCC.add(new CC_01());
         allCC.add(new CC_02());
         allCC.add(new CC_03());
@@ -109,23 +108,28 @@ public class Game {
         allCC.add(new CC_10());
         allCC.add(new CC_11());
         allCC.add(new CC_12());
+
+        //Add index from 0 to 11 that represents the personal goal cards
+        for(int i = 0; i < 12; i++){
+            nPC.add(i);
+        }
     }
 
-
+    /** Shows the board in a graphical way. Each tile is represented by a symbol.
+     *
+     * @param board the board that has to be represented.
+     */
     public void showBoard(Board board){
         for(int i=0;i<board.getNumRows();i++){
             for(int j=0;j<board.getNumCols();j++){
-                if(board.board[i][j]==null){
-                    System.out.print(" ");
-                }
                 switch (board.board[i][j].getCategory()) {
-                    case NOT_ACCESSIBLE -> System.out.println("-");
                     case GAMES -> System.out.println("G");
                     case CATS -> System.out.println("C");
                     case BOOKS -> System.out.println("B");
                     case FRAMES -> System.out.println("F");
                     case PLANTS -> System.out.println("P");
                     case TROPHIES -> System.out.println("T");
+                    default -> System.out.println("-");
                 }
             }
         }

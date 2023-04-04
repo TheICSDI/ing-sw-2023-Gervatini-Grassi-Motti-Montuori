@@ -1,4 +1,7 @@
-/** Rapresent the personal goal card. Each player need one 
+/** Represents the personal goal card. Each player has one.
+ * At the start of the game, depending on the number of player, different integers will be randomically generated.
+ * Thanks to the constructor a personal goal card will be generated as a matrix of tiles.
+ *
  * @author Montuori Giulio
  */
 package main.java.it.polimi.ingsw.model.Cards;
@@ -14,35 +17,26 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
-import main.java.polimi.ingsw.Model.Tile.*;
-
 public class PersonalCard {
-	private int id;       //each card has unique id
-
-
+	private int id;
 	private Tile[][] card;
 
-	/*
-	 * At the start of the game, depending on the number of player, different integers will be generated
-	 * and thanks to the JSON the contructer and the personalCardParser a personal goal card will be generated as a matrix of Tile
-	 */
-
-	/**
+	/** Creates a personal goal card based on the id.
+	 * Each card has unique id.
 	 *
-	 * @param uid
+	 * @param uid represent the number of the card to be created. It goes from 0 to 11.
 	 */
 	public PersonalCard(int uid)
 	{
 		this.id = uid;
-		this.card = new Tile[6][5];        // fixed size
-
+		this.card = new Tile[6][5]; //fixed size
 		personalCardParser();
 	}
 
 	/**
-	 * A parser for the personal_card.json that contains all 12 personal goal cards
+	 * A parser for the personal_card.json that contains all 12 personal goal cards.
 	 */
-	private void personalCardParser()   // a parser for the JSON file
+	private void personalCardParser()
 	{
 
 		JSONParser parser = new JSONParser();
@@ -77,11 +71,11 @@ public class PersonalCard {
 		}
 	}
 
-
-		/**Calculate the points given by the personal goal card
-		 * @param shelf the player's shelf
-		 * @return the points corrisponding the matches between the shelf and cads
-		 */
+	/** Calculate the points given by the personal goal card according to the shelf of the player.
+	 *
+	 * @param shelf the player's shelf.
+	 * @return the points corresponding the matches between the shelf and the personal goal card.
+	 */
 	public int calculatePoints(Tile[][] shelf)
 	{
 		int matches = 0, score = 0, count = 0;
@@ -123,6 +117,7 @@ public class PersonalCard {
 		return score;
 	}
 
+	/** Gets the personal card */
 	public Tile[][] getCard() {
 		return card;
 	}
