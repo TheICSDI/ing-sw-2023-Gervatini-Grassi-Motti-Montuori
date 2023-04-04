@@ -7,6 +7,7 @@ import Model.Cards.*;
 import Model.Tile.*;
 import exceptions.NotValidColumnException;
 import java.util.*;
+import Controller.*;
 
 public class Player {
     private String nickname;
@@ -74,8 +75,8 @@ public class Player {
      * @param numcol
      * @throws NotValidColumnException
      */
-    private void check_Column(int numTiles, int numcol) throws NotValidColumnException{
-        int valid=1,first_free_row=0;
+    private boolean check_Column(int numTiles, int numcol) /*throws NotValidColumnException*/{
+        /*int valid=1,first_free_row=0;
         while(valid==1) {
             while(this.Shelf[first_free_row][numcol].getCategory() != type.EMPTY){
                 first_free_row++;
@@ -86,7 +87,8 @@ public class Player {
         }
         if (valid == 0) {
             throw new NotValidColumnException("Not enough space in the column!");
-        }
+        }*/ // DA RIGUARDARE
+        return true;
     }
 
     /**
@@ -118,7 +120,25 @@ public class Player {
 
 
     //Da fare
-    public void PickTiles(){}
+    public void PickTiles(Board board){
+        Set<Position> Chosen;//posizioni delle carte da prendere
+        do{
+            Chosen=Controller.Choose();
+        }while(!board.AvailableTiles().containsAll(Chosen));
+        List<Tile> ChosenTiles=new ArrayList<>();
+        for (Position p:
+             Chosen) {
+            ChosenTiles.add(board.board[p.getX()][p.getY()]);
+        }
+        board.RemoveTiles(Chosen);
+        List<Integer> order=Controller.ChooseOrder();
+        order_tiles(ChosenTiles,order);
+        int Column;
+        do{
+            Column=Controller.ChooseColumn();
+        }while(check_Column(ChosenTiles.size(),Column));
+        changeShelf(Column,ChosenTiles);
+    }
 
     private void setShelf(Tile[][] shelf) {
         //maybe should be public for the additional feature of backup of the game.

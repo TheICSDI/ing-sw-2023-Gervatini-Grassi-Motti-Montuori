@@ -138,4 +138,36 @@ public class Board {
             }
         }
     }
+
+    public Set<Position> AvailableTiles(){
+        Set<Position> Available=new HashSet<>();
+        for (int i = 0; i < numCols; i++) {
+            for (int j = 0; j < numRows; j++) {
+                try{
+                    if(!board[i][j].getCategory().equals(type.EMPTY)  //Condizione orribile ma stacce non vedo altro
+                       && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)){
+                        if(board[i-1][j].getCategory().equals(type.EMPTY) ||
+                                board[i+1][j].getCategory().equals(type.EMPTY) ||
+                                board[i][j+1].getCategory().equals(type.EMPTY) ||
+                                board[i][j-1].getCategory().equals(type.EMPTY) ||
+                                board[i-1][j].getCategory().equals(type.NOT_ACCESSIBLE) ||
+                                board[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE) ||
+                                board[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE) ||
+                                board[i][j-1].getCategory().equals(type.NOT_ACCESSIBLE)){
+                            Available.add(new Position(i,j));
+                            }
+                        }
+                    }catch(IndexOutOfBoundsException ignored){}
+            }
+
+        }
+        return Available;
+    }
+
+    public void RemoveTiles(Set<Position> ToRemove){
+        for (Position p:
+             ToRemove) {
+            board[p.getX()][p.getY()]=new Tile("empty");
+        }
+    }
 }

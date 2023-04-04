@@ -68,7 +68,7 @@ public class Game {
         while(!endGame){
             //System.out.println("Turno "+nTurno+": "); commentato perchè non so cosa dobbiamo fare con la cli
             for (Player p:  players) {
-                p.PickTiles();
+                p.PickTiles(board);
                 if(board.isBoardEmpty()){
                     board.fillBoard();
                 }
