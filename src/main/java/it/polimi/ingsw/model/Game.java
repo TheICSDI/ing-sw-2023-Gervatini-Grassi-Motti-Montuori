@@ -52,6 +52,7 @@ public class Game {
         CommonCards.add(new CommonCard(allCC.get(1),false));
     }
 
+
     /*Double loop to have the game continue until someone gets the EndGameToken and is the turn of the player
     * with the FirstPlayerSit again, turn order is the same as the order in players list, firstPlayer is
     * the first in the List, every turn a player gets to pick 1-3 the tiles on the board and put them in his shelf,
@@ -122,7 +123,11 @@ public class Game {
     public void showBoard(Board board){
         for(int i=0;i<board.getNumRows();i++){
             for(int j=0;j<board.getNumCols();j++){
+                if(board.board[i][j]==null){
+                    System.out.print(" ");
+                }
                 switch (board.board[i][j].getCategory()) {
+                    case NOT_ACCESSIBLE -> System.out.println("-");
                     case GAMES -> System.out.println("G");
                     case CATS -> System.out.println("C");
                     case BOOKS -> System.out.println("B");

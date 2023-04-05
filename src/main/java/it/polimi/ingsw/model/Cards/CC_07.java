@@ -6,65 +6,38 @@ import main.java.it.polimi.ingsw.model.Tile.type;
 
 public class CC_07 implements CCStrategy {
     public boolean isCompleted(Player p) {
-        Tile[][] current_shelf = p.getShelf();
-        int i, j, count;
+        Tile[][] curr_shelf =p.getShelf();
+        int i, j, count,k,l;
         type curr, first;//curr si the actual tile of the control, first is the  first tile of the diagonal.
         boolean end = false;
+        int[][] start_positions = {{0, 0}, {1,0}, {0,4}, {1,4}};
+        int[][] updates = {{1, 1}, {1, 1}, {1, -1}, {1, -1}};
+        // da 00 44 da 10 54 da 04 40 14 50
         /*
-        four possible existing diagonals and so four loop to check the state of the shelf.
+        internal loop check the five tiles of a diagonal, from the one set by start
+        external loop change the start tile (by start_position) and decide the way in which indices move
+        (by updates)
+
          */
-        /*
-        first loop check the diagonal having as extremes [0][0] and [4][4]
-         */
-        first = current_shelf[0][0].getCategory();
-        for(i = 0, j = 0,count = 0; i < 5; i++, j++) {
-            curr = current_shelf[i][j].getCategory();
-            if (curr.equals(first) && !curr.equals(type.EMPTY)) {
-                count++;
+        for(k=0;k<4&& !end;k++){
+            i = start_positions[k][0];//row set
+            j = start_positions[k][1];//column set
+            count=0;//count set
+            first = curr_shelf[i][j].getCategory();//color to check set
+            if(!first.equals(type.EMPTY)) {
+                for (l = 0; l < 5; i = i + updates[k][0], j = j + updates[k][1], l++) {
+                    //updates regulate if j is ++ or --
+                    curr = curr_shelf[i][j].getCategory();
+                    if (curr.equals(first)) {
+                        count++;
+                    }
+                }
             }
-        }
-        if(count == 5){
-            end = true;
-        }
-        /*
-        second loop check the diagonal having as extremes [0][1] and [4][5]
-         */
-        first = current_shelf[0][1].getCategory();
-        for(i = 0, j = 1, count = 0; i < 5 && !end; i++, j++) {
-            curr = current_shelf[i][j].getCategory();
-            if (curr.equals(first) && !curr.equals(type.EMPTY)) {
-                count++;
+            if (count >= 5) {
+                end = true;
             }
-        }
-        if(count == 5){
-            end = true;
-        }
-        /*
-        third loop check the diagonal having as extremes [0][4] and [4][0]
-         */
-        first = current_shelf[4][0].getCategory();
-        for(i = 0, j = 0,count = 0; i >= 0 && !end; i--, j++) {
-            curr = current_shelf[i][j].getCategory();
-            if (curr.equals(first) && !curr.equals(type.EMPTY)) {
-                count++;
-            }
-        }
-        if(count == 5){
-            end = true;
-        }
-        /*
-        fourth loop check the diagonal having as extremes [4][5] and [0][1]
-         */
-        first = current_shelf[4][1].getCategory();
-        for(i = 0,j = 0,count = 0;i >= 0 && !end ; i--, j++) {
-            curr = current_shelf[i][j].getCategory();
-            if (curr.equals(first) && !curr.equals(type.EMPTY)) {
-                count++;
-            }
-        }
-        if(count == 5){
-            end = true;
         }
         return end;
     }
+
 }

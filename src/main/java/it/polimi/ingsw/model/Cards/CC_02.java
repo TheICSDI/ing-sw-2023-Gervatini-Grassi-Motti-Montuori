@@ -22,18 +22,18 @@ public class CC_02 implements CCStrategy {
 	// check if any of the four tile is empty.
 
 	if (current_shelf[0][0].getCategory().equals(type.EMPTY)
-			|| current_shelf[0][5].getCategory().equals(type.EMPTY)
-			|| current_shelf[4][0].getCategory().equals(type.EMPTY)
-			|| current_shelf[4][5].getCategory().equals(type.EMPTY)){
+			|| current_shelf[5][0].getCategory().equals(type.EMPTY)
+			|| current_shelf[0][4].getCategory().equals(type.EMPTY)
+			|| current_shelf[5][4].getCategory().equals(type.EMPTY)){
 		end=false;
 	}
 	else{
 		// check if all the tiles have the same type of the most low-left one.
 
 		color = current_shelf[0][0].getCategory();
-		if(!color.equals(current_shelf[0][5].getCategory())
-				|| !color.equals(current_shelf[4][0].getCategory())
-				|| !color.equals(current_shelf[4][5].getCategory())){
+		if(!color.equals(current_shelf[5][0].getCategory())
+				|| !color.equals(current_shelf[0][4].getCategory())
+				|| !color.equals(current_shelf[5][4].getCategory())){
 			end = false;
 		}
 	}
