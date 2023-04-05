@@ -14,8 +14,8 @@ public class CC_09 implements CCStrategy {
         int ok_column=0,i,j;
         boolean end= false;
 
-        for(i=0;i<5;i++){
-            for(j=0;j<6;j++){
+        for(i = 0; i < 5; i++){
+            for(j = 0; j < 6; j++){
                 current_tile_color = current_shelf[i][j].getCategory();
                 /*
                 controls that every tile in a column isn't empty and isn't not_accesible (the second is formally  a
@@ -23,9 +23,9 @@ public class CC_09 implements CCStrategy {
                 when the column had been checked the method verify if in it are six different type of tile, which means that the column
                 has all the types in here.
                 */
-                if(current_tile_color!= type.EMPTY &&
-                        current_tile_color!= type.NOT_ACCESSIBLE &&
-                        ! current_column_colors.contains(current_tile_color)){
+                if(!current_tile_color.equals(type.EMPTY) 
+						&& !current_tile_color.equals(type.NOT_ACCESSIBLE) 
+						&& !current_column_colors.contains(current_tile_color)){
                     current_column_colors.add(current_tile_color);
 
                 }

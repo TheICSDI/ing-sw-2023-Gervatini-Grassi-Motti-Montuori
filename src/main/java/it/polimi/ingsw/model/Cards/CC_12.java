@@ -16,8 +16,8 @@ public class CC_12 implements CCStrategy {
         /*
         first loop control che growing pyramid
          */
-        for(i=0;i<5 && control;i++){
-            for(j=0;j<6;j++){
+        for(i = 0;i < 5 && control; i++){
+            for(j = 0; j < 6; j++){
                 curr_tile_color = current_shelf[i][j].getCategory();
                 /*
                 as usual control on NOT_ACCESIBLE should be redundant.
@@ -25,10 +25,10 @@ public class CC_12 implements CCStrategy {
                 /*
                 dependently by where is located the tile it has to be full or empty the two ifs check this.
                  */
-                if(i<=j && (curr_tile_color == type.EMPTY || curr_tile_color == type.NOT_ACCESSIBLE)){
+                if(i <= j && (curr_tile_color.equals(type.EMPTY) || curr_tile_color.equals(type.NOT_ACCESSIBLE))){
                     control = false;
                 }
-                if(i>j&& curr_tile_color != type.EMPTY){
+                if(i > j && !curr_tile_color.equals(type.EMPTY)){
                     control = false;
                 }
             }
@@ -39,16 +39,16 @@ public class CC_12 implements CCStrategy {
         /*
         second loop control che not descending pyramid
          */
-        for(i=0,control =true;i<5 && control && !end;i++){
-            for(j=0;j<6;j++){
+        for(i = 0, control = true; i < 5 && control && !end; i++){
+            for(j = 0; j < 6; j++){
                 curr_tile_color = current_shelf[i][j].getCategory();
                 /*
                 dependently by where is located the tile it has to be full or empty the two ifs check this.
                  */
-                if((i+j <= 4) && (curr_tile_color == type.EMPTY || curr_tile_color == type.NOT_ACCESSIBLE)){
+                if((i+j <= 4) && (curr_tile_color.equals(type.EMPTY) || curr_tile_color.equals(type.NOT_ACCESSIBLE))){
                     control = false;
                 }
-                if(i>j&& curr_tile_color != type.EMPTY){
+                if(i > j && !curr_tile_color.equals(type.EMPTY)){
                     control = false;
                 }
             }

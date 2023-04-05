@@ -57,7 +57,7 @@ public class PersonalCard {
 
 		for (int i = 0; i < this.card.length; i++) {
 			for (int j = 0; j < this.card[0].length; j++) {
-				this.card[i][j] = new Tile("empty"); // filling the rest of the matrix with the NOT_ACCESSIBLE type
+				this.card[i][j] = new Tile("empty"); // filling the rest of the matrix with the EMPTY type
 			}
 		}
 
@@ -78,41 +78,27 @@ public class PersonalCard {
 	 */
 	public int calculatePoints(Tile[][] shelf)
 	{
-		int matches = 0, score = 0, count = 0;
+		int matches = 0, score = 0;
 		int max_matches = 6;
 
 		for(int i = 0; i < this.card.length; i++)
 		{
-			for(int j = 0; count <= max_matches && j < this.card[0].length; j++)
+			for(int j = 0; matches != max_matches && j < this.card[0].length; j++)
 			{
-				count++;
+				if(shelf[i][j].getCategory().equals(this.card[i][j].getCategory()))
+				{
+					matches++;
+				}
 			}
 		}
 
-		switch (matches)
-		{
-			case 1:
-				score = 1;
-				break;
-
-			case 2:
-				score = 2;
-				break;
-
-			case 3:
-				score = 4;
-				break;
-
-			case 4:
-				score = 6;
-				break;
-
-			case 5:
-				score = 9;
-				break;
-
-			case 6:
-				score = 12;
+		switch (matches) {
+			case 1 -> score = 1;
+			case 2 -> score = 2;
+			case 3 -> score = 4;
+			case 4 -> score = 6;
+			case 5 -> score = 9;
+			case 6 -> score = 12;
 		}
 		return score;
 	}

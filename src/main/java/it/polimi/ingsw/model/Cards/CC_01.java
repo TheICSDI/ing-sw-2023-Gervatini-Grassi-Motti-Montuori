@@ -24,16 +24,16 @@ public class CC_01 implements CCStrategy {
 
         for(int i = 0; i < num_row; i++)
         {
-            for(int j = 0; j < num_col && current_shelf[i][j].getCategory() != type.EMPTY; j++)
+            for(int j = 0; j < num_col && !current_shelf[i][j].getCategory().equals(type.EMPTY); j++)
             {
                 current_tile = current_shelf[i][j].getCategory();
                         // Check if the current tile is NOT part of a group in the previous row or column
                 if ( !(
-                        (j != 0 && current_shelf[i][j - 1].getCategory() == current_tile)
-                        || (i != 0 && current_shelf[i - 1][j].getCategory() == current_tile) )
+                        (j != 0 && current_shelf[i][j - 1].getCategory().equals(current_tile))
+                        || (i != 0 && current_shelf[i - 1][j].getCategory().equals(current_tile)) )
                         // Check if the current tile is part of a group in the next row or column
-                        &&( (j + 1 != num_col && current_shelf[i][j + 1].getCategory() == current_tile)
-                        || (i + 1 != num_row && current_shelf[i + 1][j].getCategory() == current_tile)) )
+                        &&( (j + 1 != num_col && current_shelf[i][j + 1].getCategory().equals(current_tile))
+                        || (i + 1 != num_row && current_shelf[i + 1][j].getCategory().equals(current_tile))) )
                 {
                     count++;
                     if (count == 6) {

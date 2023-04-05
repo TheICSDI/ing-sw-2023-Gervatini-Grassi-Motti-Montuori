@@ -13,11 +13,11 @@ public class CC_06 implements CCStrategy {
             /*
             not accessible is impossible to have in a shelf but however...
              */
-            if(t != type.NOT_ACCESSIBLE && t !=  type.EMPTY){
-                count =0;
-                for(i=0;i<5;i++){
-                    for(j=0;j<6;j++){
-                        if(current_shelf[i][j].getCategory() == t){
+            if(!t.equals(type.NOT_ACCESSIBLE) && !t.equals(type.EMPTY)){
+                count = 0;
+                for(i = 0; i < 5; i++){
+                    for(j = 0; j < 6; j++){
+                        if(current_shelf[i][j].getCategory().equals(t)){
                             count++;
                         }
                     }
