@@ -7,6 +7,10 @@ public class Main {
         int numLobby=0;
         int joinLobby;
 
+
+        /*if(Avvio come server)*/
+
+
         Player Player1=new Player(1, "Mayhem");
         Scanner in = new Scanner(System.in);
         String Interation_Prompt;
