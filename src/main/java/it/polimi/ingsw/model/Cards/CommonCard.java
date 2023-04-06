@@ -1,5 +1,5 @@
+/** Represents a common goal card. */
 package main.java.it.polimi.ingsw.model.Cards;
-
 import main.java.it.polimi.ingsw.model.Player;
 
 public class CommonCard{
