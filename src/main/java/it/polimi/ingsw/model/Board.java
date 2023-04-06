@@ -17,7 +17,7 @@ public class Board {
     private final int numCols = 9;
     private final int numRows = 9;
     public Tile[][] board;
-    private final List<Tile> tilesList;
+    private final List<String> tilesList;
 
     /** Gets the number of columns of the board */
     public int getNumCols() {
@@ -53,14 +53,14 @@ public class Board {
      * In this way there is no possibility for a tile to be used two times in the same game.
      */
     public void fillBoard(){
-        Random r = new Random();
         for(int i=0; i < numCols; i++) {
             for (int j=0; j < numRows; j++) {
-                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && board[i][j].getCategory().equals(type.EMPTY)){
-                    //Generate a random int between 0 (inclusive) and tilesList.size() (exclusive)
-                    int k = r.nextInt(0, tilesList.size());
-                    board[i][j] = tilesList.get(k);
-                    tilesList.remove(k);
+                if(board[i][j].getCategory().equals(type.EMPTY)){
+                    //Shuffle tilesList
+                    Collections.shuffle(tilesList);
+                    //Put the first element type in board (randomically)
+                    this.board[i][j] = new Tile(tilesList.get(0));
+                    this.tilesList.remove(0);
                 }
             }
         }
@@ -71,20 +71,18 @@ public class Board {
      * @return  true only if the board has to be filled, false otherwise.
      */
     public boolean isBoardEmpty(){
-        for(int i=0; i < numCols; i++){
-            for(int j=0; j < numRows; j++){
+        for(int i=0; i < numCols - 1; i++){
+            for(int j=0; j < numRows - 1; j++){
                 //if the object in the board is accessible and not null
-                try {
-                    if (!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i][j].getCategory().equals(type.EMPTY)) {
-                        //if the object in the right column or in the row below is accessible and not null then it means that
-                        //it is possible to "take" these tiles
-                        if ((!board[i + 1][j].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i + 1][j].getCategory().equals(type.EMPTY)) ||
-                                (!board[i][j + 1].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i][j + 1].getCategory().equals(type.EMPTY))) {
-                            //in this case the board does not need to get filled, so it return false
-                            return false;
-                        }
+                if (!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i][j].getCategory().equals(type.EMPTY)) {
+                    //if the object in the right column or in the row below is accessible and not null then it means that
+                    //it is possible to "take" these tiles
+                    if ((!board[i + 1][j].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i + 1][j].getCategory().equals(type.EMPTY))
+                            || (!board[i][j + 1].getCategory().equals(type.NOT_ACCESSIBLE) && !board[i][j + 1].getCategory().equals(type.EMPTY))) {
+                        //in this case the board does not need to get filled, so it return false
+                        return false;
                     }
-                } catch (IndexOutOfBoundsException ignored){}// Not sure if it works 100% of the times
+                }
             }
         }
         return true;
@@ -99,8 +97,7 @@ public class Board {
         JSONParser parser = new JSONParser();
         JSONArray board_na_File = null;
 
-        try
-        {
+        try {
             FileInputStream pathFile = new FileInputStream("JSON/board_na.json");
             board_na_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
 
@@ -125,8 +122,7 @@ public class Board {
         for(type t: type.values()){
             if(!t.equals(type.NOT_ACCESSIBLE) && !t.equals(type.EMPTY)) {
                 for (int i = 0; i < 22; i++) {
-                    Tile tmp = new Tile(t.toString());
-                    this.tilesList.add(tmp);
+                    this.tilesList.add(t.toString());
                 }
             }
         }

@@ -12,6 +12,8 @@ public enum type {
     FRAMES,
     TROPHIES,
     PLANTS,
+    NOT_ACCESSIBLE,
     EMPTY,
-    NOT_ACCESSIBLE;
 }
+
+

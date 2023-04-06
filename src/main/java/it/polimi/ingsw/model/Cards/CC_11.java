@@ -3,7 +3,7 @@ package main.java.it.polimi.ingsw.model.Cards;
 import main.java.it.polimi.ingsw.model.Player;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.polimi.ingsw.Model.Tile.*;
+import main.java.it.polimi.ingsw.model.Tile.*;
 
 public class CC_11 implements CCStrategy {
     public boolean isCompleted(Player p) {
