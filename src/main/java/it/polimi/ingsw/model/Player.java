@@ -70,7 +70,7 @@ public class Player {
         list and so on.
         it continues until the order list is empty (which appropriate controls it shouldn't be more than three iterations).
         */
-        while(order.isEmpty()) {
+        while(!order.isEmpty()) {
             orderedTiles.add(selected.get(order.get(0)));
             order.remove(0);
         }
@@ -162,6 +162,7 @@ public class Player {
      *
      * @param toSum points to be summed to the total of the player
      */
+
     public void addPoints(int toSum){
         this.totalPoints += toSum;
     }
@@ -170,7 +171,79 @@ public class Player {
     public int getTotalPoints() {
         return totalPoints;
     }
+    /*
+    method that calculates the remaining points, so those points that belongs to the general clustering of the shelf,
+    (the rule wrote on the board of the real game), in other word the remaining points that don't regard neither the
+    common cards neither the personal card.
+     */
+    public int Calculate_general_points(){
+        int total_points=0;
+        Tile[][] curr_shelf = this.Shelf;
+        Tile curr_tile;
+        int curr_cluster_dimension;
+        int[] position;
+        List<int[]> checked_positions = new ArrayList<>();
+        for(int i=0;i<5;i++){// should pass for every tile
+            for(int j=0;j<6;j++){
+                curr_cluster_dimension=0;
+                curr_tile = curr_shelf[i][j]; //take the tile as the base of a cluster
+                position = new int[]{i,j}; //take his position
+                if(!checked_positions.contains(position)){//check if the tiles belongs yet to a cluster
+                    checked_positions.add(position);//if not add it to the already checked tiles
 
+                    if(!curr_tile.getCategory().equals( type.EMPTY)){//if the tiles is not empty and not in another cluster
+                        curr_cluster_dimension++;//the current cluster has dim = 1 now
+                        curr_cluster_dimension = clustering_rec(curr_tile,i,j,checked_positions,curr_cluster_dimension);
+                        //reserch adiacent tiles of the same color
+                    }
+                }
+                if(curr_cluster_dimension >= 6) total_points += 8;//based on cluster dimension assign points
+                else if(curr_cluster_dimension == 5) total_points += 5;
+                else if(curr_cluster_dimension == 4) total_points += 3;
+                else if(curr_cluster_dimension == 3) total_points += 2;
+            }
+        }
+        return total_points;
+    }
+
+    private int clustering_rec(Tile t, int x, int y, List<int[]> already_checked,int cluster_dim){
+        Tile[][] curr_shelf = Shelf;
+        Tile next;
+        int[] position;
+        int[][] direction={{0,1},{1,0},{0,-1},{-1,0}};
+        /*
+        direction is used as refactor, it permits to explore all the directions with only a for loop (regulated by variable k)
+         */
+        for(int k=0;k<4;k++) {//as k change, change the direction of the inspection
+            position = new int[]{x + direction[k][0], y + direction[k][1]};
+            //position is the position of the next tile to check, as x and y coo (coo of the previour adiacente tile
+            //plus the direction in which as been moved the indices
+            if (position[0] >= 0 && position[0] < numRows && position[1] >= 0 && position[1] < numCols) {
+                //the if statement controls that next position is not out of bound from the shelf
+                next = curr_shelf[x + direction[k][0]][y + direction[k][1]];//take the next tile, sure that it exits
+                if (!already_checked.contains(position)) {
+                    //if it has not been yet controlled
+                    if (next.getCategory() == t.getCategory()) {//and is of the same type of the cluster
+                        already_checked.add(position);
+                        //add to checked list
+                        cluster_dim = clustering_rec(next, position[0], position[1], already_checked, cluster_dim + 1);
+                        /*increment the passed dim and call the recursive method on the next tile, checking if its adjacent tiles
+                        could be part of the cluster, when a next tile as no more adjacent cluster-addable tiles, it will not enter
+                        the if statement as will not call the recursive method and so the k-loop of the previous tile can go forward
+                        but with an incremented dimension due by his next tile search.
+                         */
+                    }
+                }
+            }
+        }
+        return cluster_dim;// when no more tiles can be explored the cluster has been identified
+
+        /*
+        IMPORTANT could exist a problem to report the already_checked list in the main method, idj if this case java modify the original
+        arraylist
+        in case of troubles we will fix that issue
+         */
+    }
     /** @return true only if the player has the end token, false otherwise. */
     public boolean getEndToken() {
         return endToken;
