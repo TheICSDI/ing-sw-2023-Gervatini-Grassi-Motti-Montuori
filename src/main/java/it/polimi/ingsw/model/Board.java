@@ -5,6 +5,7 @@ package main.java.it.polimi.ingsw.model;
 import java.io.*;
 import java.util.*;
 
+import main.java.it.polimi.ingsw.exceptions.NotValidPositionException;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
 
@@ -108,11 +109,11 @@ public class Board {
         for(int index=0; index<board_na_File.size(); index++) {
             JSONObject tmp = (JSONObject) board_na_File.get(index);
 
-            int indexRow = Integer.parseInt(tmp.get("x").toString());
-            int indexCol = Integer.parseInt(tmp.get("y").toString());
+            int indexX = Integer.parseInt(tmp.get("x").toString());
+            int indexY = Integer.parseInt(tmp.get("y").toString());
             int n = Integer.parseInt(tmp.get("type").toString());
-            if(n < numPlayers) {
-                this.board[indexRow][indexCol] = new Tile("not_accessible");
+            if(n > numPlayers) {
+                this.board[indexX][indexY] = new Tile("not_accessible");
             }
         }
     }
@@ -158,9 +159,18 @@ public class Board {
      *
      * @param ToRemove a set of positions.
      */
-    public void RemoveTiles(Set<Position> ToRemove){
+    public void RemoveTiles(Set<Position> ToRemove) throws NotValidPositionException {
         for (Position p: ToRemove) {
-            board[p.getX()][p.getY()] = new Tile("empty");
+            if(board[p.getX()][p.getY()].getCategory().equals(type.NOT_ACCESSIBLE)){
+                throw new NotValidPositionException("This position is not accessible in the board!");
+            } else {
+                board[p.getX()][p.getY()] = new Tile("empty");
+            }
         }
+    }
+
+    /** Gets the tile ad the position passed by parameter. */
+    public Tile getTile(Position p){
+        return this.board[p.getX()][p.getY()];
     }
 }

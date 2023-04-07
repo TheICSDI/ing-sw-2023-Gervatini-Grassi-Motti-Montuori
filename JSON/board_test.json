@@ -1,0 +1,127 @@
+[
+  {
+    "x": 0,
+    "y": 4,
+    "type": "cats"
+  },
+  {
+    "x": 1,
+    "y": 3,
+    "type": "plants"
+  },
+  {
+    "x": 1,
+    "y": 5,
+    "type": "books"
+  },
+  {
+    "x": 2,
+    "y": 2,
+    "type": "cats"
+  },
+  {
+    "x": 2,
+    "y": 4,
+    "type": "games"
+  },
+  {
+    "x": 2,
+    "y": 6,
+    "type": "books"
+  },
+  {
+    "x": 3,
+    "y": 1,
+    "type": "trophies"
+  },
+  {
+    "x": 3,
+    "y": 3,
+    "type": "games"
+  },
+  {
+    "x": 3,
+    "y": 5,
+    "type": "frames"
+  },
+  {
+    "x": 3,
+    "y": 7,
+    "type": "trophies"
+  },
+  {
+    "x": 4,
+    "y": 0,
+    "type": "plants"
+  },
+  {
+    "x": 4,
+    "y": 2,
+    "type": "frames"
+  },
+  {
+    "x": 4,
+    "y": 4,
+    "type": "books"
+  },
+  {
+    "x": 4,
+    "y": 6,
+    "type": "plants"
+  },
+  {
+    "x": 4,
+    "y": 8,
+    "type": "cats"
+  },
+  {
+    "x": 5,
+    "y": 1,
+    "type": "trophies"
+  },
+  {
+    "x": 5,
+    "y": 3,
+    "type": "frames"
+  },
+  {
+    "x": 5,
+    "y": 5,
+    "type": "plants"
+  },
+  {
+    "x": 5,
+    "y": 7,
+    "type": "books"
+  },
+  {
+    "x": 6,
+    "y": 2,
+    "type": "trophies"
+  },
+  {
+    "x": 6,
+    "y": 4,
+    "type": "plants"
+  },
+  {
+    "x": 6,
+    "y": 6,
+    "type": "cats"
+  },
+  {
+    "x": 7,
+    "y": 3,
+    "type": "trophies"
+  },
+  {
+    "x": 7,
+    "y": 5,
+    "type": "books"
+  },
+  {
+    "x": 8,
+    "y": 8,
+    "type": "plants"
+  }
+]

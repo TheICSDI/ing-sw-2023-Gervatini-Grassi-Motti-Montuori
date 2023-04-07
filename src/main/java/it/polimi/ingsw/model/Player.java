@@ -4,6 +4,7 @@
  */
 package main.java.it.polimi.ingsw.model;
 
+import main.java.it.polimi.ingsw.exceptions.NotValidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.PersonalCard;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
@@ -129,7 +130,7 @@ public class Player {
      *
      * @param b board from which the player can take the tiles.
      */
-    public void pickTiles(Board b) throws NotValidColumnException {
+    public void pickTiles(Board b) throws NotValidColumnException, NotValidPositionException {
         //Position chosen by the player
         Set<Position> chosen;
         do{
