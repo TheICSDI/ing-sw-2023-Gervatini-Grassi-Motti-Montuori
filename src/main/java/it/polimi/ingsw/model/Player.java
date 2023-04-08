@@ -1,6 +1,6 @@
 /** Represents a player.
  *  Each player has a shelf and a personal goal card.
- * @Author Caterina Motti, Marco Gervatini, Andrea Grassi
+ * @Author Caterina Motti, Andrea Grassi, Marco Gervatini
  */
 package main.java.it.polimi.ingsw.model;
 
@@ -102,11 +102,12 @@ public class Player {
             throw new InvalidColumnException("Selected column has no enough space!");
         } else {
             //For each tile in toInsert
-            for (int i = 0; i < toInsert.size(); i++){
-                for(int j = 0; j < numCols; j++){
+            for(Tile t : toInsert){
+                for (int i = numRows - 1; i >= 0; i--){
                     //If the element in the selected column is empty then it put the new tile
-                    if(Shelf[j][col].getCategory().equals(type.EMPTY)) {
-                        Shelf[j][col] = toInsert.get(i);
+                    if (Shelf[i][col].getCategory().equals(type.EMPTY)) {
+                        Shelf[i][col] = t;
+                        break;
                     }
                 }
             }
@@ -144,6 +145,16 @@ public class Player {
         Shelf = shelf;
     }
 
+    /** Return true only if the shelf of the player is full, false otherwise. */
+    public boolean isShelfFull(){
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                if(this.Shelf[i][j].getCategory().equals(type.EMPTY)) return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Update the total points of the player.
      *
@@ -158,12 +169,9 @@ public class Player {
         return totalPoints;
     }
 
-
-    /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf.
-     */
+    /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf. */
     public void calculateGeneralPoints(){
         boolean[][] checked = new boolean[numRows][numCols];
-        int currClusterDimension = 0;
         //Remove all element from checked before starting the calculation
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {
@@ -173,6 +181,7 @@ public class Player {
         //For every tile in the shelf
         for(int i = 0; i < numRows; i++){
             for(int j = 0; j < numCols; j++){
+                int currClusterDimension = 0;
                 //If the tile does not already belong to a cluster, adds it to the checked tiles
                 if(!checked[i][j]){
                     checked[i][j] = true;
@@ -190,9 +199,11 @@ public class Player {
         }
     }
 
+    /** Recursive function that calculate the dimension of the current cluster.*/
     private int clusteringRes(int x, int y, boolean[][] checked){
         Tile t = this.Shelf[x][y];
         int clusterDim = 1;
+        //Explores the shelf in every direction, if the tile is of the same type as t it calls itself recursively
         try {
             if (!checked[x][y + 1] && t.getCategory().equals(this.Shelf[x][y + 1].getCategory())) {
                 checked[x][y + 1] = true;

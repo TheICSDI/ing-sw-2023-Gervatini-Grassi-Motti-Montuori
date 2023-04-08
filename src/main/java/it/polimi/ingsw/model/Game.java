@@ -3,7 +3,7 @@
  * @author Andrea Grassi, Caterina Motti
  */
 package main.java.it.polimi.ingsw.model;
-import java.util.*;
+
 
 import main.java.it.polimi.ingsw.controller.Controller;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
@@ -11,11 +11,16 @@ import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 public class Game {
     private static int count = 0;
     public int id;
     private final int nPlayers;
-    private List<Player> players;
+    private final List<Player> players;
     private final Board board;
     private List<CCStrategy> allCC;
     private final List<CommonCard> CommonCards = new ArrayList<>();
@@ -69,7 +74,9 @@ public class Game {
      * @see Player,CommonCard,PersonalCard
      */
     public void startGame() throws InvalidColumnException, InvalidPositionException {
-        boolean endGame = false;//end game token non pescato
+        //At the starting point no player has the endgame token
+        boolean endGame = false;
+        boolean check = false;
 
         while(!endGame){
             for (Player p: players) {
@@ -83,6 +90,7 @@ public class Game {
                 if(board.isBoardEmpty()){
                     board.fillBoard();
                 }
+
                 //At each turn the common card goals are calculated
                 if(CommonCards.get(0).DoControl(p)){
                     CommonCards.get(0).CalculatePoints(p);
@@ -90,9 +98,17 @@ public class Game {
                 if(CommonCards.get(1).DoControl(p)){
                     CommonCards.get(1).CalculatePoints(p);
                 }
-                //If the current player has the token end
-                if(p.getEndToken()){
+
+                //If the end game token has not been assigned and the current player has completed his shelf
+                //it assigns the end token and add 1 point
+                if (!check && p.isShelfFull()) {
+                    p.setEndToken(true);
                     p.addPoints(1);
+                    check = true;
+                }
+
+                //If the next player has the end game token the game ends
+                if (players.get(players.indexOf(p) + 1).getEndToken()) {
                     endGame = true;
                 }
             }
@@ -102,6 +118,30 @@ public class Game {
         }
         //Manca il conteggio di personal card
     }
+
+    /** Returns the winner of the game.
+     * The player who scored most points wins the game. In case of a tie, the player sitting further from the
+     * first one wins the game.
+     */
+    public Player calculateWinner(){
+        //By default, the winner is the last player to play
+        // (if everybody has the same total points he is the winner)
+        Player winner = players.get(players.size() - 1);
+        //For each player, if the number of total points is grater than the current winner, the winner is updated
+        for(Player p : players){
+            if(p.getTotalPoints() > winner.getTotalPoints()){
+                winner = p;
+            } else if (p.getTotalPoints() == winner.getTotalPoints()){
+                //If two players have the same amount of points, then the winner is the one sitting further from
+                // the first player.
+                if(players.indexOf(p) > players.indexOf(winner)) {
+                    winner = p;
+                }
+            }
+        }
+        return winner;
+    }
+
 
     /**
      * Initializes all common and personal goal cards.
