@@ -155,8 +155,8 @@ class PlayerTest {
                 assertNotEquals(type.EMPTY, p1.getShelf()[i][j].getCategory());
             }
         }
-        /**p.calculateGeneralPoints();
-        assertEquals(15, p.getTotalPoints());*/
+        p1.calculateGeneralPoints();
+        assertEquals(15, p1.getTotalPoints());
     }
 
 
