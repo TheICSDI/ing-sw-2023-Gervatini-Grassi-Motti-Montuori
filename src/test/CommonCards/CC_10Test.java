@@ -1,6 +1,7 @@
 package test.CommonCards;
 
 import main.java.it.polimi.ingsw.model.Cards.CCStrategy;
+import main.java.it.polimi.ingsw.model.Cards.CC_10;
 import main.java.it.polimi.ingsw.model.Cards.CC_11;
 import main.java.it.polimi.ingsw.model.Player;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
@@ -20,5 +21,7 @@ class CC_10Test {
 
     @Test
     void isCompleted() {
+        CCStrategy CC10=new CC_10();
+        CCGeneral.check(CC10,"JSON/CC10_test.json",2);
     }
 }
