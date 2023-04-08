@@ -318,4 +318,8 @@ public class Player {
     public void setTurn(int turn) {
         this.turn = turn;
     }
+
+    public void setShelf(Tile[][] shelf) {
+        Shelf = shelf;
+    }
 }

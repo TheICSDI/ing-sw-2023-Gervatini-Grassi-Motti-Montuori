@@ -49,6 +49,19 @@ public class CC_03 implements CCStrategy {
 					p = p + adj(c, x, y+1, shelf, Seen);
 			}
 		}catch (IndexOutOfBoundsException ignored){}
+        try{
+            if (shelf[x-1][y].getCategory().equals(c) && !Seen[x+1][y]) {
+                Seen[x-1][y]=true;
+                p = p + adj(c, x-1, y, shelf, Seen);
+            }
+        }catch (IndexOutOfBoundsException ignored){}
+
+        try{
+            if (shelf[x][y-1].getCategory().equals(c) && !Seen[x][y+1]) {
+                Seen[x][y-1]=true;
+                p = p + adj(c, x, y-1, shelf, Seen);
+            }
+        }catch (IndexOutOfBoundsException ignored){}
 
         return p;
     }

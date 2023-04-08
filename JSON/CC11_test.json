@@ -1,0 +1,55 @@
+[
+  {
+    "tiles": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "plants"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "plants"
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "type": "plants"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "plants"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "plants"
+      }
+    ]
+  },
+  {
+    "tiles": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "plants"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "plants"
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "type": "plants"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "cats"
+      }
+    ]
+  }
+]
