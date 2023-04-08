@@ -1,3 +1,6 @@
+/** Tests for class CC_11.java.
+ * @author Andrea Grassi.
+ */
 package test.CommonCards;
 
 import main.java.it.polimi.ingsw.model.Cards.CCStrategy;
