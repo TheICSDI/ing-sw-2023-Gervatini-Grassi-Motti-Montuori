@@ -32,7 +32,7 @@ public class CCGeneral {
                 shelf[i][j]=new Tile("EMPTY");
             }
         }
-        Player p=new Player(1,"test");
+        Player p=new Player("test");
         p.setShelf(shelf);
         assertFalse(CCcard.isCompleted(p));
         try {
