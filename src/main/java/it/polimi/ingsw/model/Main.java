@@ -11,7 +11,7 @@ public class Main {
         /*if(Avvio come server)*/
 
 
-        Player Player1=new Player(1, "Mayhem");
+        Player Player1=new Player("Mayhem");
         Scanner in = new Scanner(System.in);
         String Interation_Prompt;
         List<Lobby> Lobbies=new ArrayList<>();
@@ -21,14 +21,14 @@ public class Main {
             switch (Interation_Prompt){
                 case "Create":
                     numLobby++;
-                    Lobbies.add(new Lobby(Player1,numLobby));
+                    Lobbies.add(new Lobby(Player1));
                     System.out.println("main.java.polimi.ingsw.Model.Lobby creata");
                     break;
                 case "Join":
                     System.out.print("Numero lobby: ");
                     joinLobby= in.nextInt();
                     for (Lobby l: Lobbies) {
-                        if(l.lobbyNumber==joinLobby){
+                        if(l.lobbyId ==joinLobby){
                             l.Join(Player1);
                         }
                     }
@@ -52,7 +52,7 @@ public class Main {
                             List<Player> players =l.Players;
                             Lobbies.remove(l);
                             //Thread(?)
-                            Game game = new Game("G1", players);
+                            Game game = new Game(players);
                         }
                     }
                     break;

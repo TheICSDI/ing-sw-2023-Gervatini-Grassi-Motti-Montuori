@@ -1,7 +1,9 @@
+/** Tests for class Player.java.
+ * @author Caterina Motti.
+ */
 package test;
 
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
-import main.java.it.polimi.ingsw.model.Board;
 import main.java.it.polimi.ingsw.model.Player;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
@@ -19,8 +21,8 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
-    Player p = new Player(1, "CLR");
-    Tile[][] s = p.getShelf();
+    Player p1 = new Player("CLR");
+    Tile[][] s = p1.getShelf();
     Tile t1 = new Tile("cats");
     Tile t2 = new Tile("plants");
     Tile t3 = new Tile("books");
@@ -29,7 +31,7 @@ class PlayerTest {
      * In this way there is no empty space, and it is possible to calculate the points.
      */
     private Player Parser(){
-        Player p = new Player(2, "Jhonny");
+        Player p = new Player("Jhonny");
         JSONParser parser = new JSONParser();
         JSONArray shelf_test_File = null;
 
@@ -54,12 +56,11 @@ class PlayerTest {
 
     @Test
     void orderTiles() {
-
         List<Tile> selected = new ArrayList<>();
         List<Integer> order = new ArrayList<>();
         List<Tile> ordered;
         //Empty selected and order
-        ordered = p.orderTiles(selected, order);
+        ordered = p1.orderTiles(selected, order);
         assertTrue(ordered.isEmpty());
 
         //Add some tiles in selected
@@ -71,7 +72,7 @@ class PlayerTest {
         order.add(2);
         order.add(1);
 
-        ordered = p.orderTiles(selected, order);
+        ordered = p1.orderTiles(selected, order);
 
         for (int i = 0; i < selected.size(); i++) {
             assertEquals(selected.get(order.get(i) - 1), ordered.get(i));
@@ -81,7 +82,7 @@ class PlayerTest {
         //case 1: more element in order
         order.add(4);
         Throwable ex1 = assertThrows(InputMismatchException.class, () -> {
-            List<Tile> o = p.orderTiles(selected, order);
+            List<Tile> o = p1.orderTiles(selected, order);
         });
         assertEquals("The selected order is wrong, you have selected less tiles!", ex1.getMessage());
 
@@ -89,7 +90,7 @@ class PlayerTest {
         order.remove(0);
         order.remove(1);
         Throwable ex2 = assertThrows(InputMismatchException.class, () -> {
-            List<Tile> o = p.orderTiles(selected, order);
+            List<Tile> o = p1.orderTiles(selected, order);
         });
         assertEquals("The selected order is wrong, you have selected more tiles!", ex2.getMessage());
     }
@@ -101,9 +102,9 @@ class PlayerTest {
         int col = 2;
 
         //Empty to insert
-        p.insertInShelf(toInsert, col);
-        for (int i = 0; i < p.getNumRows(); i++) {
-            for (int j = 0; j < p.getNumCols(); j++) {
+        p1.insertInShelf(toInsert, col);
+        for (int i = 0; i < p1.getNumRows(); i++) {
+            for (int j = 0; j < p1.getNumCols(); j++) {
                 assertEquals(type.EMPTY, s[i][j].getCategory());
             }
         }
@@ -112,10 +113,10 @@ class PlayerTest {
         toInsert.add(t1);
         toInsert.add(t2);
         toInsert.add(t3);
-        p.insertInShelf(toInsert, col);
+        p1.insertInShelf(toInsert, col);
 
-        for (int i = 0; i < p.getNumRows(); i++) {
-            for (int j = 0; j < p.getNumCols(); j++) {
+        for (int i = 0; i < p1.getNumRows(); i++) {
+            for (int j = 0; j < p1.getNumCols(); j++) {
                 if(j != col){
                     assertEquals(type.EMPTY, s[i][j].getCategory());
                 } else {
@@ -129,13 +130,13 @@ class PlayerTest {
         //Wrong column selected
         //case 1: column out of bound
         Throwable ex1 = assertThrows(InvalidColumnException.class, () -> {
-            p.insertInShelf(toInsert, 8);
+            p1.insertInShelf(toInsert, 8);
         });
         assertEquals("Selected column is out of bound!", ex1.getMessage());
         //case 2: column is full
-        p = Parser();
+        p1 = Parser();
         Throwable ex2 = assertThrows(InvalidColumnException.class, () -> {
-            p.insertInShelf(toInsert, col);
+            p1.insertInShelf(toInsert, col);
         });
         assertEquals("Selected column has no enough space!", ex2.getMessage());
     }
@@ -147,15 +148,15 @@ class PlayerTest {
     @Test
     void calculateGeneralPoints() {
         //Empty shelf, so no points are assigned
-        p.calculateGeneralPoints();
-        assertEquals(0, p.getTotalPoints());
+        p1.calculateGeneralPoints();
+        assertEquals(0, p1.getTotalPoints());
 
         //Full shelf with 2 cluster of 3 tiles (4pt), 1 cluster of 4 tiles (3pt) and 1 cluster of 6 tiles (6pt)
         //for a total of 4 + 3 + 8 = 15 pt
-        p = Parser();
-        for (int i = 0; i < p.getNumRows(); i++) {
-            for (int j = 0; j < p.getNumCols(); j++) {
-                assertNotEquals(type.EMPTY, p.getShelf()[i][j].getCategory());
+        p1 = Parser();
+        for (int i = 0; i < p1.getNumRows(); i++) {
+            for (int j = 0; j < p1.getNumCols(); j++) {
+                assertNotEquals(type.EMPTY, p1.getShelf()[i][j].getCategory());
             }
         }
         /**p.calculateGeneralPoints();
