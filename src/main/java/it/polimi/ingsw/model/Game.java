@@ -10,10 +10,11 @@ import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
 
 public class Game {
-    private String id;
-    private int nPlayers;
+    private static int count = 0;
+    public int id;
+    private final int nPlayers;
     private List<Player> players;
-    private Board board;
+    private final Board board;
     private List<CCStrategy> allCC;
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private final List<Integer> nPC = new ArrayList<>();
@@ -23,15 +24,16 @@ public class Game {
      * It picks the first player and give randomically each player a personal goal card.
      * It randomically choose two common goal cards.
      */
-    public Game(String id, List<Player> players){
+    public Game(List<Player> players){
         //Each game is represented by a unique id that can't be changed
-        this.id = id;
+        this.count++;
+        this.id = count;
         this.nPlayers = players.size();
         this.players = players;
 
         //Initializes the new board
-        board = new Board(nPlayers);
-        board.fillBoard();
+        this.board = new Board(nPlayers);
+        this.board.fillBoard();
 
         //Initializes the common and personal goal cards
         resetCards();
@@ -60,36 +62,39 @@ public class Game {
     * the game checks if he has the endGameToken,if he has completed a common task or if it needs to refill
     *  the board*/
     /**
-     * Manages turns, token, common cards and board checks
+     * Manages turns, token, common cards and board checks.
      *
      * @see Player,CommonCard,PersonalCard
      */
     public void startGame() throws InvalidColumnException, InvalidPositionException {
         boolean endGame = false;//end game token non pescato
-        //int nTurno=1;
 
         while(!endGame){
-            //System.out.println("Turno "+nTurno+": "); commentato perchè non so cosa dobbiamo fare con la cli
             for (Player p:  players) {
+                //The player can pick some tiles from the board
                 p.pickTiles(board);
+                //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
                 }
+                //At each turn the common card goals are calculated
                 if(CommonCards.get(0).DoControl(p)){
                     CommonCards.get(0).CalculatePoints(p);
                 }
                 if(CommonCards.get(1).DoControl(p)){
                     CommonCards.get(1).CalculatePoints(p);
                 }
+                //If the current player has the token end
                 if(p.getEndToken()){
                     p.addPoints(1);
-                    endGame=true;
+                    endGame = true;
                 }
             }
-            //nTurno++;
         }
-
-        //Manca solo il conteggio dei punti finale(Personal cards e same type tiles adiacenti)
+        for(Player p : players){
+            p.calculateGeneralPoints();
+        }
+        //Manca il conteggio di personal card
     }
 
     /**
@@ -124,17 +129,14 @@ public class Game {
     public void showBoard(Board board){
         for(int i=0;i<board.getNumRows();i++){
             for(int j=0;j<board.getNumCols();j++){
-                if(board.board[i][j]==null){
-                    System.out.print(" ");
-                }
                 switch (board.board[i][j].getCategory()) {
-                    case NOT_ACCESSIBLE -> System.out.println("-");
                     case GAMES -> System.out.println("G");
                     case CATS -> System.out.println("C");
                     case BOOKS -> System.out.println("B");
                     case FRAMES -> System.out.println("F");
                     case PLANTS -> System.out.println("P");
                     case TROPHIES -> System.out.println("T");
+                    //case not_accessible or empty
                     default -> System.out.println("-");
                 }
             }

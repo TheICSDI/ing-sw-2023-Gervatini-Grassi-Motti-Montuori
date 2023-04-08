@@ -13,8 +13,7 @@ import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import java.util.*;
 
 public class Player {
-    private String nickname;
-    private final int id;
+    private final String nickname;
     private final int numRows = 6;
     private final int numCols = 5;
     private Tile[][] Shelf;
@@ -24,16 +23,15 @@ public class Player {
     private int totalPoints;
     private int turn;
 
-    /** Create a player with a specified id and nickname.
-     * The id is final, so it can't be changed, otherwise the nickname can be changed using the setter.
+    /**
+     * Create a player with a specified id and nickname.
+     * The nickname is final, so it can't be changed. It is unique.
      * It initializes total points to 0.
      * It initializes all tiles in shelf to "empty".
      *
-     * @param id id of the player.
      * @param nick nickname of the player.
      */
-    public Player(int id, String nick){
-        this.id = id;
+    public Player(String nick){
         this.nickname = nick;
         this.totalPoints = 0;
         this.Shelf = new Tile[numRows][numCols];
@@ -248,19 +246,9 @@ public class Player {
         this.endToken = value;
     }
 
-    /** Sets a new nickname for the player. */
-    public void setNickname(String nick) {
-        this.nickname = nick;
-    }
-
     /** Gets the nickname of the player. */
     public String getNickname() {
         return nickname;
-    }
-
-    /** Gets the id of the player. */
-    public int getId() {
-        return id;
     }
 
     /** Gets the personal card of the player. */
