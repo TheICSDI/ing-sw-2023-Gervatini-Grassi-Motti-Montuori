@@ -3,8 +3,8 @@
  */
 package main.java.it.polimi.ingsw.exceptions;
 
-public class NotValidColumnException extends Exception{
-    public NotValidColumnException(String message){
+public class InvalidColumnException extends Exception{
+    public InvalidColumnException(String message){
         super(message);
     }
 }

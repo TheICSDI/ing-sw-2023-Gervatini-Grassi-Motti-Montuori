@@ -3,8 +3,8 @@
  */
 package main.java.it.polimi.ingsw.exceptions;
 
-public class NotValidPositionException extends Throwable {
-    public NotValidPositionException(String message){
+public class InvalidPositionException extends Throwable {
+    public InvalidPositionException(String message){
         super(message);
     }
 }

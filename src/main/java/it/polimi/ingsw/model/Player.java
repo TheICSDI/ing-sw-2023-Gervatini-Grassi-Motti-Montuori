@@ -1,22 +1,22 @@
 /** Represents a player.
  *  Each player has a shelf and a personal goal card.
- * @Author Marco Gervatini, Caterina Motti, Andrea Grassi
+ * @Author Caterina Motti, Marco Gervatini, Andrea Grassi
  */
 package main.java.it.polimi.ingsw.model;
 
-import main.java.it.polimi.ingsw.exceptions.NotValidPositionException;
+import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.PersonalCard;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
 import main.java.it.polimi.ingsw.controller.Controller;
-import main.java.it.polimi.ingsw.exceptions.NotValidColumnException;
+import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import java.util.*;
 
 public class Player {
     private String nickname;
     private final int id;
-    private final int numRows = 5;
-    private final int numCols = 6;
+    private final int numRows = 6;
+    private final int numCols = 5;
     private Tile[][] Shelf;
     private PersonalCard PersonalCard;
     private boolean firstToken, endToken;
@@ -46,33 +46,23 @@ public class Player {
 
     /**
      * Orders the selected tiles as order passed as a parameter.
+     * The order is represented by a list in which each element refers to the desired position for the ordered tiles.
+     * Example: selected("frames", "cats", "books"), order(3, 2, 1) -> ordered("books", "cats", "frames").
      *
      * @param selected list of selected tiles to order.
      * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
      * @return orderedTiles list of selected tiles in order.
      */
-    private List<Tile> orderTiles(List<Tile> selected, List<Integer> order){
+    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) {
         List<Tile> orderedTiles = new ArrayList<>();
-        /*order is formalized as follows
-        the player see a list of the tiles he chose like
-        1 cats
-        2 books
-        3 plants
-        and write the sequence in which he wants to insert them, like
-        213, where the first corresponds to the lower he will position in his shelf column
-        2->1->3 is the arraylist passed under order name.
-        here aren't controls over order, like size and range of values.
-
-        In ordered_select append the next value from selected, the tile chosen is determined
-
-        by the first element of order, in the example the first new element has to be the second of the old list
-        that, the head of order is removed, and then the second element to place is the first element of the original
-        list and so on.
-        it continues until the order list is empty (which appropriate controls it shouldn't be more than three iterations).
-        */
-        while(!order.isEmpty()) {
-            orderedTiles.add(selected.get(order.get(0)));
-            order.remove(0);
+        if (selected.size() > order.size()) {
+            throw new InputMismatchException("The selected order is wrong, you have selected more tiles!");
+        } else if (selected.size() < order.size()){
+            throw new InputMismatchException("The selected order is wrong, you have selected less tiles!");
+        } else {
+            for (int i = 0; i < selected.size(); i++) {
+                orderedTiles.add(selected.get(order.get(i) - 1));
+            }
         }
         return orderedTiles;
     }
@@ -82,23 +72,23 @@ public class Player {
      *
      * @param numTiles number of tiles to be inserted.
      * @param col chosen column from the player. It goes from 0 to 5.
-     * @throws NotValidColumnException if the parameter col is out of bound.
+     * @throws InvalidColumnException if the parameter col is out of bound.
      * @return true only if the shelf has enough space for the given tiles, false otherwise.
      */
-    private boolean checkColumn(int numTiles, int col) throws NotValidColumnException{
+    private boolean checkColumn(int numTiles, int col) throws InvalidColumnException {
         if(col < 0 || col >= numCols){
-            throw new NotValidColumnException("Selected column is out of bound!");
+            throw new InvalidColumnException("Selected column is out of bound!");
         } else {
             for(int j = 0; j < numRows; j++){
                 //Check how many empty spaces there are in the selected column
-                if(Shelf[col][j].getCategory().equals(type.EMPTY)) {
+                if(this.Shelf[j][col].getCategory().equals(type.EMPTY)) {
                     //For each empty space it decreases numTiles
                     numTiles --;
                     //If numTiles < 0 then there is no enough space
-                    if(numTiles < 0) return false;
+                    if(numTiles < 0) return true;
                 }
             }
-            return true;
+            return false;
         }
     }
 
@@ -107,18 +97,18 @@ public class Player {
      *
      * @param toInsert a list of tiles, ordered, to be put in Shelf.
      * @param col chosen column.
-     * @throws NotValidColumnException if the selected column has no enough space.
+     * @throws InvalidColumnException if the selected column has no enough space.
      */
-    public void changeShelf(List<Tile> toInsert, int col) throws NotValidColumnException {
+    public void insertInShelf(List<Tile> toInsert, int col) throws InvalidColumnException {
         if(!checkColumn(toInsert.size(), col)){
-            throw new NotValidColumnException("Selected column has no enough space!");
+            throw new InvalidColumnException("Selected column has no enough space!");
         } else {
             //For each tile in toInsert
-            for (Tile t: toInsert){
+            for (int i = 0; i < toInsert.size(); i++){
                 for(int j = 0; j < numCols; j++){
                     //If the element in the selected column is empty then it put the new tile
-                    if(Shelf[col][j].getCategory().equals(type.EMPTY)) {
-                        Shelf[col][j] = t;
+                    if(Shelf[j][col].getCategory().equals(type.EMPTY)) {
+                        Shelf[j][col] = toInsert.get(i);
                     }
                 }
             }
@@ -130,7 +120,7 @@ public class Player {
      *
      * @param b board from which the player can take the tiles.
      */
-    public void pickTiles(Board b) throws NotValidColumnException, NotValidPositionException {
+    public void pickTiles(Board b) throws InvalidColumnException, InvalidPositionException {
         //Position chosen by the player
         Set<Position> chosen;
         do{
@@ -149,8 +139,22 @@ public class Player {
         do{
             col = Controller.ChooseColumn();
         } while(checkColumn(ChosenTiles.size(),col));
-        changeShelf(ChosenTiles, col);
+        insertInShelf(ChosenTiles, col);
     }
+
+    /*public List<Tile> pickTiles(Set<Position> chosen, Board b) throws InvalidPositionException {
+     //Position chosen by the player
+     if (!b.AvailableTiles().containsAll(chosen)) {
+     throw new InputMismatchException("The chosen tiles are not available to be taken!");
+     } else {
+     List<Tile> choice = new ArrayList<>();
+     for (Position p : chosen) {
+     choice.add(b.board[p.getX()][p.getY()]);
+     }
+     b.RemoveTiles(chosen);
+     return choice;
+     }
+     }*/
 
     /** Gets the shelf of the player. */
     public Tile[][] getShelf() {
@@ -172,25 +176,26 @@ public class Player {
         return totalPoints;
     }
 
+    private final List<Position> checked = new ArrayList<>();
     /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf.
      */
     public void calculateGeneralPoints(){
-        List<Position> checkedPositions = new ArrayList<>();
+        //Remove all element from checked before starting the calculation
+        checked.clear();
         //For every tile in the shelf
-        for(int i = 0; i < numCols; i++){
-            for(int j = 0; j < numRows; j++){
+        for(int i = 0; i < numRows; i++){
+            for(int j = 0; j < numCols; j++){
                 //Take the tile as base for a cluster
-                int currClusterDimension = 0;
+                int currClusterDimension = 1;
                 Tile tmp = this.Shelf[i][j];
                 Position p = new Position(i,j); //take its position
 
                 //If the tile does not already belong to a cluster, adds it to the checked tiles
-                if(!checkedPositions.contains(p)){
-                    checkedPositions.add(p);
+                if(!checked.contains(p)){
+                    checked.add(p);
                     //If the tile is not empty, it calls clusteringRes that research for a cluster of tiles of the same type
-                    if(!tmp.getCategory().equals( type.EMPTY)){
-                        currClusterDimension++;
-                        currClusterDimension = clusteringRes(tmp, p, checkedPositions, currClusterDimension);
+                    if(!tmp.getCategory().equals(type.EMPTY)){
+                        currClusterDimension = clusteringRes(p, currClusterDimension);
                     }
                 }
                 //It assigns points based on the dimension of the found cluster
@@ -202,35 +207,34 @@ public class Player {
         }
     }
 
-    private int clusteringRes(Tile t, Position position, List<Position> alreadyChecked, int clusterDim){
-        //direction permits to explore all the directions with only a for loop (regulated by variable k)
-        int[][] direction = {{0,1},{1,0},{0,-1},{-1,0}};
-        for(int k = 0; k < 4; k++) {
-            //p is the position of the next tile to check
-            Position p = new Position(position.getX() + direction[k][0], position.getY() + direction[k][1]);
-
+    private int clusteringRes(Position position, int clusterDim){
+        Tile t = this.Shelf[position.getX()][position.getY()];
+        List<Position> directions = new ArrayList<>();
+        directions.add(new Position(1, 0));
+        directions.add(new Position(0, 1));
+        for (Position k : directions) {
+            //Position of the next tile to check according to the direction
+            Position p = new Position(position.getX() + k.getX(), position.getY() + k.getY());
             //if the position is not out of bound
             if (p.getX() >= 0 && p.getX() < numRows && p.getY() >= 0 && p.getY() < numCols) {
                 //it takes the next tile
-                Tile next = this.Shelf[position.getX() + direction[k][0]][position.getY() + direction[k][1]];
+                Tile next = this.Shelf[p.getX()][p.getY()];
                 //if it has not been checked yet and is of the same type of the cluster, it is added to the already checked tiles
-                if (!alreadyChecked.contains(p) && next.getCategory().equals(t.getCategory())) {
-                    alreadyChecked.add(p);
+                if (!checked.contains(p) && next.getCategory().equals(t.getCategory())) {
+                    checked.add(p);
                     //Call recursively the method by passing the next tile, its position, the list of already checked
                     //tiles and the incremented cluster dimension.
-
-                    clusterDim = clusteringRes(next, p, alreadyChecked, clusterDim + 1);
+                    return clusteringRes(p, clusterDim + 1);
                     // When the next tile as no more adjacent cluster-addable tiles, it will not enter
                     // the if statement and will not call the recursive method
-                    }
                 }
             }
-        //When no more tiles can be explored, the cluster has been identified
+        }
+        System.out.println(clusterDim);
         return clusterDim;
+        //When no more tiles can be explored, the cluster has been identified
         /*
-        IMPORTANT could exist a problem to report the alreadyChecked list in the main method,
-        idj if this case java modify the original arraylist
-        in case of troubles we will fix that issue
+        PROBLEMA: se metto le direzioni che tornano indietro va in loop, ma se non le metto non conta correttamente i cluster
          */
     }
 

@@ -5,8 +5,8 @@
 package main.java.it.polimi.ingsw.model;
 import java.util.*;
 
-import main.java.it.polimi.ingsw.exceptions.NotValidColumnException;
-import main.java.it.polimi.ingsw.exceptions.NotValidPositionException;
+import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
+import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
 
 public class Game {
@@ -64,7 +64,7 @@ public class Game {
      *
      * @see Player,CommonCard,PersonalCard
      */
-    public void startGame() throws NotValidColumnException, NotValidPositionException {
+    public void startGame() throws InvalidColumnException, InvalidPositionException {
         boolean endGame = false;//end game token non pescato
         //int nTurno=1;
 

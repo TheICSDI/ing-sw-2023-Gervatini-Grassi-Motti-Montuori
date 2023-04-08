@@ -3,7 +3,7 @@
  */
 package test;
 
-import main.java.it.polimi.ingsw.exceptions.NotValidPositionException;
+import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Board;
 import main.java.it.polimi.ingsw.model.Position;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
@@ -39,7 +39,7 @@ class BoardTest {
             e.printStackTrace();
         }
 
-        for(int index=0; index<board_test_File.size(); index++) {
+        for(int index = 0; index < board_test_File.size(); index++) {
             JSONObject tmp = (JSONObject) board_test_File.get(index);
 
             int indexX = Integer.parseInt(tmp.get("x").toString());
@@ -100,7 +100,7 @@ class BoardTest {
     }
 
     @org.junit.jupiter.api.Test
-    void removeTiles() throws NotValidPositionException {
+    void removeTiles() throws InvalidPositionException {
         Board b = new Board(4);
         b.fillBoard();
 
@@ -123,5 +123,14 @@ class BoardTest {
         b.RemoveTiles(remove);
         assertEquals(b.getTile(p1).getCategory(), type.EMPTY);
         assertEquals(b.getTile(p2).getCategory(), type.EMPTY);
+
+        //Invalid position
+        b.fillBoard();
+        Position p3 = new Position(0, 0);
+        remove.add(p3);
+        Throwable ex = assertThrows(InvalidPositionException.class, () -> {
+            b.RemoveTiles(remove);
+        });
+        assertEquals("This position is not accessible in the board!", ex.getMessage());
     }
 }
