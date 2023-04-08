@@ -23,10 +23,10 @@ public class CC_05 implements CCStrategy {
             Types = new HashSet<>(); //Lista di tipi diversi già incontrati in una colonna
             Valid = true;
             for (int i = 0; i < 6 && Valid; i++) {
-                if(p.getShelf()[i][j].getCategory().equals(type.EMPTY)){
+                if(p.getShelf()[j][i].getCategory().equals(type.EMPTY)){
                     Valid = false;
                 }//se la colonna non è piena, non è valida automaticamente
-                Types.add(p.getShelf()[i][j].getCategory());
+                Types.add(p.getShelf()[j][i].getCategory());
                 if(Types.size() > 3){
                     Valid = false;
                 }
