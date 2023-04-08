@@ -26,7 +26,7 @@ public class Game {
      */
     public Game(List<Player> players){
         //Each game is represented by a unique id that can't be changed
-        this.count++;
+        count++;
         this.id = count;
         this.nPlayers = players.size();
         this.players = players;
@@ -70,7 +70,7 @@ public class Game {
         boolean endGame = false;//end game token non pescato
 
         while(!endGame){
-            for (Player p:  players) {
+            for (Player p: players) {
                 //The player can pick some tiles from the board
                 p.pickTiles(board);
                 //If the board is empty it will be randomically filled
