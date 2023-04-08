@@ -16,11 +16,12 @@ public class CC_03 implements CCStrategy {
             }
 
         }
-        int adj = 0,limit = 0;
+        int limit = 0;
         for (int i = 0; i < num_row; i++) {
             for (int j = 0; j < num_col; j++) {
                type curr=curr_shelf[i][j].getCategory();
-			   if(!Seen[i][j]) {
+               int adj=0;
+			   if(!Seen[i][j] && !curr.equals(type.EMPTY)) {
 				   Seen[i][j] = true;
 				   adj = adj(curr, i, j, curr_shelf, Seen);
 			   }

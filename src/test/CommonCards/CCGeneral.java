@@ -17,24 +17,20 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CCGeneral {
-    //Read input in common cards from a json(JSONName), and tests it
-    public static void check(CCStrategy CCcard,String JSONName,int casiPositivi){//nel file metti prima i casi che devono dare true e poi quelli false
-        Player p=new Player("test");                                                                       //casi positivi è un int che dice quanti casi pos hai messo
+    /**
+     * General check for all common cards, reads one or more shelves from a json file and checks if the respective goal is reached
+     * @param CCcard Which goal needs to be checked
+     * @param JSONName Name of the file to read the shelves from
+     * @param positiveCases number of shelves that reached the goal(in the json you need to write positive shelves first)
+     */
+    public static void check(CCStrategy CCcard,String JSONName,int positiveCases){
+        Player p=new Player("test");
         int nRow=6;
         int nCol=5;
-        Tile[][] shelf=new Tile[nCol][nRow];
+        Tile[][] shelf=new Tile[nRow][nCol];
 
         JSONParser parser = new JSONParser();
         JSONArray CC_test_File = null;
-
-        /*for (int i = 0; i < nCol; i++) {
-            for (int j = 0; j < nRow; j++) {
-                shelf[i][j]=new Tile("EMPTY");
-            }
-        }
-
-        p.setShelf(shelf);
-        assertFalse(CCcard.isCompleted(p));*///era il test che da false quando è vuota ma è inutile e ridondante
         try {
             FileInputStream pathFile = new FileInputStream(JSONName);
             CC_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
@@ -43,8 +39,8 @@ public class CCGeneral {
             e.printStackTrace();
         }
         for (int card = 0; card < CC_test_File.size(); card++) {
-            for (int i = 0; i < nCol; i++) {
-                for (int j = 0; j < nRow; j++) {
+            for (int i = 0; i < nRow; i++) {
+                for (int j = 0; j < nCol; j++) {
                     shelf[i][j]=new Tile("EMPTY");
                 }
             }
@@ -59,7 +55,7 @@ public class CCGeneral {
                 shelf[indexX][indexY] = new Tile(t);
             }
             p.setShelf(shelf);
-            if(card<casiPositivi){
+            if(card<positiveCases){
                 assertTrue(CCcard.isCompleted(p));
             }else{
                 assertFalse(CCcard.isCompleted(p));

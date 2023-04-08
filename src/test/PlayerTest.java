@@ -129,15 +129,11 @@ class PlayerTest {
 
         //Wrong column selected
         //case 1: column out of bound
-        Throwable ex1 = assertThrows(InvalidColumnException.class, () -> {
-            p1.insertInShelf(toInsert, 8);
-        });
+        Throwable ex1 = assertThrows(InvalidColumnException.class, () -> p1.insertInShelf(toInsert, 8));
         assertEquals("Selected column is out of bound!", ex1.getMessage());
         //case 2: column is full
         p1 = Parser();
-        Throwable ex2 = assertThrows(InvalidColumnException.class, () -> {
-            p1.insertInShelf(toInsert, col);
-        });
+        Throwable ex2 = assertThrows(InvalidColumnException.class, () -> p1.insertInShelf(toInsert, col));
         assertEquals("Selected column has no enough space!", ex2.getMessage());
     }
 

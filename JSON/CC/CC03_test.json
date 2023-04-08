@@ -1,0 +1,191 @@
+[
+  {
+    "tiles": [
+      {
+        "x" : 0,
+        "y" : 0,
+        "type" : "games"
+      },
+      {
+        "x" : 1,
+        "y" : 0,
+        "type" : "games"
+      },
+      {
+        "x" : 2,
+        "y" : 0,
+        "type" : "games"
+      },
+      {
+        "x" : 2,
+        "y" : 1,
+        "type" : "games"
+      },
+
+      {
+        "x" : 0,
+        "y" : 1,
+        "type" : "frames"
+      },
+      {
+        "x" : 0,
+        "y" : 2,
+        "type" : "frames"
+      },
+      {
+        "x" : 0,
+        "y" : 3,
+        "type" : "frames"
+      },
+      {
+        "x" : 0,
+        "y" : 4,
+        "type" : "frames"
+      },
+
+      {
+        "x" : 3,
+        "y" : 3,
+        "type" : "games"
+      },
+      {
+        "x" : 3,
+        "y" : 4,
+        "type" : "games"
+      },
+      {
+        "x" : 2,
+        "y" : 4,
+        "type" : "games"
+      },
+      {
+        "x" : 4,
+        "y" : 4,
+        "type" : "games"
+      },
+
+      {
+        "x" : 3,
+        "y" : 4,
+        "type" : "cats"
+      },
+      {
+        "x" : 4,
+        "y" : 4,
+        "type" : "cats"
+      },
+      {
+        "x" : 2,
+        "y" : 5,
+        "type" : "cats"
+      },
+      {
+        "x" : 3,
+        "y" : 5,
+        "type" : "cats"
+      },
+      {
+        "x" : 4,
+        "y" : 5,
+        "type" : "cats"
+      }
+    ]
+  },
+  {
+    "tiles": [
+      {
+        "x" : 0,
+        "y" : 0,
+        "type" : "games"
+      },
+      {
+        "x" : 1,
+        "y" : 0,
+        "type" : "games"
+      },
+      {
+        "x" : 2,
+        "y" : 0,
+        "type" : "games"
+      },
+      {
+        "x" : 2,
+        "y" : 1,
+        "type" : "games"
+      },
+
+      {
+        "x" : 0,
+        "y" : 1,
+        "type" : "games"
+      },
+      {
+        "x" : 0,
+        "y" : 2,
+        "type" : "games"
+      },
+      {
+        "x" : 0,
+        "y" : 3,
+        "type" : "games"
+      },
+      {
+        "x" : 0,
+        "y" : 4,
+        "type" : "games"
+      },
+
+      {
+        "x" : 3,
+        "y" : 3,
+        "type" : "games"
+      },
+      {
+        "x" : 3,
+        "y" : 4,
+        "type" : "games"
+      },
+      {
+        "x" : 2,
+        "y" : 4,
+        "type" : "games"
+      },
+      {
+        "x" : 4,
+        "y" : 4,
+        "type" : "games"
+      },
+
+      {
+        "x" : 3,
+        "y" : 5,
+        "type" : "cats"
+      },
+      {
+        "x" : 3,
+        "y" : 4,
+        "type" : "cats"
+      },
+      {
+        "x" : 4,
+        "y" : 5,
+        "type" : "cats"
+      },
+      {
+        "x" : 4,
+        "y" : 5,
+        "type" : "cats"
+      },
+      {
+        "x" : 2,
+        "y" : 5,
+        "type" : "cats"
+      }
+    ]
+  },
+  {
+    "tiles": [
+
+    ]
+  }
+]
