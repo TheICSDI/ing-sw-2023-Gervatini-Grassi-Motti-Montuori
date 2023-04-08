@@ -138,17 +138,27 @@ public class Board {
         Set<Position> Available = new HashSet<>();
         for (int i = 0; i < numCols; i++) {
             for (int j = 0; j < numRows; j++) {
-                if(!board[i][j].getCategory().equals(type.EMPTY)
-                        && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)) {
-                    if( ((i>0) && (board[i-1][j].getCategory().equals(type.EMPTY) || board[i-1][j].getCategory().equals(type.NOT_ACCESSIBLE)))
-                            || ((i < numCols - 1)
-                                && (board[i + 1][j].getCategory().equals(type.EMPTY) || board[i + 1][j].getCategory().equals(type.NOT_ACCESSIBLE)))
-                            || ((j < numCols - 1)
-                                && (board[i][j + 1].getCategory().equals(type.EMPTY) || board[i][j + 1].getCategory().equals(type.NOT_ACCESSIBLE)))
-                            || ((j > 0)
-                                && (board[i][j - 1].getCategory().equals(type.EMPTY) || board[i][j - 1].getCategory().equals(type.NOT_ACCESSIBLE)))) {
-                        Available.add(new Position(i,j));
-                    }
+                if(!board[i][j].getCategory().equals(type.EMPTY) && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)) {
+                    try{
+                        if(board[i-1][j].getCategory().equals(type.EMPTY) || board[i-1][j].getCategory().equals(type.NOT_ACCESSIBLE)){
+                            Available.add(new Position(i,j));
+                        }
+                    } catch (IndexOutOfBoundsException ignored){}
+                    try{
+                        if(board[i][j-1].getCategory().equals(type.EMPTY) || board[i][j-1].getCategory().equals(type.NOT_ACCESSIBLE)){
+                            Available.add(new Position(i,j));
+                        }
+                    } catch (IndexOutOfBoundsException ignored){}
+                    try{
+                        if(board[i+1][j].getCategory().equals(type.EMPTY) || board[i+1][j].getCategory().equals(type.NOT_ACCESSIBLE)){
+                            Available.add(new Position(i,j));
+                        }
+                    } catch (IndexOutOfBoundsException ignored){}
+                    try{
+                        if(board[i][j+1].getCategory().equals(type.EMPTY) || board[i][j+1].getCategory().equals(type.NOT_ACCESSIBLE)){
+                            Available.add(new Position(i,j));
+                        }
+                    } catch (IndexOutOfBoundsException ignored){}
                 }
             }
         }

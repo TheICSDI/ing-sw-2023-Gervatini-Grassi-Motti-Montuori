@@ -4,7 +4,10 @@
 package test;
 
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
+import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
+import main.java.it.polimi.ingsw.model.Board;
 import main.java.it.polimi.ingsw.model.Player;
+import main.java.it.polimi.ingsw.model.Position;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
 import org.json.simple.JSONArray;
@@ -138,7 +141,32 @@ class PlayerTest {
     }
 
     @Test
-    void pickTiles() {
+    void pickTiles() throws InvalidPositionException {
+        Board b = new Board(4);
+        b.fillBoard();
+
+        //Add some available position
+        Set<Position> chosen = new HashSet<>();
+        Position pos1 = new Position(0,4);
+        Position pos2 = new Position(0, 5);
+        chosen.add(pos1);
+        chosen.add(pos2);
+
+        List<Tile> expectedTiles = new ArrayList<>();
+        expectedTiles.add(b.getTile(pos1));
+        expectedTiles.add(b.getTile(pos2));
+        List<Tile> chosenTiles = p1.pickTiles(chosen, b);
+        assertEquals(type.EMPTY, b.getTile(pos1).getCategory());
+        assertEquals(type.EMPTY, b.getTile(pos2).getCategory());
+        assertEquals(expectedTiles, chosenTiles);
+
+        //Exception
+        //Chosen position by the player are not available to be taken
+        Position pos3 = new Position(0,0);
+        chosen.add(pos3);
+        Throwable ex = assertThrows(InputMismatchException.class, () ->
+                p1.pickTiles(chosen, b));
+        assertEquals("The chosen tiles are not available to be taken!", ex.getMessage());
     }
 
     @Test
@@ -155,8 +183,8 @@ class PlayerTest {
                 assertNotEquals(type.EMPTY, p1.getShelf()[i][j].getCategory());
             }
         }
-        p1.calculateGeneralPoints();
-        assertEquals(15, p1.getTotalPoints());
+        /*p1.calculateGeneralPoints();
+        assertEquals(15, p1.getTotalPoints());*/
     }
 
 

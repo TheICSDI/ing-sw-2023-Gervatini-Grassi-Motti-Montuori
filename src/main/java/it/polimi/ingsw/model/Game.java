@@ -5,9 +5,11 @@
 package main.java.it.polimi.ingsw.model;
 import java.util.*;
 
+import main.java.it.polimi.ingsw.controller.Controller;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
+import main.java.it.polimi.ingsw.model.Tile.Tile;
 
 public class Game {
     private static int count = 0;
@@ -71,8 +73,12 @@ public class Game {
 
         while(!endGame){
             for (Player p: players) {
-                //The player can pick some tiles from the board
-                p.pickTiles(board);
+                //The player can pick some tiles from the board and insert it inside its shelf
+                Set<Position> chosen = Controller.Choose();
+                List<Tile> toInsert = p.pickTiles(chosen, board);
+                int col = Controller.ChooseColumn();
+                p.insertInShelf(toInsert, col);
+
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();

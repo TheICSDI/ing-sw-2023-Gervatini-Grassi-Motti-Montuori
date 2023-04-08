@@ -94,6 +94,13 @@ class BoardTest {
         //No available tiles: the board is empty
         assertTrue(b.AvailableTiles().isEmpty());
 
+        //Some tiles are available
+        b.board[5][5] = new Tile("cats");
+        b.board[5][6] = new Tile("cats");
+        assertFalse(b.AvailableTiles().isEmpty());
+        assertTrue(b.AvailableTiles().contains(new Position(5, 5)));
+        assertTrue(b.AvailableTiles().contains(new Position(5, 6)));
+
         //All tiles are available: the board is full
         b.fillBoard();
         assertFalse(b.AvailableTiles().isEmpty());

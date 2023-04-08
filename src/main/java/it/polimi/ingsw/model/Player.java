@@ -113,46 +113,26 @@ public class Player {
         }
     }
 
-    //DA rivedere la parte del controller
     /**
+     * Return a list of tiles chosen by the player to be taken from the board.
+     * It checks if the position are available to be taken, and after taking the tiles it removes them from the board.
      *
+     * @param chosen a set of position that the player has chosen.
      * @param b board from which the player can take the tiles.
      */
-    public void pickTiles(Board b) throws InvalidColumnException, InvalidPositionException {
-        //Position chosen by the player
-        Set<Position> chosen;
-        do{
-            chosen = Controller.Choose();
-        } while(!b.AvailableTiles().containsAll(chosen));
-
-        List<Tile> ChosenTiles = new ArrayList<>();
-        for (Position p: chosen) {
-            ChosenTiles.add(b.board[p.getX()][p.getY()]);
-        }
-        b.RemoveTiles(chosen);
-
-        List<Integer> order = Controller.ChooseOrder();
-        orderTiles(ChosenTiles,order);
-        int col;
-        do{
-            col = Controller.ChooseColumn();
-        } while(checkColumn(ChosenTiles.size(),col));
-        insertInShelf(ChosenTiles, col);
-    }
-
-    /*public List<Tile> pickTiles(Set<Position> chosen, Board b) throws InvalidPositionException {
-     //Position chosen by the player
-     if (!b.AvailableTiles().containsAll(chosen)) {
-     throw new InputMismatchException("The chosen tiles are not available to be taken!");
-     } else {
-     List<Tile> choice = new ArrayList<>();
-     for (Position p : chosen) {
-     choice.add(b.board[p.getX()][p.getY()]);
+    public List<Tile> pickTiles(Set<Position> chosen, Board b) throws InvalidPositionException {
+        List<Tile> choice = new ArrayList<>();
+         //Position chosen by the player
+         if (!b.AvailableTiles().containsAll(chosen)) {
+            throw new InputMismatchException("The chosen tiles are not available to be taken!");
+         } else {
+             for (Position p : chosen) {
+                 choice.add(b.board[p.getX()][p.getY()]);
+             }
+         b.RemoveTiles(chosen);
+         return choice;
+         }
      }
-     b.RemoveTiles(chosen);
-     return choice;
-     }
-     }*/
 
     /** Gets the shelf of the player. */
     public Tile[][] getShelf() {
@@ -178,10 +158,11 @@ public class Player {
         return totalPoints;
     }
 
-    private final Boolean[][] checked = new Boolean[numRows][numCols];
+
     /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf.
      */
     public void calculateGeneralPoints(){
+        boolean[][] checked = new boolean[numRows][numCols];
         int currClusterDimension = 0;
         //Remove all element from checked before starting the calculation
         for (int i = 0; i < this.numRows; i++) {
@@ -197,7 +178,7 @@ public class Player {
                     checked[i][j] = true;
                     //If the tile is not empty, it calls clusteringRes that research for a cluster of tiles of the same type
                     if(!this.Shelf[i][j].getCategory().equals(type.EMPTY)){
-                        currClusterDimension = clusteringRes(i, j);
+                        currClusterDimension = clusteringRes(i, j, checked);
                     }
                 }
                 //It assigns points based on the dimension of the found cluster
@@ -209,31 +190,31 @@ public class Player {
         }
     }
 
-    private int clusteringRes(int x, int y){
+    private int clusteringRes(int x, int y, boolean[][] checked){
         Tile t = this.Shelf[x][y];
         int clusterDim = 1;
         try {
             if (!checked[x][y + 1] && t.getCategory().equals(this.Shelf[x][y + 1].getCategory())) {
                 checked[x][y + 1] = true;
-                clusterDim = clusterDim + clusteringRes(x, y + 1);
+                clusterDim = clusterDim + clusteringRes(x, y + 1, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         try {
             if (!checked[x + 1][y] && t.getCategory().equals(this.Shelf[x + 1][y].getCategory())) {
                 checked[x + 1][y] = true;
-                clusterDim = clusterDim + clusteringRes(x + 1, y);
+                clusterDim = clusterDim + clusteringRes(x + 1, y, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         try {
             if (!checked[x][y - 1] && t.getCategory().equals(this.Shelf[x][y - 1].getCategory())) {
                 checked[x][y - 1] = true;
-                clusterDim = clusterDim + clusteringRes(x, y - 1);
+                clusterDim = clusterDim + clusteringRes(x, y - 1, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         try {
             if (!checked[x - 1][y] && t.getCategory().equals(this.Shelf[x - 1][y].getCategory())) {
                 checked[x - 1][y] = true;
-                clusterDim = clusterDim + clusteringRes(x - 1, y);
+                clusterDim = clusterDim + clusteringRes(x - 1, y, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         return clusterDim;
