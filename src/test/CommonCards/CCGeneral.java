@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CCGeneral {
     //Read input in common cards from a json(JSONName), and tests it
     public static void check(CCStrategy CCcard,String JSONName,int casiPositivi){//nel file metti prima i casi che devono dare true e poi quelli false
-                                                                                //casi positivi è un int che dice quanti casi pos hai messo
+        Player p=new Player("test");                                                                       //casi positivi è un int che dice quanti casi pos hai messo
         int nRow=6;
         int nCol=5;
         Tile[][] shelf=new Tile[nCol][nRow];
@@ -27,14 +27,14 @@ public class CCGeneral {
         JSONParser parser = new JSONParser();
         JSONArray CC_test_File = null;
 
-        for (int i = 0; i < nCol; i++) {
+        /*for (int i = 0; i < nCol; i++) {
             for (int j = 0; j < nRow; j++) {
                 shelf[i][j]=new Tile("EMPTY");
             }
         }
-        Player p=new Player("test");
+
         p.setShelf(shelf);
-        assertFalse(CCcard.isCompleted(p));
+        assertFalse(CCcard.isCompleted(p));*///era il test che da false quando è vuota ma è inutile e ridondante
         try {
             FileInputStream pathFile = new FileInputStream(JSONName);
             CC_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
@@ -43,6 +43,11 @@ public class CCGeneral {
             e.printStackTrace();
         }
         for (int card = 0; card < CC_test_File.size(); card++) {
+            for (int i = 0; i < nCol; i++) {
+                for (int j = 0; j < nRow; j++) {
+                    shelf[i][j]=new Tile("EMPTY");
+                }
+            }
             JSONObject tmp1 = (JSONObject) CC_test_File.get(card);
             JSONArray tiles= (JSONArray) tmp1.get("tiles");
             for(int index = 0; index < tiles.size(); index++) {
