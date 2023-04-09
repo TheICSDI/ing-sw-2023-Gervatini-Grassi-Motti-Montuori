@@ -113,8 +113,4 @@ public class PersonalCard {
 	public Tile[][] getCard() {
 		return card;
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 1d5beff2c370c59428e1888f17814f17ce364c9b
