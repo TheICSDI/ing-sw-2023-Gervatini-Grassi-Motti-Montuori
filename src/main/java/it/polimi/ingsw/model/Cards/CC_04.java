@@ -24,34 +24,36 @@ public class CC_04 implements CCStrategy {
 
         for (int i = 0; i < num_row - 1; i++)
         {
-            for (int j = 0; j < num_col - 1 && !current_shelf[i][j].getCategory().equals(type.EMPTY); j++)
+            for (int j = 0; j < num_col - 1; j++)
             {
                 current_tile = current_shelf[i][j].getCategory();
 
-                //Check if there is a 2x2 square
-                if (current_tile.equals(current_shelf[i][j + 1].getCategory())               // Tile right
-                        && current_tile.equals(current_shelf[i + 1][j].getCategory())        // Tile down
-                        && current_tile.equals(current_shelf[i + 1][j + 1].getCategory()))   // Tile down-right
+                if(!current_tile.equals(type.EMPTY))
                 {
-
-                    // Check if there are no additional adjacent tiles of the same type
-                    if ( !(
-                            (i > 0 && current_tile.equals(current_shelf[i - 1][j].getCategory()))                    // Tile up
-                            || (i > 0 && current_tile.equals(current_shelf[i - 1][j + 1].getCategory()))             // Tile up-right
-                            || (j < num_col - 2 && current_tile.equals(current_shelf[i][j + 2].getCategory()))       // Tile right-right
-                            || (j < num_col - 2 && current_tile.equals(current_shelf[i + 1][j + 2].getCategory()))   // Tile down-right-right
-                            || (i < num_row - 2 && current_tile.equals(current_shelf[i + 2][j + 1].getCategory()))   // Tile down-down-right
-                            || (i < num_row - 2 && current_tile.equals(current_shelf[i + 2][j].getCategory()))       // Tile down-down
-                            || (j > 0 && current_tile.equals(current_shelf[i + 1][j - 1].getCategory())))            // Tile down-left
-                            || (j > 0 && current_tile.equals(current_shelf[i][j - 1].getCategory())) )               // Tile left
-					{
-						count++;
+                    //Check if there is a 2x2 square
+                    if (current_tile.equals(current_shelf[i][j + 1].getCategory())               // Tile right
+                            && current_tile.equals(current_shelf[i + 1][j].getCategory())        // Tile down
+                            && current_tile.equals(current_shelf[i + 1][j + 1].getCategory()))   // Tile down-right
+                    {
+                        // Check if there are no additional adjacent tiles of the same type
+                        if (!(
+                                (i > 0 && current_tile.equals(current_shelf[i - 1][j].getCategory()))                            // Tile up
+                                        || (i > 0 && current_tile.equals(current_shelf[i - 1][j + 1].getCategory()))             // Tile up-right
+                                        || (j < num_col - 2 && current_tile.equals(current_shelf[i][j + 2].getCategory()))       // Tile right-right
+                                        || (j < num_col - 2 && current_tile.equals(current_shelf[i + 1][j + 2].getCategory()))   // Tile down-right-right
+                                        || (i < num_row - 2 && current_tile.equals(current_shelf[i + 2][j + 1].getCategory()))   // Tile down-down-right
+                                        || (i < num_row - 2 && current_tile.equals(current_shelf[i + 2][j].getCategory()))       // Tile down-down
+                                        || (j > 0 && current_tile.equals(current_shelf[i + 1][j - 1].getCategory()))             // Tile down-left
+                                        || (j > 0 && current_tile.equals(current_shelf[i][j - 1].getCategory()))))                // Tile left
+                        {
+                            count++;
+                            if (count == 2) {
+                                return true;
+                            }
+                        }
                     }
                 }
 
-                if (count == 2) {
-                    return true;
-                }
             }
         }
 

@@ -1,5 +1,6 @@
 [
   {
+    "assert" : true,
     "tiles": [
       {
         "x": 0,
@@ -31,7 +32,6 @@
         "y": 0,
         "type": "plants"
       },
-
       {
         "x": 0,
         "y": 1,
@@ -62,7 +62,6 @@
         "y": 1,
         "type": "frames"
       },
-
       {
         "x": 0,
         "y": 4,
@@ -93,11 +92,10 @@
         "y": 4,
         "type": "games"
       }
-
-
     ]
   },
   {
+    "assert" : false,
     "tiles":[
       {
         "x": 0,
