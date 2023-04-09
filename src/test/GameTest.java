@@ -20,6 +20,58 @@ class GameTest {
     List<Player> playerList = new ArrayList<>();
 
     @Test
+    void Game(){
+        playerList.add(p1);
+        playerList.add(p2);
+        playerList.add(p3);
+        playerList.add(p4);
+        Game g = new Game(playerList);
+
+        //Only the first player of the list of Game g has the first token
+        assertTrue(g.getPlayers().get(0).getFirstToken());
+        assertFalse(g.getPlayers().get(1).getFirstToken());
+        assertFalse(g.getPlayers().get(2).getFirstToken());
+        assertFalse(g.getPlayers().get(3).getFirstToken());
+
+        //Each player has a personal goal card and there are no duplicate
+        for (int i = 0; i < playerList.size(); i++) {
+            for (int j = 0; j < playerList.size(); j++) {
+                assertNotEquals(null, playerList.get(i).getPersonalCard());
+                if(i != j){
+                    assertNotEquals(playerList.get(i).getPersonalCard(), playerList.get(j).getPersonalCard());
+                }
+            }
+        }
+
+        //No duplicate in list of all common goal cards
+        for (int i = 0; i < g.getAllCC().size(); i++) {
+            for (int j = 0; j < g.getAllCC().size(); j++) {
+                if(i != j){
+                    assertNotEquals(g.getAllCC().get(i), g.getAllCC().get(j));
+                }
+            }
+        }
+
+        //No duplicate in list of common goal cards for the game
+        for (int i = 0; i < g.getCommonCards().size(); i++) {
+            for (int j = 0; j < g.getCommonCards().size(); j++) {
+                if(i != j){
+                    assertNotEquals(g.getCommonCards().get(i), g.getCommonCards().get(j));
+                }
+            }
+        }
+
+        //No duplicate in list of all personal goal cards
+        for (int i = 0; i < g.getAllPC().size(); i++) {
+            for (int j = 0; j < g.getAllPC().size(); j++) {
+                if(i != j){
+                    assertNotEquals(g.getAllPC().get(i), g.getAllPC().get(j));
+                }
+            }
+        }
+    }
+
+    @Test
     void startGame() {
         playerList.add(p1);
         playerList.add(p2);

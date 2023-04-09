@@ -16,7 +16,7 @@ public class Player {
     private final int numRows = 6;
     private final int numCols = 5;
     private Tile[][] Shelf;
-    private PersonalCard PersonalCard;
+    private PersonalCard PersonalCard = null;
     private boolean firstToken, endToken;
     private int scoreToken1, scoreToken2;
     private int totalPoints;

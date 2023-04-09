@@ -24,7 +24,7 @@ public class Game {
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
-    private final List<PersonalCard> nPC = new ArrayList<>();
+    private final List<PersonalCard> allPC = new ArrayList<>();
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
@@ -49,11 +49,11 @@ public class Game {
         Collections.shuffle(players);
         players.get(0).setFirstToken(true);
         //Shuffle the personal goal cards in order to randomically give them to the players
-        Collections.shuffle(nPC);
+        Collections.shuffle(allPC);
         for(int i = 0; i < nPlayers; i++){
             //Sets the turn of each player
             players.get(i).setTurn(i);
-            players.get(i).setPersonalCard(nPC.get(i));
+            players.get(i).setPersonalCard(allPC.get(i));
         }
 
         //Shuffle the common goal cards to randomically draws two of them
@@ -160,8 +160,7 @@ public class Game {
 
         //Add index from 0 to 11 that represents the personal goal cards
         for(int i = 0; i < 12; i++){
-            PersonalCard c = new PersonalCard(i);
-            nPC.add(c);
+            allPC.add(new PersonalCard(i));
         }
     }
 
@@ -189,5 +188,20 @@ public class Game {
     /** Gets the list of player. */
     public List<Player> getPlayers() {
         return players;
+    }
+
+    /** Gets the list of common goal cards fot the cal. */
+    public List<CommonCard> getCommonCards() {
+        return CommonCards;
+    }
+
+    /** Gets the list of personal goal cards. */
+    public List<PersonalCard> getAllPC() {
+        return allPC;
+    }
+
+    /** Gets the list of all common goal cards. */
+    public List<CCStrategy> getAllCC() {
+        return allCC;
     }
 }
