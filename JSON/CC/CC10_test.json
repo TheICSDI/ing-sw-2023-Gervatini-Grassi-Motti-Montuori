@@ -1,5 +1,6 @@
 [
   {
+    "assert": true,
     "tiles": [
       {
         "x": 1,
@@ -79,6 +80,7 @@
     ]
   },
   {
+    "assert": true,
     "tiles" : [
       {
         "x": 1,
@@ -133,6 +135,7 @@
     ]
   },
   {
+    "assert": false,
     "tiles": [
       {
         "x": 1,
@@ -187,6 +190,7 @@
     ]
   },
   {
+    "assert": false,
     "tiles": [
       {
         "x": 1,
