@@ -22,7 +22,7 @@ public class Game {
     private final int nPlayers;
     private final List<Player> players;
     private final Board board;
-    private List<CCStrategy> allCC;
+    private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private final List<Integer> nPC = new ArrayList<>();
 
@@ -63,15 +63,11 @@ public class Game {
     }
 
 
-    /*Double loop to have the game continue until someone gets the EndGameToken and is the turn of the player
-    * with the FirstPlayerSit again, turn order is the same as the order in players list, firstPlayer is
-    * the first in the List, every turn a player gets to pick 1-3 the tiles on the board and put them in his shelf,
-    * the game checks if he has the endGameToken,if he has completed a common task or if it needs to refill
-    *  the board*/
     /**
-     * Manages turns, token, common cards and board checks.
+     * Manages all the game logic from start to end.
+     * It calculates the total points of each player at the end of every turn.
      *
-     * @see Player,CommonCard,PersonalCard
+     * @see Player,Board,CommonCard,PersonalCard
      */
     public void startGame() throws InvalidColumnException, InvalidPositionException {
         //At the starting point no player has the endgame token
