@@ -5,7 +5,7 @@
 package main.java.it.polimi.ingsw.model;
 
 
-import main.java.it.polimi.ingsw.controller.Controller;
+import main.java.it.polimi.ingsw.controller.gameController;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
@@ -77,9 +77,9 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 //The player can pick some tiles from the board and insert it inside its shelf
-                Set<Position> chosen = Controller.Choose();
+                Set<Position> chosen = gameController.Choose();
                 List<Tile> toInsert = p.pickTiles(chosen, board);
-                int col = Controller.ChooseColumn();
+                int col = gameController.ChooseColumn();
                 p.insertInShelf(toInsert, col);
 
                 //If the board is empty it will be randomically filled
@@ -164,11 +164,8 @@ public class Game {
         }
     }
 
-    /** Shows the board in a graphical way. Each tile is represented by a symbol.
-     *
-     * @param board the board that has to be represented.
-     */
-    public void showBoard(Board board){
+    /** Shows the board in a graphical way. Each tile is represented by a symbol. */
+    public void showBoard(){
         for(int i=0;i<board.getNumRows();i++){
             for(int j=0;j<board.getNumCols();j++){
                 switch (board.board[i][j].getCategory()) {

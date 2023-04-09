@@ -1,8 +1,7 @@
 /** Represents the personal goal card. Each player has one.
  * At the start of the game, depending on the number of player, different integers will be randomically generated.
  * Thanks to the constructor a personal goal card will be generated as a matrix of tiles.
- *
- * @author Montuori Giulio
+ * @author Giulio Montuori
  */
 package main.java.it.polimi.ingsw.model.Cards;
 
@@ -114,4 +113,8 @@ public class PersonalCard {
 	public Tile[][] getCard() {
 		return card;
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1d5beff2c370c59428e1888f17814f17ce364c9b

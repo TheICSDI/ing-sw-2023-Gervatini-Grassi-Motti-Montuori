@@ -1,48 +1,48 @@
+/**
+ * CC_09 class implements the logic for checking if the common goal card number 9 is completed by a player.
+ * It requires the player to have two columns each formed by 6 different types of tiles.
+ * @author Marco Gervatini
+ */
 package main.java.it.polimi.ingsw.model.Cards;
 import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CC_09 implements CCStrategy {
-    public boolean isCompleted(Player p) {Tile[][] curr_shelf =p.getShelf();
-        int num_row = curr_shelf.length;
-        int num_col = curr_shelf[0].length;
-        type current_tile_color;
-        List<type> current_column_colors = new ArrayList<>();
-        int ok_column=0,i,j;
-        boolean end= false;
+    /**
+     * Checks if the common goal is completed.
+     *
+     * @param p a player.
+     * @return true only if the common goal card is completed.
+     */
+    public boolean isCompleted(Player p) {
+        //List of types encountered in a column
+        List<type> currColTypes = new ArrayList<>();
+        int validCols = 0;
 
-        for(i = 0; i < num_row; i++){
-            for(j = 0; j < num_col; j++){
-                current_tile_color = curr_shelf[i][j].getCategory();
-                /*
-                controls that every tile in a column isn't empty and isn't not_accesible (the second is formally  a
-                not reachable state) if the type of [i][j] isn't yet been found in the column it will be added to the list,
-                when the column had been checked the method verify if in it are six different type of tile, which means that the column
-                has all the types in here.
-                */
-                if(!current_tile_color.equals(type.EMPTY) 
-						&& !current_tile_color.equals(type.NOT_ACCESSIBLE)//can we delete this line?
-						&& !current_column_colors.contains(current_tile_color)){
-                    current_column_colors.add(current_tile_color);
-
+        //For each column
+        for(int j = 0; j < p.getNumCols(); j++){
+            //Clear the list of types encountered in the column
+            currColTypes.clear();
+            //For each row
+            for(int i = 0; i < p.getNumRows(); i++){
+                type currType = p.getShelf()[i][j].getCategory();
+                //If the current tile is not empty and the current column does not contain this type
+                if(!currType.equals(type.EMPTY) && !currColTypes.contains(currType)){
+                    currColTypes.add(currType);
                 }
             }
-            if(current_column_colors.size() == num_row){
-                ok_column++;
+            //If the columns has many types as the number of rows then it is a valid column
+            if(currColTypes.size() == p.getNumRows()){
+                validCols++;
+                //It returns true if the number of valid columns is greater than 2
+                if(validCols >= 2){
+                   return true;
+                }
             }
-            current_column_colors.clear();
         }
-        /*
-        assuming that the ok_columns have to be exactly 2 and no more.
-        can we put a greater equal?
-         */
-        if(ok_column >= 2){
-            end= true;
-        }
-        return end;
+        return false;
     }
 }

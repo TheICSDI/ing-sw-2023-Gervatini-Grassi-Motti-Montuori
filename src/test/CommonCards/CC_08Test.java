@@ -5,10 +5,8 @@ package test.CommonCards;
 
 import main.java.it.polimi.ingsw.model.Cards.CCStrategy;
 import main.java.it.polimi.ingsw.model.Cards.CC_08;
-import main.java.it.polimi.ingsw.model.Cards.CC_10;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class CC_08Test {
 

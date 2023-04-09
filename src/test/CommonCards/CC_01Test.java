@@ -1,3 +1,6 @@
+/** Tests for class CC01.java.
+ * @author Giulio Montuori.
+ */
 package test.CommonCards;
 
 import main.java.it.polimi.ingsw.model.Cards.CCStrategy;

@@ -1,40 +1,52 @@
+/**
+ * CC_05 class implements the logic for checking if the common goal card number 5 is completed by a player.
+ * It requires the player to have three columns each formed by 6 tiles of maximum three different types.
+ * One column can show the same or a different combination of another column.
+ * @author Andrea Grassi
+ */
 package main.java.it.polimi.ingsw.model.Cards;
 
 import main.java.it.polimi.ingsw.model.Player;
 import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.model.Tile.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class CC_05 implements CCStrategy {
-    private int ValidColumns;
-    private Set<type> Types;
-    private boolean Valid;
-
     /**
-     * Counts complete columns that have 3 or less different tile types in them.
-     * @param p Checks if player p's shelf meets common card 5 mission
-     * @return true as soon as it finds 3 valid columns
+     * Checks if the common goal is completed.
+     *
+     * @param p a player.
+     * @return true only if the common goal card is completed.
      */
     public boolean isCompleted(Player p) {
-        ValidColumns = 0; //Numero colonne Valide
-        for (int j = 0; j < 5; j++) { //ciclo per le colonne
-            Types = new HashSet<>(); //Lista di tipi diversi già incontrati in una colonna
+        //number of valid columns
+        int ValidColumns = 0;
+        //Set of different types already encountered in a column
+        Set<type> Types;
+        boolean Valid;
+
+        //For each column
+        for (int j = 0; j < p.getNumCols(); j++) {
             Valid = true;
-            for (int i = 0; i < 6 && Valid; i++) {
+            Types = new HashSet<>();
+            //For each row in the selected column
+            for (int i = 0; i < p.getNumRows() && Valid; i++) {
+                //If the element is empty, it is automatically false
                 if(p.getShelf()[i][j].getCategory().equals(type.EMPTY)){
                     Valid = false;
-                }//se la colonna non è piena, non è valida automaticamente
+                }
                 Types.add(p.getShelf()[i][j].getCategory());
                 if(Types.size() > 3){
                     Valid = false;
                 }
             }
-            if(Valid){ // se la colonna non ha trovato problemi la aggiungo a quelle valide
+
+            //If there are no more than three different types in the same column, it is added to the valid ones
+            if(Valid){
                 ValidColumns++;
-                if(ValidColumns == 3){ // basta chiudere quà il ciclo perchè non potendo chiudere due righe alla volta
-                                    // il caso con esattamente 3 colonne giuste verrà trovato il turno in cui succede
+                //It returns true if the number of valid columns equal 3
+                if(ValidColumns == 3){
                     return true;
                 }
             }

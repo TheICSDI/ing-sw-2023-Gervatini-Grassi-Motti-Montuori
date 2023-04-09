@@ -1,9 +1,21 @@
+/**
+ * CC_03 class implements the logic for checking if the common goal card number 3 is completed by a player.
+ * It requires four groups of tiles each containing at least 4 tiles of the same type.
+ * The tiles of one group can be different from those of another group.
+ * @author Andrea Grassi
+ */
 package main.java.it.polimi.ingsw.model.Cards;
 import main.java.it.polimi.ingsw.model.Tile.type;
 import main.java.it.polimi.ingsw.model.Player;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 
 public class CC_03 implements CCStrategy {
+    /**
+     * Checks if the common goal is completed.
+     *
+     * @param p a player.
+     * @return true only if the common goal card is completed.
+     */
     public boolean isCompleted(Player p) {
         Tile[][] curr_shelf = p.getShelf();
 		int num_row = curr_shelf.length;
