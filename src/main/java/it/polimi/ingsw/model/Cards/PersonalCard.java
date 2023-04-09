@@ -7,6 +7,7 @@
 package main.java.it.polimi.ingsw.model.Cards;
 
 import main.java.it.polimi.ingsw.model.Tile.Tile;
+import main.java.it.polimi.ingsw.model.Tile.type;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -86,11 +87,12 @@ public class PersonalCard {
 		int matches = 0, score = 0;
 		int max_matches = 6;
 
-		for(int i = 0; i < this.card.length; i++)
+		for(int i = 0; i < this.numRows; i++)
 		{
-			for(int j = 0; matches != max_matches && j < this.card[0].length; j++)
+			for(int j = 0; matches != max_matches && j < this.numCols; j++)
 			{
-				if(shelf[i][j].getCategory().equals(this.card[i][j].getCategory()))
+				if(!shelf[i][j].getCategory().equals(type.EMPTY)
+						&& shelf[i][j].getCategory().equals(this.card[i][j].getCategory()))
 				{
 					matches++;
 				}
@@ -113,7 +115,3 @@ public class PersonalCard {
 		return card;
 	}
 }
-	/*
-	 * Probably we can ditch the matrix rappresentation of the personal goal cards and switch to one like
-	 * the JSON file to discuss
-	 */
