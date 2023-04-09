@@ -8,7 +8,6 @@ import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.PersonalCard;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.controller.Controller;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import java.util.*;
 
@@ -252,8 +251,8 @@ public class Player {
     }
 
     /** Sets the personal card of the player according to the parameter id. */
-    public void setPersonalCard(int id){
-        PersonalCard = new PersonalCard(id);
+    public void setPersonalCard(PersonalCard p){
+        PersonalCard = p;
     }
 
     /** Sets the value of end token of the player. */

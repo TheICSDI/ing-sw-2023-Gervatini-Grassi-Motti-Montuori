@@ -24,7 +24,7 @@ public class Game {
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
-    private final List<Integer> nPC = new ArrayList<>();
+    private final List<PersonalCard> nPC = new ArrayList<>();
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
@@ -160,7 +160,8 @@ public class Game {
 
         //Add index from 0 to 11 that represents the personal goal cards
         for(int i = 0; i < 12; i++){
-            nPC.add(i);
+            PersonalCard c = new PersonalCard(i);
+            nPC.add(c);
         }
     }
 
@@ -185,4 +186,8 @@ public class Game {
         }
     }
 
+    /** Gets the list of player. */
+    public List<Player> getPlayers() {
+        return players;
+    }
 }

@@ -19,8 +19,6 @@ class GameTest {
     Player p4 = new Player("Fozy");
     List<Player> playerList = new ArrayList<>();
 
-
-
     @Test
     void startGame() {
         playerList.add(p1);
@@ -28,6 +26,8 @@ class GameTest {
         playerList.add(p3);
         playerList.add(p4);
         Game g = new Game(playerList);
+
+
 
     }
 
@@ -37,8 +37,25 @@ class GameTest {
         playerList.add(p2);
         playerList.add(p3);
         playerList.add(p4);
-        //Game g = new Game(playerList);
+        Game g = new Game(playerList);
 
-        //assertEquals(p4, g.calculateWinner());
+        //Every player has totalPoints = 0, then the last player to play is the winner
+        assertEquals(g.getPlayers().get(g.getPlayers().size() - 1), g.calculateWinner());
+
+        //Adding some points to the players, the winner is the player that has more points in total
+        p1.addPoints(30);
+        p2.addPoints(30);
+        p3.addPoints(40);
+        p4.addPoints(35);
+        assertEquals(p3, g.calculateWinner());
+
+        //In case of tie, the winner is the one sitting further from the first player
+        //In this case p2 and p3 have 40 points
+        p2.addPoints(10);
+        if (g.getPlayers().indexOf(p2) > g.getPlayers().indexOf(p3)) {
+            assertEquals(p2, g.calculateWinner());
+        } else {
+            assertEquals(p3, g.calculateWinner());
+        }
     }
 }
