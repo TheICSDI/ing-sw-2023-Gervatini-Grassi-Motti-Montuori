@@ -1,18 +1,20 @@
+/**
+ * CC_04 class implements the logic for checking if the common goal card number 4 is completed by a player.
+ * It requires the player to have two groups, each containing four tiles of the same type in a 2x2 square.
+ * @author Giulio Montuori
+ */
 package main.java.it.polimi.ingsw.model.Cards;
 
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
 import main.java.it.polimi.ingsw.model.Player;
 
-/**
- * CC_04 class implements the logic for checking if the fourth common goal card is completed by a player.
- * The fourth common goal card requires the player to have two groups, each containing four tiles of the same type in a 2x2 square.
- */
 public class CC_04 implements CCStrategy {
     /**
      * Checks if the common goal is completed.
-     * @param p Player
-     * @return a boolean value true if exactly two 2x2 squares are found
+     *
+     * @param p a player.
+     * @return true only if the common goal card is completed.
      */
     public boolean isCompleted(Player p)
     {

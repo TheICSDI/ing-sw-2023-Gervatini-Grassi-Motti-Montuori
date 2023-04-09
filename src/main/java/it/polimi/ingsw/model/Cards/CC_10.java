@@ -1,3 +1,9 @@
+/**
+ * CC_10 class implements the logic for checking if the common goal card number 10 is completed by a player.
+ * It requires the player to have two rows each formed by 5 different types of tiles. One line can show the
+ * same or a different combination of the other line
+ * @author Andrea Grassi
+ */
 package main.java.it.polimi.ingsw.model.Cards;
 
 import main.java.it.polimi.ingsw.model.Player;
@@ -7,27 +13,35 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CC_10  implements CCStrategy {
-    private int ValidRows;
-    private Set<type> Types;
-    private boolean Valid;
     /**
-     * Counts complete rows that have every tile with a different type(5 types).
-     * @param p Checks if player p's shelf meets common card 10 mission
-     * @return true as soon as it finds 2 valid columns
+     * Checks if the common goal is completed.
+     *
+     * @param p a player.
+     * @return true only if the common goal card is completed.
      */
     public boolean isCompleted(Player p) {
-        ValidRows = 0; //Numero righe Valide
-        for (int i = 0; i < 6 ; i++) { //ciclo per le righe
-            Types= new HashSet<>(); //Lista di tipi diversi già incontrati in una riga
+        //Number of valid rows
+        int ValidRows = 0;
+        //Set of different types already encountered in a column
+        Set<type> Types;
+        boolean Valid;
+
+        //For each row
+        for (int i = 0; i < p.getNumRows(); i++) {
             Valid = true;
-            for (int j = 0; j < 5 && Valid; j++) {
+            Types = new HashSet<>();
+            //For each column
+            for (int j = 0; j < p.getNumCols() && Valid; j++) {
+                //If the element is empty, it is automatically false
                 if(p.getShelf()[i][j].getCategory().equals(type.EMPTY)){
                     Valid = false;
-                }//se la riga non è piena, non è valida automaticamente
+                }
                 Types.add(p.getShelf()[i][j].getCategory());
             }
+            //If there are five different types in the same row, it is added to the valid ones
             if(Types.size() == 5 && Valid){
                 ValidRows++;
+                //It returns true only if the number of valid rows is grater than 2
                 if(ValidRows >= 2){
                     return true;
                 }
