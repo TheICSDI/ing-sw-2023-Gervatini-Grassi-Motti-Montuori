@@ -30,9 +30,7 @@ class PlayerTest {
     Tile t2 = new Tile("plants");
     Tile t3 = new Tile("books");
 
-    /** Parser for shelf_test.json. It returns a player with a full shelf.
-     * In this way there is no empty space, and it is possible to calculate the points.
-     */
+    /** Parser for shelf_test.json. It returns a player with a full shelf. */
     private Player Parser(){
         Player p = new Player("Jhonny");
         JSONParser parser = new JSONParser();

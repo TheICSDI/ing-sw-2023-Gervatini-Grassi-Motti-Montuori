@@ -87,11 +87,11 @@ public class Game {
                 }
 
                 //At each turn the common card goals are calculated
-                if(CommonCards.get(0).DoControl(p)){
-                    CommonCards.get(0).CalculatePoints(p);
+                if(CommonCards.get(0).control(p)){
+                    CommonCards.get(0).givePoints(p);
                 }
-                if(CommonCards.get(1).DoControl(p)){
-                    CommonCards.get(1).CalculatePoints(p);
+                if(CommonCards.get(1).control(p)){
+                    CommonCards.get(1).givePoints(p);
                 }
 
                 //If the end game token has not been assigned and the current player has completed his shelf

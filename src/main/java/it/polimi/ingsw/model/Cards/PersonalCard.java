@@ -14,10 +14,9 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
-public class PersonalCard {
+public class PersonalCard{
 	private final int id;
 	private final Tile[][] card;
 	private final int numRows = 6;
@@ -49,11 +48,7 @@ public class PersonalCard {
 			FileInputStream pathFile = new FileInputStream("JSON/personal_card.json");
 			personalCardFile = (JSONArray) parser.parse(new InputStreamReader(pathFile));
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (ParseException | IOException e) {
 			e.printStackTrace();
 		}
 

@@ -1,55 +1,48 @@
-/** Represents a common goal card. */
+/** Represents a common goal card.
+ * @author Marco Gervatini */
 package main.java.it.polimi.ingsw.model.Cards;
 import main.java.it.polimi.ingsw.model.Player;
 
 public class CommonCard{
     private int points = 8;
-    private boolean first_card;
-    private CCStrategy strategy;
+    private final boolean firstCard;
+    private final CCStrategy strategy;
 
-    public CommonCard(CCStrategy current_strategy, boolean first){
-        this.strategy = current_strategy;
-        this.first_card = first;
+    /** Creates a common goal card given its type.
+     *
+     * @param currStrategy type of card that has to be created.
+     * @param first true only if is the first card of the game, false otherwise. */
+    public CommonCard(CCStrategy currStrategy, boolean first){
+        this.strategy = currStrategy;
+        this.firstCard = first;
     }
-    public boolean DoControl(Player p){
+
+    /** Controls if the given player has completed the common goal card.
+     *
+     * @return true only if the player has completed the common goal card, false otherwise. */
+    public boolean control(Player p){
         return strategy.isCompleted(p);
     }
 
-    public void CalculatePoints(Player p){
-        if(getPoints()>0){
-            if(DoControl(p)){
-                if(isFirst_card()){
+    /** Sets the score token of the given player according to how many points are still available. */
+    public void givePoints(Player p){
+        if(this.points > 0){
+            //If the player has completed the common goal card
+            if(control(p)){
+                //If it is the first card of the game then it will modify the first score token
+                if(this.firstCard){
                     if(p.getScoreToken1() == 0){
                         p.setScoreToken1(points);
-                        setPoints(points-2);       //Diviso in due righe uguali per far si che abbassi i punti solo la prima volta che
-                                                    // completa la common
+                        this.points = points - 2;
                     }
-                }
-                else{
-                    if(p.getScoreToken2()==0){
+                } else {
+                    //Otherwise it will modify the second score token
+                    if(p.getScoreToken2() == 0){
                         p.setScoreToken2(points);
-                        setPoints(points-2);
+                        this.points = points - 2;
                     }
                 }
-
-
             }
         }
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public boolean isFirst_card() {
-        return first_card;
-    }
-
-    public void setFirst_card(boolean first_card) {
-        this.first_card = first_card;
     }
 }
