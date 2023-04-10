@@ -29,7 +29,7 @@ public class CC_02 implements CCStrategy {
 				|| current_shelf[5][4].getCategory().equals(type.EMPTY)){
 			end=false;
 		} else{
-			//Check if all the tiles have the same type of the most low-left one.
+			//Check if all the tiles have the same type of the most high-left one.
 			color = current_shelf[0][0].getCategory();
 			if(!color.equals(current_shelf[5][0].getCategory())
 					|| !color.equals(current_shelf[0][4].getCategory())

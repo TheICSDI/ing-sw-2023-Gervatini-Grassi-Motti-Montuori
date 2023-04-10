@@ -1,0 +1,158 @@
+[
+  {
+    "assert" : true,
+    "tiles" : [
+      {
+        "x": 0,
+        "y": 0,
+        "type": "games"
+      },
+      {
+        "x": 1,
+        "y": 1,
+        "type": "games"
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "type": "games"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "games"
+      },
+      {
+        "x": 4,
+        "y": 4,
+        "type": "games"
+      }
+    ]
+  },
+  {
+    "assert" : true,
+    "tiles" : [
+      {
+        "x": 1,
+        "y": 0,
+        "type": "games"
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "type": "games"
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "type": "games"
+      },
+      {
+        "x": 4,
+        "y": 3,
+        "type": "games"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "type": "games"
+      }
+    ]
+  },
+  {
+    "assert" : true,
+    "tiles" : [
+      {
+        "x": 0,
+        "y": 4,
+        "type": "frames"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "frames"
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "type": "frames"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "frames"
+      },
+      {
+        "x": 4,
+        "y": 0,
+        "type": "frames"
+      }
+    ]
+  },
+  {
+    "assert" : true,
+    "tiles" : [
+      {
+        "x": 1,
+        "y": 4,
+        "type": "frames"
+      },
+      {
+        "x": 2,
+        "y": 3,
+        "type": "frames"
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "type": "frames"
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "type": "frames"
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "type": "frames"
+      }
+    ]
+  },
+  {
+    "assert" : false,
+    "tiles" : [
+      {
+        "x": 0,
+        "y": 4,
+        "type": "frames"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "frames"
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "type": "frames"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "frames"
+      },
+      {
+        "x": 4,
+        "y": 0,
+        "type": "books"
+      }
+    ]
+  },
+  {
+    "assert" : false,
+    "tiles" : [
+
+    ]
+  }
+]

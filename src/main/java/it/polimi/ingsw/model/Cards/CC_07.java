@@ -19,7 +19,7 @@ public class CC_07 implements CCStrategy {
         int i, j, count;
         type curr, first;//curr si the actual tile of the control, first is the  first tile of the diagonal.
         boolean end = false;
-        int[][] start_positions = {{0, 0}, {1,0}, {0,4}, {1,4}};
+        int[][] startPositions = {{0, 0}, {1,0}, {0,4}, {1,4}};
         int[][] updates = {{1, 1}, {1, 1}, {1, -1}, {1, -1}};
         // da 00 44 da 10 54 da 04 40 14 50
         /*
@@ -27,9 +27,9 @@ public class CC_07 implements CCStrategy {
         external loop change the start tile (by start_position) and decide the way in which indices move
         (by updates)
          */
-        for(int k = 0; k < 4 && !end; k++){
-            i = start_positions[k][0];//row set
-            j = start_positions[k][1];//column set
+        for(int k = 0; k < startPositions.length && !end; k++){
+            i = startPositions[k][0];//row set
+            j = startPositions[k][1];//column set
             count = 0;//count set
             first = p.getShelf()[i][j].getCategory();//color to check set
             if(!first.equals(type.EMPTY)) {

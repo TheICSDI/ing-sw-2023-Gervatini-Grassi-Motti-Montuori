@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 
 class CC_11Test {
-
     @Test
     void isCompleted() {
         CCStrategy CC11=new CC_11();

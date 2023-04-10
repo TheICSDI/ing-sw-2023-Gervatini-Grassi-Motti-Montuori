@@ -1,0 +1,470 @@
+[
+  {
+    "assert" : true,
+    "tiles" : [
+      {
+        "x": 0,
+        "y": 0,
+        "type": "cats"
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "type": "cats"
+      },
+      {
+        "x": 2,
+        "y": 0,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 0,
+        "type": "games"
+      },
+      {
+        "x": 4,
+        "y": 0,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "type": "books"
+      },
+
+      {
+        "x": 1,
+        "y": 1,
+        "type": "cats"
+      },{
+        "x": 2,
+        "y": 1,
+        "type": "cats"
+      },{
+        "x": 3,
+        "y": 1,
+        "type": "cats"
+      },{
+        "x": 4,
+        "y": 1,
+        "type": "cats"
+      },{
+        "x": 5,
+        "y": 1,
+        "type": "cats"
+      },
+
+      {
+        "x": 2,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "type": "cats"
+      },
+
+      {
+        "x": 3,
+        "y": 3,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 3,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "cats"
+      },
+
+      {
+        "x": 4,
+        "y": 4,
+        "type": "cats"
+      },{
+        "x": 5,
+        "y": 4,
+        "type": "cats"
+      }
+    ]
+  },
+  {
+    "assert" : true,
+    "tiles" : [
+      {
+        "x": 1,
+        "y": 0,
+        "type": "cats"
+      },
+      {
+        "x": 2,
+        "y": 0,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 0,
+        "type": "games"
+      },
+      {
+        "x": 4,
+        "y": 0,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "type": "books"
+      },
+
+      {
+        "x": 2,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "cats"
+      },
+
+      {
+        "x": 3,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "type": "cats"
+      },
+
+      {
+        "x": 4,
+        "y": 3,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "cats"
+      },
+
+      {
+        "x": 5,
+        "y": 4,
+        "type": "cats"
+      }
+    ]
+  },
+  {
+    "assert" : true,
+    "tiles" : [
+      {
+        "x": 0,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 1,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 2,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 4,
+        "type": "games"
+      },
+      {
+        "x": 4,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "type": "books"
+      },
+
+      {
+        "x": 1,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 2,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 3,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 4,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 5,
+        "y": 3,
+        "type": "cats"
+      },
+
+      {
+        "x": 2,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "type": "cats"
+      },
+
+      {
+        "x": 3,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "cats"
+      },
+
+      {
+        "x": 4,
+        "y": 0,
+        "type": "cats"
+      },{
+        "x": 5,
+        "y": 0,
+        "type": "cats"
+      }
+    ]
+  },
+  {
+    "assert" : true,
+    "tiles" : [
+
+      {
+        "x": 1,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 2,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 4,
+        "type": "games"
+      },
+      {
+        "x": 4,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "type": "books"
+      },
+
+      {
+        "x": 2,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 3,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 4,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 5,
+        "y": 3,
+        "type": "cats"
+      },
+
+      {
+        "x": 3,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "type": "cats"
+      },
+
+      {
+        "x": 4,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "cats"
+      },
+
+      {
+        "x": 5,
+        "y": 0,
+        "type": "cats"
+      }
+    ]
+  },
+  {
+    "assert" : false,
+    "tiles" : [
+      {
+        "x": 0,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 1,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 2,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 4,
+        "type": "games"
+      },
+      {
+        "x": 4,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "type": "books"
+      },
+
+      {
+        "x": 1,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 2,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 3,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 4,
+        "y": 3,
+        "type": "cats"
+      },{
+        "x": 5,
+        "y": 3,
+        "type": "cats"
+      },
+
+      {
+        "x": 2,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "type": "cats"
+      },
+
+      {
+        "x": 3,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "cats"
+      }
+    ]
+  }
+]

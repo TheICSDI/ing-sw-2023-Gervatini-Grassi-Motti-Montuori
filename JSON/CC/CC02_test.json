@@ -1,0 +1,72 @@
+[
+  {
+    "assert" : true,
+    "tiles": [
+      {
+        "x": 0,
+        "y": 0,
+        "type": "books"
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "type": "books"
+      },
+      {
+        "x": 0,
+        "y": 4,
+        "type": "books"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "type": "books"
+      }
+    ]
+  },
+  {
+    "assert": false,
+    "tiles": [
+      {
+        "x": 0,
+        "y": 0,
+        "type": "books"
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "type": "books"
+      },
+      {
+        "x": 0,
+        "y": 4,
+        "type": "cats"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "type": "games"
+      }
+    ]
+  },
+  {
+    "assert" : false,
+    "tiles" : [
+      {
+        "x": 0,
+        "y": 0,
+        "type": "books"
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "type": "books"
+      },
+      {
+        "x": 0,
+        "y": 4,
+        "type": "books"
+      }
+    ]
+  }
+]
