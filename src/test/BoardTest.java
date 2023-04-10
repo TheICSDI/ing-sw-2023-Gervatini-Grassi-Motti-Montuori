@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
@@ -93,6 +92,13 @@ class BoardTest {
         Board b = new Board(4);
         //No available tiles: the board is empty
         assertTrue(b.AvailableTiles().isEmpty());
+
+        //Some tiles are available
+        b.board[5][5] = new Tile("cats");
+        b.board[5][6] = new Tile("cats");
+        assertFalse(b.AvailableTiles().isEmpty());
+        assertTrue(b.AvailableTiles().contains(new Position(5, 5)));
+        assertTrue(b.AvailableTiles().contains(new Position(5, 6)));
 
         //All tiles are available: the board is full
         b.fillBoard();

@@ -3,21 +3,28 @@
  * @author Andrea Grassi, Caterina Motti
  */
 package main.java.it.polimi.ingsw.model;
-import java.util.*;
 
+
+import main.java.it.polimi.ingsw.controller.gameController;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
+import main.java.it.polimi.ingsw.model.Tile.Tile;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class Game {
     private static int count = 0;
     public int id;
     private final int nPlayers;
-    private List<Player> players;
+    private final List<Player> players;
     private final Board board;
-    private List<CCStrategy> allCC;
+    private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
-    private final List<Integer> nPC = new ArrayList<>();
+    private final List<PersonalCard> allPC = new ArrayList<>();
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
@@ -42,11 +49,11 @@ public class Game {
         Collections.shuffle(players);
         players.get(0).setFirstToken(true);
         //Shuffle the personal goal cards in order to randomically give them to the players
-        Collections.shuffle(nPC);
+        Collections.shuffle(allPC);
         for(int i = 0; i < nPlayers; i++){
             //Sets the turn of each player
             players.get(i).setTurn(i);
-            players.get(i).setPersonalCard(nPC.get(i));
+            players.get(i).setPersonalCard(allPC.get(i));
         }
 
         //Shuffle the common goal cards to randomically draws two of them
@@ -56,27 +63,30 @@ public class Game {
     }
 
 
-    /*Double loop to have the game continue until someone gets the EndGameToken and is the turn of the player
-    * with the FirstPlayerSit again, turn order is the same as the order in players list, firstPlayer is
-    * the first in the List, every turn a player gets to pick 1-3 the tiles on the board and put them in his shelf,
-    * the game checks if he has the endGameToken,if he has completed a common task or if it needs to refill
-    *  the board*/
     /**
-     * Manages turns, token, common cards and board checks.
+     * Manages all the game logic from start to end.
+     * It calculates the total points of each player at the end of every turn.
      *
-     * @see Player,CommonCard,PersonalCard
+     * @see Player,Board,CommonCard,PersonalCard
      */
     public void startGame() throws InvalidColumnException, InvalidPositionException {
-        boolean endGame = false;//end game token non pescato
+        //At the starting point no player has the endgame token
+        boolean endGame = false;
+        boolean check = false;
 
         while(!endGame){
             for (Player p: players) {
-                //The player can pick some tiles from the board
-                p.pickTiles(board);
+                //The player can pick some tiles from the board and insert it inside its shelf
+                Set<Position> chosen = gameController.Choose();
+                List<Tile> toInsert = p.pickTiles(chosen, board);
+                int col = gameController.ChooseColumn();
+                p.insertInShelf(toInsert, col);
+
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
                 }
+
                 //At each turn the common card goals are calculated
                 if(CommonCards.get(0).DoControl(p)){
                     CommonCards.get(0).CalculatePoints(p);
@@ -84,9 +94,17 @@ public class Game {
                 if(CommonCards.get(1).DoControl(p)){
                     CommonCards.get(1).CalculatePoints(p);
                 }
-                //If the current player has the token end
-                if(p.getEndToken()){
+
+                //If the end game token has not been assigned and the current player has completed his shelf
+                //it assigns the end token and add 1 point
+                if (!check && p.isShelfFull()) {
+                    p.setEndToken(true);
                     p.addPoints(1);
+                    check = true;
+                }
+
+                //If the next player has the end game token the game ends
+                if (players.get(players.indexOf(p) + 1).getEndToken()) {
                     endGame = true;
                 }
             }
@@ -96,6 +114,30 @@ public class Game {
         }
         //Manca il conteggio di personal card
     }
+
+    /** Returns the winner of the game.
+     * The player who scored most points wins the game. In case of a tie, the player sitting further from the
+     * first one wins the game.
+     */
+    public Player calculateWinner(){
+        //By default, the winner is the last player to play
+        // (if everybody has the same total points he is the winner)
+        Player winner = players.get(players.size() - 1);
+        //For each player, if the number of total points is grater than the current winner, the winner is updated
+        for(Player p : players){
+            if(p.getTotalPoints() > winner.getTotalPoints()){
+                winner = p;
+            } else if (p.getTotalPoints() == winner.getTotalPoints()){
+                //If two players have the same amount of points, then the winner is the one sitting further from
+                // the first player.
+                if(players.indexOf(p) > players.indexOf(winner)) {
+                    winner = p;
+                }
+            }
+        }
+        return winner;
+    }
+
 
     /**
      * Initializes all common and personal goal cards.
@@ -118,15 +160,12 @@ public class Game {
 
         //Add index from 0 to 11 that represents the personal goal cards
         for(int i = 0; i < 12; i++){
-            nPC.add(i);
+            allPC.add(new PersonalCard(i));
         }
     }
 
-    /** Shows the board in a graphical way. Each tile is represented by a symbol.
-     *
-     * @param board the board that has to be represented.
-     */
-    public void showBoard(Board board){
+    /** Shows the board in a graphical way. Each tile is represented by a symbol. */
+    public void showBoard(){
         for(int i=0;i<board.getNumRows();i++){
             for(int j=0;j<board.getNumCols();j++){
                 switch (board.board[i][j].getCategory()) {
@@ -143,4 +182,23 @@ public class Game {
         }
     }
 
+    /** Gets the list of player. */
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    /** Gets the list of common goal cards fot the cal. */
+    public List<CommonCard> getCommonCards() {
+        return CommonCards;
+    }
+
+    /** Gets the list of personal goal cards. */
+    public List<PersonalCard> getAllPC() {
+        return allPC;
+    }
+
+    /** Gets the list of all common goal cards. */
+    public List<CCStrategy> getAllCC() {
+        return allCC;
+    }
 }

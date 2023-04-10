@@ -1,5 +1,6 @@
 [
   {
+	"assert" : true,
     "tiles": [
       {
         "x" : 0,
@@ -42,7 +43,6 @@
         "y" : 0,
         "type" : "frames"
       },
-
       {
         "x" : 3,
         "y" : 3,
@@ -94,6 +94,7 @@
     ]
   },
   {
+    "assert": false,
     "tiles": [
 
     ]

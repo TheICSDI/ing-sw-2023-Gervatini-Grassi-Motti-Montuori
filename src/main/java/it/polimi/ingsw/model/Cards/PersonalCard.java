@@ -1,12 +1,12 @@
 /** Represents the personal goal card. Each player has one.
  * At the start of the game, depending on the number of player, different integers will be randomically generated.
  * Thanks to the constructor a personal goal card will be generated as a matrix of tiles.
- *
- * @author Montuori Giulio
+ * @author Giulio Montuori
  */
 package main.java.it.polimi.ingsw.model.Cards;
 
 import main.java.it.polimi.ingsw.model.Tile.Tile;
+import main.java.it.polimi.ingsw.model.Tile.type;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,8 +18,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 
 public class PersonalCard {
-	private int id;
-	private Tile[][] card;
+	private final int id;
+	private final Tile[][] card;
+	private final int numRows = 6;
+	private final int numCols = 5;
 
 	/** Creates a personal goal card based on the id.
 	 * Each card has unique id.
@@ -29,7 +31,7 @@ public class PersonalCard {
 	public PersonalCard(int uid)
 	{
 		this.id = uid;
-		this.card = new Tile[6][5]; //fixed size
+		this.card = new Tile[numRows][numCols]; //fixed size
 		personalCardParser();
 	}
 
@@ -55,9 +57,10 @@ public class PersonalCard {
 			e.printStackTrace();
 		}
 
-		for (int i = 0; i < this.card.length; i++) {
-			for (int j = 0; j < this.card[0].length; j++) {
-				this.card[i][j] = new Tile("empty"); // filling the rest of the matrix with the EMPTY type
+		//Fill the card with empty tiles
+		for (int i = 0; i < this.numRows; i++) {
+			for (int j = 0; j < this.numCols; j++) {
+				this.card[i][j] = new Tile("empty");
 			}
 		}
 
@@ -67,7 +70,9 @@ public class PersonalCard {
 		{
 			JSONObject coordinate = (JSONObject) cardTiles.get(i);
 			temp = new Tile(coordinate.get("type").toString());
-			this.card[Integer.parseInt(coordinate.get("x").toString())][Integer.parseInt(coordinate.get("y").toString())] = temp;
+			int x = Integer.parseInt(coordinate.get("x").toString());
+			int y = Integer.parseInt(coordinate.get("y").toString());
+			this.card[x][y] = temp;
 		}
 	}
 
@@ -81,11 +86,12 @@ public class PersonalCard {
 		int matches = 0, score = 0;
 		int max_matches = 6;
 
-		for(int i = 0; i < this.card.length; i++)
+		for(int i = 0; i < this.numRows; i++)
 		{
-			for(int j = 0; matches != max_matches && j < this.card[0].length; j++)
+			for(int j = 0; matches != max_matches && j < this.numCols; j++)
 			{
-				if(shelf[i][j].getCategory().equals(this.card[i][j].getCategory()))
+				if(!shelf[i][j].getCategory().equals(type.EMPTY)
+						&& shelf[i][j].getCategory().equals(this.card[i][j].getCategory()))
 				{
 					matches++;
 				}
@@ -108,7 +114,3 @@ public class PersonalCard {
 		return card;
 	}
 }
-	/*
-	 * Probably we can ditch the matrix rappresentation of the personal goal cards and switch to one like
-	 * the JSON file to discuss
-	 */

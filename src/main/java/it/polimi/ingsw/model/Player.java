@@ -1,6 +1,6 @@
 /** Represents a player.
  *  Each player has a shelf and a personal goal card.
- * @Author Caterina Motti, Marco Gervatini, Andrea Grassi
+ * @Author Caterina Motti, Andrea Grassi, Marco Gervatini
  */
 package main.java.it.polimi.ingsw.model;
 
@@ -8,7 +8,6 @@ import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.PersonalCard;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.controller.Controller;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import java.util.*;
 
@@ -17,7 +16,7 @@ public class Player {
     private final int numRows = 6;
     private final int numCols = 5;
     private Tile[][] Shelf;
-    private PersonalCard PersonalCard;
+    private PersonalCard PersonalCard = null;
     private boolean firstToken, endToken;
     private int scoreToken1, scoreToken2;
     private int totalPoints;
@@ -102,57 +101,38 @@ public class Player {
             throw new InvalidColumnException("Selected column has no enough space!");
         } else {
             //For each tile in toInsert
-            for (int i = 0; i < toInsert.size(); i++){
-                for(int j = 0; j < numCols; j++){
+            for(Tile t : toInsert){
+                for (int i = numRows - 1; i >= 0; i--){
                     //If the element in the selected column is empty then it put the new tile
-                    if(Shelf[j][col].getCategory().equals(type.EMPTY)) {
-                        Shelf[j][col] = toInsert.get(i);
+                    if (Shelf[i][col].getCategory().equals(type.EMPTY)) {
+                        Shelf[i][col] = t;
+                        break;
                     }
                 }
             }
         }
     }
 
-    //DA rivedere la parte del controller
     /**
+     * Return a list of tiles chosen by the player to be taken from the board.
+     * It checks if the position are available to be taken, and after taking the tiles it removes them from the board.
      *
+     * @param chosen a set of position that the player has chosen.
      * @param b board from which the player can take the tiles.
      */
-    public void pickTiles(Board b) throws InvalidColumnException, InvalidPositionException {
-        //Position chosen by the player
-        Set<Position> chosen;
-        do{
-            chosen = Controller.Choose();
-        } while(!b.AvailableTiles().containsAll(chosen));
-
-        List<Tile> ChosenTiles = new ArrayList<>();
-        for (Position p: chosen) {
-            ChosenTiles.add(b.board[p.getX()][p.getY()]);
-        }
-        b.RemoveTiles(chosen);
-
-        List<Integer> order = Controller.ChooseOrder();
-        orderTiles(ChosenTiles,order);
-        int col;
-        do{
-            col = Controller.ChooseColumn();
-        } while(checkColumn(ChosenTiles.size(),col));
-        insertInShelf(ChosenTiles, col);
-    }
-
-    /*public List<Tile> pickTiles(Set<Position> chosen, Board b) throws InvalidPositionException {
-     //Position chosen by the player
-     if (!b.AvailableTiles().containsAll(chosen)) {
-     throw new InputMismatchException("The chosen tiles are not available to be taken!");
-     } else {
-     List<Tile> choice = new ArrayList<>();
-     for (Position p : chosen) {
-     choice.add(b.board[p.getX()][p.getY()]);
+    public List<Tile> pickTiles(Set<Position> chosen, Board b) throws InvalidPositionException {
+        List<Tile> choice = new ArrayList<>();
+         //Position chosen by the player
+         if (!b.AvailableTiles().containsAll(chosen)) {
+            throw new InputMismatchException("The chosen tiles are not available to be taken!");
+         } else {
+             for (Position p : chosen) {
+                 choice.add(b.board[p.getX()][p.getY()]);
+             }
+         b.RemoveTiles(chosen);
+         return choice;
+         }
      }
-     b.RemoveTiles(chosen);
-     return choice;
-     }
-     }*/
 
     /** Gets the shelf of the player. */
     public Tile[][] getShelf() {
@@ -162,6 +142,16 @@ public class Player {
     /** Sets the shelf of the player. */
     public void setShelf(Tile[][] shelf) {
         Shelf = shelf;
+    }
+
+    /** Return true only if the shelf of the player is full, false otherwise. */
+    public boolean isShelfFull(){
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                if(this.Shelf[i][j].getCategory().equals(type.EMPTY)) return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -178,11 +168,9 @@ public class Player {
         return totalPoints;
     }
 
-    private final Boolean[][] checked = new Boolean[numRows][numCols];
-    /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf.
-     */
+    /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf. */
     public void calculateGeneralPoints(){
-        int currClusterDimension = 0;
+        boolean[][] checked = new boolean[numRows][numCols];
         //Remove all element from checked before starting the calculation
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {
@@ -192,12 +180,13 @@ public class Player {
         //For every tile in the shelf
         for(int i = 0; i < numRows; i++){
             for(int j = 0; j < numCols; j++){
+                int currClusterDimension = 0;
                 //If the tile does not already belong to a cluster, adds it to the checked tiles
                 if(!checked[i][j]){
                     checked[i][j] = true;
                     //If the tile is not empty, it calls clusteringRes that research for a cluster of tiles of the same type
                     if(!this.Shelf[i][j].getCategory().equals(type.EMPTY)){
-                        currClusterDimension = clusteringRes(i, j);
+                        currClusterDimension = clusteringRes(i, j, checked);
                     }
                 }
                 //It assigns points based on the dimension of the found cluster
@@ -209,31 +198,33 @@ public class Player {
         }
     }
 
-    private int clusteringRes(int x, int y){
+    /** Recursive function that calculate the dimension of the current cluster.*/
+    private int clusteringRes(int x, int y, boolean[][] checked){
         Tile t = this.Shelf[x][y];
         int clusterDim = 1;
+        //Explores the shelf in every direction, if the tile is of the same type as t it calls itself recursively
         try {
             if (!checked[x][y + 1] && t.getCategory().equals(this.Shelf[x][y + 1].getCategory())) {
                 checked[x][y + 1] = true;
-                clusterDim = clusterDim + clusteringRes(x, y + 1);
+                clusterDim = clusterDim + clusteringRes(x, y + 1, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         try {
             if (!checked[x + 1][y] && t.getCategory().equals(this.Shelf[x + 1][y].getCategory())) {
                 checked[x + 1][y] = true;
-                clusterDim = clusterDim + clusteringRes(x + 1, y);
+                clusterDim = clusterDim + clusteringRes(x + 1, y, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         try {
             if (!checked[x][y - 1] && t.getCategory().equals(this.Shelf[x][y - 1].getCategory())) {
                 checked[x][y - 1] = true;
-                clusterDim = clusterDim + clusteringRes(x, y - 1);
+                clusterDim = clusterDim + clusteringRes(x, y - 1, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         try {
             if (!checked[x - 1][y] && t.getCategory().equals(this.Shelf[x - 1][y].getCategory())) {
                 checked[x - 1][y] = true;
-                clusterDim = clusterDim + clusteringRes(x - 1, y);
+                clusterDim = clusterDim + clusteringRes(x - 1, y, checked);
             }
         } catch (IndexOutOfBoundsException ignored){}
         return clusterDim;
@@ -260,8 +251,8 @@ public class Player {
     }
 
     /** Sets the personal card of the player according to the parameter id. */
-    public void setPersonalCard(int id){
-        PersonalCard = new PersonalCard(id);
+    public void setPersonalCard(PersonalCard p){
+        PersonalCard = p;
     }
 
     /** Sets the value of end token of the player. */

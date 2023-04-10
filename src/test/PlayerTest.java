@@ -4,7 +4,10 @@
 package test;
 
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
+import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
+import main.java.it.polimi.ingsw.model.Board;
 import main.java.it.polimi.ingsw.model.Player;
+import main.java.it.polimi.ingsw.model.Position;
 import main.java.it.polimi.ingsw.model.Tile.Tile;
 import main.java.it.polimi.ingsw.model.Tile.type;
 import org.json.simple.JSONArray;
@@ -101,7 +104,7 @@ class PlayerTest {
         List<Tile> toInsert = new ArrayList<>();
         int col = 2;
 
-        //Empty to insert
+        //Empty toInsert: it inserts anything in the shelf
         p1.insertInShelf(toInsert, col);
         for (int i = 0; i < p1.getNumRows(); i++) {
             for (int j = 0; j < p1.getNumCols(); j++) {
@@ -118,10 +121,16 @@ class PlayerTest {
         for (int i = 0; i < p1.getNumRows(); i++) {
             for (int j = 0; j < p1.getNumCols(); j++) {
                 if(j != col){
+                    //All other tiles are unchanged
                     assertEquals(type.EMPTY, s[i][j].getCategory());
                 } else {
-                    for (int k = 0; k < toInsert.size(); k++) {
-                        assertNotEquals(type.EMPTY, s[k][j].getCategory());
+                    if(i <= p1.getNumRows() - toInsert.size() - 1){
+                        //All other tiles are unchanged
+                        assertEquals(type.EMPTY, s[i][j].getCategory());
+                    } else {
+                        assertNotEquals(type.EMPTY, s[i][j].getCategory());
+                        //The tiles are inserted so that t1 is at the "bottom" and t3 is at the "top"
+                        assertEquals(toInsert.get(p1.getNumRows() - 1 - i).getCategory(), s[i][j].getCategory());
                     }
                 }
             }
@@ -138,7 +147,32 @@ class PlayerTest {
     }
 
     @Test
-    void pickTiles() {
+    void pickTiles() throws InvalidPositionException {
+        Board b = new Board(4);
+        b.fillBoard();
+
+        //Add some available position
+        Set<Position> chosen = new HashSet<>();
+        Position pos1 = new Position(0,4);
+        Position pos2 = new Position(0, 5);
+        chosen.add(pos1);
+        chosen.add(pos2);
+
+        List<Tile> expectedTiles = new ArrayList<>();
+        expectedTiles.add(b.getTile(pos1));
+        expectedTiles.add(b.getTile(pos2));
+        List<Tile> chosenTiles = p1.pickTiles(chosen, b);
+        assertEquals(type.EMPTY, b.getTile(pos1).getCategory());
+        assertEquals(type.EMPTY, b.getTile(pos2).getCategory());
+        assertEquals(expectedTiles, chosenTiles);
+
+        //Exception
+        //Chosen position by the player are not available to be taken
+        Position pos3 = new Position(0,0);
+        chosen.add(pos3);
+        Throwable ex = assertThrows(InputMismatchException.class, () ->
+                p1.pickTiles(chosen, b));
+        assertEquals("The chosen tiles are not available to be taken!", ex.getMessage());
     }
 
     @Test
@@ -159,5 +193,18 @@ class PlayerTest {
         assertEquals(15, p1.getTotalPoints());
     }
 
+    @Test
+    void isShelfFull(){
+        //The shelf is empty
+        assertFalse(p1.isShelfFull());
 
+        //The shelf has some tiles but is not full
+        p1.getShelf()[5][0] = t1;
+        p1.getShelf()[4][0] = t2;
+        assertFalse(p1.isShelfFull());
+
+        //The shelf is completely full
+        p1 = Parser();
+        assertTrue(p1.isShelfFull());
+    }
 }
