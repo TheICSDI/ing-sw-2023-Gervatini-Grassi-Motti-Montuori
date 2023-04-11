@@ -16,8 +16,10 @@ public class CC_11 implements CCStrategy {
      * @return true only if the common goal card is completed.
      */
     public boolean isCompleted(Player p) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
+        int nRow=6;
+        int nCol=5;
+        for (int i = 0; i < nRow-2; i++) {
+            for (int j = 0; j < nCol-2; j++) {
                 if(!p.getShelf()[i][j].getCategory().equals(type.EMPTY)) {
                     type curr_type = p.getShelf()[i][j].getCategory();
                     if(p.getShelf()[i+2][j].getCategory().equals(curr_type)

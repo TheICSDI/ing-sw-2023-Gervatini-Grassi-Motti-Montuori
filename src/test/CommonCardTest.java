@@ -63,7 +63,7 @@ class CommonCardTest {
         p1 = Parser();
         assertTrue(c1.control(p1));
         assertTrue(c2.control(p1));
-        //assertFalse(c3.control(p1)); DA PROBLEMI DA RIGUARDARE
+        assertFalse(c3.control(p1)); //DA PROBLEMI DA RIGUARDARE
     }
 
     @Test
