@@ -4,7 +4,7 @@
  */
 package main.java.it.polimi.ingsw.model;
 
-import main.java.it.polimi.ingsw.controller.Controller;
+import main.java.it.polimi.ingsw.controller.gameController;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import static main.java.it.polimi.ingsw.controller.Controller.*;
 
 public class Game {
     private static int count = 0;
@@ -46,10 +44,10 @@ public class Game {
         //Initializes the common and personal goal cards
         resetCards();
 
-        //Shuffle the list of players in order to randomly pick the first one
+        //Shuffle the list of players in order to randomically pick the first one
         Collections.shuffle(players);
         players.get(0).setFirstToken(true);
-        //Shuffle the personal goal cards in order to randomly give them to the players
+        //Shuffle the personal goal cards in order to randomically give them to the players
         Collections.shuffle(allPC);
         for(int i = 0; i < nPlayers; i++){
             //Sets the turn of each player
@@ -57,7 +55,7 @@ public class Game {
             players.get(i).setPersonalCard(allPC.get(i));
         }
 
-        //Shuffle the common goal cards to randomly draws two of them
+        //Shuffle the common goal cards to randomically draws two of them
         Collections.shuffle(allCC);
         CommonCards.add(new CommonCard(allCC.get(0),true));
         CommonCards.add(new CommonCard(allCC.get(1),false));
@@ -78,9 +76,9 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 //The player can pick some tiles from the board and insert it inside its shelf
-                Set<Position> chosen = Choose();
+                Set<Position> chosen = gameController.Choose();
                 List<Tile> toInsert = p.pickTiles(chosen, board);
-                int col = ChooseColumn();
+                int col = gameController.ChooseColumn();
                 p.insertInShelf(toInsert, col);
 
                 //If the board is empty it will be randomically filled
