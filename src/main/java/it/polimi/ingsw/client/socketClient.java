@@ -1,5 +1,6 @@
 package main.java.it.polimi.ingsw.client;
 
+import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
 import main.java.it.polimi.ingsw.messages.ClientMessage;
 
 import java.io.BufferedReader;
@@ -26,12 +27,13 @@ public class socketClient {
     }
     //sendMessage chiama un filtro applicato dal controller che gli blocca l'invio di messaggi formattati male oppure
     //che non puo fare in quel momento
-    public String sendMessage(String message) throws IOException {
+    public String sendMessage(String message) throws IOException, InvalidCommandException {
         ClientMessage clientMessage;
         /*
         non so dove l'errore dello static context quindi non tocco nulla finche' non abbiamo le idee piu chiare
          */
-        clientMessage = clientController.checkMessageShape(message);
+
+        clientMessage = controller.checkMessageShape(message);
         out.println(clientMessage);
         return in.readLine();//non so a cosa serva/come gestire questa riga, ho solo modificato il metodo che ho trovato
     }
