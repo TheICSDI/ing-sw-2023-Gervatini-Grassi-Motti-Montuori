@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.messages;
+package main.java.it.polimi.ingsw.network.messages;
 
 public enum action {
     //vanno aggiunti diversi messaggi di sicuro, sicuramente bisogna anche definire l'insieme dei messaggi ricevibili

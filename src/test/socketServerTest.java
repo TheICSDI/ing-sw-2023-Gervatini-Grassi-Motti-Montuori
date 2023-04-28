@@ -1,6 +1,6 @@
 package test;
 
-import main.java.it.polimi.ingsw.client.socketClient;
+import main.java.it.polimi.ingsw.network.client.socketClient;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

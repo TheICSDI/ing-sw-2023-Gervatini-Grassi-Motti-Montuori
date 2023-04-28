@@ -1,6 +1,7 @@
-package main.java.it.polimi.ingsw.client;
+package main.java.it.polimi.ingsw.network.client;
 
-import main.java.it.polimi.ingsw.messages.ClientMessage;
+import main.java.it.polimi.ingsw.controller.clientController;
+import main.java.it.polimi.ingsw.network.messages.ClientMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;

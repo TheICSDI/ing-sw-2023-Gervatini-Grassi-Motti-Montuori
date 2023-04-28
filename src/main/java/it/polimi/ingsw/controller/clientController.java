@@ -1,8 +1,8 @@
-package main.java.it.polimi.ingsw.client;
+package main.java.it.polimi.ingsw.controller;
 
 import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
-import main.java.it.polimi.ingsw.messages.ClientMessage;
-import main.java.it.polimi.ingsw.messages.action;
+import main.java.it.polimi.ingsw.network.messages.ClientMessage;
+import main.java.it.polimi.ingsw.network.messages.action;
 
 import java.util.ArrayList;
 import java.util.List;
