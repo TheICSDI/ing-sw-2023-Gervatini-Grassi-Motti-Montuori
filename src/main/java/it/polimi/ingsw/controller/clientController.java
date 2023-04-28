@@ -142,6 +142,7 @@ public class clientController{
                     throw new InvalidCommandException("Command cannot be called");
                 }
             case PUTTILES:
+
                 if(imInALobby()){
                     if(isGameStarted()){
                         if(isMyTurn() && countMove == 2){
