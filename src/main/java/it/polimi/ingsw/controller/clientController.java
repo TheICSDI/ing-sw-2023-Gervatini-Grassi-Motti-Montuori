@@ -1,8 +1,8 @@
 package main.java.it.polimi.ingsw.controller;
 
 import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
-import main.java.it.polimi.ingsw.network.messages.ClientMessage;
-import main.java.it.polimi.ingsw.network.messages.action;
+import main.java.it.polimi.ingsw.network.messages.GeneralMessage;
+import main.java.it.polimi.ingsw.network.messages.Action;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,21 +17,21 @@ public class clientController{
     }
     //controlla che la stringa che rappresenta l'azione scelta corrisponda a un comando esistente e chiamabile dal client
     //in quel momento
-    public ClientMessage checkMessageShape(String m) throws InvalidCommandException {
-        ClientMessage clientMessage;
-        action curr_action;
+    public GeneralMessage checkMessageShape(String m) throws InvalidCommandException {
+        GeneralMessage clientMessage;
+        Action curr_action;
         List<String> curr_params;
         //parsing dell'input string
         String[] words = m.split(" ");
         words[0] = words[0].toUpperCase();
         try{
             //vediamo se il comando esiste prima di tutto
-            curr_action = action.valueOf(words[0]);
+            curr_action = Action.valueOf(words[0]);
             //checkArgs in base comando scelto valuta se il giocatore lo puo invocare e se i parametri sono accettabili
             //non controlla ad esempio se le tiles scelte sono disponibili, quello lo vedremo lato server (ok?)
             curr_params =  checkArgs(curr_action,words);
             //se e' tutto ok crea il messaggio
-            clientMessage = new ClientMessage(curr_action,curr_params);
+            // clientMessage = new GeneralMessage(curr_action,curr_params);
             return clientMessage;
         }
         catch(IllegalArgumentException e){
@@ -54,7 +54,7 @@ public class clientController{
     A seconda del comando controlla con uno switch case se i parametri sono nel numero corretto
     eventuali controlli sul accettabilità dei parametri verrà valutata lato server
     */
-    public List<String> checkArgs(action a, String[] p) throws InvalidCommandException{
+    public List<String> checkArgs(Action a, String[] p) throws InvalidCommandException{
         //the first element of p is the action but in string form, we can modify the methods and pass
         //directly only the params in a second moment
         List<String> params = new ArrayList<>();

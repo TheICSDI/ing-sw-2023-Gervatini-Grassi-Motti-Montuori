@@ -1,13 +1,14 @@
 package main.java.it.polimi.ingsw.network.messages;
 
-public enum action {
-    //vanno aggiunti diversi messaggi di sicuro, sicuramente bisogna anche definire l'insieme dei messaggi ricevibili
-    JOINLOBBY,
+public enum Action {
+    SETNAME,
     CREATELOBBY,
+    SHOWLOBBY,
+    JOINLOBBY,
     EXITLOBBY,
-    CHOOSETILES,
+    STARTGAME,
+    PICKTILES,
     SELECTORDER,
-    PUTTILES
     /*
     EVENTUALMENTE ANCHE IL COMANDO CHAT SE VOLESSIMO FARE UNA CHAT DOVE PER MANDARE UN MESSAGGIO SI USA UN COMANDO
      */

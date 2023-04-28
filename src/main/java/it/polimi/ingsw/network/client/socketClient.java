@@ -2,15 +2,13 @@ package main.java.it.polimi.ingsw.network.client;
 
 import main.java.it.polimi.ingsw.controller.clientController;
 import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
-import main.java.it.polimi.ingsw.network.messages.ClientMessage;
+import main.java.it.polimi.ingsw.network.messages.GeneralMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
-import static main.java.it.polimi.ingsw.controller.clientController.*;
 
 public class socketClient {
     private Socket clientSocket;
@@ -31,7 +29,7 @@ public class socketClient {
     //sendMessage chiama un filtro applicato dal controller che gli blocca l'invio di messaggi formattati male oppure
     //che non puo fare in quel momento
     public String sendMessage(String message) throws IOException, InvalidCommandException {
-        ClientMessage clientMessage;
+        GeneralMessage clientMessage;
         /*
         non so dove l'errore dello static context quindi non tocco nulla finche' non abbiamo le idee piu chiare
          */
