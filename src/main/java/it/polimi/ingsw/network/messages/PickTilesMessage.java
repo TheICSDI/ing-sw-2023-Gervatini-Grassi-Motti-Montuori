@@ -29,4 +29,8 @@ public class PickTilesMessage extends GeneralMessage{
                 pos_string.toString() +
                 "}";
     }
+
+    public ArrayList<Position> getPos() {
+        return pos;
+    }
 }

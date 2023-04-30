@@ -5,6 +5,7 @@
 package main.java.it.polimi.ingsw.model;
 
 import main.java.it.polimi.ingsw.controller.gameController;
+import main.java.it.polimi.ingsw.exceptions.CannotAddPlayerException;
 import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
 import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
 import main.java.it.polimi.ingsw.model.Cards.*;
@@ -18,12 +19,14 @@ import java.util.Set;
 public class Game {
     private static int count = 0;
     public int id;
-    private final int nPlayers;
+    private Boolean started = false;
+    private int nPlayers;// non puo essere final perche' il numero di player puo cambiare se qualcuno entra ed esce
     private final List<Player> players;
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private final List<PersonalCard> allPC = new ArrayList<>();
+    public final gameController controller = new gameController();
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
@@ -72,13 +75,14 @@ public class Game {
         //At the starting point no player has the endgame token
         boolean endGame = false;
         boolean check = false;
+        started = true;
 
         while(!endGame){
             for (Player p: players) {
                 //The player can pick some tiles from the board and insert it inside its shelf
-                Set<Position> chosen = gameController.Choose();
+                Set<Position> chosen = controller.Choose(p.getNickname(),id);
                 List<Tile> toInsert = p.pickTiles(chosen, board);
-                int col = gameController.ChooseColumn();
+                int col = controller.ChooseColumn(p.getNickname(),id);
                 p.insertInShelf(toInsert, col);
 
                 //If the board is empty it will be randomically filled
@@ -199,5 +203,19 @@ public class Game {
     /** Gets the list of all common goal cards. */
     public List<CCStrategy> getAllCC() {
         return allCC;
+    }
+
+    public void addPlayer(Player p) throws CannotAddPlayerException {
+        if(!started){
+            if(players.size()<4){
+                players.add(p);
+            }
+            else throw  new CannotAddPlayerException("too many players already in the lobby");
+        }
+        else throw new CannotAddPlayerException("the game is already started");
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 }

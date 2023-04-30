@@ -29,4 +29,8 @@ public class SelectOrderMessage extends GeneralMessage{
                 "}";
 
     }
+
+    public ArrayList<Tile> getOrder() {
+        return order;
+    }
 }

@@ -9,7 +9,8 @@ public enum Action {
     STARTGAME,
     PICKTILES,
     SELECTORDER,
-    /*
-    EVENTUALMENTE ANCHE IL COMANDO CHAT SE VOLESSIMO FARE UNA CHAT DOVE PER MANDARE UN MESSAGGIO SI USA UN COMANDO
-     */
+    PUTTILES,
+
+    //server commands, for how is structured the message type this is the simplest implementation
+    REDOCOMMAND
 }
