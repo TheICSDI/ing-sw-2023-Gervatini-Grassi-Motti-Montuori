@@ -17,7 +17,6 @@ public abstract class GeneralMessage implements Serializable {
     private final Action action;
     private final int lobby_id;
     private final String username;
-    // List<String> params = new ArrayList<>();
 
     /**
      * Constructor that initializes a message with the provided parameters.

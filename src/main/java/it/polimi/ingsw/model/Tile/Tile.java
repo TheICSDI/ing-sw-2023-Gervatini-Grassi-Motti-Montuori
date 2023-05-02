@@ -7,19 +7,43 @@ package main.java.it.polimi.ingsw.model.Tile;
 public class Tile {
 	private final type category;
 	private String color;
+	private char initial;
+
+
 
 	/** Creates a tile according to a given type. */
 	public Tile(String any) {
 
 		this.category = type.valueOf(any.toUpperCase());
 		switch (category){
-			case NOT_ACCESSIBLE, EMPTY -> color ="\033[40m";
-			case CATS -> color = "\033[42m";
-			case TROPHIES -> color = "\033[46m";
-			case FRAMES -> color = "\033[44m";
-			case PLANTS -> color = "\033[0;105m";
-			case BOOKS -> color = "\033[47m";
-			case GAMES -> color = "\033[43m";
+			case NOT_ACCESSIBLE, EMPTY -> {
+				color ="\033[48;5;94m";
+				initial=' ';
+			}
+			case CATS -> {
+				color = "\033[42m";
+				initial='C';
+			}
+			case TROPHIES -> {
+				color = "\033[46m";
+				initial='T';
+			}
+			case FRAMES -> {
+				color = "\033[44m";
+				initial='F';
+			}
+			case PLANTS -> {
+				color = "\033[45m";
+				initial='P';
+			}
+			case BOOKS -> {
+				color = "\033[47m";
+				initial='B';
+			}
+			case GAMES -> {
+				color = "\033[43m";
+				initial='G';
+			}
 		}
 	}
 
@@ -28,5 +52,6 @@ public class Tile {
         return this.category;
   	}
 	public String getColor() { return color;}
+	public char getInitial() {return initial;}
 }
 
