@@ -48,6 +48,7 @@ public class socketServer {
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 String input;
+                //Prima cosa dopo la connessione chiede un nickname finchè non ne riceve uno unico
                 out.println("Set your nickname: ");
                 String nickname;
                 nickname=in.readLine();
@@ -56,18 +57,21 @@ public class socketServer {
                     out.println("NotValid");
                     nickname=in.readLine();
                 }
+                //che poi viene aggiungo alla hashmap statica allPlayers e crea l'oggetto player associato
                 gameController.allPlayers.put(nickname,new Player(nickname));
                 out.println(nickname);
 
                 GeneralMessage mex = null;
-
+                //loop infinito che riceve i messaggi
                 while((input = in.readLine()) != null){
+                    //identify legge la action del messaggio e re istanzia mex come la corrispondente sottoclasse di General Message
                     switch (GeneralMessage.identify(input)){
                         case CREATELOBBY -> {
                             mex=new CreateLobbyMessage(input);
                         }
                         //TODO Mettere tutti i casi nella ricezione messaggi
                     }
+                    //il comando viene eseguito
                     if(!(mex ==null)){
                         SC.executeMessage(mex);
                     }
