@@ -18,19 +18,19 @@ public class clientController{
     //controlla che la stringa che rappresenta l'azione scelta corrisponda a un comando esistente e chiamabile dal client
     //in quel momento
     public GeneralMessage checkMessageShape(String m) throws InvalidCommandException {
-        //GeneralMessage clientMessage = null;
         Action curr_action;
         List<String> curr_params;
-        //parsing dell'input string
+        //parsing dell'input string e separazione se contiene più parametri
         String[] words = m.split(" ");
         String action = words[0];
         action = action.toUpperCase();
         try{
             //vediamo se il comando esiste prima di tutto
             curr_action = Action.valueOf(action);
-            //return new GeneralMessage(curr_action,curr_params);
-
+            //Per ora conto i messaggi qua ma è da rivedere perchè solo lato client
             idMex++;
+            //in base al tipo di messaggio controlla se il numero di parametri è giusto(forse avremo da controllare che siano effettivamente corretti anche i param)
+            //e formatta il messaggio 
             switch (curr_action){
                 case CREATELOBBY -> {
                     if(words.length==1){
@@ -68,6 +68,7 @@ public class clientController{
     A seconda del comando controlla con uno switch case se i parametri sono nel numero corretto
     eventuali controlli sul accettabilità dei parametri verrà valutata lato server
     */
+    // DEPRECATED, SARA' DA TOGLIERE
     public List<String> checkArgs(Action a, String[] p) throws InvalidCommandException{
         //the first element of p is the action but in string form, we can modify the methods and pass
         //directly only the params in a second moment
