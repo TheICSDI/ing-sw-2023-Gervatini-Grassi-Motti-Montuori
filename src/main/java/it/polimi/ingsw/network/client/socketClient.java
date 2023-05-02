@@ -34,11 +34,14 @@ public class socketClient {
     public String sendMessage(String message) throws IOException, InvalidCommandException {
         GeneralMessage clientMessage;
         /*
-        non so dove l'errore dello static context quindi non tocco nulla finche' non abbiamo le idee piu chiare
+        Controllo argomenti
          */
         clientMessage = controller.checkMessageShape(message);
+        //formattazione
         String toSend = clientMessage.toString();
+        //invio
         out.println(toSend);
+        // A OGNI MESSAGGIO DEVE CORRISPONDERE UNA RISPOSTA DEL SERVER
         return in.readLine();//non so a cosa serva/come gestire questa riga, ho solo modificato il metodo che ho trovato
     }
 
@@ -53,15 +56,18 @@ public class socketClient {
         Client.connection("127.0.0.1", 2345);
         Scanner input = new Scanner(System.in);
         String nick;
+        //scegli nickname
         System.out.println(in.readLine());
         do {
             out.println(input.nextLine());
             nick = in.readLine();
         } while (!Objects.equals(nick, "NotValid"));
+        //creazione client controller associato al giocatore dopo aver ricevuto conferma di avere un nickname unico
         controller = new clientController(nick);
-
+        //invio messaggi
         while (true) {
             String x = input.nextLine();
+            //controllo correttezza messaggio e formattazione in json
             Client.sendMessage(x);
 
         }
