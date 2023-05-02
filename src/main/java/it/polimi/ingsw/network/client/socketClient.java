@@ -3,22 +3,25 @@ package main.java.it.polimi.ingsw.network.client;
 import main.java.it.polimi.ingsw.controller.clientController;
 import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
 import main.java.it.polimi.ingsw.network.messages.GeneralMessage;
+import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class socketClient {
     private Socket clientSocket;
-    private PrintWriter out;
-    private BufferedReader in;
+    private static PrintWriter out;
+    private static BufferedReader in;
     /*
     bisogna usare un id per il client handler, potremmo avere un id per il client e un id per i giocatore assegnato solo
     per il game per esempio (questione aperta, almeno per me)
      */
-    private final clientController controller = new clientController(1);
+    private static clientController controller;
     public void connection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);
 
@@ -34,7 +37,8 @@ public class socketClient {
         non so dove l'errore dello static context quindi non tocco nulla finche' non abbiamo le idee piu chiare
          */
         clientMessage = controller.checkMessageShape(message);
-        out.println(clientMessage);
+        String toSend = clientMessage.toString();
+        out.println(toSend);
         return in.readLine();//non so a cosa serva/come gestire questa riga, ho solo modificato il metodo che ho trovato
     }
 
@@ -42,6 +46,25 @@ public class socketClient {
         in.close();
         out.close();
         clientSocket.close();
+    }
+
+    public static void main(String[] args) throws IOException, InvalidCommandException {
+        socketClient Client = new socketClient();
+        Client.connection("127.0.0.1", 2345);
+        Scanner input = new Scanner(System.in);
+        String nick;
+        System.out.println(in.readLine());
+        do {
+            out.println(input.nextLine());
+            nick = in.readLine();
+        } while (!Objects.equals(nick, "NotValid"));
+        controller = new clientController(nick);
+
+        while (true) {
+            String x = input.nextLine();
+            Client.sendMessage(x);
+
+        }
     }
 }
 

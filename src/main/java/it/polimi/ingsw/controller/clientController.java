@@ -1,42 +1,56 @@
 package main.java.it.polimi.ingsw.controller;
 
 import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
-import main.java.it.polimi.ingsw.network.messages.GeneralMessage;
-import main.java.it.polimi.ingsw.network.messages.Action;
+import main.java.it.polimi.ingsw.network.messages.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class clientController{
-    private final int playerId;
+    private int idMex=0;
+    private final String nickname;
     //countMove represents a counter of the three mandatory action a player have to do in a turn
     //is useful to control that for example selectOrder is called only one time and only after chooseTiles
     private int countMove = 0;
-    public clientController(int playerId){
-        this.playerId = playerId;
+    public clientController(String nickname){
+        this.nickname = nickname;
     }
     //controlla che la stringa che rappresenta l'azione scelta corrisponda a un comando esistente e chiamabile dal client
     //in quel momento
     public GeneralMessage checkMessageShape(String m) throws InvalidCommandException {
-        GeneralMessage clientMessage = null;
+        //GeneralMessage clientMessage = null;
         Action curr_action;
         List<String> curr_params;
         //parsing dell'input string
         String[] words = m.split(" ");
-        words[0] = words[0].toUpperCase();
+        String action = words[0];
+        action = action.toUpperCase();
         try{
             //vediamo se il comando esiste prima di tutto
-            curr_action = Action.valueOf(words[0]);
-            //checkArgs in base comando scelto valuta se il giocatore lo puo invocare e se i parametri sono accettabili
-            //non controlla ad esempio se le tiles scelte sono disponibili, quello lo vedremo lato server (ok?)
-            curr_params =  checkArgs(curr_action,words);
-            //se e' tutto ok crea il messaggio
-            // clientMessage = new GeneralMessage(curr_action,curr_params);
-            return clientMessage;
+            curr_action = Action.valueOf(action);
+            //return new GeneralMessage(curr_action,curr_params);
+
+            idMex++;
+            switch (curr_action){
+                case CREATELOBBY -> {
+                    if(words.length==1){
+                        new CreateLobbyMessage(idMex,nickname);
+                    }
+                }
+                case JOINLOBBY -> {
+                    if(words.length==2){
+                        new JoinLobbyMessage(idMex,Integer.parseInt(words[1]),nickname);
+                    }
+                }
+                //TODO da completare switch e da qualche parte i controlli per vedere se puoi mandare il messaggio in quel momento
+            }
+            return null;
+
         }
         catch(IllegalArgumentException e){
-            throw new InvalidCommandException("invalid command");
-
+            //throw new InvalidCommandException("invalid command");
+            System.out.println("Invalid command");
+            return null;
         }
 
     }

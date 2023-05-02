@@ -15,10 +15,10 @@ public class SetNameMessage extends GeneralMessage{
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message
-     * @param username uid of the user
+     * @param nickname uid of the user
      */
-    public SetNameMessage(int message_id, String username) {
-        super(message_id, Action.SETNAME, -1, username);
+    public SetNameMessage(int message_id, String nickname) {
+        super(message_id, Action.SETNAME, -1, nickname);
         //lobby_id == -1 when the player isn't in any lobby
     }
 

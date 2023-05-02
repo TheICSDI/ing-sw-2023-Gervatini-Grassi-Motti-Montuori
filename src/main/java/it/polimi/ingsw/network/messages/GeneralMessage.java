@@ -54,6 +54,7 @@ public abstract class GeneralMessage implements Serializable {
         if(!msg_obj.containsKey("action")) {
             throw new InvalidKeyException("Missing key: action");
         }
+        //TODO da vedere come contare i mex
 
         // Assigns the values from the JSON object to the instance variables.
         this.message_id = Integer.parseInt(msg_obj.get("message_id").toString());
@@ -89,5 +90,18 @@ public abstract class GeneralMessage implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public int getGameId() {
+        return 0;//Da sistemare
+    }
+
+    public static Action identify(String msg) throws ParseException, InvalidKeyException {
+        JSONParser parser = new JSONParser();
+        JSONObject msg_obj = (JSONObject) parser.parse(msg);
+        if(!msg_obj.containsKey("action")) {
+            throw new InvalidKeyException("Missing key: action");
+        }
+        return Action.valueOf(msg_obj.get("action").toString());
     }
 }

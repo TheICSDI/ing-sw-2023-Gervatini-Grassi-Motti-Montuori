@@ -14,11 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 public class serverController {
-   gameController controller = new gameController();
+   public gameController controller = new gameController();
    GeneralMessage message;
 
 
    //getMessage inizializza il game controller in base all'azione richiesta dal client
+   //TODO DA COMPLETARE
    public void executeMessage(GeneralMessage received_message){
       message = received_message;
       int id = message.getMessage_id();
@@ -49,7 +50,7 @@ public class serverController {
             break;
       }
    }
-
+    //todo CONTROLLO CONDIZIONI MESSAGGI
    private void sendOk(GeneralMessage message) {
    }
 

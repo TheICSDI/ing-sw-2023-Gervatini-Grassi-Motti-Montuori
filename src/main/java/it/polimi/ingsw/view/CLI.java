@@ -46,5 +46,6 @@ public class CLI implements typeView {
                 System.out.println("\033[0m");
             }
         }
+
     }
 }
