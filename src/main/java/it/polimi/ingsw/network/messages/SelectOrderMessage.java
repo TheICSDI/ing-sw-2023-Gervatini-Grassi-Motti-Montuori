@@ -1,24 +1,70 @@
 package main.java.it.polimi.ingsw.network.messages;
 
-import main.java.it.polimi.ingsw.model.Tile.Tile;
+import main.java.it.polimi.ingsw.exceptions.InvalidActionException;
+import main.java.it.polimi.ingsw.exceptions.InvalidKeyException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a message for selecting the order of the tiles.
+ * It extends the GeneralMessage class to include specific behavior for selecting the order of the tile.
+ */
 public class SelectOrderMessage extends GeneralMessage{
-    private final ArrayList<Tile> order;
-    public SelectOrderMessage(int message_id, String username, ArrayList<Tile> order) {
-        super(message_id, Action.SELECTORDER, username);
+
+    private ArrayList<Integer> order = new ArrayList<Integer>();
+
+    /**
+     * Constructor that initializes a message with the provided parameters.
+     * @param message_id uid of the message
+     * @param lobby_id uid of lobby
+     * @param username uid of the user
+     * @param order a list with the position in the chosen order
+     */
+    public SelectOrderMessage(int message_id, int lobby_id, String username, ArrayList<Integer> order) {
+        super(message_id, Action.SELECTORDER, lobby_id, username);
         this.order = order;
     }
 
+    /**
+     * Constructor that parses a JSON-formatted string and initializes the message.
+     * @param msg a JSON-formatted string
+     */
+    public SelectOrderMessage(String msg) throws ParseException, InvalidActionException, InvalidKeyException {
+        super(msg);
+        JSONParser parser = new JSONParser();
+        JSONObject msg_obj = (JSONObject) parser.parse(msg);
+
+        // Validates that the 'action' key in the JSON object matches the expected action for this message type.
+        if(!msg_obj.get("action").toString().equals(Action.SELECTORDER.toString()))
+        {
+            throw new InvalidActionException("Invalid SelectOrderMessage encoding");
+        }
+
+        // Parsing the JSONARRAY into the Arraylist this.order
+        Integer tmp;
+        JSONArray order = (JSONArray) msg_obj.get("order");
+        for (Object item : order) {
+
+            tmp = Integer.getInteger(item.toString());
+            this.order.add(tmp);
+        }
+    }
+
+    /**
+     * Overrides the toString method to provide a custom string representation.
+     */
     @Override
     public String toString()
     {
         StringBuilder order_string = new StringBuilder("\"order\":[");
 
-        for(Tile item : order)
+        for(Integer item : order)
         {
-            order_string.append("{\"tile\":").append(item.getCategory()).append("},");
+            order_string.append(item.intValue()).append(",");
         }
 
         int i_last = order_string.length() - 1;
@@ -27,6 +73,9 @@ public class SelectOrderMessage extends GeneralMessage{
         return super.startMessage() + "," +
                 order_string.toString() +
                 "}";
+    }
 
+    public ArrayList<Integer> getOrder() {
+        return order;
     }
 }

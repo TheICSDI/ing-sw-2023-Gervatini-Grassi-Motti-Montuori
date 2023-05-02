@@ -1,0 +1,6 @@
+{
+  "message_id": 0,
+  "action": "STARTGAME",
+  "lobby_id": 0,
+  "username": "test_username"
+}

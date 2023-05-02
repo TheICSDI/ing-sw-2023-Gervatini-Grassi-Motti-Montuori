@@ -18,7 +18,7 @@ public class clientController{
     //controlla che la stringa che rappresenta l'azione scelta corrisponda a un comando esistente e chiamabile dal client
     //in quel momento
     public GeneralMessage checkMessageShape(String m) throws InvalidCommandException {
-        GeneralMessage clientMessage;
+        GeneralMessage clientMessage = null;
         Action curr_action;
         List<String> curr_params;
         //parsing dell'input string
@@ -97,7 +97,7 @@ public class clientController{
                 else{
                     throw new InvalidCommandException("Cannot create a lobby");
                 }
-            case CHOOSETILES:
+            case PICKTILES:
                 if(imInALobby()){
                     if(isGameStarted()){
                         if(isMyTurn() && countMove == 0){
@@ -141,7 +141,7 @@ public class clientController{
                 }else{
                     throw new InvalidCommandException("Command cannot be called");
                 }
-            case PUTTILES:
+            case SETNAME://sbagliato per scelta
 
                 if(imInALobby()){
                     if(isGameStarted()){

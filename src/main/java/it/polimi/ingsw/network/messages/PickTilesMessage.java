@@ -1,16 +1,67 @@
 package main.java.it.polimi.ingsw.network.messages;
 
+import main.java.it.polimi.ingsw.exceptions.InvalidActionException;
+import main.java.it.polimi.ingsw.exceptions.InvalidKeyException;
 import main.java.it.polimi.ingsw.model.Position;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a message for picking tiles in a game.
+ * It extends the GeneralMessage class to include specific behavior for picking tiles in a game.
+ */
 public class PickTilesMessage extends GeneralMessage{
-    private final ArrayList<Position> pos;
-    public PickTilesMessage(int message_id, String username, ArrayList<Position> pos) {
-        super(message_id, Action.PICKTILES, username);
+
+    private ArrayList<Position> pos = new ArrayList<Position>();
+
+    /**
+     * Constructor that initializes a message with the provided parameters.
+     * @param message_id uid of the message
+     * @param lobby_id uid of lobby
+     * @param username uid of the user
+     * @param pos and array with position of the piked tiles
+     */
+    public PickTilesMessage(int message_id, int lobby_id, String username, ArrayList<Position> pos) {
+        super(message_id, Action.PICKTILES, lobby_id, username);
         this.pos = pos;
     }
 
+    /**
+     * Constructor that parses a JSON-formatted string and initializes the message.
+     * @param msg a JSON-formatted string
+     */
+    public PickTilesMessage(String msg) throws ParseException, InvalidActionException, InvalidKeyException {
+        super(msg);
+        JSONParser parser = new JSONParser();
+        JSONObject msg_obj = (JSONObject) parser.parse(msg);
+
+        // Validates that the 'action' key in the JSON object matches the expected action for this message type.
+        if(!msg_obj.get("action").toString().equals(Action.PICKTILES.toString()))
+        {
+            throw new InvalidActionException("Invalid PickTilesMessage encoding");
+        }
+
+        // Parsing the JSONARRAY into the Arraylist this.pos
+        int x, y;
+        Position tmp;
+        JSONArray pos = (JSONArray) msg_obj.get("position");
+        for (Object po : pos) {
+
+            JSONObject item = (JSONObject) po;
+            x = Integer.parseInt(item.get("x").toString());
+            y = Integer.parseInt(item.get("y").toString());
+            tmp = new Position(x, y);
+            this.pos.add(tmp);
+        }
+    }
+
+    /**
+     * Overrides the toString method to provide a custom string representation.
+     */
     @Override
     public String toString()
     {
@@ -28,5 +79,9 @@ public class PickTilesMessage extends GeneralMessage{
         return super.startMessage() + "," +
                 pos_string.toString() +
                 "}";
+    }
+
+    public ArrayList<Position> getPos() {
+        return pos;
     }
 }
