@@ -27,7 +27,6 @@ public class serverController {
       int game_id = message.getGameId();
       switch(message.getAction()/*getClass().getSimpleName()??*/){
          case CREATELOBBY -> {
-
             //Crea una nuova lobby che ha come creatore chi invia il messaggio
             if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){
                gameController.allLobbies.add(new Lobby(gameController.allPlayers.get(message.getUsername())));
@@ -40,6 +39,15 @@ public class serverController {
          case SHOWLOBBY -> {
             return new ShowLobbyReplyMessage("show",gameController.allLobbies).toString();
 
+         }
+         case JOINLOBBY -> {
+            for (Lobby l:
+                 gameController.allLobbies) {
+               if(l.lobbyId==message.getLobby_id()){
+                  l.Join(gameController.allPlayers.get(message.getUsername()));
+               }
+            }
+            return new ReplyMessage("Lobby Joined").toString();
          }
          case PICKTILES-> {
             ArrayList<Position> pos;

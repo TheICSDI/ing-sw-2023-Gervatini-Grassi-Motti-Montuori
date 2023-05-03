@@ -45,7 +45,7 @@ public class socketClient {
         if(toSend.equals("Error") ) return new ReplyMessage("Errore");
         out.println(toSend);
         switch (curr_action){
-            case CREATELOBBY -> {
+            case CREATELOBBY, JOINLOBBY -> {
                 return ReplyMessage.decrypt(in.readLine());
             }
             case SHOWLOBBY -> {

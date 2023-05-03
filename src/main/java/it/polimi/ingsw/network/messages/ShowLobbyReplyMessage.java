@@ -44,7 +44,7 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
         }
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         List<Lobby> Lobbi=new ArrayList<>();
         Lobby l=new Lobby(new Player("marco"));
         l.Join(new Player("MArcio"));
@@ -56,5 +56,5 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
         ShowLobbyReplyMessage Retrieve= Prova.decrypt(x);
         System.out.println(Retrieve.getMessaggio());
 
-    }*/
+    }
 }

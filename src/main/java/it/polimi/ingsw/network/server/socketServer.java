@@ -7,6 +7,7 @@ import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.messages.CreateLobbyMessage;
 import it.polimi.ingsw.network.messages.GeneralMessage;
+import it.polimi.ingsw.network.messages.JoinLobbyMessage;
 import it.polimi.ingsw.network.messages.ShowLobbyMessage;
 import org.json.simple.parser.ParseException;
 
@@ -69,6 +70,7 @@ public class socketServer {
                     switch (GeneralMessage.identify(input)){
                         case CREATELOBBY -> mex=new CreateLobbyMessage(input);
                         case SHOWLOBBY -> mex=new ShowLobbyMessage(input);
+                        case JOINLOBBY -> mex=new JoinLobbyMessage(input);
                         //TODO Mettere tutti i casi nella ricezione messaggi
                     }
                     //il comando viene eseguito
