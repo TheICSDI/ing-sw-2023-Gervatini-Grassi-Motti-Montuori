@@ -54,8 +54,12 @@ public class Player {
         List<Tile> orderedTiles = new ArrayList<>();
         if (selected.size() > order.size()) {
             throw new InputMismatchException("The selected order is wrong, you have selected more tiles!");
+            //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
+
         } else if (selected.size() < order.size()){
             throw new InputMismatchException("The selected order is wrong, you have selected less tiles!");
+            //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
+
         } else {
             for (int i = 0; i < selected.size(); i++) {
                 orderedTiles.add(selected.get(order.get(i) - 1));
@@ -66,7 +70,6 @@ public class Player {
 
     /**
      * Check if the chosen column has enough space for the given tiles.
-     *
      * @param numTiles number of tiles to be inserted.
      * @param col chosen column from the player. It goes from 0 to 5.
      * @throws InvalidColumnException if the parameter col is out of bound.
@@ -75,6 +78,8 @@ public class Player {
     private boolean checkColumn(int numTiles, int col) throws InvalidColumnException {
         if(col < 0 || col >= numCols){
             throw new InvalidColumnException("Selected column is out of bound!");
+            //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
+
         } else {
             for(int j = 0; j < numRows; j++){
                 //Check how many empty spaces there are in the selected column
@@ -83,6 +88,8 @@ public class Player {
                     numTiles --;
                     //If numTiles < 0 then there is no enough space
                     if(numTiles < 0) return true;
+                    //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
+
                 }
             }
             return false;
@@ -125,6 +132,7 @@ public class Player {
          //Position chosen by the player
          if (!b.AvailableTiles().containsAll(chosen)) {
             throw new InputMismatchException("The chosen tiles are not available to be taken!");
+             //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client
          } else {
              for (Position p : chosen) {
                  choice.add(b.board[p.getX()][p.getY()]);
