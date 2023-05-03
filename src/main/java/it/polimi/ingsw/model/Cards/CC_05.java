@@ -4,10 +4,10 @@
  * One column can show the same or a different combination of another column.
  * @author Andrea Grassi
  */
-package main.java.it.polimi.ingsw.model.Cards;
+package it.polimi.ingsw.model.Cards;
 
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.type;
 
 import java.util.HashSet;
 import java.util.Set;

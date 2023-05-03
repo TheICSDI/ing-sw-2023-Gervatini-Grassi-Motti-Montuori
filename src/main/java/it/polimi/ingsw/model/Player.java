@@ -2,13 +2,13 @@
  *  Each player has a shelf and a personal goal card.
  * @Author Caterina Motti, Andrea Grassi, Marco Gervatini
  */
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
-import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
-import main.java.it.polimi.ingsw.model.Cards.PersonalCard;
-import main.java.it.polimi.ingsw.model.Tile.Tile;
-import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
+import it.polimi.ingsw.exceptions.InvalidPositionException;
+import it.polimi.ingsw.model.Cards.PersonalCard;
+import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.exceptions.InvalidColumnException;
 import java.util.*;
 
 public class Player {

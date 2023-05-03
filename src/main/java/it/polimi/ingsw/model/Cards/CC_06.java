@@ -3,10 +3,10 @@
  * It requires the player to have eight tiles of the same type.
  * @author Marco Gervatini
  */
-package main.java.it.polimi.ingsw.model.Cards;
+package it.polimi.ingsw.model.Cards;
 
-import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.model.Player;
 
 public class CC_06 implements CCStrategy {
     /**

@@ -3,11 +3,11 @@
  * It requires the player to have at least six groups, each containing at least two tiles of the same type.
  * @author Giulio Montuori
  */
-package main.java.it.polimi.ingsw.model.Cards;
+package it.polimi.ingsw.model.Cards;
 
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Tile.Tile;
-import main.java.it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
 
 public class CC_01 implements CCStrategy {
     /**

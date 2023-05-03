@@ -3,7 +3,7 @@
  * The value NOT_ACCESSIBLE is used in the board of the game to identify a position that can't be used.
  * @author Caterina Motti
  */
-package main.java.it.polimi.ingsw.model.Tile;
+package it.polimi.ingsw.model.Tile;
 
 public enum type {
     CATS,

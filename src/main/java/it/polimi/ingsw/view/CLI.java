@@ -1,8 +1,8 @@
-package main.java.it.polimi.ingsw.view;
+package it.polimi.ingsw.view;
 
-import main.java.it.polimi.ingsw.model.Board;
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.Tile;
 import java.util.List;
 
 public class CLI implements typeView {

@@ -1,7 +1,8 @@
-package main.java.it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller;
 
-import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
-import main.java.it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.exceptions.InvalidCommandException;
+import it.polimi.ingsw.model.Lobby;
+import it.polimi.ingsw.network.messages.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,25 +35,33 @@ public class clientController{
             switch (curr_action){
                 case CREATELOBBY -> {
                     if(words.length==1){
-                        new CreateLobbyMessage(idMex,nickname);
+                        return new CreateLobbyMessage(idMex,nickname);
+                    }
+                }
+                case SHOWLOBBY -> {
+                    if(words.length==1){
+                        return new ShowLobbyMessage(idMex,nickname);
                     }
                 }
                 case JOINLOBBY -> {
                     if(words.length==2){
-                        new JoinLobbyMessage(idMex,Integer.parseInt(words[1]),nickname);
+                        return new JoinLobbyMessage(idMex,Integer.parseInt(words[1]),nickname);
                     }
                 }
-                //TODO da completare switch e da qualche parte i controlli per vedere se puoi mandare il messaggio in quel momento
+                    //TODO da completare switch e da qualche parte i controlli per vedere se puoi mandare il messaggio in quel momento
+
             }
-            return null;
+
 
         }
         catch(IllegalArgumentException e){
             //throw new InvalidCommandException("invalid command");
             System.out.println("Invalid command");
-            return null;
+            idMex--;
+            return new DefaultErrorMessage();
         }
 
+        return null;
     }
     /*
         La stringa da convertire in MESSAGE deve essere cosi composto:
@@ -68,7 +77,7 @@ public class clientController{
     A seconda del comando controlla con uno switch case se i parametri sono nel numero corretto
     eventuali controlli sul accettabilità dei parametri verrà valutata lato server
     */
-    public List<String> checkArgs(Action a, String[] p) throws InvalidCommandException{
+    /*public List<String> checkArgs(Action a, String[] p) throws InvalidCommandException{
         //the first element of p is the action but in string form, we can modify the methods and pass
         //directly only the params in a second moment
         List<String> params = new ArrayList<>();
@@ -181,7 +190,7 @@ public class clientController{
             default:
                 throw new InvalidCommandException("Command not found");
         }
-    }
+    }*/
 
     /*
     return true if the game is started only it is the player's turn
@@ -199,12 +208,7 @@ public class clientController{
     /*
     return true only if the player is already assigned to a lobby
      */
-    public Boolean imInALobby(){
-        /*
-        sempre stesso problema possiamo chiedere al server o decidere d'implementare il controllo qui
-         */
-        return true;
-    }
+
 
     /*
     return true only if the lobby's game is started

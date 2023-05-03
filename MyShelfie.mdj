@@ -17,7 +17,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGG+k32nMkxCm0="
 					},
-					"name": "main.java.polimi.ingsw.Model",
+					"name": "polimi.ingsw.Model",
 					"ownedElements": [
 						{
 							"_type": "UMLClassDiagram",
@@ -25,7 +25,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Model.main.java.it.polimi.ingsw.Main",
+							"name": "Model.it.polimi.ingsw.Main",
 							"defaultDiagram": true,
 							"ownedViews": [
 								{
@@ -72,7 +72,7 @@
 													"top": 4767,
 													"width": 263,
 													"height": 13,
-													"text": "Model.main.java.it.polimi.ingsw.Lobby"
+													"text": "Model.it.polimi.ingsw.Lobby"
 												},
 												{
 													"_type": "LabelView",
@@ -86,7 +86,7 @@
 													"top": 4032,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -231,7 +231,7 @@
 													"top": 4828,
 													"width": 263,
 													"height": 13,
-													"text": "+joinGame(IdGame: String, p: Model.main.java.it.polimi.ingsw.Player)",
+													"text": "+joinGame(IdGame: String, p: Model.it.polimi.ingsw.Player)",
 													"horizontalAlignment": 0
 												},
 												{
@@ -391,7 +391,7 @@
 													"top": 4063,
 													"width": 287,
 													"height": 13,
-													"text": "Model.main.java.it.polimi.ingsw.Player"
+													"text": "Model.it.polimi.ingsw.Player"
 												},
 												{
 													"_type": "LabelView",
@@ -405,7 +405,7 @@
 													"top": -16,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -633,7 +633,7 @@
 													"top": 4229,
 													"width": 287,
 													"height": 13,
-													"text": "+Model.main.java.it.polimi.ingsw.Player(nickname: String)",
+													"text": "+Model.it.polimi.ingsw.Player(nickname: String)",
 													"horizontalAlignment": 0
 												},
 												{
@@ -877,7 +877,7 @@
 													"top": 4431,
 													"width": 311,
 													"height": 13,
-													"text": "Model.main.java.it.polimi.ingsw.Game"
+													"text": "Model.it.polimi.ingsw.Game"
 												},
 												{
 													"_type": "LabelView",
@@ -891,7 +891,7 @@
 													"top": 144,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -983,7 +983,7 @@
 													"top": 4484,
 													"width": 311,
 													"height": 13,
-													"text": "+board: Model.main.java.it.polimi.ingsw.Board",
+													"text": "+board: Model.it.polimi.ingsw.Board",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1085,7 +1085,7 @@
 													"top": 4567,
 													"width": 311,
 													"height": 13,
-													"text": "+Model.main.java.it.polimi.ingsw.Game(String Id, int numPlayers): void",
+													"text": "+Model.it.polimi.ingsw.Game(String Id, int numPlayers): void",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1102,7 +1102,7 @@
 													"top": 4582,
 													"width": 311,
 													"height": 13,
-													"text": "+leaveGame(p: Model.main.java.it.polimi.ingsw.Player): void",
+													"text": "+leaveGame(p: Model.it.polimi.ingsw.Player): void",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1120,7 +1120,7 @@
 													"top": 4597,
 													"width": 311,
 													"height": 13,
-													"text": "+nextHasTokenEnd(p: Model.main.java.it.polimi.ingsw.Player): void",
+													"text": "+nextHasTokenEnd(p: Model.it.polimi.ingsw.Player): void",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1138,7 +1138,7 @@
 													"top": 4582,
 													"width": 311,
 													"height": 13,
-													"text": "+generateFirstPlayer(): Model.main.java.it.polimi.ingsw.Player",
+													"text": "+generateFirstPlayer(): Model.it.polimi.ingsw.Player",
 													"horizontalAlignment": 0
 												},
 												{
@@ -1294,7 +1294,7 @@
 													"top": -64,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -1542,7 +1542,7 @@
 													"top": 1136,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -1740,7 +1740,7 @@
 													"top": 4695,
 													"width": 383.20458984375,
 													"height": 13,
-													"text": "Model.main.java.it.polimi.ingsw.Board"
+													"text": "Model.it.polimi.ingsw.Board"
 												},
 												{
 													"_type": "LabelView",
@@ -1754,7 +1754,7 @@
 													"top": 672,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -1931,7 +1931,7 @@
 													"top": 4816,
 													"width": 383.20458984375,
 													"height": 13,
-													"text": "+getTiles(start: Model.main.java.it.polimi.ingsw.Position, end: Model.main.java.it.polimi.ingsw.Position): List<Tiles>",
+													"text": "+getTiles(start: Model.it.polimi.ingsw.Position, end: Model.it.polimi.ingsw.Position): List<Tiles>",
 													"horizontalAlignment": 0
 												},
 												{
@@ -2071,7 +2071,7 @@
 													"top": -80,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -2285,7 +2285,7 @@
 													"top": -160,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -3949,7 +3949,7 @@
 													"top": 7114,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -4333,7 +4333,7 @@
 													"top": -32,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -4912,7 +4912,7 @@
 													"top": 4727,
 													"width": 118,
 													"height": 13,
-													"text": "Model.main.java.it.polimi.ingsw.Position"
+													"text": "Model.it.polimi.ingsw.Position"
 												},
 												{
 													"_type": "LabelView",
@@ -4926,7 +4926,7 @@
 													"top": 896,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -5960,7 +5960,7 @@
 													"top": -160,
 													"width": 73.67724609375,
 													"height": 13,
-													"text": "(from main.java.polimi.ingsw.Model)"
+													"text": "(from polimi.ingsw.Model)"
 												},
 												{
 													"_type": "LabelView",
@@ -6431,7 +6431,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Model.main.java.it.polimi.ingsw.Lobby",
+							"name": "Model.it.polimi.ingsw.Lobby",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",
@@ -6576,7 +6576,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Model.main.java.it.polimi.ingsw.Player",
+							"name": "Model.it.polimi.ingsw.Player",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",
@@ -6811,7 +6811,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGG+k32nMj9+qI="
 									},
-									"name": "Model.main.java.it.polimi.ingsw.Player",
+									"name": "Model.it.polimi.ingsw.Player",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -6994,7 +6994,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Model.main.java.it.polimi.ingsw.Game",
+							"name": "Model.it.polimi.ingsw.Game",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",
@@ -7446,7 +7446,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGG+k32nMkWDuo="
 									},
-									"name": "Model.main.java.it.polimi.ingsw.Game",
+									"name": "Model.it.polimi.ingsw.Game",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -7799,7 +7799,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Model.main.java.it.polimi.ingsw.Board",
+							"name": "Model.it.polimi.ingsw.Board",
 							"ownedElements": [
 								{
 									"_type": "UMLAssociation",
@@ -8229,7 +8229,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGG+k32nMkwcB8="
 							},
-							"name": "Model.main.java.it.polimi.ingsw.Position",
+							"name": "Model.it.polimi.ingsw.Position",
 							"attributes": [
 								{
 									"_type": "UMLAttribute",

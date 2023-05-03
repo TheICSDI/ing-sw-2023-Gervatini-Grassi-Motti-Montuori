@@ -1,8 +1,8 @@
-package main.java.it.polimi.ingsw.network.messages;
+package it.polimi.ingsw.network.messages;
 
-import main.java.it.polimi.ingsw.exceptions.InvalidActionException;
-import main.java.it.polimi.ingsw.exceptions.InvalidKeyException;
-import main.java.it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.exceptions.InvalidActionException;
+import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.model.Position;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

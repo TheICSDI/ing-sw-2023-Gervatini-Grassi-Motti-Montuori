@@ -1,8 +1,11 @@
-package main.java.it.polimi.ingsw.network.client;
+package it.polimi.ingsw.network.client;
 
-import main.java.it.polimi.ingsw.controller.clientController;
-import main.java.it.polimi.ingsw.exceptions.InvalidCommandException;
-import main.java.it.polimi.ingsw.network.messages.GeneralMessage;
+import it.polimi.ingsw.controller.clientController;
+import it.polimi.ingsw.exceptions.InvalidCommandException;
+import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.network.messages.GeneralMessage;
+import it.polimi.ingsw.network.messages.ReplyMessage;
+import it.polimi.ingsw.network.messages.ShowLobbyReplyMessage;
 import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
@@ -31,15 +34,26 @@ public class socketClient {
     }
     //sendMessage chiama un filtro applicato dal controller che gli blocca l'invio di messaggi formattati male oppure
     //che non puo fare in quel momento
-    public String sendMessage(String message) throws IOException, InvalidCommandException {
+    public ReplyMessage sendMessage(String message) throws IOException, InvalidCommandException {
         GeneralMessage clientMessage;
         /*
         non so dove l'errore dello static context quindi non tocco nulla finche' non abbiamo le idee piu chiare
          */
         clientMessage = controller.checkMessageShape(message);
+        Action curr_action=clientMessage.getAction();
         String toSend = clientMessage.toString();
+        if(toSend.equals("Error") ) return new ReplyMessage("Errore");
         out.println(toSend);
-        return in.readLine();//non so a cosa serva/come gestire questa riga, ho solo modificato il metodo che ho trovato
+        switch (curr_action){
+            case CREATELOBBY -> {
+                return ReplyMessage.decrypt(in.readLine());
+            }
+            case SHOWLOBBY -> {
+                return ShowLobbyReplyMessage.decrypt(in.readLine());
+            }
+
+        }
+        return null;
     }
 
     public void endConnection() throws IOException {
@@ -57,12 +71,14 @@ public class socketClient {
         do {
             out.println(input.nextLine());
             nick = in.readLine();
-        } while (!Objects.equals(nick, "NotValid"));
+        } while (nick.equals("NotValid"));
         controller = new clientController(nick);
+        System.out.println("Nickname set: "+nick);
 
         while (true) {
             String x = input.nextLine();
-            Client.sendMessage(x);
+            ReplyMessage reply=Client.sendMessage(x);
+            reply.print();
 
         }
     }

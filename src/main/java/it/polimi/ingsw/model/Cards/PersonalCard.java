@@ -3,10 +3,10 @@
  * Thanks to the constructor a personal goal card will be generated as a matrix of tiles.
  * @author Giulio Montuori
  */
-package main.java.it.polimi.ingsw.model.Cards;
+package it.polimi.ingsw.model.Cards;
 
-import main.java.it.polimi.ingsw.model.Tile.Tile;
-import main.java.it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

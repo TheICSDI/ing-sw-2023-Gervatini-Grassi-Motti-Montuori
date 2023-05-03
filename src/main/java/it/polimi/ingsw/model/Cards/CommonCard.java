@@ -1,7 +1,7 @@
 /** Represents a common goal card.
  * @author Marco Gervatini */
-package main.java.it.polimi.ingsw.model.Cards;
-import main.java.it.polimi.ingsw.model.Player;
+package it.polimi.ingsw.model.Cards;
+import it.polimi.ingsw.model.Player;
 
 public class CommonCard{
     private int points = 8;

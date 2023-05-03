@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.exceptions;
+package it.polimi.ingsw.exceptions;
 
 public class AlreadyInAGameException extends Exception {
     public AlreadyInAGameException(String message){

@@ -3,9 +3,9 @@
  * It requires the player to have two columns each formed by 6 different types of tiles.
  * @author Marco Gervatini
  */
-package main.java.it.polimi.ingsw.model.Cards;
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Tile.type;
+package it.polimi.ingsw.model.Cards;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.type;
 
 import java.util.ArrayList;
 import java.util.List;

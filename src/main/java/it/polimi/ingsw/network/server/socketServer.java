@@ -1,12 +1,13 @@
-package main.java.it.polimi.ingsw.network.server;
+package it.polimi.ingsw.network.server;
 
-import main.java.it.polimi.ingsw.controller.gameController;
-import main.java.it.polimi.ingsw.controller.serverController;
-import main.java.it.polimi.ingsw.exceptions.InvalidActionException;
-import main.java.it.polimi.ingsw.exceptions.InvalidKeyException;
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.network.messages.CreateLobbyMessage;
-import main.java.it.polimi.ingsw.network.messages.GeneralMessage;
+import it.polimi.ingsw.controller.gameController;
+import it.polimi.ingsw.controller.serverController;
+import it.polimi.ingsw.exceptions.InvalidActionException;
+import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.messages.CreateLobbyMessage;
+import it.polimi.ingsw.network.messages.GeneralMessage;
+import it.polimi.ingsw.network.messages.ShowLobbyMessage;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -51,8 +52,8 @@ public class socketServer {
                 out.println("Set your nickname: ");
                 String nickname;
                 nickname=in.readLine();
+                System.out.println("Mex ricevuto: " + nickname);
                 while(gameController.allPlayers.containsKey(nickname)){
-                    System.out.println("Mex ricevuto: " + nickname);
                     out.println("NotValid");
                     nickname=in.readLine();
                 }
@@ -63,13 +64,12 @@ public class socketServer {
 
                 while((input = in.readLine()) != null){
                     switch (GeneralMessage.identify(input)){
-                        case CREATELOBBY -> {
-                            mex=new CreateLobbyMessage(input);
-                        }
+                        case CREATELOBBY -> mex=new CreateLobbyMessage(input);
+                        case SHOWLOBBY -> mex=new ShowLobbyMessage(input);
                         //TODO Mettere tutti i casi nella ricezione messaggi
                     }
                     if(!(mex ==null)){
-                        SC.executeMessage(mex);
+                        out.println(SC.executeMessage(mex));
                     }
                 }
 

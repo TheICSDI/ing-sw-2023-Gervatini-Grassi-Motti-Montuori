@@ -1,5 +1,5 @@
 /** Represents a pair of indices used to indicate a position on the board */
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
 import java.util.Objects;
 

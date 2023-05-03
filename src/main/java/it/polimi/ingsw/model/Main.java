@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
 import java.util.*;
 
@@ -20,7 +20,7 @@ public class Main {
             switch (Interaction_Prompt){
                 case "Create":
                     Lobbies.add(new Lobby(Player1));
-                    System.out.println("main.java.polimi.ingsw.Model.Lobby creata");
+                    System.out.println("polimi.ingsw.Model.Lobby creata");
                     break;
                 case "Join":
                     System.out.print("Numero lobby: ");
@@ -42,7 +42,7 @@ public class Main {
                     availableLobbies(Lobbies);
                     break;
                 case "Start":
-                    System.out.println("Games Started");//Create main.java.polimi.ingsw.Model.Game, rimuovi lobby dalla lista
+                    System.out.println("Games Started");//Create polimi.ingsw.Model.Game, rimuovi lobby dalla lista
 
                     for (Lobby l:
                          Lobbies) {

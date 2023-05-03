@@ -1,11 +1,12 @@
 /** The clients have to call the controller's method to interact with the game's model.*/
-package main.java.it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller;
 
-import main.java.it.polimi.ingsw.exceptions.*;
-import main.java.it.polimi.ingsw.model.Game;
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Position;
-import main.java.it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Lobby;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.network.messages.Action;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ public class gameController {
     //partita allora si va a modificare la hashmap
     public static Map<String, Player> allPlayers = new HashMap<>();
     public static Map<Integer, Game> allGames = new HashMap<>();
+    //tutte le lobby
+    public static List<Lobby> allLobbies=new ArrayList<>();
 
     /*
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER

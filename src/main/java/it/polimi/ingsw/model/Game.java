@@ -2,14 +2,14 @@
  * Each game has some players (from 2 to 4), a board, 12 common goal cards and 12 personal goal cards.
  * @author Andrea Grassi, Caterina Motti
  */
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
-import main.java.it.polimi.ingsw.controller.gameController;
-import main.java.it.polimi.ingsw.exceptions.CannotAddPlayerException;
-import main.java.it.polimi.ingsw.exceptions.InvalidColumnException;
-import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
-import main.java.it.polimi.ingsw.model.Cards.*;
-import main.java.it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.controller.gameController;
+import it.polimi.ingsw.exceptions.CannotAddPlayerException;
+import it.polimi.ingsw.exceptions.InvalidColumnException;
+import it.polimi.ingsw.exceptions.InvalidPositionException;
+import it.polimi.ingsw.model.Cards.*;
+import it.polimi.ingsw.model.Tile.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;

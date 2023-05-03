@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.network.messages;
+package it.polimi.ingsw.network.messages;
 
 public enum Action {
     SETNAME,
@@ -10,4 +10,6 @@ public enum Action {
     PICKTILES,
     SELECTORDER,
     SELECTCOLUMN,
+
+    ERROR//magari da rivedere, mi serve un figlio di general message in caso trovi errore per dirli cosa fare
 }

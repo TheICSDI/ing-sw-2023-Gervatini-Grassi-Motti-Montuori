@@ -4,10 +4,10 @@
  * The tiles of one group can be different from those of another group.
  * @author Andrea Grassi
  */
-package main.java.it.polimi.ingsw.model.Cards;
-import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Tile.Tile;
+package it.polimi.ingsw.model.Cards;
+import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.Tile;
 
 public class CC_03 implements CCStrategy {
     Tile[][] shelf;

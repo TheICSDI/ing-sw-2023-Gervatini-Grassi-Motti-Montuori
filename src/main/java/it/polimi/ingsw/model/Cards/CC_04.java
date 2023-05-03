@@ -3,11 +3,11 @@
  * It requires the player to have two groups, each containing four tiles of the same type in a 2x2 square.
  * @author Giulio Montuori
  */
-package main.java.it.polimi.ingsw.model.Cards;
+package it.polimi.ingsw.model.Cards;
 
-import main.java.it.polimi.ingsw.model.Tile.Tile;
-import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.model.Player;
 
 public class CC_04 implements CCStrategy {
     /**

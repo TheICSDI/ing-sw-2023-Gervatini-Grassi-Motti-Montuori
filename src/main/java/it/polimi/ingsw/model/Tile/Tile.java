@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.model.Tile;
+package it.polimi.ingsw.model.Tile;
 
 
 /** Represents a tile of the game.

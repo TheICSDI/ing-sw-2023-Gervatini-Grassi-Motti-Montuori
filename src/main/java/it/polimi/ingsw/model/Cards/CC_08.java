@@ -4,10 +4,10 @@
  * line can show the same or a different combination of another line.
  * @author Andrea Grassi
  */
-package main.java.it.polimi.ingsw.model.Cards;
+package it.polimi.ingsw.model.Cards;
 
-import main.java.it.polimi.ingsw.model.Tile.type;
-import main.java.it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.model.Player;
 
 import java.util.HashSet;
 import java.util.Set;

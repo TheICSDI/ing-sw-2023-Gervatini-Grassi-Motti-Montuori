@@ -1,9 +1,9 @@
-package main.java.it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller;
 
-import main.java.it.polimi.ingsw.model.Game;
-import main.java.it.polimi.ingsw.model.Player;
-import main.java.it.polimi.ingsw.model.Position;
-import main.java.it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.network.messages.Action;
 
 import java.util.List;
 //serve ad aggiungere comandi pendenti non ancora completamenti eseguiti.

@@ -3,7 +3,7 @@
  * participating.
  * Each lobby is represented by a unique number.
  * @author Andrea Grassi, Caterina Motti */
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Lobby {
     private static int count = 0;
-    public int lobbyId;
+    public final int lobbyId;
     public List<Player> Players = new ArrayList<>();
 
     /** Create a new lobby given a player "creator" and a unique number automatically generated. */
@@ -55,5 +55,20 @@ public class Lobby {
      * A lobby is considered full when it reaches 4 players (maximum for the game)*/
     private boolean isLobbyFull(){
         return Players.size() == 4;
+    }
+
+    /**
+     * Checks if a certain player is in this lobby
+     * @param p player to check
+     * @return true if he is
+     */
+    public boolean isPlayerInLobby(Player p){
+        for (Player player:
+             this.Players) {
+            if(p.getNickname().equals(player.getNickname())){
+                return true;
+            }
+        }
+        return false;
     }
 }

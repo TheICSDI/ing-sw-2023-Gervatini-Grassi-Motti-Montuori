@@ -1,13 +1,13 @@
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 /** Represent the board of a game. It has to be declared in each game.
  * @author Caterina Motti.
  */
 import java.io.*;
 import java.util.*;
 
-import main.java.it.polimi.ingsw.exceptions.InvalidPositionException;
-import main.java.it.polimi.ingsw.model.Tile.Tile;
-import main.java.it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.exceptions.InvalidPositionException;
+import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
