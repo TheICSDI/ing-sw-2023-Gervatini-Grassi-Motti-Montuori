@@ -19,6 +19,7 @@ public class gameController {
     //partita allora si va a modificare la hashmap
     public static Map<String, Player> allPlayers = new HashMap<>();
     public static Map<Integer, Game> allGames = new HashMap<>();
+
     //tutte le lobby
     public static List<Lobby> allLobbies=new ArrayList<>();
 
@@ -83,7 +84,7 @@ public class gameController {
      */
 
 
-    public void pickTiles(String player, Action action, ArrayList<Position> pos, int id_game,int num_mess) throws NotAvaibleTilesException {
+    public void pickTiles(String player, Action action, List<Position> pos, int id_game,int num_mess) throws NotAvaibleTilesException {
         Player p = allPlayers.get(player);
         Game g = allGames.get(id_game);
         orderBook pending = new orderBook(g,p,action,num_mess);
@@ -105,34 +106,8 @@ public class gameController {
         pending.setNum_col(numCol);
         pendingOrders.add(pending);
     }
-    //se il giocatore non e' in una partita ne crea una nuova questa viene aggiunta all'elenco dei game disponibili
-    public void createLobby(String player) throws AlreadyInAGameException {
-        for(Game g : allGames.values()){
-            if(g.getPlayers().contains(allPlayers.get(player))){
-                throw new AlreadyInAGameException("The player is already in a game");
-            }
-        }
-        List<Player> onlyTheFirstList = new ArrayList<>();
-        onlyTheFirstList.add(allPlayers.get(player));
-        Game g = new Game(onlyTheFirstList);
-        allGames.put(g.id,g);
 
-    }
 
-    public void joinLobby(String player, int gameId)throws AlreadyInAGameException{
-        Game game = allGames.get(gameId);
-        Player p = allPlayers.get(player);
-        for(Game g : allGames.values()){
-            if(g.getPlayers().contains(allPlayers.get(player))){
-                throw new AlreadyInAGameException("The player is already in a game");
-            }
-        }
-        try {
-            game.addPlayer(p);
-        } catch (CannotAddPlayerException e) {
-            throw new RuntimeException(e);
-        }
-    }
     //permette di uscire da una partita a patto che non sia cominciata
     public void leaveLobby(String player, int gameId) throws GameStartedException {
         Game g = allGames.get(gameId);
@@ -145,15 +120,6 @@ public class gameController {
         }
     }
 
-    public void startGame(String player, int idGame) throws InvalidColumnException, InvalidPositionException {
-        Game g = allGames.get(idGame);
-        Player p = allPlayers.get(player);
-        if(g.getPlayers().contains(p)){
-            if(g.isStarted()){
-                g.startGame();
-            }
-        }
-    }
 
 
 

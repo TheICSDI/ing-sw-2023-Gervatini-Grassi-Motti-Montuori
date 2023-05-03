@@ -51,6 +51,11 @@ public class socketClient {
             case SHOWLOBBY -> {
                 return ShowLobbyReplyMessage.decrypt(in.readLine());
             }
+            case STARTGAME -> {
+                //TODO I client coinvolti nel game devono avere un nuovo tipo di invio/ricezione messaggi con un
+                //thread che riceve sempre e stampa (board shelf e goal ecc.) appena riceve e uno che invia messaggi
+                //messaggio con formattazione shelf e board in gson, turnazione ecc...
+            }
 
         }
         return null;

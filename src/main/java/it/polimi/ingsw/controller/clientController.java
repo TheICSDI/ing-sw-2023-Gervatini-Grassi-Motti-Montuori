@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.InvalidCommandException;
 import it.polimi.ingsw.model.Lobby;
+import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
 
 import java.util.ArrayList;
@@ -34,8 +35,10 @@ public class clientController{
             idMex++;
             switch (curr_action){
                 case CREATELOBBY -> {
-                    if(words.length==1){
-                        return new CreateLobbyMessage(idMex,nickname);
+                    if(words.length==2){
+                        return new CreateLobbyMessage(idMex,nickname,Integer.parseInt(words[1]));
+                    }else{
+                        return new DefaultErrorMessage("Insert number of players in this lobby");
                     }
                 }
                 case SHOWLOBBY -> {
@@ -58,7 +61,7 @@ public class clientController{
             //throw new InvalidCommandException("invalid command");
             System.out.println("Invalid command");
             idMex--;
-            return new DefaultErrorMessage();
+            return new DefaultErrorMessage("Error");
         }
 
         return null;

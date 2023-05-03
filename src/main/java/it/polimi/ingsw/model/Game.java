@@ -11,6 +11,7 @@ import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,19 +27,21 @@ public class Game {
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private final List<PersonalCard> allPC = new ArrayList<>();
-    public final gameController controller = new gameController();
+    public final gameController controller;
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
      * It picks the first player and give randomically each player a personal goal card.
      * It randomically choose two common goal cards.
      */
-    public Game(List<Player> players){
+    public Game(List<Player> players,gameController controller){
+        this.controller=controller;
         //Each game is represented by a unique id that can't be changed
         count++;
         this.id = count;
         this.nPlayers = players.size();
         this.players = players;
+
 
         //Initializes the new board
         this.board = new Board(nPlayers);

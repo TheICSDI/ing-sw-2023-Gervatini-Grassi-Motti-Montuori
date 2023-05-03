@@ -11,14 +11,15 @@ import org.json.simple.parser.ParseException;
  * It extends the GeneralMessage class to include specific behavior for creating lobby messages.
  */
 public class CreateLobbyMessage extends GeneralMessage{
-
+    private int limit;
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message
      * @param username the unique identification of the user
      */
-    public CreateLobbyMessage(int message_id, String username) {
+    public CreateLobbyMessage(int message_id, String username,int limit) {
         super(message_id, Action.CREATELOBBY, -1, username);
+        this.limit=limit;
         //lobby_id == -1 when the player isn't in any lobby
     }
 
@@ -46,5 +47,10 @@ public class CreateLobbyMessage extends GeneralMessage{
     {
         return super.startMessage() +
                 "}";
+    }
+
+    @Override
+    public int getLimit() {
+        return limit;
     }
 }

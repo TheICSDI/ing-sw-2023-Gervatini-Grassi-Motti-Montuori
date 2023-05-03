@@ -18,7 +18,7 @@ public class SelectOrderTest {
     @Test
     void testString()
     {
-        int test_id = 0, lobby_id = 0;
+        int test_id = 0;
         String test_usr = "test_username";
 
 
@@ -32,7 +32,7 @@ public class SelectOrderTest {
             order.add(i);
         }
 
-        SelectOrderMessage test = new SelectOrderMessage(test_id, lobby_id, test_usr, order);
+        SelectOrderMessage test = new SelectOrderMessage(test_id, test_usr, order);
 
         try {
             FileInputStream pathFile = new FileInputStream("JSON/MessageTest/selectorder_test.json");

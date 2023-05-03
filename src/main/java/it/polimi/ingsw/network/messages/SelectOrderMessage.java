@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a message for selecting the order of the tiles.
@@ -15,17 +16,16 @@ import java.util.ArrayList;
  */
 public class SelectOrderMessage extends GeneralMessage{
 
-    private ArrayList<Integer> order = new ArrayList<Integer>();
+    private List<Integer> order = new ArrayList<>();
 
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message
-     * @param lobby_id uid of lobby
      * @param username uid of the user
      * @param order a list with the position in the chosen order
      */
-    public SelectOrderMessage(int message_id, int lobby_id, String username, ArrayList<Integer> order) {
-        super(message_id, Action.SELECTORDER, lobby_id, username);
+    public SelectOrderMessage(int message_id, String username, List<Integer> order) {
+        super(message_id, Action.SELECTORDER,-1, username);
         this.order = order;
     }
 
@@ -75,7 +75,7 @@ public class SelectOrderMessage extends GeneralMessage{
                 "}";
     }
 
-    public ArrayList<Integer> getOrder() {
+    public List<Integer> getOrder() {
         return order;
     }
 }

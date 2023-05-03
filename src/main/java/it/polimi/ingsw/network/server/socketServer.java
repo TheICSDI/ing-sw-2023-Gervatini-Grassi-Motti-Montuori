@@ -5,10 +5,7 @@ import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.network.messages.CreateLobbyMessage;
-import it.polimi.ingsw.network.messages.GeneralMessage;
-import it.polimi.ingsw.network.messages.JoinLobbyMessage;
-import it.polimi.ingsw.network.messages.ShowLobbyMessage;
+import it.polimi.ingsw.network.messages.*;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -60,7 +57,7 @@ public class socketServer {
                     nickname=in.readLine();
                 }
                 //che poi viene aggiungo alla hashmap statica allPlayers e crea l'oggetto player associato
-                gameController.allPlayers.put(nickname,new Player(nickname));
+                gameController.allPlayers.put(nickname,new Player(nickname,out));
                 out.println(nickname);
 
                 GeneralMessage mex = null;
@@ -71,6 +68,8 @@ public class socketServer {
                         case CREATELOBBY -> mex=new CreateLobbyMessage(input);
                         case SHOWLOBBY -> mex=new ShowLobbyMessage(input);
                         case JOINLOBBY -> mex=new JoinLobbyMessage(input);
+                        case STARTGAME -> mex=new StartGameMessage(input);
+                        case PICKTILES -> mex=new PickTilesMessage(input);
                         //TODO Mettere tutti i casi nella ricezione messaggi
                     }
                     //il comando viene eseguito

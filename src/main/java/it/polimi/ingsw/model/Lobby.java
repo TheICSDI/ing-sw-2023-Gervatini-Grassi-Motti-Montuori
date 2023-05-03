@@ -13,14 +13,16 @@ import java.util.List;
 public class Lobby {
     private static int count = 0;
     public final int lobbyId;
+    public final int limit;
     public List<Player> Players = new ArrayList<>();
 
     /** Create a new lobby given a player "creator" and a unique number automatically generated. */
-    public Lobby(Player Creator){
+    public Lobby(Player Creator, int limit){
         Players.add(Creator);
         //The static attribute make the id unique
         count++;
         this.lobbyId = count;
+        this.limit=limit;
     }
 
     /** Adds a player "joiner" to the lobby, only if the total number of player is less than four.

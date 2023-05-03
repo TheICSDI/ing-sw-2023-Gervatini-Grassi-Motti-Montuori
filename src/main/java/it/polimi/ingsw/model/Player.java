@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Player {
@@ -21,6 +24,11 @@ public class Player {
     private int scoreToken1, scoreToken2;
     private int totalPoints;
     private int turn;
+    private final PrintWriter out;
+
+    public PrintWriter getOut() {
+        return out;
+    }
 
     /**
      * Create a player with a specified id and nickname.
@@ -30,8 +38,9 @@ public class Player {
      *
      * @param nick nickname of the player.
      */
-    public Player(String nick){
+    public Player(String nick, PrintWriter out){
         this.nickname = nick;
+        this.out=out;
         this.totalPoints = 0;
         this.Shelf = new Tile[numRows][numCols];
         for(int i=0; i<numRows; i++){

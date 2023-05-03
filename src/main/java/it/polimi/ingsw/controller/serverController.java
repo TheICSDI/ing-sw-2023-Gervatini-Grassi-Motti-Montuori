@@ -29,7 +29,9 @@ public class serverController {
          case CREATELOBBY -> {
             //Crea una nuova lobby che ha come creatore chi invia il messaggio
             if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){
-               gameController.allLobbies.add(new Lobby(gameController.allPlayers.get(message.getUsername())));
+               Player pl=gameController.allPlayers.get(message.getUsername());
+               int limit=message.getLimit();
+               gameController.allLobbies.add(new Lobby(pl,limit));
                return new ReplyMessage("Lobby created").toString();
             }else{
                return new ReplyMessage("Already in a lobby").toString();
@@ -41,24 +43,54 @@ public class serverController {
 
          }
          case JOINLOBBY -> {
-            for (Lobby l:
-                 gameController.allLobbies) {
-               if(l.lobbyId==message.getLobby_id()){
-                  l.Join(gameController.allPlayers.get(message.getUsername()));
+            boolean found=false;
+            if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){
+               for (Lobby l:
+                       gameController.allLobbies) {
+                  if(l.lobbyId==message.getLobby_id()){
+                     l.Join(gameController.allPlayers.get(message.getUsername()));
+                  }
                }
+               return new ReplyMessage("Lobby Joined").toString();
+            }else{
+               return new ReplyMessage("Already in a lobby").toString();
             }
-            return new ReplyMessage("Lobby Joined").toString();
+         }
+         case STARTGAME -> {
+            if(isInALobby(gameController.allPlayers.get(message.getUsername()))){
+               for (Lobby l:
+                    gameController.allLobbies) {
+                  if(l.isPlayerInLobby(gameController.allPlayers.get(message.getUsername()))){
+                     if(l.Players.size()==l.limit){
+                        Game g = new Game(l.Players, controller);
+                        gameController.allGames.put(g.id,g);
+                        gameController.allLobbies.remove(l);
+                        executorService.submit(()->{
+                           try {
+                              g.startGame();
+                           } catch (InvalidColumnException | InvalidPositionException e) {
+                              throw new RuntimeException(e);
+                           }
+                        });
+                        return new ReplyMessage("Game started").toString();
+                     }else{
+                        return new DefaultErrorMessage("Not enought players").toString();
+                     }
+                  }
+               }
+            }else{
+               return new ReplyMessage("Not in a Lobby").toString();
+            }
          }
          case PICKTILES-> {
-            ArrayList<Position> pos;
+            List<Position> pos;
             pos = ((PickTilesMessage) message).getPos();
             try {
                controller.pickTiles(player, action, pos, game_id, id);
                //manda un messaggio di esito positivo con dentro
-               sendOk(message);
+               return new OkReplyMessage("Ok").toString();
             } catch (NotAvaibleTilesException e) {
-               //manda un messaggio al client che la richiesta non è stata soddisfatta
-               sendKo(message);
+               return new ReplyMessage("Tiles not available").toString();
             }
          }
          case SELECTORDER -> {

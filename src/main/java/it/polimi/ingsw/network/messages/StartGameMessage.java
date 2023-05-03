@@ -18,8 +18,8 @@ public class StartGameMessage extends GeneralMessage {
      * @param lobby_id uid of lobby
      * @param username uid of the user
      */
-    public StartGameMessage(int message_id, int lobby_id, String username) {
-        super(message_id, Action.STARTGAME, lobby_id, username);
+    public StartGameMessage(int message_id, String username) {
+        super(message_id, Action.STARTGAME, -1, username);
     }
 
     /**

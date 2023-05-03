@@ -17,13 +17,6 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
     }
     @Override
     public String toString(){
-//        String reply;
-//        reply="{[";
-//        for (Lobby l:
-//             Lobbies) {
-//            reply="\"Lobby_id\":"+l.lobbyId +","+
-//                    "\"Players\":["
-//        }
         return new Gson().toJson(this);
     }
     public static ShowLobbyReplyMessage decrypt(String json){
@@ -44,7 +37,7 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
         }
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         List<Lobby> Lobbi=new ArrayList<>();
         Lobby l=new Lobby(new Player("marco"));
         l.Join(new Player("MArcio"));
@@ -56,5 +49,5 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
         ShowLobbyReplyMessage Retrieve= Prova.decrypt(x);
         System.out.println(Retrieve.getMessaggio());
 
-    }
+    }*/
 }

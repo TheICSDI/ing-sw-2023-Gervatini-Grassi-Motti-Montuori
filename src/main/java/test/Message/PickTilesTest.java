@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +28,7 @@ public class PickTilesTest {
         JSONObject file_obj = null, test_obj = null;
 
         int test_size = 3;
-        ArrayList<Position> pos = new ArrayList<Position>();
+        List<Position> pos = new ArrayList<Position>();
         Position tmp;
         for(int i = 0; i <= test_size; i++)
         {
@@ -35,7 +36,7 @@ public class PickTilesTest {
             pos.add(tmp);
         }
 
-        PickTilesMessage test = new PickTilesMessage(test_id, lobby_id, test_usr, pos);
+        PickTilesMessage test = new PickTilesMessage(test_id, test_usr, pos);
 
         try {
             FileInputStream pathFile = new FileInputStream("JSON/MessageTest/picktiles_test.json");

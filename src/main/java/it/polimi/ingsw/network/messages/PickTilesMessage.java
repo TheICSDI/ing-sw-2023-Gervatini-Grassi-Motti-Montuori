@@ -9,6 +9,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a message for picking tiles in a game.
@@ -16,12 +17,11 @@ import java.util.ArrayList;
  */
 public class PickTilesMessage extends GeneralMessage{
 
-    private ArrayList<Position> pos = new ArrayList<Position>();
+    private List<Position> pos = new ArrayList<Position>();
 
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message
-     * @param lobby_id uid of lobby
      * @param username uid of the user
      * @param pos and array with position of the piked tiles
      */
@@ -81,7 +81,7 @@ public class PickTilesMessage extends GeneralMessage{
                 "}";
     }
 
-    public ArrayList<Position> getPos() {
+    public List<Position> getPos() {
         return pos;
     }
 }

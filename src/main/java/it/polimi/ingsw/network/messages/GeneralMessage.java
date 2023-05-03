@@ -108,4 +108,6 @@ public abstract class GeneralMessage implements Serializable {
         }
         return Action.valueOf(msg_obj.get("action").toString());
     }
+
+    public int getLimit(){return 0;};
 }

@@ -10,7 +10,7 @@ public class Main {
         /*if(Avvio come server)*/
 
 
-        Player Player1=new Player("Mayhem");
+        /*Player Player1=new Player("Mayhem");
         Scanner in = new Scanner(System.in);
         String Interaction_Prompt;
         List<Lobby> Lobbies=new ArrayList<>();
@@ -56,8 +56,8 @@ public class Main {
                     break;
             }
 
-            Interaction_Prompt=in.nextLine();
-        }
+            Interaction_Prompt=in.nextLine();*/
+        //}
     }
 
     public static void availableLobbies(List<Lobby> Lobbies){
