@@ -95,7 +95,11 @@ public abstract class GeneralMessage implements Serializable {
     public int getGameId() {
         return 0;//Da sistemare
     }
-
+    /**
+     * Reads only the action of the message
+     * @param msg Message received
+     * @return action of the msg
+     */
     public static Action identify(String msg) throws ParseException, InvalidKeyException {
         JSONParser parser = new JSONParser();
         JSONObject msg_obj = (JSONObject) parser.parse(msg);

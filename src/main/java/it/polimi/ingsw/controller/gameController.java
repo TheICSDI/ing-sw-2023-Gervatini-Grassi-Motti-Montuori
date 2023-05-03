@@ -28,16 +28,20 @@ public class gameController {
      */
 
     //RIROTNA IL NUMERO DI COLONNA RICHIESTO NELLA PARTITA
-    public int ChooseColumn(String player, int gameId){
+    public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;
         order = findTheRequest(player,gameId,Action.PICKTILES);
         return order.get().getNum_col();
     }
-
+    public List<Integer> chooseOrder(String player, int gameId){
+        Optional<orderBook> order;
+        order = findTheRequest(player,gameId,Action.SELECTORDER);
+        return order.get().getOrder();
+    }
     //rimuove dall'orderbook il comando che dice quali posizioni di quali tiles ha scelto il player
     //rimuove eventuali vecchie richieste rimaste inevase nell'orderbook
     //restituisce le posizioni al model
-    public Set<Position> Choose(String player , int gameId){
+    public Set<Position> chooseTiles(String player , int gameId){
         Optional<orderBook> order;
         order = findTheRequest(player,gameId,Action.PICKTILES);
         return new HashSet<>(order.get().getPos());
@@ -45,7 +49,7 @@ public class gameController {
 
     //trova la richiesta che match tra gli orderbook, restituisce sempre un optional non null, se trova piu richieste che vanno bene
     //le cancella tutte e prende solo quella piu recente ( in realta non servirebbe ma la metto per sicurezza questa feature
-    public Optional<orderBook> findTheRequest(String player,int gameId, Action a){
+    private Optional<orderBook> findTheRequest(String player,int gameId, Action a){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
         List<orderBook> toFind;
@@ -86,6 +90,20 @@ public class gameController {
         pending.setPos(pos);
         pendingOrders.add(pending);
 
+    }
+    public void selectOrder(String player, Action action, List<Integer> order, int gameId, int num_mess){
+        Player p = allPlayers.get(player);
+        Game g = allGames.get(gameId);
+        orderBook pending = new orderBook(g,p,action,num_mess);
+        pending.setOrder(order);
+        pendingOrders.add(pending);
+    }
+    public void selectColumn(String player, Action action, int numCol, int gameId, int num_mess){
+        Player p = allPlayers.get(player);
+        Game g = allGames.get(gameId);
+        orderBook pending = new orderBook(g,p,action,num_mess);
+        pending.setNum_col(numCol);
+        pendingOrders.add(pending);
     }
     //se il giocatore non e' in una partita ne crea una nuova questa viene aggiunta all'elenco dei game disponibili
     public void createLobby(String player) throws AlreadyInAGameException {
@@ -136,5 +154,7 @@ public class gameController {
             }
         }
     }
+
+
 
 }

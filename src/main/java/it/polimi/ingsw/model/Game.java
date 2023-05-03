@@ -80,9 +80,12 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 //The player can pick some tiles from the board and insert it inside its shelf
-                Set<Position> chosen = controller.Choose(p.getNickname(),id);
+                Set<Position> chosen = controller.chooseTiles(p.getNickname(),id);
                 List<Tile> toInsert = p.pickTiles(chosen, board);
-                int col = controller.ChooseColumn(p.getNickname(),id);
+                List<Integer> order;
+                order = controller.chooseOrder(p.getNickname(), id);
+                toInsert = p.orderTiles(toInsert,order);
+                int col = controller.chooseColumn(p.getNickname(),id);
                 p.insertInShelf(toInsert, col);
 
                 //If the board is empty it will be randomically filled
@@ -217,5 +220,17 @@ public class Game {
 
     public boolean isStarted() {
         return started;
+    }
+    //return true if the order is a list of length between 1 and 3 and is composed only from 1 instance of 1 ,2 and 3
+    public boolean acceptableOrder(List<Integer> order) {
+        if (order.size() > 3) {
+            return false;
+        } else {
+            if (!order.contains(1)) {
+                return false;
+            } else if (order.size() > 1 && !order.contains(2)) {
+                return false;
+            } else return order.contains(3);
+        }
     }
 }
