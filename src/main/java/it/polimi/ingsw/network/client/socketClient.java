@@ -2,7 +2,9 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidCommandException;
+import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.messages.*;
+import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,46 +33,17 @@ public class socketClient {
     }
     //sendMessage chiama un filtro applicato dal controller che gli blocca l'invio di messaggi formattati male oppure
     //che non puo fare in quel momento//Ho aggiunto qualche parametro per renderla generale così possiamo fare più client
-    public ReplyMessage sendMessage(String message,clientController control,BufferedReader In,PrintWriter Out) throws IOException {
+    public void sendMessage(String message,clientController control,BufferedReader In,PrintWriter Out) throws IOException {
         GeneralMessage clientMessage;
         //Controlla che il formato del comando sia giusto
         clientMessage = control.checkMessageShape(message,control);
         Action curr_action=clientMessage.getAction();
         String toSend = clientMessage.toString();
         //Se il formato è sbagliato checkmessage restituisce un messaggio di tipo error e non viene inviato
-        if(curr_action.equals(Action.ERROR)) return new ReplyMessage(toSend);
-        //altrimenti viene inviato
-        Out.println(toSend);
-        //in base al tipo di comando inviato il client aspetta un determinato tipo di risposta
-        switch (curr_action){
-            case CREATELOBBY -> {
-                CreateLobbyReplyMessage x = CreateLobbyReplyMessage.decrypt(In.readLine());
-                control.setIdLobby(x.getIdLobby());
-                return x;
-            }
-            //Semplicemente una stringa di successo/errore
-            case JOINLOBBY -> {
-                JoinLobbyReplyMessage x= JoinLobbyReplyMessage.decrypt(In.readLine());
-                control.setIdLobby(x.getIdLobby());
-                return x;
-            }
-            //Lista di tutte le lobby disponibili
-            case SHOWLOBBY -> {
-                return ShowLobbyReplyMessage.decrypt(In.readLine());
-            }
-            //Conferma che il game può iniziare
-            case STARTGAME -> {
-                //TODO I client coinvolti nel game devono avere un nuovo tipo di invio/ricezione messaggi con un
-                //thread che riceve sempre e stampa (board shelf e goal ecc.) appena riceve e uno che invia messaggi
-                //messaggio con formattazione shelf e board in gson, turnazione ecc...
-                control.setIdLobby(0);
-                return StartGameReplyMessage.decrypt(In.readLine());
-            }
-            //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
-            //altrimenti non è questa sezione che li controlla(e invece ha senso):D
-            default -> {
-                return ReplyMessage.decrypt(In.readLine());
-            }
+        if(curr_action.equals(Action.ERROR)) {
+            new ReplyMessage(toSend,Action.ERROR).print();
+        }else{
+            Out.println(toSend);
         }
     }
 
@@ -115,33 +88,63 @@ public class socketClient {
         //Ogni player ha il suo clientController
         controller = new clientController(nick);
         System.out.println("Nickname set: "+nick);
-        ReplyMessage reply=new ReplyMessage("");
-        //inizio connessione
-        while (!reply.getGameStart()) { //TODO (rivedere)probabilmente serve un thread che riceve un messaggio quando un altro giocatore della stessa lobby inizia il game
-            String x = input.nextLine();
-            reply = Client.sendMessage(x,controller,in,out);
-            reply.print();
-        }
-        //A regola esce dal ciclo dopo STARTGAME
-        //creazione thread che sta in ascolto dal server
-        ExecutorService executor = Executors.newFixedThreadPool(10);
 
+        //inizio connessione
+        ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.submit(()-> {
             try {
-                Client.inGameSend(out,Client);
-            } catch (IOException | InvalidCommandException e) {
+                Client.listenMessages(controller,in);
+            } catch (IOException | ParseException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
         });
-        System.out.println("sgroda");
-        String msg=in.readLine();//non sarà string ma un formato di un messaggio
-        while(msg!=null/*Placeholder per la vera condizione che sarà un messaggio di fine game*/){
-            /*
-             Lettura messaggio e stampa di board/shelf/ecc.
-            */
+
+        while (true) { //TODO (rivedere)probabilmente serve un thread che riceve un messaggio quando un altro giocatore della stessa lobby inizia il game
+            Client.sendMessage(input.nextLine(),controller,in,out);
         }
-        executor.shutdownNow();//uccisione thread
+
+        //A regola esce dal ciclo dopo STARTGAME
+        //creazione thread che sta in ascolto dal server
+        //executor.shutdownNow();//uccisione thread
         //implementare ciclo per tornare a lobby ecc
+    }
+    public void listenMessages(clientController controller, BufferedReader In) throws IOException, ParseException, InvalidKeyException {
+        ReplyMessage reply;
+        while(true) {
+            String message = In.readLine();
+            Action replyAction = ReplyMessage.identify(message);
+            switch (replyAction) {
+                case CREATELOBBY -> {
+                    reply = CreateLobbyReplyMessage.decrypt(message);
+                    controller.setIdLobby(reply.getIdLobby());
+                }
+                //Semplicemente una stringa di successo/errore
+                case JOINLOBBY -> {
+                    reply = JoinLobbyReplyMessage.decrypt(message);
+                    controller.setIdLobby(reply.getIdLobby());
+                }
+                //Lista di tutte le lobby disponibili
+                case SHOWLOBBY -> {
+                    reply = ShowLobbyReplyMessage.decrypt(message);
+                }
+                //Conferma che il game può iniziare
+                case STARTGAME -> {
+                    controller.setIdLobby(0);
+                    reply = StartGameReplyMessage.decrypt(message);
+                }
+                //TODO Entrano in game ora dobbiamo fare il gioco(Il gioco inizia ora)
+                //TODO AGGIUNGERE IN GAME LE RICHIESTE PER IL CLIENT DI INVIARE I COMANDI
+                //TODO AGGIUNGERE I METODI E LE STRUTTURE DATI PER LA CLI
+                //TODO MATRICE SHELF, MATRICE BOARD, CARTE PERSONAL GOAL ETC;
+                //TODO COLLEGARE MESSAGGIO CHIUSURA GAME
+                //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
+                //altrimenti non è questa sezione che li controlla(e invece ha senso):D
+                default -> {
+                    reply = ReplyMessage.decrypt(message);
+                }
+            }
+            reply.print();
+        }
     }
 
 }

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class CreateLobbyReplyMessage extends ReplyMessage{
     public CreateLobbyReplyMessage(String msg,int idLobby) {
-        super(msg);
+        super(msg,Action.CREATELOBBY);
         this.idLobby=idLobby;
     }
 

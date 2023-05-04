@@ -34,7 +34,7 @@ public class serverController {
                gameController.allLobbies.add(NewLobby);
                return new CreateLobbyReplyMessage("Lobby created", NewLobby.lobbyId).toString();
             }else{
-               return new ReplyMessage("Already in a lobby").toString();
+               return new ReplyMessage("Already in a lobby",Action.ERROR).toString();
             }
 
          }
@@ -53,7 +53,7 @@ public class serverController {
                }
                return new JoinLobbyReplyMessage("Lobby Joined", message.getLobby_id()).toString();
             }else{
-               return new ReplyMessage("Already in a lobby").toString();
+               return new ReplyMessage("Already in a lobby",Action.ERROR).toString();
             }
          }
          case STARTGAME -> {
@@ -69,11 +69,11 @@ public class serverController {
                      executorsService.submit(g::startGame);
                      return new StartGameReplyMessage("Game started").toString();
                   }else{
-                     return new ReplyMessage("Not enough ot too many players").toString();
+                     return new ReplyMessage("Not enough ot too many players",Action.ERROR).toString();
                   }
                }
             }
-            return new ReplyMessage("Not in a Lobby").toString();
+            return new ReplyMessage("Not in a Lobby",Action.ERROR).toString();
          }
          case PICKTILES-> {
             List<Position> pos;

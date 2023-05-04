@@ -12,7 +12,7 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
     public List<Lobby> getLobbies(){return Lobbies;}
 
     public ShowLobbyReplyMessage(String msg, List<Lobby> Lobbies) {
-        super(msg);
+        super(msg,Action.SHOWLOBBY);
         this.Lobbies=Lobbies;
     }
 

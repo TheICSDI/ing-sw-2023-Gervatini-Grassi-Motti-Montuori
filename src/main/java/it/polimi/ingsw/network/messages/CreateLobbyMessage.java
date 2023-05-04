@@ -37,6 +37,7 @@ public class CreateLobbyMessage extends GeneralMessage{
         {
             throw new InvalidActionException("Invalid CreateLobbyMessage encoding");
         }
+        this.limit = Integer.parseInt(msg_obj.get("limit").toString());
     }
 
     /**

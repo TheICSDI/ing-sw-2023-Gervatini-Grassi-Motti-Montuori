@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.messages;
 import com.google.gson.Gson;
 import java.io.Serializable;
 //Stampino di risposta del server, dato che spesso una stringa non basta
-public class ReplyMessage implements Serializable {
+public class ReplyMessage extends GeneralMessage implements Serializable {
     private final String message;
     protected int idLobby;
     protected boolean gameStart=false;
@@ -12,8 +12,9 @@ public class ReplyMessage implements Serializable {
         return message;
     }
 
-    public ReplyMessage(String msg){
-        message =msg;
+    public ReplyMessage(String msg,Action action){
+        super(-1,action,-1,"");
+        message = msg;
     }
 
     public String toString(){

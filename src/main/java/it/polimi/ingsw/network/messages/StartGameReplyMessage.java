@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class StartGameReplyMessage extends ReplyMessage {
     public StartGameReplyMessage(String msg){
-        super(msg);
+        super(msg,Action.STARTGAME);
         gameStart=true;
     }
 

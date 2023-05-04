@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class JoinLobbyReplyMessage extends ReplyMessage{
     public JoinLobbyReplyMessage(String msg,int idLobby) {
-        super(msg);
+        super(msg,Action.JOINLOBBY );
         this.idLobby=idLobby;
     }
     public static JoinLobbyReplyMessage decrypt(String json){

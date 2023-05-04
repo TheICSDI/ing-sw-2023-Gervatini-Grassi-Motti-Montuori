@@ -1,11 +1,9 @@
 package it.polimi.ingsw.network.messages;
 
-import com.google.gson.Gson;
-
 public class OkReplyMessage extends ReplyMessage{
 
     public OkReplyMessage(String msg) {
-        super(msg);
+        super(msg,Action.ERROR);
     }
 
     @Override
