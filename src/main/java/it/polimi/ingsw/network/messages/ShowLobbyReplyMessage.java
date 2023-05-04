@@ -9,7 +9,8 @@ import java.util.List;
 
 public class ShowLobbyReplyMessage extends ReplyMessage {
 
-    private List<Lobby> Lobbies;
+    private final List<Lobby> Lobbies;
+    public List<Lobby> getLobbies(){return Lobbies;}
 
     public ShowLobbyReplyMessage(String msg, List<Lobby> Lobbies) {
         super(msg);

@@ -25,11 +25,11 @@ class CommonCardTest {
     CommonCard c1 = new CommonCard(n2, true);
     CommonCard c2 = new CommonCard(n6, false);
     CommonCard c3 = new CommonCard(n11, false);
-    Player p1 = new Player("CLR");
+    Player p1 = new Player("CLR",null);
 
     /** Parser for shelf_test.json. It returns a player with a full shelf. */
     private Player Parser(){
-        Player p = new Player("Jhonny");
+        Player p = new Player("Jhonny",null);
         JSONParser parser = new JSONParser();
         JSONArray common_card_test_File = null;
 

@@ -20,7 +20,7 @@ public class CreateLobbyTest {
         int test_id = 0;
         String test_usr = "test_username";
 
-        CreateLobbyMessage test = new CreateLobbyMessage(test_id, test_usr);
+        CreateLobbyMessage test = new CreateLobbyMessage(test_id, test_usr,2);
 
         JSONParser parser = new JSONParser();
         JSONObject file_obj = null, test_obj = null;

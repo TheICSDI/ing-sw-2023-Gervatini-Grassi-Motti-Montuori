@@ -25,12 +25,10 @@ public class gameController {
     public static Map<Integer, Game> allGames = new HashMap<>();
     public static List<orderBook> pendingOrders = new ArrayList<>();
     public static List<Lobby> allLobbies=new ArrayList<>();
-
     /*
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER
 
      */
-
     //RIROTNA IL NUMERO DI COLONNA RICHIESTO NELLA PARTITA
     public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;

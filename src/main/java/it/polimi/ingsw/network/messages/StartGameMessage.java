@@ -15,7 +15,6 @@ public class StartGameMessage extends GeneralMessage {
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message
-     * @param lobby_id uid of lobby
      * @param username uid of the user
      */
     public StartGameMessage(int message_id, String username) {

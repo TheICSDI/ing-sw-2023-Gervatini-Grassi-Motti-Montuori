@@ -27,7 +27,7 @@ public class CCGeneral {
      * @param JSONName name of the file to read the shelves from.
      */
     public static void check(CCStrategy CCard, String JSONName){
-        Player p = new Player("test");
+        Player p = new Player("test",null);
         int nRow = p.getNumRows();
         int nCol = p.getNumCols();
         Tile[][] shelf = new Tile[nRow][nCol];

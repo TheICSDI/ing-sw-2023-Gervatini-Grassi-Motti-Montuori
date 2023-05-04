@@ -24,7 +24,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
-    Player p1 = new Player("CLR");
+    Player p1 = new Player("CLR",null);
     Tile[][] s = p1.getShelf();
     Tile t1 = new Tile("cats");
     Tile t2 = new Tile("plants");
@@ -32,7 +32,7 @@ class PlayerTest {
 
     /** Parser for shelf_test.json. It returns a player with a full shelf. */
     private Player Parser(){
-        Player p = new Player("Jhonny");
+        Player p = new Player("Jhonny",null);
         JSONParser parser = new JSONParser();
         JSONArray shelf_test_File = null;
 

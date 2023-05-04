@@ -25,8 +25,8 @@ public class PickTilesMessage extends GeneralMessage{
      * @param username uid of the user
      * @param pos and array with position of the piked tiles
      */
-    public PickTilesMessage(int message_id, int lobby_id, String username, ArrayList<Position> pos) {
-        super(message_id, Action.PICKTILES, lobby_id, username);
+    public PickTilesMessage(int message_id, String username, List<Position> pos) {
+        super(message_id, Action.PICKTILES, -1, username);
         this.pos = pos;
     }
 

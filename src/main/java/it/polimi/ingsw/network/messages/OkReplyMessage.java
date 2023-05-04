@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
+import com.google.gson.Gson;
+
 public class OkReplyMessage extends ReplyMessage{
 
     public OkReplyMessage(String msg) {
@@ -8,4 +10,7 @@ public class OkReplyMessage extends ReplyMessage{
 
     @Override
     public void print() {}
+    /*public static OkReplyMessage decrypt(String json){
+        return new Gson().fromJson(json,OkReplyMessage.class);
+    }*/
 }

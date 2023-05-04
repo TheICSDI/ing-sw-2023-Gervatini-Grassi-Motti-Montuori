@@ -13,10 +13,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-    Player p1 = new Player("CLR");
-    Player p2 = new Player("Jhonny");
-    Player p3 = new Player("Mayhem");
-    Player p4 = new Player("Fozy");
+    Player p1 = new Player("CLR",null);
+    Player p2 = new Player("Jhonny",null);
+    Player p3 = new Player("Mayhem",null);
+    Player p4 = new Player("Fozy",null);
     List<Player> playerList = new ArrayList<>();
 
     @Test
@@ -25,7 +25,7 @@ class GameTest {
         playerList.add(p2);
         playerList.add(p3);
         playerList.add(p4);
-        Game g = new Game(playerList);
+        Game g = new Game(playerList,null);
 
         //Only the first player of the list of Game g has the first token
         assertTrue(g.getPlayers().get(0).getFirstToken());
@@ -77,7 +77,7 @@ class GameTest {
         playerList.add(p2);
         playerList.add(p3);
         playerList.add(p4);
-        Game g = new Game(playerList);
+        Game g = new Game(playerList,null);
 
 
 
@@ -89,7 +89,7 @@ class GameTest {
         playerList.add(p2);
         playerList.add(p3);
         playerList.add(p4);
-        Game g = new Game(playerList);
+        Game g = new Game(playerList,null);
 
         //Every player has totalPoints = 0, then the last player to play is the winner
         assertEquals(g.getPlayers().get(g.getPlayers().size() - 1), g.calculateWinner());

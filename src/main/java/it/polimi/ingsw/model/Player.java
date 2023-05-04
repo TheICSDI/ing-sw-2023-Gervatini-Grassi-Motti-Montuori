@@ -12,9 +12,10 @@ import it.polimi.ingsw.exceptions.InvalidColumnException;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable {
     private final String nickname;
     private final int numRows = 6;
     private final int numCols = 5;
@@ -24,11 +25,12 @@ public class Player {
     private int scoreToken1, scoreToken2;
     private int totalPoints;
     private int turn;
-    private final PrintWriter out;
+    private transient final PrintWriter out;
 
     public PrintWriter getOut() {
         return out;
     }
+
 
     /**
      * Create a player with a specified id and nickname.
