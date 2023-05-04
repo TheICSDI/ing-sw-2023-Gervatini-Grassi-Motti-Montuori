@@ -67,7 +67,11 @@ public class serverController {
                      gameController.allGames.put(g.id,g);
                      gameController.allLobbies.remove(l);
                      executorsService.submit(g::startGame);
-                     return new StartGameReplyMessage("Game started").toString();
+                     for (Player p:
+                          l.Players) {
+                        p.getOut().println(new StartGameReplyMessage("Game started").toString());
+                     }
+                     return new OkReplyMessage("").toString();
                   }else{
                      return new ReplyMessage("Not enough ot too many players",Action.ERROR).toString();
                   }
