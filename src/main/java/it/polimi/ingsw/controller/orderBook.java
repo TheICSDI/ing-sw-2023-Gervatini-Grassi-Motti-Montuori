@@ -17,6 +17,7 @@ public class orderBook{
     private int num_col = 42;
 
     public orderBook(Game g, Player p, Action a,int num_mess){
+        //si potrebbero conservare game e player solo come id e nickname
         this.g = g;
         this.p = p;
         this.a = a;

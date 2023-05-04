@@ -82,7 +82,7 @@ public class socketClient {
 
         while (true) {
             String x = input.nextLine();
-            ReplyMessage reply=Client.sendMessage(x);
+            ReplyMessage reply = Client.sendMessage(x);
             reply.print();
 
         }

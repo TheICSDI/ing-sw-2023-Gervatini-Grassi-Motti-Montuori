@@ -29,6 +29,7 @@ public class gameController {
      */
 
     //RIROTNA IL NUMERO DI COLONNA RICHIESTO NELLA PARTITA
+    //TODO FAR SI CHE QUESTI METODDI INVIINO UN MESSAGGIO DI ERRORE AL CLIENT SE RICEVONO DEI DATI PER ESEMPIO TILES NON SCEGLIBILI
     public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;
         order = findTheRequest(player,gameId,Action.PICKTILES);

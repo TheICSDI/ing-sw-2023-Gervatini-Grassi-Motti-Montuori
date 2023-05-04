@@ -1,22 +1,19 @@
 package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.Lobby;
-import org.ietf.jgss.GSSContext;
 
 import java.io.Serializable;
-import java.util.List;
 
 //Stampino di risposta del server, dato che spesso una stringa non basta
 public class ReplyMessage implements Serializable {
-    private String messaggio;
+    private String message;
 
-    public String getMessaggio() {
-        return messaggio;
+    public String getMessage() {
+        return message;
     }
 
     public ReplyMessage(String msg){
-        messaggio=msg;
+        message =msg;
     }
 
     public String toString(){
@@ -24,7 +21,7 @@ public class ReplyMessage implements Serializable {
     }
 
     public void print(){
-        System.out.println(this.messaggio);
+        System.out.println(this.message);
     }
     public static ReplyMessage decrypt(String json){
         return new Gson().fromJson(json,ReplyMessage.class);

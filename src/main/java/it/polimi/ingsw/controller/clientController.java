@@ -43,12 +43,15 @@ public class clientController{
                 }
                 case SHOWLOBBY -> {
                     if(words.length==1){
-                        return new ShowLobbyMessage(idMex,nickname);
+                        return new ShowLobbyMessage(idMex, nickname);
                     }
                 }
                 case JOINLOBBY -> {
                     if(words.length==2){
-                        return new JoinLobbyMessage(idMex,Integer.parseInt(words[1]),nickname);
+                        return new JoinLobbyMessage(idMex, Integer.parseInt(words[1]), nickname);
+                    }
+                    else{
+                        return new DefaultErrorMessage("Insert a valid lobby number please");
                     }
                 }
                     //TODO da completare switch e da qualche parte i controlli per vedere se puoi mandare il messaggio in quel momento

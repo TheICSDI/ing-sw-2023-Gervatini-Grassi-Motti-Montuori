@@ -47,7 +47,7 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
         String x=Prova.toString();
         System.out.println(x);
         ShowLobbyReplyMessage Retrieve= Prova.decrypt(x);
-        System.out.println(Retrieve.getMessaggio());
+        System.out.println(Retrieve.getMessage());
 
     }*/
 }
