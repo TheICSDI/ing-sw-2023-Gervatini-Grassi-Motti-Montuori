@@ -46,5 +46,6 @@ public class JoinLobbyMessage extends GeneralMessage{
     {
         return super.startMessage() +
                 "}";
+        //return new Gson().toJson(this);
     }
 }

@@ -1,12 +1,7 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidCommandException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
-import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +9,16 @@ import java.util.List;
 public class clientController{
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
     private final String nickname;
+    private int idLobby=0;
+
+    public int getIdLobby() {
+        return idLobby;
+    }
+
+    public void setIdLobby(int idLobby) {
+        this.idLobby = idLobby;
+    }
+
     public clientController(String nickname){
         this.nickname = nickname;
     }
@@ -24,7 +29,7 @@ public class clientController{
     e restituisce al client un message del tipo giusto per l'azione che verra' poi messo in json format e inviato al server
     */
 
-    public GeneralMessage checkMessageShape(String m){
+    public GeneralMessage checkMessageShape(String m,clientController controller){
         Action curr_action;
         List<String> curr_params;
         //parsing dell'input string
@@ -40,6 +45,7 @@ public class clientController{
             switch (curr_action){
                 case CREATELOBBY -> {//words deve contenere action, numero di giocatori partita
                     if(words.length==2){
+                        int x=Integer.parseInt(words[1]);
                         return new CreateLobbyMessage(idMex,nickname,Integer.parseInt(words[1]));
                     }else{
                         return new DefaultErrorMessage("Insert number of players in this lobby");
@@ -59,7 +65,7 @@ public class clientController{
                     }
                 }
                 case STARTGAME -> {//words deve contenere action
-                    return new StartGameMessage(idMex,nickname);
+                    return new StartGameMessage(idMex,controller.getIdLobby(),nickname);
                 }
                 case PICKTILES -> {//words deve contenere action e poi da 2 a 6 numeri che sono le coordinate delle tiles
                     //scelte sul tabellone, es. picktiles 2 3 2 4 5 6

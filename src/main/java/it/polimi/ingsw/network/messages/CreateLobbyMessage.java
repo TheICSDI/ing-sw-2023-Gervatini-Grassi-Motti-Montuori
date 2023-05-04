@@ -11,7 +11,7 @@ import org.json.simple.parser.ParseException;
  * It extends the GeneralMessage class to include specific behavior for creating lobby messages.
  */
 public class CreateLobbyMessage extends GeneralMessage{
-    private int limit;
+
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message
@@ -46,7 +46,9 @@ public class CreateLobbyMessage extends GeneralMessage{
     public String toString()
     {
         return super.startMessage() +
+                "\"limit\": \""+ limit + "\""+
                 "}";
+        //return  new Gson().toJson(this);
     }
 
     @Override

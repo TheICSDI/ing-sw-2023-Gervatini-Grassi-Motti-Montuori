@@ -17,6 +17,7 @@ public abstract class GeneralMessage implements Serializable {
     private final Action action;
     private final int lobby_id;
     private final String username;
+    protected int limit;
 
     /**
      * Constructor that initializes a message with the provided parameters.
@@ -109,5 +110,5 @@ public abstract class GeneralMessage implements Serializable {
         return Action.valueOf(msg_obj.get("action").toString());
     }
 
-    public int getLimit(){return 0;}
+    public int getLimit(){return limit;}
 }

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShowLobbyReplyMessage extends ReplyMessage {
@@ -16,10 +15,7 @@ public class ShowLobbyReplyMessage extends ReplyMessage {
         super(msg);
         this.Lobbies=Lobbies;
     }
-    @Override
-    public String toString(){
-        return new Gson().toJson(this);
-    }
+
     public static ShowLobbyReplyMessage decrypt(String json){
         return new Gson().fromJson(json,ShowLobbyReplyMessage.class);
     }

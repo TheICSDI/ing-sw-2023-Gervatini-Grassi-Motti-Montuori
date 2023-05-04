@@ -1,18 +1,12 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.exceptions.InvalidColumnException;
-import it.polimi.ingsw.exceptions.InvalidPositionException;
-import it.polimi.ingsw.exceptions.NotAvaibleTilesException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,6 +22,7 @@ public class serverController {
       int id = message.getMessage_id();
       String player = message.getUsername();
       Action action = message.getAction();
+      int idLobby= message.getLobby_id();
       int gameId = message.getGameId();
       switch(message.getAction()/*getClass().getSimpleName()??*/){
          case CREATELOBBY -> {
@@ -35,8 +30,9 @@ public class serverController {
             if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){
                Player pl=gameController.allPlayers.get(message.getUsername());
                int limit=message.getLimit();
-               gameController.allLobbies.add(new Lobby(pl,limit));
-               return new ReplyMessage("Lobby created").toString();
+               Lobby NewLobby=new Lobby(pl,limit);
+               gameController.allLobbies.add(NewLobby);
+               return new CreateLobbyReplyMessage("Lobby created", NewLobby.lobbyId).toString();
             }else{
                return new ReplyMessage("Already in a lobby").toString();
             }
@@ -55,30 +51,29 @@ public class serverController {
                      l.Join(gameController.allPlayers.get(message.getUsername()));
                   }
                }
-               return new ReplyMessage("Lobby Joined").toString();
+               return new JoinLobbyReplyMessage("Lobby Joined", message.getLobby_id()).toString();
             }else{
                return new ReplyMessage("Already in a lobby").toString();
             }
          }
          case STARTGAME -> {
-            if(isInALobby(gameController.allPlayers.get(message.getUsername()))){
-               for (Lobby l:
-                    gameController.allLobbies) {
-                  if(l.isPlayerInLobby(gameController.allPlayers.get(message.getUsername()))){
-                     if(l.Players.size()==l.limit){
-                        Game g = new Game(l.Players, controller);
-                        gameController.allGames.put(g.id,g);
-                        gameController.allLobbies.remove(l);
-                        executorsService.submit(g::startGame);//riga suggerita dal IDE prima era scritta diversa va provata
-                        return new StartGameReplyMessage("Game started").toString();
-                     }else{
-                        return new DefaultErrorMessage("Not enough players").toString();//Probabile da rivedere(saranno tipo Reply)
-                     }
+            for (Lobby l:
+                 gameController.allLobbies) {
+               if(idLobby==l.lobbyId){
+                  int b=l.Players.size();
+                  int a=l.limit;
+                  if(l.Players.size()==l.limit){
+                     Game g = new Game(l.Players, controller);
+                     gameController.allGames.put(g.id,g);
+                     gameController.allLobbies.remove(l);
+                     executorsService.submit(g::startGame);
+                     return new StartGameReplyMessage("Game started").toString();
+                  }else{
+                     return new ReplyMessage("Not enough ot too many players").toString();
                   }
                }
-            }else{
-               return new ReplyMessage("Not in a Lobby").toString();
             }
+            return new ReplyMessage("Not in a Lobby").toString();
          }
          case PICKTILES-> {
             List<Position> pos;

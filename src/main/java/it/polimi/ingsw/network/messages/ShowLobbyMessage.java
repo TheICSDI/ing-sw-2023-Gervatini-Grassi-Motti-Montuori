@@ -45,5 +45,6 @@ public class ShowLobbyMessage extends GeneralMessage{
     {
         return super.startMessage() +
                 "}";
+
     }
 }

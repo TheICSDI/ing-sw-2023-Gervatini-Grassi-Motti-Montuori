@@ -17,8 +17,8 @@ public class StartGameMessage extends GeneralMessage {
      * @param message_id uid of the message
      * @param username uid of the user
      */
-    public StartGameMessage(int message_id, String username) {
-        super(message_id, Action.STARTGAME, -1, username);
+    public StartGameMessage(int message_id,int idLobby, String username) {
+        super(message_id, Action.STARTGAME, idLobby, username);
     }
 
     /**

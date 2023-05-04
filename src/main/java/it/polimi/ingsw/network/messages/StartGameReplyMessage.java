@@ -7,6 +7,7 @@ public class StartGameReplyMessage extends ReplyMessage {
         super(msg);
         gameStart=true;
     }
+
     public static StartGameReplyMessage decrypt(String json){
         return new Gson().fromJson(json,StartGameReplyMessage.class);
     }
