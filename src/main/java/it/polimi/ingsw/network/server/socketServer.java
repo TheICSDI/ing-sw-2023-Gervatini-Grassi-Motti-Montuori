@@ -70,6 +70,8 @@ public class socketServer {
                         case JOINLOBBY -> mex=new JoinLobbyMessage(input);
                         case STARTGAME -> mex=new StartGameMessage(input);
                         case PICKTILES -> mex=new PickTilesMessage(input);
+                        case SELECTORDER -> mex = new SelectOrderMessage(input);
+                        case SELECTCOLUMN -> mex = new SelectColumnMessage(input);
                         //TODO Mettere tutti i casi nella ricezione messaggi
                     }
                     //il comando viene eseguito

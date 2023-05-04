@@ -59,7 +59,7 @@ public class Player {
      * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
      * @return orderedTiles list of selected tiles in order.
      */
-    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) {
+    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws InputMismatchException{
         List<Tile> orderedTiles = new ArrayList<>();
         if (selected.size() > order.size()) {
             throw new InputMismatchException("The selected order is wrong, you have selected more tiles!");

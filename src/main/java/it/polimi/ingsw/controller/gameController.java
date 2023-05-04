@@ -10,17 +10,20 @@ import it.polimi.ingsw.network.messages.Action;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+/*
+game-controller e' una classe che ha due macro funzionalita'
+la prima permette al server controller di creare dei nuovi orderbook e di aggiungerli alla lista di quelli non ancora usati
+la seconda permette ai game in corso di richiedere e ottenere le informazioni che necessitano in quel momento
+ */
 public class gameController {
-    public static List<orderBook> pendingOrders = new ArrayList<>();
-    //mettiamo delle hash map per tutti i giocatori e tutti i game attualmente in svolgimento, in modo da ricercare
-    // piu velocemente queste informazioni quando il game-controller deve capire per conto di chi sta effettuando le modifiche
-    //la chiave dei player è il nick, quella dei game è l'id e ogni volta che un giocatore entra/ esce o si comincia/finisce una
-    //partita allora si va a modificare la hashmap
+    /*
+    le hash map conservano: tutti i game iniziati, i giocatori connessi abbiamo poi due liste
+    una per le partite non iniziate(lobby) e una per gli orderbook, ossia i comandi inviati da input non ancora
+    usati dal game
+     */
     public static Map<String, Player> allPlayers = new HashMap<>();
     public static Map<Integer, Game> allGames = new HashMap<>();
-
-    //tutte le lobby
+    public static List<orderBook> pendingOrders = new ArrayList<>();
     public static List<Lobby> allLobbies=new ArrayList<>();
 
     /*
@@ -29,7 +32,6 @@ public class gameController {
      */
 
     //RIROTNA IL NUMERO DI COLONNA RICHIESTO NELLA PARTITA
-    //TODO FAR SI CHE QUESTI METODDI INVIINO UN MESSAGGIO DI ERRORE AL CLIENT SE RICEVONO DEI DATI PER ESEMPIO TILES NON SCEGLIBILI
     public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;
         order = findTheRequest(player,gameId,Action.PICKTILES);
@@ -85,7 +87,7 @@ public class gameController {
      */
 
 
-    public void pickTiles(String player, Action action, List<Position> pos, int id_game,int num_mess) throws NotAvaibleTilesException {
+    public void pickTiles(String player, Action action, List<Position> pos, int id_game,int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(id_game);
         orderBook pending = new orderBook(g,p,action,num_mess);
@@ -109,7 +111,7 @@ public class gameController {
     }
 
 
-    //permette di uscire da una partita a patto che non sia cominciata
+    /*permette di uscire da una partita a patto che non sia cominciata
     public void leaveLobby(String player, int gameId) throws GameStartedException {
         Game g = allGames.get(gameId);
         Player p = allPlayers.get(player);
@@ -120,6 +122,8 @@ public class gameController {
             throw new GameStartedException("The game is started you can't leave now!");
         }
     }
+
+     */
 
 
 

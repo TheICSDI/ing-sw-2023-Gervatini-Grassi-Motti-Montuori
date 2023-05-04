@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.InvalidColumnException;
+import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.exceptions.NotAvaibleTilesException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
@@ -11,11 +13,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class serverController {
    public gameController controller = new gameController();
    GeneralMessage message;
-
+   ExecutorService executorsService = Executors.newFixedThreadPool(10);
 
    //getMessage inizializza il game controller in base all'azione richiesta dal client
    //TODO DA COMPLETARE
@@ -24,7 +28,7 @@ public class serverController {
       int id = message.getMessage_id();
       String player = message.getUsername();
       Action action = message.getAction();
-      int game_id = message.getGameId();
+      int gameId = message.getGameId();
       switch(message.getAction()/*getClass().getSimpleName()??*/){
          case CREATELOBBY -> {
             //Crea una nuova lobby che ha come creatore chi invia il messaggio
@@ -65,16 +69,10 @@ public class serverController {
                         Game g = new Game(l.Players, controller);
                         gameController.allGames.put(g.id,g);
                         gameController.allLobbies.remove(l);
-                        executorService.submit(()->{
-                           try {
-                              g.startGame();
-                           } catch (InvalidColumnException | InvalidPositionException e) {
-                              throw new RuntimeException(e);
-                           }
-                        });
-                        return new ReplyMessage("Game started").toString();
+                        executorsService.submit(g::startGame);//riga suggerita dal IDE prima era scritta diversa va provata
+                        return new StartGameReplyMessage("Game started").toString();
                      }else{
-                        return new DefaultErrorMessage("Not enought players").toString();
+                        return new DefaultErrorMessage("Not enough players").toString();//Probabile da rivedere(saranno tipo Reply)
                      }
                   }
                }
@@ -85,39 +83,30 @@ public class serverController {
          case PICKTILES-> {
             List<Position> pos;
             pos = ((PickTilesMessage) message).getPos();
-            try {
-               controller.pickTiles(player, action, pos, game_id, id);
-               //manda un messaggio di esito positivo con dentro
-               return new OkReplyMessage("Ok").toString();
-            } catch (NotAvaibleTilesException e) {
-               return new ReplyMessage("Tiles not available").toString();
-            }
+            controller.pickTiles(player, action, pos, gameId, id);
+            //manda un messaggio di esito positivo con dentro
+            return new OkReplyMessage("Ok").toString();
+
          }
          case SELECTORDER -> {
-            /*
-
-             */
+            List<Integer> order = ((SelectOrderMessage)message).getOrder();
+            controller.selectOrder(player, action, order, gameId, id);
          }
-         case
+         case SELECTCOLUMN -> {
+            int numCol = ((SelectColumnMessage) message).getCol();
+            controller.selectColumn(player, action, numCol, gameId, id);
+
+         }
          default -> {
-            return "";
-            //default :{            break;
+
          }
       }
       return "";
    }
     //todo CONTROLLO CONDIZIONI MESSAGGI
-   private void sendOk(GeneralMessage message) {
-   }
-
-   private void sendKo(GeneralMessage message) {
-
-   }
 
    private boolean isInALobby(Player p){
-
-         for (Lobby l:
-                 gameController.allLobbies) {
+         for (Lobby l: gameController.allLobbies) {
             if(l.isPlayerInLobby(gameController.allPlayers.get(p.getNickname()))){
                return true;
             }

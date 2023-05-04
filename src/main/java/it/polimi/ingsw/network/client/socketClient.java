@@ -58,7 +58,6 @@ public class socketClient {
             }
 
         }
-        return null;
     }
 
     public void endConnection() throws IOException {

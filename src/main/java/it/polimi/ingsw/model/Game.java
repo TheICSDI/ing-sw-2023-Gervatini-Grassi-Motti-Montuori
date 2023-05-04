@@ -12,10 +12,7 @@ import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Game {
     private static int count = 0;
@@ -35,7 +32,7 @@ public class Game {
      * It randomically choose two common goal cards.
      */
     public Game(List<Player> players,gameController controller){
-        this.controller=controller;
+        this.controller = controller;
         //Each game is represented by a unique id that can't be changed
         count++;
         this.id = count;
@@ -74,7 +71,7 @@ public class Game {
      *
      * @see Player,Board,CommonCard,PersonalCard
      */
-    public void startGame() throws InvalidColumnException, InvalidPositionException {
+    public void startGame(){
         //At the starting point no player has the endgame token
         boolean endGame = false;
         boolean check = false;
@@ -83,14 +80,38 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 //The player can pick some tiles from the board and insert it inside its shelf
-                Set<Position> chosen = controller.chooseTiles(p.getNickname(),id);
-                List<Tile> toInsert = p.pickTiles(chosen, board);
-                List<Integer> order;
-                order = controller.chooseOrder(p.getNickname(), id);
-                toInsert = p.orderTiles(toInsert,order);
-                int col = controller.chooseColumn(p.getNickname(),id);
-                p.insertInShelf(toInsert, col);
 
+                List<Tile>  toInsert = new ArrayList<>();
+                while(toInsert.isEmpty()) {
+                    Set<Position> chosen = controller.chooseTiles(p.getNickname(),id);
+                    try{
+                        toInsert = p.pickTiles(chosen, board);
+                    } catch (InvalidPositionException e) {
+                        //bisogna attivare un thread per comunicare che non ce la tiles
+                    }
+                }
+                List<Integer> order = new ArrayList<>();
+                while(order.isEmpty()){
+                    order = controller.chooseOrder(p.getNickname(), id);
+                    try{
+                        toInsert = p.orderTiles(toInsert, order);
+                    }
+                    catch (InputMismatchException e){
+                        order.clear();//serve per la condizione del while
+                        //bisogna inviare un messaggio al client
+                    }
+
+                }
+                int col = -1;
+                while(col == -1) {
+                    col= controller.chooseColumn(p.getNickname(),id);
+                    try {
+                        p.insertInShelf(toInsert, col);
+                    } catch (InvalidColumnException e) {
+                        col = -1;//serve per il while
+                        //bisogna attivare un thread per comunicare che non ce spazio
+                    }
+                }
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
