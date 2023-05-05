@@ -52,6 +52,7 @@ public class SetNameMessage extends GeneralMessage{
     {
         return new Gson().toJson(this);
     }
+
     public static SetNameMessage decrypt(String json){
         return new Gson().fromJson(json,SetNameMessage.class);
     }
