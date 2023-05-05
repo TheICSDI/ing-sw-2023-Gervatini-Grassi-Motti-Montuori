@@ -32,14 +32,13 @@ public class Client2 {
         Scanner input = new Scanner(System.in);
         SetNameMessage nick;
         System.out.println(in.readLine());
-        System.out.print(in.readLine());
         //Controllo unicità nome
         do {
-            out.println(new SetNameMessage("Gynephobia",false));
+            out.println(new SetNameMessage("Gynephobia",true));
             //out.println(new SetNameMessage(input.nextLine(),false));
             nick = SetNameMessage.decrypt(in.readLine());
             nick.print();
-        } while (nick.isNotAvailable());
+        } while (!nick.isAvailable());
         //Ogni player ha il suo clientController
         controller = new clientController(nick.getUsername());
         //inizio connessione

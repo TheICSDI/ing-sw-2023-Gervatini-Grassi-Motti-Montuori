@@ -90,11 +90,11 @@ public class serverController {
                      Game g = new Game(l.Players, controller);
                      gameController.allGames.put(g.id,g);
                      gameController.allLobbies.remove(l);
-                     executorsService.submit(g::startGame);
                      for (Player p:
-                          l.Players) {
+                             l.Players) {
                         p.getOut().println(new StartGameReplyMessage(message.getUsername() + " started the game!"));
                      }
+                     executorsService.submit(g::startGame);
                      gameStarted=true;
                      break; // se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce un foreach su una lista che viene modificata
                   }else{

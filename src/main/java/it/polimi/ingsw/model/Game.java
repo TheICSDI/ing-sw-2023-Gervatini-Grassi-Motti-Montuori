@@ -4,12 +4,17 @@
  */
 package it.polimi.ingsw.model;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.exceptions.CannotAddPlayerException;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.network.messages.ReplyMessage;
+import it.polimi.ingsw.network.messages.UpdateBoardMessage;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -76,11 +81,12 @@ public class Game {
         boolean endGame = false;
         boolean check = false;
         started = true;
-
         while(!endGame){
             for (Player p: players) {
-                //The player can pick some tiles from the board and insert it inside its shelf
-
+                sendElement(board.board, players,Action.UPDATEBOARD);
+                sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
+                p.getOut().println(new ReplyMessage("It's your turn!",Action.ERROR));//provvisoria
+                //The player can pick some tiles from the board and insert it inside its shel//
                 List<Tile>  toInsert = new ArrayList<>();
                 while(toInsert.isEmpty()) {
                     Set<Position> chosen = controller.chooseTiles(p.getNickname(),id);
@@ -255,6 +261,18 @@ public class Game {
             } else if (order.size() > 1 && !order.contains(2)) {
                 return false;
             } else return order.contains(3);
+        }
+    }
+
+    public void sendElement(Tile[][] element, List<Player> playersToSendTo, Action action){
+        type[][] information = new type[element.length][element[0].length];
+        for(int i = 0; i< element.length;i++ ){
+            for(int j = 0; j<element[0].length;j++){
+                information[i][j] = element[i][j].getCategory();
+            }
+        }
+        for (Player p: playersToSendTo) {
+            p.getOut().println(new UpdateBoardMessage(action, information));
         }
     }
 }

@@ -1,12 +1,15 @@
 package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.model.Tile.type;
+
 import java.io.Serializable;
 //Stampino di risposta del server, dato che spesso una stringa non basta
 public class ReplyMessage extends GeneralMessage implements Serializable {
     private final String message;
     protected int idLobby;
     protected boolean gameStart=false;
+    type[][] simpleBoard;
 
     public String getMessage() {
         return message;
@@ -44,4 +47,7 @@ public class ReplyMessage extends GeneralMessage implements Serializable {
     public boolean getGameStart(){return gameStart;}
     public int getIdLobby(){return idLobby;}
 
+    public type[][] getSimpleBoard() {
+        return simpleBoard;
+    }
 }

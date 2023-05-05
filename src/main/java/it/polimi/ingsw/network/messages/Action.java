@@ -11,6 +11,7 @@ public enum Action {
     SELECTORDER,
     SELECTCOLUMN,
     UPDATEBOARD,
+    UPDATESHELF,
     UPDATELOBBY,
     SETNAME,
 

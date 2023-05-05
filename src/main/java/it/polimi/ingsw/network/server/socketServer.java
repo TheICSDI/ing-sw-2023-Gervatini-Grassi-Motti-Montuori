@@ -49,16 +49,15 @@ public class socketServer {
                 String input;
                 //Prima cosa dopo la connessione chiede un nickname finchè non ne riceve uno unico
                 out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
-                out.println("Set your nickname: ");
                 SetNameMessage nickname;
                 nickname=SetNameMessage.decrypt(in.readLine());
                 while(gameController.allPlayers.containsKey(nickname.getUsername())){
-                    out.println(new SetNameMessage("",true ));
+                    out.println(new SetNameMessage("",false ));
                     nickname=SetNameMessage.decrypt(in.readLine());
                 }
                 //che poi viene aggiungo alla hashmap statica allPlayers e crea l'oggetto player associato
                 gameController.allPlayers.put(nickname.getUsername(),new Player(nickname.getUsername(),out));
-                out.println(new SetNameMessage(nickname.getUsername(),false ));
+                out.println(new SetNameMessage(nickname.getUsername(),true ));
 
                 GeneralMessage mex = null;
                 //loop infinito che riceve i messaggi

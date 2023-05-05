@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.view.CLI;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -70,27 +71,37 @@ public class socketClient {
      */
     public void listenMessages(clientController controller, BufferedReader In) throws IOException, ParseException, InvalidKeyException {
         ReplyMessage reply;
+        boolean isLobby;
+        CLI CLI = new CLI();
         while(true) {
+            isLobby=false;
             String message = In.readLine();
             Action replyAction = ReplyMessage.identify(message);
             switch (replyAction) {
                 case CREATELOBBY -> {
                     reply = CreateLobbyReplyMessage.decrypt(message);
                     controller.setIdLobby(reply.getIdLobby());
+                    isLobby=true;
                 }
                 //Semplicemente una stringa di successo/errore
                 case JOINLOBBY -> {
                     reply = JoinLobbyReplyMessage.decrypt(message);
                     controller.setIdLobby(reply.getIdLobby());
+                    isLobby=true;
                 }
                 //Lista di tutte le lobby disponibili
                 case SHOWLOBBY -> {
                     reply = ShowLobbyReplyMessage.decrypt(message);
+                    isLobby=true;
                 }
                 //Conferma che il game può iniziare
                 case STARTGAME -> {
                     controller.setIdLobby(0);
                     reply = StartGameReplyMessage.decrypt(message);
+                    isLobby=true;
+                }
+                case UPDATEBOARD,UPDATESHELF -> {
+                    reply = UpdateBoardMessage.decrypt(message);
                 }
                 //TODO Entrano in game ora dobbiamo fare il gioco(Il gioco inizia ora)
                 //TODO AGGIUNGERE IN GAME LE RICHIESTE PER IL CLIENT DI INVIARE I COMANDI
@@ -101,13 +112,33 @@ public class socketClient {
                 //altrimenti non è questa sezione che li controlla(e invece ha senso):D
                 default -> {
                     reply = ReplyMessage.decrypt(message);
+                    isLobby=true;
                 }
             }
-            reply.print();
+            //distinzione cli gui
+            if(true/*isCLI*/){
+                if(isLobby){
+                    reply.print();
+                }else{
+                    switch (replyAction){
+                        case UPDATEBOARD -> {
+                            CLI.showBoard(reply.getSimpleBoard());
+                        }
+                        case UPDATESHELF -> {
+                            CLI.showBoard(reply.getSimpleBoard());
+                        }
+                    }
+                }
+            }else{
+                /*
+
+                 */
+            }
+
         }
     }
 
-    public static void main(String[] args) throws IOException, InvalidActionException, ParseException, InvalidKeyException {
+    public static void main(String[] args) throws IOException {
         socketClient Client = new socketClient();
         //Client.connection("192.168.1.234", 2345);
         Client.connection("127.0.0.1", 2345);
@@ -116,7 +147,6 @@ public class socketClient {
 
         //Richiesta nickname unico
         System.out.println(in.readLine());
-        System.out.print(in.readLine());
         //Controllo unicità nome
         do {
             out.println(new SetNameMessage("Mayhem",false));//Linea temporanea, quella sotto è quella effettiva

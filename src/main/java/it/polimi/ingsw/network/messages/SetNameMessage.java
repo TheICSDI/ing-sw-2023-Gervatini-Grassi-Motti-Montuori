@@ -12,21 +12,21 @@ import org.json.simple.parser.ParseException;
  * It extends the GeneralMessage class to include specific behavior for setting a username for the game.
  */
 public class SetNameMessage extends GeneralMessage{
-    private boolean notAvailable;
+    private boolean Available;
 
-    public boolean isNotAvailable() {
-        return notAvailable;
+    public boolean isAvailable() {
+        return Available;
     }
 
     /**
      * Constructor that initializes a message with the provided parameters.
      *
      * @param user uid of the user
-     * @param notAvailable nickname already chosen
+     * @param Available nickname available
      */
-    public SetNameMessage(String user,boolean notAvailable){
+    public SetNameMessage(String user,boolean Available){
         super(-1,Action.SETNAME,-1,user);
-        this.notAvailable=notAvailable;
+        this.Available=Available;
     }
     /**
      * Constructor that parses a JSON-formatted string and initializes the message.
@@ -58,7 +58,7 @@ public class SetNameMessage extends GeneralMessage{
     }
 
     public void print(){
-        if(notAvailable){
+        if(!Available){
             System.out.print("Nickname not available, try again: ");
         }else{
             System.out.println("Nickname set: "+this.getUsername());
