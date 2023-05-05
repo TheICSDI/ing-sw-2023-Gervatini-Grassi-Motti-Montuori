@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
 public enum Action {
-    SETNAME,
     CREATELOBBY,
     SHOWLOBBY,
     JOINLOBBY,
@@ -13,6 +12,7 @@ public enum Action {
     SELECTCOLUMN,
     UPDATEBOARD,
     UPDATELOBBY,
+    SETNAME,
 
     ERROR//magari da rivedere, mi serve un figlio di general message in caso trovi errore per dirli cosa fare
 }

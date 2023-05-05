@@ -1,4 +1,4 @@
-package test;
+package test.Network;
 
 import it.polimi.ingsw.exceptions.InvalidCommandException;
 import it.polimi.ingsw.network.client.socketClient;

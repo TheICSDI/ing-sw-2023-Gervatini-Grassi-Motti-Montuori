@@ -17,10 +17,6 @@ public class SetNameMessage extends GeneralMessage{
      * @param message_id uid of the message
      * @param nickname uid of the user
      */
-    public SetNameMessage(int message_id, String nickname) {
-        super(message_id, Action.SETNAME, -1, nickname);
-        //lobby_id == -1 when the player isn't in any lobby
-    }
 
     /**
      * Constructor that parses a JSON-formatted string and initializes the message.

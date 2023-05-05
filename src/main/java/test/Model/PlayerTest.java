@@ -1,7 +1,7 @@
 /** Tests for class Player.java.
  * @author Caterina Motti.
  */
-package test;
+package test.Model;
 
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;

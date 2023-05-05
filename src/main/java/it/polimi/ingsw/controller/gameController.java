@@ -29,7 +29,7 @@ public class gameController {
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER
 
      */
-    //RIROTNA IL NUMERO DI COLONNA RICHIESTO NELLA PARTITA
+    //Ritorna il numero di colonna richiesto dalla partita
     public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;
         order = findTheRequest(player,gameId,Action.PICKTILES);
@@ -110,6 +110,7 @@ public class gameController {
 
 
     /*permette di uscire da una partita a patto che non sia cominciata
+
     public void leaveLobby(String player, int gameId) throws GameStartedException {
         Game g = allGames.get(gameId);
         Player p = allPlayers.get(player);

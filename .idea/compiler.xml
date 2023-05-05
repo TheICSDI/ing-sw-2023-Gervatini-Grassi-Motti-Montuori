@@ -7,10 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="PSP35" />
+        <module name="ing-sw-2023-Gervatini-Grassi-Motti-Montuori" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ing-sw-2023-Gervatini-Grassi-Motti-Montuori" target="19" />
-    </bytecodeTargetLevel>
   </component>
 </project>

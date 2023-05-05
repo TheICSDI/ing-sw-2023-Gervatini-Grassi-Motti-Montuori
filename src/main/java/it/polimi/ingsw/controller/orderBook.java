@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.messages.Action;
 import java.util.List;
 //serve ad aggiungere comandi pendenti non ancora completamenti eseguiti.
 public class orderBook{
+    //se vediamo che risulta lento si puo anche fare storage solo del gameId e del Player nickname
     public Game g;
     public Player p;
     public Action a;

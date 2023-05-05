@@ -80,7 +80,7 @@ public class clientController{
                     }
                     return new PickTilesMessage(idMex, nickname, pos);
                 }
-                case SELECTORDER -> {//action, da 1 a 3 interi
+                case SELECTORDER -> {//action, da 1 a 3 interi es. selectorder 2 1 3
                     List<Integer> order =  new ArrayList<>();
                     if (words.length<=4 && words.length>=2) {
                         for (int i = 1; i < words.length; i++) {//riempie order
@@ -107,7 +107,8 @@ public class clientController{
         }
         catch(IllegalArgumentException e){
             System.out.println("Invalid command");
-            idMex--;
+            idMex--;//secondo me e' tagliabile tanto gli id vanno solo in ordine cresciente anche se ne perdiamo
+            // uno l'importante e' che non ce ne siano due guiali
             return new DefaultErrorMessage("Error");
         }
 
