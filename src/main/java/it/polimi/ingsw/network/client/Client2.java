@@ -13,12 +13,13 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Client2 {
     private static PrintWriter out;
     private static BufferedReader in;
     private static clientController controller;
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         socketClient Client = new socketClient();
         //Client.connection("192.168.1.234", 2345); //Forse dovrei censurarlo il mio ip tbh
@@ -34,7 +35,8 @@ public class Client2 {
         System.out.print(in.readLine());
         //Controllo unicità nome
         do {
-            out.println(new SetNameMessage(input.nextLine(),false));
+            out.println(new SetNameMessage("Gynephobia",false));
+            //out.println(new SetNameMessage(input.nextLine(),false));
             nick = SetNameMessage.decrypt(in.readLine());
             nick.print();
         } while (nick.isNotAvailable());
@@ -49,7 +51,9 @@ public class Client2 {
                 throw new RuntimeException(e);
             }
         });
-
+        Client.sendMessage("joinlobby 1",controller,in,out);//Codice temporaneo per velocizzare
+        TimeUnit.SECONDS.sleep(1);//toccava aspettare la risposta per farlo automatico
+        Client.sendMessage("startgame",controller,in,out);
         while (true) {//Condizione da rivedere
             Client.sendMessage(input.nextLine(),controller,in,out);
         }

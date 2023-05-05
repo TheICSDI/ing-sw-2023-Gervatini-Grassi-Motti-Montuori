@@ -119,7 +119,8 @@ public class socketClient {
         System.out.print(in.readLine());
         //Controllo unicità nome
         do {
-            out.println(new SetNameMessage(input.nextLine(),false));//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
+            out.println(new SetNameMessage("Mayhem",false));//Linea temporanea, quella sotto è quella effettiva
+            //out.println(new SetNameMessage(input.nextLine(),false));//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
             nick = SetNameMessage.decrypt(in.readLine());
             nick.print();
         } while (nick.isNotAvailable());
@@ -135,8 +136,10 @@ public class socketClient {
                 throw new RuntimeException(e);
             }
         });
+        Client.sendMessage("createlobby 2",controller,in,out);//per velocizzare, sarà da rimuovere
         //Ciclio per invio messaggi
         while (true) { //Condizione da rivedere
+
             Client.sendMessage(input.nextLine(),controller,in,out);
         }
         //executor.shutdownNow();//uccisione thread

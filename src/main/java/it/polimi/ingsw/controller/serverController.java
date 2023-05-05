@@ -39,9 +39,10 @@ public class serverController {
       switch(message.getAction()){
          case CREATELOBBY -> {
             //Player must not be already in game
-            if(isInGame(gameController.allPlayers.get(message.getUsername()))) out.println(new ReplyMessage("Already in game!",Action.ERROR).toString());
+            if (isInGame(gameController.allPlayers.get(message.getUsername()))){
+               out.println(new ReplyMessage("Already in game!", Action.ERROR).toString());
             //Create a new lobby whose first player is who have called the command
-            if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){//player cannot be in a lobby
+            }else if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){//player cannot be in a lobby
                Player pl = gameController.allPlayers.get(message.getUsername());
                int limit=message.getLimit();//lobby has a set amount of players needed to start
                Lobby NewLobby=new Lobby(pl,limit);
@@ -53,15 +54,20 @@ public class serverController {
 
          }
          case SHOWLOBBY -> {
-            if(isInGame(gameController.allPlayers.get(message.getUsername()))) out.println(new ReplyMessage("Invalid command",Action.ERROR).toString());
-            out.println(new ShowLobbyReplyMessage("show",gameController.allLobbies));
+            if(isInGame(gameController.allPlayers.get(message.getUsername()))) {
+               out.println(new ReplyMessage("Invalid command",Action.ERROR));
+            }else{
+               out.println(new ShowLobbyReplyMessage("show",gameController.allLobbies));
+            }
+
 
          }
          case JOINLOBBY -> {
             boolean found=false;
             //Player must not be already in game
-            if(isInGame(gameController.allPlayers.get(message.getUsername()))) out.println(new ReplyMessage("Already in game!",Action.ERROR).toString());
-            if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){//verifica che il player non
+            if(isInGame(gameController.allPlayers.get(message.getUsername()))) {
+               out.println(new ReplyMessage("Already in game!",Action.ERROR));
+            }else if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){//verifica che il player non
                // sia in nessuna lobby
                for (Lobby l: gameController.allLobbies) {
                   if(l.lobbyId==message.getLobby_id()){//trova la lobby scelta
@@ -76,7 +82,7 @@ public class serverController {
             }
          }
          case STARTGAME -> {
-            boolean notInLobby=true;
+            boolean notInLobby=true, gameStarted=false;
             for (Lobby l:  gameController.allLobbies) {
                if(idLobby==l.lobbyId){
                   notInLobby=false;
@@ -89,16 +95,18 @@ public class serverController {
                           l.Players) {
                         p.getOut().println(new StartGameReplyMessage(message.getUsername() + " started the game!"));
                      }
+                     gameStarted=true;
+                     break; // se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce un foreach su una lista che viene modificata
                   }else{
                      out.println(new ReplyMessage("Not enough ot too many players",Action.ERROR));
                   }
                }
             }
-            if(isInGame(gameController.allPlayers.get(message.getUsername()))) {
-               notInLobby=false;
-               out.println(new ReplyMessage("Already in game!",Action.ERROR));
+            if(!gameStarted) {
+               if (isInGame(gameController.allPlayers.get(message.getUsername()))) {
+                  out.println(new ReplyMessage("Already in game!", Action.ERROR));
+               }else if (notInLobby) out.println(new ReplyMessage("Not in a Lobby", Action.ERROR));
             }
-            if(notInLobby) out.println(new ReplyMessage("Not in a Lobby",Action.ERROR));
          }
          case PICKTILES-> {
             List<Position> pos;
@@ -143,9 +151,10 @@ public class serverController {
     * @return true if found
     */
    public boolean isInGame(Player p){
-      for (int i = 0; i < gameController.allGames.size(); i++) {
+      for (Integer key:
+           gameController.allGames.keySet()) {
          for (Player pl:
-              gameController.allGames.get(i).getPlayers()) {
+                 gameController.allGames.get(key).getPlayers()) {
             if(pl.getNickname().equals(p.getNickname())){
                return true;
             }
