@@ -20,14 +20,16 @@ public class UpdateBoardMessage extends ReplyMessage {
      * Constructor that initializes a message with the provided parameters.
      *
      */
-    public UpdateBoardMessage(int message_id, int lobby_id, String username) {
-        super(message_id, Action.UPDATEBOARD, lobby_id, username);
+    public UpdateBoardMessage(Action action, type[][] simpleShelf) {
+        super("", action);
+        this.simpleBoard = simpleShelf;
     }
 
     /**
      * Constructor that parses a JSON-formatted string and initializes the message.
      * @param msg a JSON-formatted string
      */
+    /*
     public UpdateBoardMessage(String msg) throws ParseException, InvalidActionException, InvalidKeyException {
         super(msg);
         JSONParser parser = new JSONParser();
@@ -38,7 +40,14 @@ public class UpdateBoardMessage extends ReplyMessage {
         {
             throw new InvalidActionException("Invalid UpdateBoardMessage encoding");
         }
+        if(!msg_obj.containsKey("simpleShelf"))
+        {
+            throw new InvalidKeyException("Missing key: simpleShelf");
+        }
+        //
     }
+
+     */
 
     /**
      * Overrides the toString method to provide a custom string representation.

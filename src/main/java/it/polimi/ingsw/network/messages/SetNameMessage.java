@@ -42,6 +42,10 @@ public class SetNameMessage extends GeneralMessage{
         {
             throw new InvalidActionException("Invalid SetNameMessage encoding");
         }
+        if(!msg_obj.containsKey("Available")) {
+            throw new InvalidKeyException("Missing key: Available");
+        }
+        this.Available = (boolean) msg_obj.get("Available");
     }
 
     /**

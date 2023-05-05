@@ -143,17 +143,26 @@ public class socketClient {
         //Client.connection("192.168.1.234", 2345);
         Client.connection("127.0.0.1", 2345);
         Scanner input = new Scanner(System.in);
+        CLI cli = new CLI();
+        String username;
         SetNameMessage nick;
 
         //Richiesta nickname unico
         System.out.println(in.readLine());
         //Controllo unicità nome
         do {
-            out.println(new SetNameMessage("Mayhem",false));//Linea temporanea, quella sotto è quella effettiva
-            //out.println(new SetNameMessage(input.nextLine(),false));//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
-            nick = SetNameMessage.decrypt(in.readLine());
-            nick.print();
-        } while (nick.isNotAvailable());
+
+            //username = cli.askUsername();
+            //nick = new SetNameMessage(username,true);
+            nick = new SetNameMessage("Mayhem",true);
+            out.println(nick);//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
+            try{
+                //nick = new SetNameMessage(in.readLine());
+                nick = SetNameMessage.decrypt(in.readLine());
+            }catch(Exception ignored){}
+            //
+            cli.printUsername(nick.getUsername(), nick.isAvailable());
+        } while (!nick.isAvailable());
         //Ogni player ha il suo clientController
         controller = new clientController(nick.getUsername());
         //inizio connessione
