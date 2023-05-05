@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.network.messages.SetNameMessage;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -28,16 +29,17 @@ public class Client2 {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         Scanner input = new Scanner(System.in);
-        String nick;
+        SetNameMessage nick;
         System.out.println(in.readLine());
+        System.out.print(in.readLine());
+        //Controllo unicità nome
         do {
-            out.println(input.nextLine());
-            nick = in.readLine();
-        } while (nick.equals("NotValid"));
+            out.println(new SetNameMessage(input.nextLine(),false));
+            nick = SetNameMessage.decrypt(in.readLine());
+            nick.print();
+        } while (nick.isNotAvailable());
         //Ogni player ha il suo clientController
-        controller = new clientController(nick);
-        System.out.println("Nickname set: "+nick);
-
+        controller = new clientController(nick.getUsername());
         //inizio connessione
         ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.submit(()-> {
@@ -48,7 +50,7 @@ public class Client2 {
             }
         });
 
-        while (true) { //TODO (rivedere)probabilmente serve un thread che riceve un messaggio quando un altro giocatore della stessa lobby inizia il game
+        while (true) {//Condizione da rivedere
             Client.sendMessage(input.nextLine(),controller,in,out);
         }
     }

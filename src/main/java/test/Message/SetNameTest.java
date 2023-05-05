@@ -1,5 +1,7 @@
 package test.Message;
 
+import it.polimi.ingsw.exceptions.InvalidActionException;
+import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.messages.SetNameMessage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,12 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SetNameTest {
 
     @Test
-    void testString()
-    {
+    void testString() throws InvalidActionException, ParseException, InvalidKeyException {
         int test_id = 0;
         String test_usr = "test_username";
 
-        SetNameMessage test = new SetNameMessage(test_id, test_usr);
+        SetNameMessage test = new SetNameMessage(test_usr);
 
         JSONParser parser = new JSONParser();
         JSONObject file_obj = null, test_obj = null;

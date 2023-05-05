@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.exceptions.InvalidCommandException;
+import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.messages.*;
 import org.json.simple.parser.ParseException;
@@ -31,8 +31,15 @@ public class socketClient {
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
-    //sendMessage chiama un filtro applicato dal controller che gli blocca l'invio di messaggi formattati male oppure
-    //che non puo fare in quel momento//Ho aggiunto qualche parametro per renderla generale così possiamo fare più client
+
+    /**
+     * Function that checks if the message has the right format and sends them to server
+     * @param message Command to send
+     * @param control Sender client's controller
+     * @param In Input stream
+     * @param Out Output stream
+     * @throws IOException
+     */
     public void sendMessage(String message,clientController control,BufferedReader In,PrintWriter Out) throws IOException {
         GeneralMessage clientMessage;
         //Controlla che il formato del comando sia giusto
@@ -47,67 +54,20 @@ public class socketClient {
         }
     }
 
-    public void inGameSend(PrintWriter out,socketClient Client) throws IOException,InvalidCommandException{
-        Scanner input = new Scanner(System.in);
-        //Invio messaggi al server durante il game, funzione simile alla precedente ma qua non aspetto una risposta
-        //se mando un comando da lobby riceve errore e non invia
-        while(true){
-            GeneralMessage clientMessage;
-            clientMessage = controller.checkMessageShape(input.nextLine(),controller);
-            Action curr_action=clientMessage.getAction();
-            String toSend = clientMessage.toString();
-            if(toSend.equals("Error") ) System.out.println("Errore");
-            if(curr_action.equals(Action.CREATELOBBY)||
-                    curr_action.equals(Action.SHOWLOBBY) ||
-                    curr_action.equals(Action.JOINLOBBY)){
-                System.out.println("Already in a game");
-            }else {
-                out.println(toSend);
-            }
-        }
-    }
     public void endConnection() throws IOException {
         in.close();
         out.close();
         clientSocket.close();
     }
 
-    public static void main(String[] args) throws IOException {
-        socketClient Client = new socketClient();
-        //Client.connection("192.168.1.234", 2345);
-        Client.connection("127.0.0.1", 2345);
-        Scanner input = new Scanner(System.in);
-        String nick;
-
-        //Richiesta nickname unico
-        System.out.println(in.readLine());
-        do {
-            out.println(input.nextLine());
-            nick = in.readLine();
-        } while (nick.equals("NotValid"));
-        //Ogni player ha il suo clientController
-        controller = new clientController(nick);
-        System.out.println("Nickname set: "+nick);
-
-        //inizio connessione
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        executor.submit(()-> {
-            try {
-                Client.listenMessages(controller,in);
-            } catch (IOException | ParseException | InvalidKeyException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        while (true) { //TODO (rivedere)probabilmente serve un thread che riceve un messaggio quando un altro giocatore della stessa lobby inizia il game
-            Client.sendMessage(input.nextLine(),controller,in,out);
-        }
-
-        //A regola esce dal ciclo dopo STARTGAME
-        //creazione thread che sta in ascolto dal server
-        //executor.shutdownNow();//uccisione thread
-        //implementare ciclo per tornare a lobby ecc
-    }
+    /**
+     * Function that receives json messages ,identifies them and acts differently upon the action they have
+     * @param controller receiver client's controller
+     * @param In input stream(server)
+     * @throws IOException ??
+     * @throws ParseException ??
+     * @throws InvalidKeyException ??
+     */
     public void listenMessages(clientController controller, BufferedReader In) throws IOException, ParseException, InvalidKeyException {
         ReplyMessage reply;
         while(true) {
@@ -145,6 +105,41 @@ public class socketClient {
             }
             reply.print();
         }
+    }
+
+    public static void main(String[] args) throws IOException, InvalidActionException, ParseException, InvalidKeyException {
+        socketClient Client = new socketClient();
+        //Client.connection("192.168.1.234", 2345);
+        Client.connection("127.0.0.1", 2345);
+        Scanner input = new Scanner(System.in);
+        SetNameMessage nick;
+
+        //Richiesta nickname unico
+        System.out.println(in.readLine());
+        System.out.print(in.readLine());
+        //Controllo unicità nome
+        do {
+            out.println(new SetNameMessage(input.nextLine(),false));//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
+            nick = SetNameMessage.decrypt(in.readLine());
+            nick.print();
+        } while (nick.isNotAvailable());
+        //Ogni player ha il suo clientController
+        controller = new clientController(nick.getUsername());
+        //inizio connessione
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        //thread che rimane in ascolto di messaggi
+        executor.submit(()-> {
+            try {
+                Client.listenMessages(controller,in);
+            } catch (IOException | ParseException | InvalidKeyException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        //Ciclio per invio messaggi
+        while (true) { //Condizione da rivedere
+            Client.sendMessage(input.nextLine(),controller,in,out);
+        }
+        //executor.shutdownNow();//uccisione thread
     }
 
 }

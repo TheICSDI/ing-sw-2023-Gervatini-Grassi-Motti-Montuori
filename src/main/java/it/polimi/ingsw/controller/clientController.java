@@ -29,6 +29,13 @@ public class clientController{
     e restituisce al client un message del tipo giusto per l'azione che verra' poi messo in json format e inviato al server
     */
 
+    /**
+     * Checks if the command called by the client is accepted by the server, with the right number of parameters and formats
+     * the message to be ready to send
+     * @param m message to check
+     * @param controller sender client's controller
+     * @return subclass of general message based on the action type
+     */
     public GeneralMessage checkMessageShape(String m,clientController controller){
         Action curr_action;
         List<String> curr_params;
@@ -44,11 +51,10 @@ public class clientController{
             idMex++;//indice del messaggio, ogni player ha il suo perchè vengono contati da lato client
             switch (curr_action){
                 case CREATELOBBY -> {//words deve contenere action, numero di giocatori partita
-                    if(words.length==2){
-                        int x=Integer.parseInt(words[1]);
+                    if(words.length==2 && Integer.parseInt(words[1])>=2 && Integer.parseInt(words[1])<=4){ //un parametro int compreso tra 2 e 4 (limite giocatori)
                         return new CreateLobbyMessage(idMex,nickname,Integer.parseInt(words[1]));
                     }else{
-                        return new DefaultErrorMessage("Insert number of players in this lobby");
+                        return new DefaultErrorMessage("Insert number of players for this lobby between 2 and 4");
                     }
                 }
                 case SHOWLOBBY -> {
@@ -61,7 +67,7 @@ public class clientController{
                         return new JoinLobbyMessage(idMex, Integer.parseInt(words[1]), nickname);
                     }
                     else{
-                        return new DefaultErrorMessage("Insert a valid lobby number please");
+                        return new DefaultErrorMessage("Insert a valid lobby number");
                     }
                 }
                 case STARTGAME -> {//words deve contenere action
@@ -106,10 +112,9 @@ public class clientController{
 
         }
         catch(IllegalArgumentException e){
-            System.out.println("Invalid command");
-            idMex--;//secondo me e' tagliabile tanto gli id vanno solo in ordine cresciente anche se ne perdiamo
-            // uno l'importante e' che non ce ne siano due guiali
-            return new DefaultErrorMessage("Error");
+            idMex--;//M:secondo me e' tagliabile tanto gli id vanno solo in ordine cresciente anche se ne perdiamo
+            // uno l'importante e' che non ce ne siano due ugali// A:boh mi sembra scema come cosa avere i messaggi con id: 1,2,7 perchè il giocatore non sa scrivere
+            return new DefaultErrorMessage("Invalid command");
         }
 
         return null;

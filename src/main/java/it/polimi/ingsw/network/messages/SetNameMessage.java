@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import org.json.simple.JSONObject;
@@ -11,13 +12,22 @@ import org.json.simple.parser.ParseException;
  * It extends the GeneralMessage class to include specific behavior for setting a username for the game.
  */
 public class SetNameMessage extends GeneralMessage{
+    private boolean notAvailable;
+
+    public boolean isNotAvailable() {
+        return notAvailable;
+    }
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param message_id uid of the message
-     * @param nickname uid of the user
+     *
+     * @param user uid of the user
+     * @param notAvailable nickname already chosen
      */
-
+    public SetNameMessage(String user,boolean notAvailable){
+        super(-1,Action.SETNAME,-1,user);
+        this.notAvailable=notAvailable;
+    }
     /**
      * Constructor that parses a JSON-formatted string and initializes the message.
      * @param msg a JSON-formatted string
@@ -40,7 +50,17 @@ public class SetNameMessage extends GeneralMessage{
     @Override
     public String toString()
     {
-        return startMessage() +
-                "}";
+        return new Gson().toJson(this);
+    }
+    public static SetNameMessage decrypt(String json){
+        return new Gson().fromJson(json,SetNameMessage.class);
+    }
+
+    public void print(){
+        if(notAvailable){
+            System.out.print("Nickname not available, try again: ");
+        }else{
+            System.out.println("Nickname set: "+this.getUsername());
+        }
     }
 }
