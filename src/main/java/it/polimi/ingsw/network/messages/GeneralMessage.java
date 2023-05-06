@@ -16,6 +16,7 @@ public abstract class GeneralMessage implements Serializable {
     private final int message_id;
     private final Action action;
     private final int lobby_id;
+    protected int idGame;
     private final String username;
     protected int limit;
 
@@ -93,8 +94,8 @@ public abstract class GeneralMessage implements Serializable {
         return username;
     }
 
-    public int getGameId() {
-        return 0;//Da sistemare
+    public int getIdGame() {
+        return idGame;//Da sistemare
     }
     /**
      * Reads only the action of the message

@@ -1,10 +1,9 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
-import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.network.messages.Action;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public interface View {
     void printUsername(String username, boolean isAvailable);
     void createLobby(String lobbyName, int maxPlayers);
     void showLobby(List<String> usrs, int num_usrs);
-    void showBoard(type[][] simpleBoard);
+    void showBoard(type[][] simpleBoard,Action action);
     void showShelf(type[][] simpleBoard);
     void joinLobby(int lobby_id);
     void exitLobby(int lobby_id);

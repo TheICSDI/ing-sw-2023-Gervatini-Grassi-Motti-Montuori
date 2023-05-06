@@ -15,5 +15,9 @@ public enum Action {
     UPDATELOBBY,
     SETNAME,
 
-    ERROR//magari da rivedere, mi serve un figlio di general message in caso trovi errore per dirli cosa fare
+    INGAMEEVENT, //AZIONE PER INVIARE MESSAGGI DURANTE IL GAME
+
+    CHOSENTILES,
+
+    ERROR
 }

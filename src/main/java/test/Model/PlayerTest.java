@@ -155,11 +155,12 @@ class PlayerTest {
         Position pos2 = new Position(0, 5);
         chosen.add(pos1);
         chosen.add(pos2);
+        Player p=new Player("Mario",null);
 
         List<Tile> expectedTiles = new ArrayList<>();
         expectedTiles.add(b.getTile(pos1));
         expectedTiles.add(b.getTile(pos2));
-        List<Tile> chosenTiles = p1.pickTiles(chosen, b);
+        List<Tile> chosenTiles = p1.pickTiles(chosen, b,p);
         assertEquals(type.EMPTY, b.getTile(pos1).getCategory());
         assertEquals(type.EMPTY, b.getTile(pos2).getCategory());
         assertEquals(expectedTiles, chosenTiles);
@@ -169,7 +170,7 @@ class PlayerTest {
         Position pos3 = new Position(0,0);
         chosen.add(pos3);
         Throwable ex = assertThrows(InputMismatchException.class, () ->
-                p1.pickTiles(chosen, b));
+                p1.pickTiles(chosen, b,p));
         assertEquals("The chosen tiles are not available to be taken!", ex.getMessage());
     }
 

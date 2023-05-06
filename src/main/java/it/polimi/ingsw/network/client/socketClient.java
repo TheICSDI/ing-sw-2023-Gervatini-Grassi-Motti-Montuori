@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.CLI;
 import org.json.simple.parser.ParseException;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -98,10 +99,17 @@ public class socketClient {
                 case STARTGAME -> {
                     controller.setIdLobby(0);
                     reply = StartGameReplyMessage.decrypt(message);
+                    controller.setIdGame(reply.getIdGame());
                     isLobby=true;
                 }
                 case UPDATEBOARD,UPDATESHELF -> {
                     reply = UpdateBoardMessage.decrypt(message);
+                }
+                case INGAMEEVENT -> {
+                    reply = ReplyMessage.decrypt(message);
+                }
+                case CHOSENTILES -> {
+                    reply = PickedTilesMessage.decrypt(message);
                 }
                 //TODO Entrano in game ora dobbiamo fare il gioco(Il gioco inizia ora)
                 //TODO AGGIUNGERE IN GAME LE RICHIESTE PER IL CLIENT DI INVIARE I COMANDI
@@ -121,11 +129,20 @@ public class socketClient {
                     reply.print();
                 }else{
                     switch (replyAction){
-                        case UPDATEBOARD -> {
-                            CLI.showBoard(reply.getSimpleBoard());
+                        case UPDATEBOARD, UPDATESHELF -> {
+                            CLI.showBoard(reply.getSimpleBoard(),replyAction);
                         }
-                        case UPDATESHELF -> {
-                            CLI.showBoard(reply.getSimpleBoard());
+                        case INGAMEEVENT -> {
+                            reply.print(); //da implementare in cli
+                        }
+                        case CHOSENTILES -> {
+                            List<Tile> tile=reply.getTiles();
+                            //temporaneo
+                            for (Tile t:
+                                    tile) {
+                                System.out.println(t.getCategory());
+                            }
+
                         }
                     }
                 }
@@ -143,10 +160,10 @@ public class socketClient {
         //Client.connection("192.168.1.234", 2345);
         Client.connection("127.0.0.1", 2345);
         Scanner input = new Scanner(System.in);
-        CLI cli = new CLI();
+
         String username;
         SetNameMessage nick;
-
+        CLI cli = new CLI();
         //Richiesta nickname unico
         System.out.println(in.readLine());
         //Controllo unicità nome

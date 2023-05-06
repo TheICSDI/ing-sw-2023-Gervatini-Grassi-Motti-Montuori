@@ -4,7 +4,6 @@
  */
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.exceptions.CannotAddPlayerException;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
@@ -13,10 +12,10 @@ import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.network.messages.PickedTilesMessage;
 import it.polimi.ingsw.network.messages.ReplyMessage;
 import it.polimi.ingsw.network.messages.UpdateBoardMessage;
 
-import java.io.PrintWriter;
 import java.util.*;
 
 public class Game {
@@ -84,18 +83,21 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 sendElement(board.board, players,Action.UPDATEBOARD);
+                p.getOut().println(new ReplyMessage(p.getNickname()+ "'s shelf",Action.INGAMEEVENT));
                 sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
-                p.getOut().println(new ReplyMessage("It's your turn!",Action.ERROR));//provvisoria
+                p.getOut().println(new ReplyMessage("It's your turn!",Action.INGAMEEVENT));
                 //The player can pick some tiles from the board and insert it inside its shel//
                 List<Tile>  toInsert = new ArrayList<>();
                 while(toInsert.isEmpty()) {
-                    Set<Position> chosen = controller.chooseTiles(p.getNickname(),id);
+                    Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
                     try{
-                        toInsert = p.pickTiles(chosen, board);
+                        toInsert = p.pickTiles(chosen, board,p);
                     } catch (InvalidPositionException e) {
                         //bisogna attivare un thread per comunicare che non ce la tiles
                     }
                 }
+                p.getOut().println(new ReplyMessage("Tiles chosen: "+toInsert.get(0).getCategory(),Action.INGAMEEVENT)); //provvisorio, manda solo la prima e funziona
+                p.getOut().println(new PickedTilesMessage(toInsert));//da rivedere il messaggio
                 List<Integer> order = new ArrayList<>();
                 while(order.isEmpty()){
                     order = controller.chooseOrder(p.getNickname(), id);

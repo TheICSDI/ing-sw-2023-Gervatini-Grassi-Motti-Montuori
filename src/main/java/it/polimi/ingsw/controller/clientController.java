@@ -18,6 +18,15 @@ public class clientController{
     public void setIdLobby(int idLobby) {
         this.idLobby = idLobby;
     }
+    private int idGame=0;
+
+    public int getIdGame() {
+        return idGame;
+    }
+
+    public void setIdGame(int idGame) {
+        this.idGame = idGame;
+    }
 
     public clientController(String nickname){
         this.nickname = nickname;
@@ -84,7 +93,7 @@ public class clientController{
                     }else{
                         return new DefaultErrorMessage("Number of parameters is wrong");
                     }
-                    return new PickTilesMessage(idMex, nickname, pos);
+                    return new PickTilesMessage(idMex, nickname, pos,controller.getIdGame());
                 }
                 case SELECTORDER -> {//action, da 1 a 3 interi es. selectorder 2 1 3
                     List<Integer> order =  new ArrayList<>();

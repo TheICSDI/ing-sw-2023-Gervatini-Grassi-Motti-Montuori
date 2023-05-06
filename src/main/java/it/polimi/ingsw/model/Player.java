@@ -4,16 +4,20 @@
  */
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.exceptions.InvalidColumnException;
+import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.network.messages.ReplyMessage;
 
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Set;
 
 public class Player implements Serializable {
     private final String nickname;
@@ -138,12 +142,12 @@ public class Player implements Serializable {
      * @param chosen a set of position that the player has chosen.
      * @param b board from which the player can take the tiles.
      */
-    public List<Tile> pickTiles(Set<Position> chosen, Board b) throws InvalidPositionException {
+    public List<Tile> pickTiles(Set<Position> chosen, Board b,Player player) throws InvalidPositionException {
         List<Tile> choice = new ArrayList<>();
          //Position chosen by the player
          if (!b.AvailableTiles().containsAll(chosen)) {
-            throw new InputMismatchException("The chosen tiles are not available to be taken!");
-             //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client
+             player.getOut().println(new ReplyMessage("The chosen tiles are not available to be taken!", Action.INGAMEEVENT));
+             return choice;
          } else {
              for (Position p : chosen) {
                  choice.add(b.board[p.getX()][p.getY()]);

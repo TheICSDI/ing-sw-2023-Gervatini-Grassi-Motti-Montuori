@@ -36,7 +36,7 @@ public class PickTilesTest {
             pos.add(tmp);
         }
 
-        PickTilesMessage test = new PickTilesMessage(test_id, test_usr, pos);
+        PickTilesMessage test = new PickTilesMessage(test_id, test_usr, pos,1);
 
         try {
             FileInputStream pathFile = new FileInputStream("JSON/MessageTest/picktiles_test.json");

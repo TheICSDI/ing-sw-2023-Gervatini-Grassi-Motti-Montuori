@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,7 +34,7 @@ public class serverController {
       int id = message.getMessage_id();
       String player = message.getUsername();
       Action action = message.getAction();
-      int gameId = message.getGameId();
+      int gameId = message.getIdGame();
       int idLobby = message.getLobby_id();
       //Different action based on message type
       switch(message.getAction()){
@@ -92,7 +93,7 @@ public class serverController {
                      gameController.allLobbies.remove(l);
                      for (Player p:
                              l.Players) {
-                        p.getOut().println(new StartGameReplyMessage(message.getUsername() + " started the game!"));
+                        p.getOut().println(new StartGameReplyMessage(message.getUsername() + " started the game!" , g.id));
                      }
                      executorsService.submit(g::startGame);
                      gameStarted=true;
@@ -109,8 +110,8 @@ public class serverController {
             }
          }
          case PICKTILES-> {
-            List<Position> pos;
-            pos = ((PickTilesMessage) message).getPos();
+            List<Position> pos=new ArrayList<>();
+            ((PickTilesMessage) message).getPos(pos); //TODO non credo funzioni con 3 tiles perché for reasons la dimensione di pos è 2
             controller.pickTiles(player, action, pos, gameId, id);
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto

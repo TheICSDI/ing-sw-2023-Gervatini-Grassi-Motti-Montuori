@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
@@ -12,6 +11,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLI implements View{
+    public static final String RESET = "\033[0m";
+
+    public static final String BLACK = "\033[0;30m";
 
     private PrintStream out;
 
@@ -38,11 +40,21 @@ public class CLI implements View{
     }
 
     @Override
-    public void showBoard(type[][] board){
+    public void showBoard(type[][] board,Action action){
         Tile[][] shelf=recreateShelf(board);
         for (int i = 0; i < shelf.length; i++){  //stampa della board
             for (int j = 0; j < shelf[0].length; j++) {
-                out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
+                if(action.equals(Action.UPDATEBOARD)){
+                    if(i==0){
+                        out.print(shelf[i][j].getColor() + " " + j + " ");
+                    }else if(j==0){
+                        out.print(shelf[i][j].getColor() + " " + i + " ");
+                    }else {
+                        out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
+                    }
+                }else if(action.equals(Action.UPDATESHELF)){
+                    out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
+                }
             }
             System.out.println("\033[0m");
         }

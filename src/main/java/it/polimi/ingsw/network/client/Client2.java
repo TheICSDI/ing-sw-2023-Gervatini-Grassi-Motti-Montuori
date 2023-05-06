@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.messages.SetNameMessage;
+import it.polimi.ingsw.view.CLI;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -31,18 +32,28 @@ public class Client2 {
 
         Scanner input = new Scanner(System.in);
         SetNameMessage nick;
+        CLI cli = new CLI();
+        //Richiesta nickname unico
         System.out.println(in.readLine());
         //Controllo unicità nome
         do {
-            out.println(new SetNameMessage("Gynephobia",true));
-            //out.println(new SetNameMessage(input.nextLine(),false));
-            nick = SetNameMessage.decrypt(in.readLine());
-            nick.print();
+
+            //username = cli.askUsername();
+            //nick = new SetNameMessage(username,true); linee effettive
+            nick = new SetNameMessage("Gynephobia",true); //provv
+            out.println(nick);//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
+            try{
+                //nick = new SetNameMessage(in.readLine());
+                nick = SetNameMessage.decrypt(in.readLine());
+            }catch(Exception ignored){}
+            //
+            cli.printUsername(nick.getUsername(), nick.isAvailable());
         } while (!nick.isAvailable());
         //Ogni player ha il suo clientController
         controller = new clientController(nick.getUsername());
         //inizio connessione
         ExecutorService executor = Executors.newFixedThreadPool(1);
+        //thread che rimane in ascolto di messaggi
         executor.submit(()-> {
             try {
                 Client.listenMessages(controller,in);
@@ -50,11 +61,14 @@ public class Client2 {
                 throw new RuntimeException(e);
             }
         });
-        Client.sendMessage("joinlobby 1",controller,in,out);//Codice temporaneo per velocizzare
-        TimeUnit.SECONDS.sleep(1);//toccava aspettare la risposta per farlo automatico
-        Client.sendMessage("startgame",controller,in,out);
-        while (true) {//Condizione da rivedere
+        Client.sendMessage("joinlobby 1",controller,in,out);//per velocizzare, sarà da rimuovere
+        TimeUnit.SECONDS.sleep(1);
+        Client.sendMessage("startgame",controller,in,out);//per velocizzare, sarà da rimuovere
+        //Ciclio per invio messaggi
+        while (true) { //Condizione da rivedere
+
             Client.sendMessage(input.nextLine(),controller,in,out);
         }
+        //executor.shutdownNow();//uccisione thread
     }
 }

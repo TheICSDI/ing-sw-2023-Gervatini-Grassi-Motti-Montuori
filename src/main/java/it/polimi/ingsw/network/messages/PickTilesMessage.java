@@ -25,9 +25,10 @@ public class PickTilesMessage extends GeneralMessage{
      * @param username uid of the user
      * @param pos and array with position of the piked tiles
      */
-    public PickTilesMessage(int message_id, String username, List<Position> pos) {
+    public PickTilesMessage(int message_id, String username, List<Position> pos,int idGame) {
         super(message_id, Action.PICKTILES, -1, username);
         this.pos = pos;
+        this.idGame=idGame;
     }
 
     /**
@@ -57,6 +58,7 @@ public class PickTilesMessage extends GeneralMessage{
             tmp = new Position(x, y);
             this.pos.add(tmp);
         }
+        this.idGame = Integer.parseInt(msg_obj.get("idGame").toString());
     }
 
     /**
@@ -78,10 +80,11 @@ public class PickTilesMessage extends GeneralMessage{
 
         return super.startMessage() + "," +
                 pos_string.toString() +
+                "\"idGame\":\"" + this.getIdGame() + "\""+
                 "}";
     }
 
-    public List<Position> getPos() {
-        return pos;
+    public void getPos(List<Position> pos) {
+        pos.addAll(this.pos);
     }
 }
