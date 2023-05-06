@@ -1,7 +1,6 @@
 /** The clients have to call the controller's method to interact with the game's model.*/
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
@@ -123,7 +122,6 @@ public class gameController {
     }
 
      */
-
 
 
 

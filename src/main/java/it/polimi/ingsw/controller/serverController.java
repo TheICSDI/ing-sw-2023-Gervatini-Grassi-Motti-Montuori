@@ -1,9 +1,9 @@
 package it.polimi.ingsw.controller;
+
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
-
 import it.polimi.ingsw.network.messages.*;
 
 import java.io.PrintWriter;
@@ -111,13 +111,14 @@ public class serverController {
          }
          case PICKTILES-> {
             List<Position> pos=new ArrayList<>();
-            ((PickTilesMessage) message).getPos(pos); //TODO non credo funzioni con 3 tiles perché for reasons la dimensione di pos è 2
+            ((PickTilesMessage) message).getPos(pos);
             controller.pickTiles(player, action, pos, gameId, id);
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
          case SELECTORDER -> {
-            List<Integer> order = ((SelectOrderMessage)message).getOrder();
+            List<Integer> order = new ArrayList<>();
+            ((SelectOrderMessage)message).getOrder(order);
             controller.selectOrder(player, action, order, gameId, id);
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto

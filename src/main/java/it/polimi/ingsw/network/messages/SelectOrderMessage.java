@@ -27,7 +27,7 @@ public class SelectOrderMessage extends GeneralMessage{
     public SelectOrderMessage(int message_id, String username, List<Integer> order,int idGame) {
         super(message_id, Action.SELECTORDER,-1, username);
         this.order = order;
-        this.idGame=idGame;
+        this.idGame = idGame;
     }
 
     /**
@@ -50,9 +50,11 @@ public class SelectOrderMessage extends GeneralMessage{
         JSONArray order = (JSONArray) msg_obj.get("order");
         for (Object item : order) {
 
-            tmp = Integer.getInteger(item.toString());
+            tmp = Integer.parseInt(item.toString());
             this.order.add(tmp);
         }
+        this.idGame = Integer.parseInt(msg_obj.get("idGame").toString());
+
     }
 
     /**
@@ -69,14 +71,15 @@ public class SelectOrderMessage extends GeneralMessage{
         }
 
         int i_last = order_string.length() - 1;
-        order_string.replace(i_last, i_last + 1, "]");
+        order_string.replace(i_last, i_last + 1, "],");
 
         return super.startMessage() + "," +
-                order_string.toString() +
+                order_string +
+                "\"idGame\":\"" + this.getIdGame() + "\"" +
                 "}";
     }
 
-    public List<Integer> getOrder() {
-        return order;
+    public void getOrder(List<Integer> order) {
+        order.addAll(this.order);
     }
 }

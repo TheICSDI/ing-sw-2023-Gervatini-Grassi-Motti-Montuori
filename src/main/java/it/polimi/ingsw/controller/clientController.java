@@ -106,7 +106,7 @@ public class clientController{
                     }
                     return new SelectOrderMessage(idMex, nickname, order,controller.getIdGame());
                 }
-                case SELECTCOLUMN -> {//TODO da finire
+                case SELECTCOLUMN -> {
                     int col;
                     if(words.length == 2){//action, un numero
                         col = Integer.parseInt(words[1]);
@@ -114,6 +114,12 @@ public class clientController{
                     else{
                         return new DefaultErrorMessage("Number of parameters is wrong");
                     }
+                    if(col<1 || col>5){
+                        return new DefaultErrorMessage("Column not valid");
+                    }else{
+                        return new SelectColumnMessage(idMex, nickname,col ,controller.getIdGame());
+                    }
+
                 }
 
             }

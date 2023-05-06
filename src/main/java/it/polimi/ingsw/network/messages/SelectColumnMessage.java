@@ -20,8 +20,8 @@ public class SelectColumnMessage extends GeneralMessage {
      * @param username uid of the user
      * @param col the selected column by the user
      */
-    public SelectColumnMessage(int message_id, int lobby_id, String username, int col,int idGame) {
-        super(message_id, Action.SELECTCOLUMN, lobby_id, username);
+    public SelectColumnMessage(int message_id, String username, int col,int idGame) {
+        super(message_id, Action.SELECTCOLUMN, -1, username);
         this.col = col;
         this.idGame=idGame;
     }
@@ -45,6 +45,7 @@ public class SelectColumnMessage extends GeneralMessage {
         }
 
         this.col = Integer.parseInt(msg_obj.get("column").toString());
+        this.idGame = Integer.parseInt(msg_obj.get("idGame").toString());
     }
 
     /**
@@ -55,6 +56,7 @@ public class SelectColumnMessage extends GeneralMessage {
     {
         return super.startMessage() + "," +
                 "\"column\":" + this.col +
+                "\"idGame\":\"" + this.getIdGame() + "\""+
                 "}";
     }
     public int getCol() {

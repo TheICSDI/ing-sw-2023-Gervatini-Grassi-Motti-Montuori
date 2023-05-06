@@ -65,19 +65,21 @@ public class Player implements Serializable {
      * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
      * @return orderedTiles list of selected tiles in order.
      */
-    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws InputMismatchException{
+    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws InputMismatchException {
         List<Tile> orderedTiles = new ArrayList<>();
         if (selected.size() > order.size()) {
+            this.out.println(new ReplyMessage("Errore",Action.INGAMEEVENT));
             throw new InputMismatchException("The selected order is wrong, you have selected more tiles!");
             //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
 
         } else if (selected.size() < order.size()){
+            this.out.println(new ReplyMessage("Errore",Action.INGAMEEVENT));
             throw new InputMismatchException("The selected order is wrong, you have selected less tiles!");
-            //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
-
         } else {
             for (int i = 0; i < selected.size(); i++) {
-                orderedTiles.add(selected.get(order.get(i) - 1));
+                int x=order.get(i);
+                x--;
+                orderedTiles.add(selected.get(x));
             }
         }
         return orderedTiles;

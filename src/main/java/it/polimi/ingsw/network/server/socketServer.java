@@ -64,11 +64,11 @@ public class socketServer {
                 while((input = in.readLine()) != null){
                     //identify legge la action del messaggio e re istanzia mex come la corrispondente sottoclasse di General Message
                     switch (GeneralMessage.identify(input)){
-                        case CREATELOBBY -> mex=new CreateLobbyMessage(input);
-                        case SHOWLOBBY -> mex=new ShowLobbyMessage(input);
-                        case JOINLOBBY -> mex=new JoinLobbyMessage(input);
-                        case STARTGAME -> mex=new StartGameMessage(input);
-                        case PICKTILES -> mex=new PickTilesMessage(input);
+                        case CREATELOBBY -> mex = new CreateLobbyMessage(input);
+                        case SHOWLOBBY -> mex = new ShowLobbyMessage(input);
+                        case JOINLOBBY -> mex = new JoinLobbyMessage(input);
+                        case STARTGAME -> mex = new StartGameMessage(input);
+                        case PICKTILES -> mex = new PickTilesMessage(input);
                         case SELECTORDER -> mex = new SelectOrderMessage(input);
                         case SELECTCOLUMN -> mex = new SelectColumnMessage(input);
                         //TODO Mettere tutti i casi nella ricezione messaggi

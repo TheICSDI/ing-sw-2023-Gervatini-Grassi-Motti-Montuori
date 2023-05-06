@@ -3,6 +3,7 @@
  */
 package test.Model;
 
+import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Board;
@@ -60,6 +61,7 @@ class PlayerTest {
         List<Tile> selected = new ArrayList<>();
         List<Integer> order = new ArrayList<>();
         List<Tile> ordered;
+        gameController controller= new gameController();
         //Empty selected and order
         ordered = p1.orderTiles(selected, order);
         assertTrue(ordered.isEmpty());

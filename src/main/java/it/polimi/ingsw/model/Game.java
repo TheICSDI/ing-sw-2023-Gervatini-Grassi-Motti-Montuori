@@ -75,6 +75,9 @@ public class Game {
      *
      * @see Player,Board,CommonCard,PersonalCard
      */
+    //TODO AGGIUNGERE CONTROLLI DEI COMANDI ALCUNI CRASHANO
+    //NON PARTE IL SECONDO TURNO
+    //COMANDI PER VEDERE PG,CG,SHELF TRA I TURNI
     public void startGame(){
         //At the starting point no player has the endgame token
         boolean endGame = false;
@@ -88,16 +91,19 @@ public class Game {
                 p.getOut().println(new ReplyMessage("It's your turn!",Action.INGAMEEVENT));
                 //The player can pick some tiles from the board and insert it inside its shel//
                 List<Tile>  toInsert = new ArrayList<>();
+
                 while(toInsert.isEmpty()) {
                     Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
+
                     try{
                         toInsert = p.pickTiles(chosen, board,p);
                     } catch (InvalidPositionException e) {
                         //bisogna attivare un thread per comunicare che non ce la tiles
                     }
                 }
-                sendElement(board.board, players,Action.UPDATEBOARD);
-                p.getOut().println(new ChosenTilesMessage(toInsert));//da rivedere il messaggio
+                sendElement(board.board, List.of(p),Action.UPDATEBOARD);
+                p.getOut().println(new ChosenTilesMessage(toInsert));
+                p.getOut().println(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT));
                 List<Integer> order = new ArrayList<>();
                 while(order.isEmpty()){
                     order = controller.chooseOrder(p.getNickname(), id);
@@ -106,20 +112,24 @@ public class Game {
                     }
                     catch (InputMismatchException e){
                         order.clear();//serve per la condizione del while
-                        //bisogna inviare un messaggio al client
+                        p.getOut().println(new ReplyMessage("Invalid order",Action.INGAMEEVENT));
                     }
 
                 }
+                p.getOut().println(new ChosenTilesMessage(toInsert));
+                p.getOut().println(new ReplyMessage("Choose column: ",Action.INGAMEEVENT));
                 int col = -1;
                 while(col == -1) {
                     col= controller.chooseColumn(p.getNickname(),id);
                     try {
-                        p.insertInShelf(toInsert, col);
+                        p.insertInShelf(toInsert, (col-1));
                     } catch (InvalidColumnException e) {
                         col = -1;//serve per il while
                         //bisogna attivare un thread per comunicare che non ce spazio
                     }
                 }
+                p.getOut().println(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT));
+                sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
