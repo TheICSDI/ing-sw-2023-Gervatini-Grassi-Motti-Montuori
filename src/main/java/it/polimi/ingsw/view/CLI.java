@@ -127,13 +127,6 @@ public class CLI implements View{
     public void displayMessage(String msg){
 
     }
-
-    /**
-     * Prints board, every player's shelf and chosen tiles
-     * @param board board status
-     * @param players all players
-     * @param chosenTiles tiles chosen, if there are any
-     */
 /*
     //statica perchè non ha senso creare un oggetto cli, non so se è il massimo una funzione così vedremo
     // tile.getColor cambia il colore dello sfondo se messo in una print, 3 spazi per fare un quadrato
