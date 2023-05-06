@@ -90,6 +90,9 @@ public class clientController{
                         for (int i = 1; i < words.length; i=i+2) {
                             pos.add(new Position(Integer.parseInt(words[i]),Integer.parseInt(words[i+1])));
                         }
+                        if(!isStraightLineTiles(pos)){
+                            return new DefaultErrorMessage("Not Adjacent");
+                        }
                     }else{
                         return new DefaultErrorMessage("Number of parameters is wrong");
                     }

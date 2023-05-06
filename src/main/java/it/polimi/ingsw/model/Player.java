@@ -98,9 +98,10 @@ public class Player implements Serializable {
                 //For each empty space it decreases numTiles
                 numTiles --;
                 //If numTiles < 0 then there is no enough space
-                if(numTiles < 0) return true;
-                //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
-
+                if(numTiles == 0) return true;
+            }else{
+                out.println(new ReplyMessage("This column is full!",Action.INGAMEEVENT));
+                return false;
             }
         }
         return false;
@@ -143,7 +144,7 @@ public class Player implements Serializable {
          if (!b.AvailableTiles().containsAll(chosen)) {
              player.getOut().println(new ReplyMessage("The chosen tiles are not available to be taken!", Action.INGAMEEVENT));
              return choice;
-         } else {
+         }else {
              for (Position p : chosen) {
                  choice.add(b.board[p.getX()][p.getY()]);
              }

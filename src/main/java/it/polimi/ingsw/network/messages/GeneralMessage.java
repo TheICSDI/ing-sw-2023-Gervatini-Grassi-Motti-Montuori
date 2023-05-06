@@ -56,7 +56,6 @@ public abstract class GeneralMessage implements Serializable {
         if(!msg_obj.containsKey("action")) {
             throw new InvalidKeyException("Missing key: action");
         }
-        //TODO da vedere come contare i mex
 
         // Assigns the values from the JSON object to the instance variables.
         this.message_id = Integer.parseInt(msg_obj.get("message_id").toString());

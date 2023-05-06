@@ -43,9 +43,10 @@ public class socketServer {
         @Override
         public void run() {
             try {
+                //TODO risolvere perche' dopo un po' non va piu' la connessione
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
+                //clientSocket.setKeepAlive(true);
                 String input;
                 //Prima cosa dopo la connessione chiede un nickname finchè non ne riceve uno unico
                 out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
