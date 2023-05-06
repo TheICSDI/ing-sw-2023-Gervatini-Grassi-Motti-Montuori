@@ -96,6 +96,7 @@ public class Game {
                         //bisogna attivare un thread per comunicare che non ce la tiles
                     }
                 }
+
                 p.getOut().println(new ReplyMessage("Tiles chosen: "+toInsert.get(0).getCategory(),Action.INGAMEEVENT)); //provvisorio, manda solo la prima e funziona
                 p.getOut().println(new PickedTilesMessage(toInsert));//da rivedere il messaggio
                 List<Integer> order = new ArrayList<>();

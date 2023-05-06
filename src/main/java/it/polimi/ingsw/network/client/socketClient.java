@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -136,7 +137,9 @@ public class socketClient {
                             reply.print(); //da implementare in cli
                         }
                         case CHOSENTILES -> {
-                            List<Tile> tile=reply.getTiles();
+                            List<Tile> tile=new ArrayList<>();
+                            System.out.println("prova");
+                            reply.getTiles(tile);
                             //temporaneo
                             for (Tile t:
                                     tile) {

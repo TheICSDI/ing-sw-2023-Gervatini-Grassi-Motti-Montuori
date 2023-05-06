@@ -55,7 +55,7 @@ public class ReplyMessage extends GeneralMessage implements Serializable {
         return simpleBoard;
     }
 
-    public List<Tile> getTiles() {
-        return tiles;
+    public void getTiles(List<Tile> tiles) {
+        tiles.addAll(this.tiles);
     }
 }
