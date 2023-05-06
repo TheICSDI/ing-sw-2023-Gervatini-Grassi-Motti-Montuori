@@ -97,8 +97,15 @@ public class clientController{
                 }
                 case SELECTORDER -> {//action, da 1 a 3 interi es. selectorder 2 1 3
                     List<Integer> order =  new ArrayList<>();
+                    if((words.length==3 && words[1].equals(words[2]) ||
+                            (words.length==4 && (words[1].equals(words[2]) || (words[1].equals(words[3]) || (words[3].equals(words[2]))))))){
+                        return new DefaultErrorMessage("Can't use two equal numbers!");
+                    }
                     if (words.length<=4 && words.length>=2) {
                         for (int i = 1; i < words.length; i++) {//riempie order
+                            if(Integer.parseInt(words[i])> (words.length-1)){
+                                return new DefaultErrorMessage("One or more numbers out of bound");
+                            }
                             order.add(Integer.parseInt(words[i]));
                         }
                     }else{

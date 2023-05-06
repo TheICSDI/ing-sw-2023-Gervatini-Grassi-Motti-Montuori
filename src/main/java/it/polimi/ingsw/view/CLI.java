@@ -11,9 +11,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLI implements View{
+    //"\u001b[48;2;<R code>;<G code>;<B code>"
     public static final String RESET = "\033[0m";
 
     public static final String BLACK = "\033[0;30m";
+    public static final String DARK_BROWN= "\u001b[48;2;117;61;34m";
 
     private PrintStream out;
 
@@ -43,6 +45,9 @@ public class CLI implements View{
     public void showBoard(type[][] board,Action action){
         Tile[][] shelf=recreateShelf(board);
         for (int i = 0; i < shelf.length; i++){  //stampa della board
+            if(action.equals(Action.UPDATESHELF)) {
+                out.print("\033[0m  ");
+            }
             for (int j = 0; j < shelf[0].length; j++) {
                 if(action.equals(Action.UPDATEBOARD)){
                     if(i==0){
@@ -54,20 +59,26 @@ public class CLI implements View{
                     }
                 }else if(action.equals(Action.UPDATESHELF)){
                     out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
+                    if(j< shelf[0].length - 1){
+                        out.print(DARK_BROWN+" ");
+                    }
                 }
             }
-            System.out.println("\033[0m");
+            out.println("\033[0m");
         }
-        System.out.println();
+        if(action.equals(Action.UPDATESHELF)){
+            out.println("\033[48;5;94m   1   2   3   4   5   \033[0m");
+        }
+        out.println();
     }
     @Override
     public void showChosenTiles(List<Tile> tiles){
-        System.out.print("Tiles chosen:");
+        out.print("Tiles chosen:");
         for (Tile t:
              tiles) {
-            System.out.print("\033[0m " + t.getColor() + " " + t.getInitial() + " " );
+            out.print("\033[0m " + t.getColor() + " " + t.getInitial() + " " );
         }
-        System.out.println("\033[0m");
+        out.println("\033[0m");
     }
 
     @Override

@@ -112,10 +112,8 @@ public class socketClient {
                 case CHOSENTILES -> {
                     reply = ChosenTilesMessage.decrypt(message);
                 }
-                //TODO Entrano in game ora dobbiamo fare il gioco(Il gioco inizia ora)
-                //TODO AGGIUNGERE IN GAME LE RICHIESTE PER IL CLIENT DI INVIARE I COMANDI
-                //TODO AGGIUNGERE I METODI E LE STRUTTURE DATI PER LA CLI
-                //TODO MATRICE SHELF, MATRICE BOARD, CARTE PERSONAL GOAL ETC;
+
+                //TODO CARTE PERSONAL GOAL ETC;
                 //TODO COLLEGARE MESSAGGIO CHIUSURA GAME
                 //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
                 //altrimenti non è questa sezione che li controlla(e invece ha senso):D
@@ -197,6 +195,10 @@ public class socketClient {
             Client.sendMessage(input.nextLine(),controller,in,out);
         }
         //executor.shutdownNow();//uccisione thread
+        //ToDo Ogni tanto si pianta il programma, mandi un messaggio e o crasha o devi mettere un altro messaggio a caso per farlo ripartire, non so da cosa sia dato e non è consistente
+        //ToDo PERSONAL GOAL E PERSONAL CARDS: basta mandarle una volta a tutti a inizio game così il client non deve chiederle per stamparle ma le ha in locale
+        //ToDo Da fare il controllo per vedere se metti tiles in una colonna dove non ci stanno
+        //ToDo Controlli di fine game e riempimento board, punteggio
     }
 
 }

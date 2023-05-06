@@ -68,12 +68,12 @@ public class Player implements Serializable {
     public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws InputMismatchException {
         List<Tile> orderedTiles = new ArrayList<>();
         if (selected.size() > order.size()) {
-            this.out.println(new ReplyMessage("Errore",Action.INGAMEEVENT));
-            throw new InputMismatchException("The selected order is wrong, you have selected more tiles!");
+            this.out.println(new ReplyMessage("The selected order is wrong, you have selected more tiles!",Action.INGAMEEVENT));
+            throw new InputMismatchException("");
 
         } else if (selected.size() < order.size()){
-            this.out.println(new ReplyMessage("Errore",Action.INGAMEEVENT));
-            throw new InputMismatchException("The selected order is wrong, you have selected less tiles!");
+            this.out.println(new ReplyMessage("The selected order is wrong, you have selected less tiles!",Action.INGAMEEVENT));
+            throw new InputMismatchException("");
         } else {
             for (int i = 0; i < selected.size(); i++) {
                 int x=order.get(i);
@@ -92,24 +92,18 @@ public class Player implements Serializable {
      * @return true only if the shelf has enough space for the given tiles, false otherwise.
      */
     private boolean checkColumn(int numTiles, int col) throws InvalidColumnException {
-        if(col < 0 || col >= numCols){
-            throw new InvalidColumnException("Selected column is out of bound!");
-            //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
+        for(int j = 0; j < numRows; j++){
+            //Check how many empty spaces there are in the selected column
+            if(this.Shelf[j][col].getCategory().equals(type.EMPTY)) {
+                //For each empty space it decreases numTiles
+                numTiles --;
+                //If numTiles < 0 then there is no enough space
+                if(numTiles < 0) return true;
+                //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
 
-        } else {
-            for(int j = 0; j < numRows; j++){
-                //Check how many empty spaces there are in the selected column
-                if(this.Shelf[j][col].getCategory().equals(type.EMPTY)) {
-                    //For each empty space it decreases numTiles
-                    numTiles --;
-                    //If numTiles < 0 then there is no enough space
-                    if(numTiles < 0) return true;
-                    //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
-
-                }
             }
-            return false;
         }
+        return false;
     }
 
     /** Inserts the selected tiles in a single column of the shelf.

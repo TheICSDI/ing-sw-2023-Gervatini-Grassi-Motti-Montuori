@@ -50,6 +50,7 @@ public class gameController {
 
     //trova la richiesta che match tra gli order-book, restituisce sempre un optional non null, se trova piu richieste che vanno bene
     //le cancella tutte e prende solo quella piu recente( in realta' non servirebbe ma la metto per sicurezza questa feature
+    //ToDo Il ciclo infinito non è il massimo imo, secondo me dovremmo provare a fare un listener che avverte il metodo quando la queue viene aggiornata e limita i controlli solo quando necessario
     private Optional<orderBook> findTheRequest(String player,int gameId, Action a){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);

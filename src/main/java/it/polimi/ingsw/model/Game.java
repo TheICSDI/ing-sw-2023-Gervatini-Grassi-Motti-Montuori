@@ -75,9 +75,6 @@ public class Game {
      *
      * @see Player,Board,CommonCard,PersonalCard
      */
-    //TODO AGGIUNGERE CONTROLLI DEI COMANDI ALCUNI CRASHANO
-    //NON PARTE IL SECONDO TURNO
-    //COMANDI PER VEDERE PG,CG,SHELF TRA I TURNI
     public void startGame(){
         //At the starting point no player has the endgame token
         boolean endGame = false;
@@ -85,14 +82,24 @@ public class Game {
         started = true;
         while(!endGame){
             for (Player p: players) {
-                sendElement(board.board, players,Action.UPDATEBOARD);
-                p.getOut().println(new ReplyMessage(p.getNickname()+ "'s shelf",Action.INGAMEEVENT));
+                for (Player p1:
+                     players) {
+                    if(p1.getNickname().equals(p.getNickname())){
+                        p1.getOut().println(new ReplyMessage("It's your turn!",Action.INGAMEEVENT));
+                        sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                    }else{
+                        sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                        p1.getOut().println(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT));
+                    }
+                }
+                p.getOut().println(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT));
                 sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
-                p.getOut().println(new ReplyMessage("It's your turn!",Action.INGAMEEVENT));
+                p.getOut().println(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT));
+
                 //The player can pick some tiles from the board and insert it inside its shel//
                 List<Tile>  toInsert = new ArrayList<>();
 
-                while(toInsert.isEmpty()) {
+                while(toInsert.isEmpty()) { //todo è possibile prendere due tiles disponibili ma non adiacenti, è da fixare
                     Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
 
                     try{
@@ -103,20 +110,35 @@ public class Game {
                 }
                 sendElement(board.board, List.of(p),Action.UPDATEBOARD);
                 p.getOut().println(new ChosenTilesMessage(toInsert));
-                p.getOut().println(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT));
-                List<Integer> order = new ArrayList<>();
-                while(order.isEmpty()){
-                    order = controller.chooseOrder(p.getNickname(), id);
-                    try{
-                        toInsert = p.orderTiles(toInsert, order);
-                    }
-                    catch (InputMismatchException e){
-                        order.clear();//serve per la condizione del while
-                        p.getOut().println(new ReplyMessage("Invalid order",Action.INGAMEEVENT));
-                    }
 
+                //CONTROLLO SE SERVE CHIEDERE L'ORDINE, ALTRIMENTI SALTO IL PASSAGGIO
+                boolean allTheSame=true;
+                for (Tile t1:
+                     toInsert) {
+                    for (Tile t2:
+                         toInsert) {
+                        if ((!t1.equals(t2)) && (!t1.getCategory().equals(t2.getCategory()))) {
+                            allTheSame = false;
+                            break;
+                        }
+                    }
+                    if(!allTheSame) break;
                 }
-                p.getOut().println(new ChosenTilesMessage(toInsert));
+                if(!allTheSame){
+                    p.getOut().println(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT));
+                    List<Integer> order = new ArrayList<>();
+                    while(order.isEmpty()){
+                        order = controller.chooseOrder(p.getNickname(), id);
+                        try{
+                            toInsert = p.orderTiles(toInsert, order);
+                        }
+                        catch (InputMismatchException e){
+                            order.clear();//serve per la condizione del while
+                        }
+
+                    }
+                    p.getOut().println(new ChosenTilesMessage(toInsert));
+                }
                 p.getOut().println(new ReplyMessage("Choose column: ",Action.INGAMEEVENT));
                 int col = -1;
                 while(col == -1) {
@@ -129,6 +151,7 @@ public class Game {
                     }
                 }
                 p.getOut().println(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT));
+                p.getOut().println(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT));
                 sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
@@ -152,7 +175,7 @@ public class Game {
                 }
 
                 //If the next player has the end game token the game ends
-                if (players.get(players.indexOf(p) + 1).getEndToken()) {
+                if (players.get((players.indexOf(p) + 1) % players.size()).getEndToken()) {
                     endGame = true;
                 }
             }
