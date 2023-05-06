@@ -31,7 +31,7 @@ public class gameController {
     //Ritorna il numero di colonna richiesto dalla partita
     public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;
-        order = findTheRequest(player,gameId,Action.PICKTILES);
+        order = findTheRequest(player,gameId,Action.SELECTCOLUMN);
         return order.get().getNum_col();
     }
     public List<Integer> chooseOrder(String player, int gameId){
@@ -48,8 +48,8 @@ public class gameController {
         return new HashSet<>(order.get().getPos());
     }
 
-    //trova la richiesta che match tra gli orderbook, restituisce sempre un optional non null, se trova piu richieste che vanno bene
-    //le cancella tutte e prende solo quella piu recente ( in realta non servirebbe ma la metto per sicurezza questa feature
+    //trova la richiesta che match tra gli order-book, restituisce sempre un optional non null, se trova piu richieste che vanno bene
+    //le cancella tutte e prende solo quella piu recente( in realta' non servirebbe ma la metto per sicurezza questa feature
     private Optional<orderBook> findTheRequest(String player,int gameId, Action a){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);

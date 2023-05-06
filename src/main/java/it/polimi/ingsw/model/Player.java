@@ -70,7 +70,6 @@ public class Player implements Serializable {
         if (selected.size() > order.size()) {
             this.out.println(new ReplyMessage("Errore",Action.INGAMEEVENT));
             throw new InputMismatchException("The selected order is wrong, you have selected more tiles!");
-            //TODO bisogna collegare questa exception all'invio di un messaggio per avvisare il client di rinviare l'info
 
         } else if (selected.size() < order.size()){
             this.out.println(new ReplyMessage("Errore",Action.INGAMEEVENT));
