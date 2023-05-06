@@ -140,6 +140,10 @@ public class Player implements Serializable {
      */
     public List<Tile> pickTiles(Set<Position> chosen, Board b,Player player) throws InvalidPositionException {
         List<Tile> choice = new ArrayList<>();
+        if(maxSpaceInShelf() < chosen.size()){
+            out.println(new ReplyMessage("Not enough space in the shelf",Action.INGAMEEVENT));
+            return choice;
+        }
          //Position chosen by the player
          if (!b.AvailableTiles().containsAll(chosen)) {
              player.getOut().println(new ReplyMessage("The chosen tiles are not available to be taken!", Action.INGAMEEVENT));
@@ -151,6 +155,24 @@ public class Player implements Serializable {
          b.RemoveTiles(chosen);
          return choice;
          }
+     }
+     public int maxSpaceInShelf(){
+        int maxSpace=0;
+        boolean firstFullRow=true;
+         for (int i = 0; i < 3; i++) {
+             for (int j = 0; j < numCols; j++) {
+                 if (Shelf[i][j].getCategory().equals(type.EMPTY)) {
+                     firstFullRow = false;
+                     break;
+                 }
+             }
+             if(!firstFullRow){
+                 maxSpace++;
+                 if(maxSpace==3) return maxSpace;
+             }
+             firstFullRow=false;
+         }
+        return maxSpace;
      }
 
     /** Gets the shelf of the player. */

@@ -62,7 +62,7 @@ public class socketServer {
 
                 GeneralMessage mex = null;
                 //loop infinito che riceve i messaggi
-                while((input = in.readLine()) != null){
+                while((input=in.readLine())!=null){
                     //identify legge la action del messaggio e re istanzia mex come la corrispondente sottoclasse di General Message
                     switch (GeneralMessage.identify(input)){
                         case CREATELOBBY -> mex = new CreateLobbyMessage(input);
@@ -79,7 +79,6 @@ public class socketServer {
                         SC.executeMessage(mex,out);
                     }
                 }
-
                 in.close();
                 out.close();
                 clientSocket.close();

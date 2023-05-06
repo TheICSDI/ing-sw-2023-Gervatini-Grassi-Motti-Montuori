@@ -61,13 +61,13 @@ public class Client2 {
                 throw new RuntimeException(e);
             }
         });
-        Client.sendMessage("joinlobby 1",controller,in,out);//per velocizzare, sarà da rimuovere
+        Client.sendMessage("joinlobby 1",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         TimeUnit.SECONDS.sleep(1);
-        Client.sendMessage("startgame",controller,in,out);//per velocizzare, sarà da rimuovere
+        Client.sendMessage("startgame",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         //Ciclio per invio messaggi
         while (true) { //Condizione da rivedere
 
-            Client.sendMessage(input.nextLine(),controller,in,out);
+            Client.sendMessage(input.nextLine(),controller,in,out,cli);
         }
         //executor.shutdownNow();//uccisione thread
     }

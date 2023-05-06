@@ -43,7 +43,7 @@ public class socketClient {
      * @param Out Output stream
      * @throws IOException
      */
-    public void sendMessage(String message,clientController control,BufferedReader In,PrintWriter Out) throws IOException {
+    public void sendMessage(String message,clientController control,BufferedReader In,PrintWriter Out, CLI cli) throws IOException {
         GeneralMessage clientMessage;
         //Controlla che il formato del comando sia giusto
         clientMessage = control.checkMessageShape(message,control);
@@ -52,6 +52,8 @@ public class socketClient {
         //Se il formato è sbagliato checkmessage restituisce un messaggio di tipo error e non viene inviato
         if(curr_action.equals(Action.ERROR)) {
             new ReplyMessage(toSend,Action.ERROR).print();
+        }else if(curr_action.equals(Action.SHOWPERSONAL)){
+            cli.showBoard(controller.getSimpleGoal(),Action.UPDATESHELF);
         }else{
             Out.println(toSend);
         }
@@ -112,6 +114,10 @@ public class socketClient {
                 case CHOSENTILES -> {
                     reply = ChosenTilesMessage.decrypt(message);
                 }
+                case SHOWPERSONAL -> {
+                    reply = UpdateBoardMessage.decrypt(message);
+                    controller.setSimpleGoal(reply.getSimpleBoard());
+                }
 
                 //TODO CARTE PERSONAL GOAL ETC;
                 //TODO COLLEGARE MESSAGGIO CHIUSURA GAME
@@ -156,7 +162,6 @@ public class socketClient {
         //Client.connection("192.168.1.234", 2345);
         Client.connection("127.0.0.1", 2345);
         Scanner input = new Scanner(System.in);
-
         String username;
         SetNameMessage nick;
         CLI cli = new CLI();
@@ -188,14 +193,13 @@ public class socketClient {
                 throw new RuntimeException(e);
             }
         });
-        Client.sendMessage("createlobby 2",controller,in,out);//per velocizzare, sarà da rimuovere
+        Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         //Ciclio per invio messaggi
         while (true) { //Condizione da rivedere
 
-            Client.sendMessage(input.nextLine(),controller,in,out);
+            Client.sendMessage(input.nextLine(),controller,in,out,cli);
         }
         //executor.shutdownNow();//uccisione thread
-        //ToDo Ogni tanto si pianta il programma, mandi un messaggio e o crasha o devi mettere un altro messaggio a caso per farlo ripartire, non so da cosa sia dato e non è consistente
         //ToDo PERSONAL GOAL E PERSONAL CARDS: basta mandarle una volta a tutti a inizio game così il client non deve chiederle per stamparle ma le ha in locale
         //ToDo Da fare il controllo per vedere se metti tiles in una colonna dove non ci stanno
         //ToDo Controlli di fine game e riempimento board, punteggio

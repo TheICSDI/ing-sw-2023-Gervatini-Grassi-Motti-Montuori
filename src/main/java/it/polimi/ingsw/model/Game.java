@@ -80,6 +80,10 @@ public class Game {
         boolean endGame = false;
         boolean check = false;
         started = true;
+        /*for (Player p:
+             players) {
+            sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
+        }*/ //ToDo FIXARE, dovrebbe mandare le personal goal ma fa esplodere tutto
         while(!endGame){
             for (Player p: players) {
                 for (Player p1:
@@ -98,10 +102,8 @@ public class Game {
 
                 //The player can pick some tiles from the board and insert it inside its shel//
                 List<Tile>  toInsert = new ArrayList<>();
-
                 while(toInsert.isEmpty()) { //todo è possibile prendere due tiles disponibili ma non adiacenti, è da fixare
                     Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
-
                     try{
                         toInsert = p.pickTiles(chosen, board,p);
                     } catch (InvalidPositionException e) {
@@ -147,7 +149,6 @@ public class Game {
                         p.insertInShelf(toInsert, (col-1));
                     } catch (InvalidColumnException e) {
                         col = -1;//serve per il while
-                        //bisogna attivare un thread per comunicare che non ce spazio
                     }
                 }
                 p.getOut().println(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT));
@@ -156,6 +157,7 @@ public class Game {
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
+                    p.getOut().println(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT));
                 }
 
                 //At each turn the common card goals are calculated
@@ -286,18 +288,7 @@ public class Game {
     public boolean isStarted() {
         return started;
     }
-    //return true if the order is a list of length between 1 and 3 and is composed only from 1 instance of 1 ,2 and 3
-    public boolean acceptableOrder(List<Integer> order) {
-        if (order.size() > 3) {
-            return false;
-        } else {
-            if (!order.contains(1)) {
-                return false;
-            } else if (order.size() > 1 && !order.contains(2)) {
-                return false;
-            } else return order.contains(3);
-        }
-    }
+
 
     public void sendElement(Tile[][] element, List<Player> playersToSendTo, Action action){
         type[][] information = new type[element.length][element[0].length];

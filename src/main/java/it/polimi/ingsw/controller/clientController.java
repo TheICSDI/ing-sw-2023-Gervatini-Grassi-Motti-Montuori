@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.*;
 
 import java.util.ArrayList;
@@ -10,6 +11,14 @@ public class clientController{
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
     private final String nickname;
     private int idLobby=0;
+    private type[][] simpleGoal;
+
+    public type[][] getSimpleGoal(){return simpleGoal;}
+    public void setSimpleGoal(type[][] goal) {
+        for (int i = 0; i < goal.length; i++) {
+            System.arraycopy(goal[i], 0, simpleGoal[i], 0, goal[1].length);
+        }
+    }
 
     public int getIdLobby() {
         return idLobby;
@@ -100,19 +109,11 @@ public class clientController{
                 }
                 case SELECTORDER -> {//action, da 1 a 3 interi es. selectorder 2 1 3
                     List<Integer> order =  new ArrayList<>();
-                    if((words.length==3 && words[1].equals(words[2]) ||
-                            (words.length==4 && (words[1].equals(words[2]) || (words[1].equals(words[3]) || (words[3].equals(words[2]))))))){
-                        return new DefaultErrorMessage("Can't use two equal numbers!");
+                    for (int i = 1; i < words.length; i++) {//riempie order
+                        order.add(Integer.parseInt(words[i]));
                     }
-                    if (words.length<=4 && words.length>=2) {
-                        for (int i = 1; i < words.length; i++) {//riempie order
-                            if(Integer.parseInt(words[i])> (words.length-1)){
-                                return new DefaultErrorMessage("One or more numbers out of bound");
-                            }
-                            order.add(Integer.parseInt(words[i]));
-                        }
-                    }else{
-                        return new DefaultErrorMessage("Number of parameters is wrong");
+                    if(!acceptableOrder(order)){
+                        return new DefaultErrorMessage("Invalid format");
                     }
                     return new SelectOrderMessage(idMex, nickname, order,controller.getIdGame());
                 }
@@ -131,6 +132,11 @@ public class clientController{
                     }
 
                 }
+                case SHOWPERSONAL -> {
+                    if(idGame!=0){
+                        return new ShowPersonalCardMessage();
+                    }
+                }
 
             }
 
@@ -143,5 +149,55 @@ public class clientController{
         }
 
         return null;
+    }
+
+    public boolean acceptableOrder(List<Integer> order) {
+        if (order.size() > 3 || order.size()==0) {
+            return false;
+        } else {
+            if (!order.contains(1)) {
+                return false;
+            } else if (order.size() > 1 && !order.contains(2)) {
+                return false;
+            } else{
+                return order.size() <= 2 || order.contains(3);
+            }
+        }
+    }
+
+    public boolean isStraightLineTiles(List<Position> tiles){
+        if(tiles.size() == 1){
+            return true;
+        }
+        else if(tiles.size() ==2){
+            return isAdjacentOnX(tiles.get(0),tiles.get(1)) || isAdjacentOnY(tiles.get(0),tiles.get(1));
+        }
+        else{
+            if(isAdjacentOnX(tiles.get(0),tiles.get(1)) && isAdjacentOnX(tiles.get(1),tiles.get(2))){
+                return true;
+            } else if (isAdjacentOnX(tiles.get(0),tiles.get(2)) && isAdjacentOnX(tiles.get(1),tiles.get(2))) {
+                return true;
+            } else if (isAdjacentOnX(tiles.get(0),tiles.get(2)) && isAdjacentOnX(tiles.get(1),tiles.get(0))){
+                return true;
+            } else if(isAdjacentOnY(tiles.get(0),tiles.get(1)) && isAdjacentOnY(tiles.get(1),tiles.get(2))){
+                return true;
+            } else if (isAdjacentOnY(tiles.get(0),tiles.get(2)) && isAdjacentOnY(tiles.get(1),tiles.get(2))) {
+                return true;
+            } else return isAdjacentOnY(tiles.get(0), tiles.get(2)) && isAdjacentOnY(tiles.get(1), tiles.get(0));
+        }
+    }
+
+    /**
+     * Checks if two tiles are adjacent 0 1 2
+     * @param a first tile
+     * @param b second tile
+     * @return true if they are
+     */
+    //Are three tiles in a line
+    public boolean isAdjacentOnX(Position a ,Position b){
+        return a.getX() == b.getX() && ((a.getY() == b.getY() - 1) || (a.getY() == b.getY() + 1));
+    }
+    public boolean isAdjacentOnY(Position a ,Position b){
+        return a.getY() == b.getY() && ((a.getX() == b.getX() - 1) || (a.getX() == b.getX() + 1));
     }
 }
