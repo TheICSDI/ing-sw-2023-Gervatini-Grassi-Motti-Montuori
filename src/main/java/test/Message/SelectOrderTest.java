@@ -32,7 +32,7 @@ public class SelectOrderTest {
             order.add(i);
         }
 
-        SelectOrderMessage test = new SelectOrderMessage(test_id, test_usr, order);
+        SelectOrderMessage test = new SelectOrderMessage(test_id, test_usr, order,0);
 
         try {
             FileInputStream pathFile = new FileInputStream("JSON/MessageTest/selectorder_test.json");

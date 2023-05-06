@@ -19,5 +19,6 @@ public enum Action {
 
     CHOSENTILES,
 
+    //TODO da implementare messaggi per mostrare le common e le personal goal
     ERROR
 }

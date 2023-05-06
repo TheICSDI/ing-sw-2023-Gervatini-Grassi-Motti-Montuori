@@ -110,7 +110,7 @@ public class socketClient {
                     reply = ReplyMessage.decrypt(message);
                 }
                 case CHOSENTILES -> {
-                    reply = PickedTilesMessage.decrypt(message);
+                    reply = ChosenTilesMessage.decrypt(message);
                 }
                 //TODO Entrano in game ora dobbiamo fare il gioco(Il gioco inizia ora)
                 //TODO AGGIUNGERE IN GAME LE RICHIESTE PER IL CLIENT DI INVIARE I COMANDI
@@ -138,18 +138,13 @@ public class socketClient {
                         }
                         case CHOSENTILES -> {
                             List<Tile> tile=new ArrayList<>();
-                            System.out.println("prova");
                             reply.getTiles(tile);
                             //temporaneo
-                            for (Tile t:
-                                    tile) {
-                                System.out.println(t.getCategory());
-                            }
-
+                            CLI.showChosenTiles(tile);
                         }
                     }
                 }
-            }else{
+            }else{//GUI
                 /*
 
                  */

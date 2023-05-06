@@ -20,7 +20,7 @@ public class SelectColumnTest {
         int test_id = 0, test_lobby = 0, test_col = 0;
         String test_usr = "test_username";
 
-        SelectColumnMessage test = new SelectColumnMessage(test_id, test_lobby, test_usr, test_col);
+        SelectColumnMessage test = new SelectColumnMessage(test_id, test_lobby, test_usr, test_col,0);
 
         JSONParser parser = new JSONParser();
         JSONObject file_obj = null, test_obj = null;

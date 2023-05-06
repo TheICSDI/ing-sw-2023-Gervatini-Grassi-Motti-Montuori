@@ -104,9 +104,9 @@ public class clientController{
                     }else{
                         return new DefaultErrorMessage("Number of parameters is wrong");
                     }
-                    return new SelectOrderMessage(idMex, nickname, order);
+                    return new SelectOrderMessage(idMex, nickname, order,controller.getIdGame());
                 }
-                case SELECTCOLUMN -> {
+                case SELECTCOLUMN -> {//TODO da finire
                     int col;
                     if(words.length == 2){//action, un numero
                         col = Integer.parseInt(words[1]);

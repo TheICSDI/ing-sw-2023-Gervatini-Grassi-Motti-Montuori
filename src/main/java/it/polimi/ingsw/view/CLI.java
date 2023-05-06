@@ -60,10 +60,14 @@ public class CLI implements View{
         }
         System.out.println();
     }
-
     @Override
-    public void showShelf(type[][] simpleBoard) {
-
+    public void showChosenTiles(List<Tile> tiles){
+        System.out.print("Tiles chosen:");
+        for (Tile t:
+             tiles) {
+            System.out.print("\033[0m " + t.getColor() + " " + t.getInitial() + " " );
+        }
+        System.out.println("\033[0m");
     }
 
     @Override

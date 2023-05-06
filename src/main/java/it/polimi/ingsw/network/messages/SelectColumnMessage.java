@@ -20,9 +20,10 @@ public class SelectColumnMessage extends GeneralMessage {
      * @param username uid of the user
      * @param col the selected column by the user
      */
-    public SelectColumnMessage(int message_id, int lobby_id, String username, int col) {
+    public SelectColumnMessage(int message_id, int lobby_id, String username, int col,int idGame) {
         super(message_id, Action.SELECTCOLUMN, lobby_id, username);
         this.col = col;
+        this.idGame=idGame;
     }
 
     /**

@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.network.messages.PickedTilesMessage;
+import it.polimi.ingsw.network.messages.ChosenTilesMessage;
 import it.polimi.ingsw.network.messages.ReplyMessage;
 import it.polimi.ingsw.network.messages.UpdateBoardMessage;
 
@@ -96,9 +96,8 @@ public class Game {
                         //bisogna attivare un thread per comunicare che non ce la tiles
                     }
                 }
-
-                p.getOut().println(new ReplyMessage("Tiles chosen: "+toInsert.get(0).getCategory(),Action.INGAMEEVENT)); //provvisorio, manda solo la prima e funziona
-                p.getOut().println(new PickedTilesMessage(toInsert));//da rivedere il messaggio
+                sendElement(board.board, players,Action.UPDATEBOARD);
+                p.getOut().println(new ChosenTilesMessage(toInsert));//da rivedere il messaggio
                 List<Integer> order = new ArrayList<>();
                 while(order.isEmpty()){
                     order = controller.chooseOrder(p.getNickname(), id);

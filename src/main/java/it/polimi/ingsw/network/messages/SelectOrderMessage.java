@@ -24,9 +24,10 @@ public class SelectOrderMessage extends GeneralMessage{
      * @param username uid of the user
      * @param order a list with the position in the chosen order
      */
-    public SelectOrderMessage(int message_id, String username, List<Integer> order) {
+    public SelectOrderMessage(int message_id, String username, List<Integer> order,int idGame) {
         super(message_id, Action.SELECTORDER,-1, username);
         this.order = order;
+        this.idGame=idGame;
     }
 
     /**
