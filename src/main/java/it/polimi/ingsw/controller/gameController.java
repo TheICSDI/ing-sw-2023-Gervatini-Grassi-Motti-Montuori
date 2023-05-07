@@ -24,6 +24,7 @@ public class gameController {
     public static Map<Integer, Game> allGames = new HashMap<>();
     public static List<orderBook> pendingOrders = new ArrayList<>();
     public static List<Lobby> allLobbies=new ArrayList<>();
+    private final Object queue = new Object();
     /*
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER
 
@@ -42,7 +43,7 @@ public class gameController {
     //rimuove dall'orderbook il comando che dice quali posizioni di quali tiles ha scelto il player
     //rimuove eventuali vecchie richieste rimaste inevase nell'orderbook
     //restituisce le posizioni al model
-    public Set<Position> chooseTiles(String player , int gameId){
+    public  Set<Position> chooseTiles(String player , int gameId){
         Optional<orderBook> order;
         order = findTheRequest(player,gameId,Action.PICKTILES);
         return new HashSet<>(order.get().getPos());
@@ -50,7 +51,7 @@ public class gameController {
 
     //trova la richiesta che match tra gli order-book, restituisce sempre un optional non null, se trova piu richieste che vanno bene
     //le cancella tutte e prende solo quella piu recente( in realta' non servirebbe ma la metto per sicurezza questa feature
-    //TODO Il ciclo infinito non è il massimo imo, secondo me dovremmo provare a fare un listener che avverte il metodo quando la queue viene aggiornata e limita i controlli solo quando necessario
+
     private Optional<orderBook> findTheRequest(String player,int gameId, Action a){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
@@ -70,6 +71,8 @@ public class gameController {
                 found = toFind.stream()
                         .reduce((ob1,ob2) -> ob1.num_mess > ob2.num_mess ? ob1 : ob2);
             }
+            //System.out.println(i);
+            //i++;
         }
         return found;
     }
@@ -90,17 +93,19 @@ public class gameController {
         Game g = allGames.get(id_game);
         orderBook pending = new orderBook(g,p,action,num_mess);
         pending.setPos(pos);
-        pendingOrders.add(pending);
+        synchronized (queue) {
+            pendingOrders.add(pending);
+        }
 
     }
-    public void selectOrder(String player, Action action, List<Integer> order, int gameId, int num_mess){
+    public  void selectOrder(String player, Action action, List<Integer> order, int gameId, int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
         orderBook pending = new orderBook(g,p,action,num_mess);
         pending.setOrder(order);
         pendingOrders.add(pending);
     }
-    public void selectColumn(String player, Action action, int numCol, int gameId, int num_mess){
+    public  void selectColumn(String player, Action action, int numCol, int gameId, int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
         orderBook pending = new orderBook(g,p,action,num_mess);

@@ -179,7 +179,7 @@ public class socketClient {
     public static void main(String[] args) throws IOException {
         socketClient Client = new socketClient();
         //Client.connection("192.168.1.234", 2345);
-        Client.connection("127.0.0.1", 2345);
+        Client.connection("127.0.0.1", 23450);
         Scanner input = new Scanner(System.in);
         String username;
         SetNameMessage nick;
@@ -203,7 +203,7 @@ public class socketClient {
         //Ogni player ha il suo clientController
         controller = new clientController(nick.getUsername());
         //inizio connessione
-        ExecutorService executor = Executors.newFixedThreadPool(1);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
         //thread che rimane in ascolto di messaggi
         executor.submit(()-> {
             try {
@@ -214,10 +214,11 @@ public class socketClient {
         });
         Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         //Ciclio per invio messaggi
-        while (true) { //Condizione da rivedere
+        while(true) { //Condizione da rivedere
 
             Client.sendMessage(input.nextLine(),controller,in,out,cli);
         }
+
         //executor.shutdownNow();//uccisione thread
         //ToDo Controlli di fine game e riempimento board, punteggio
     }

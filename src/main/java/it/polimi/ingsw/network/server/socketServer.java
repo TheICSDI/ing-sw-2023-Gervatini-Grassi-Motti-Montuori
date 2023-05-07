@@ -18,7 +18,7 @@ import java.net.Socket;
 public class socketServer {
     private ServerSocket serverSocket;
 
-    private static final serverController SC=new serverController();
+    private static final serverController SC = new serverController();
 
 
     public void start(int port) throws IOException {
@@ -43,7 +43,6 @@ public class socketServer {
         @Override
         public void run() {
             try {
-                //TODO risolvere perche' dopo un po' non va piu' la connessione
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 //clientSocket.setKeepAlive(true);
@@ -72,12 +71,13 @@ public class socketServer {
                         case PICKTILES -> mex = new PickTilesMessage(input);
                         case SELECTORDER -> mex = new SelectOrderMessage(input);
                         case SELECTCOLUMN -> mex = new SelectColumnMessage(input);
-                        //TODO Mettere tutti i casi nella ricezione messaggi CREDO MANCHI SOLO EXITLOBBY SE LO VOGLIAMO FARE
+                        //TODO Mettere tutti i casi nella ricezione messaggi
                     }
                     //il comando viene eseguito
                     if(!(mex ==null)){
                         SC.executeMessage(mex,out);
                     }
+                    mex = null;//
                 }
                 in.close();
                 out.close();
@@ -90,7 +90,7 @@ public class socketServer {
 
     public static void main(String[] args) throws IOException {
         socketServer server = new socketServer();
-        server.start(2345);
+        server.start(23450);
     }
 }
 

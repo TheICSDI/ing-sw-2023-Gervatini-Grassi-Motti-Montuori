@@ -24,7 +24,7 @@ public class Client2 {
 
         socketClient Client = new socketClient();
         //Client.connection("192.168.1.234", 2345); //Forse dovrei censurarlo il mio ip tbh
-        Socket clientSocket = new Socket("127.0.0.1", 2345);
+        Socket clientSocket = new Socket("127.0.0.1", 23450);
 
         //Directed communication between client and server
         out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -68,6 +68,7 @@ public class Client2 {
         while (true) { //Condizione da rivedere
 
             Client.sendMessage(input.nextLine(),controller,in,out,cli);
+            out.flush();
         }
         //executor.shutdownNow();//uccisione thread
     }

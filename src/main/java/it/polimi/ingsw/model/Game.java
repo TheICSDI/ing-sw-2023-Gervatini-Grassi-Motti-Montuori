@@ -24,7 +24,7 @@ public class Game {
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
-    List<Integer> ccId=new ArrayList<>();
+    List<Integer> ccId = new ArrayList<>();
 
     private final List<PersonalCard> allPC = new ArrayList<>();
     public final gameController controller;
@@ -80,7 +80,6 @@ public class Game {
         //At the starting point no player has the endgame token
         boolean endGame = false;
         boolean check = false;
-        started = true;
 
         for (Player p:
              players) {
@@ -187,6 +186,7 @@ public class Game {
         }
         for(Player p : players){
             p.calculateGeneralPoints();
+
         }
         //Manca il conteggio di personal card
     }
@@ -260,21 +260,6 @@ public class Game {
     public List<CCStrategy> getAllCC() {
         return allCC;
     }
-
-    public void addPlayer(Player p) throws CannotAddPlayerException {
-        if(!started){
-            if(players.size()<4){
-                players.add(p);
-            }
-            else throw  new CannotAddPlayerException("too many players already in the lobby");
-        }
-        else throw new CannotAddPlayerException("the game is already started");
-    }
-
-    public boolean isStarted() {
-        return started;
-    }
-
 
     public void sendElement(Tile[][] element, List<Player> playersToSendTo, Action action){
         type[][] information = new type[element.length][element[0].length];
