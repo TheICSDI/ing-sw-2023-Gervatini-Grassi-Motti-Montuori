@@ -14,7 +14,6 @@ public class CLI implements View{
     //"\u001b[48;2;<R code>;<G code>;<B code>m" BACKGROUND COLORS
     //TODO  GRAFICHE PER LE COMMON CARDS
     public static final String RESET = "\033[0m";
-
     public static final String BLACK = "\033[0;30m";
     public static final String DARK_BROWN= "\u001b[48;2;117;61;34m";
 
@@ -33,7 +32,6 @@ public class CLI implements View{
 
     @Override
     public void printUsername(String username, boolean isAvailable){
-
         if(isAvailable) {
             out.println("Username set correctly\n");
         }
@@ -45,30 +43,32 @@ public class CLI implements View{
     @Override
     public void showBoard(type[][] board,Action action){
         Tile[][] shelf=recreateShelf(board);
+        if(action.equals(Action.UPDATEBOARD)){
+            System.out.println("    0  1  2  3  4  5  6  7  8");
+        }
         for (int i = 0; i < shelf.length; i++){  //stampa della board
             if(action.equals(Action.UPDATESHELF)) {
-                out.print("\033[0m  ");
+                out.print(RESET + "  ");
             }
-            for (int j = 0; j < shelf[0].length; j++) {
+            for (int j = -1; j < shelf[0].length; j++) {
                 if(action.equals(Action.UPDATEBOARD)){
-                    if(i==0){
-                        out.print(shelf[i][j].getColor() + " " + j + " ");
-                    }else if(j==0){
-                        out.print(shelf[i][j].getColor() + " " + i + " ");
+                    if(j==-1){
+                        out.print(" " + i + " ");
                     }else {
                         out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
                     }
                 }else if(action.equals(Action.UPDATESHELF)){
+                    if(j==-1) j++;
                     out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
                     if(j< shelf[0].length - 1){
                         out.print(DARK_BROWN+" ");
                     }
                 }
             }
-            out.println("\033[0m");
+            out.println(RESET);
         }
         if(action.equals(Action.UPDATESHELF)){
-            out.println("\033[48;5;94m   1   2   3   4   5   \033[0m");
+            out.println("\033[48;5;94m   1   2   3   4   5   " + RESET);
         }
         out.println();
     }
@@ -77,11 +77,90 @@ public class CLI implements View{
         out.print("Tiles chosen:");
         for (Tile t:
              tiles) {
-            out.print("\033[0m " + t.getColor() + " " + t.getInitial() + " " );
+            out.print(RESET + " " + t.getColor() + " " + t.getInitial() + " " );
         }
-        out.println("\033[0m");
+        out.println(RESET);
+    }
+    
+    @Override
+    public void showCommons(List<Integer> cc){
+        int x=1;
+        for (int i:
+             cc) {
+            switch (i){
+                case(1)->{
+                    out.println("Goal " + x + ": Six groups each containing at least\n" +
+                            "2 tiles of the same type (not necessarily\n" +
+                            "in the depicted shape).\n" +
+                            "The tiles of one group can be different\n" +
+                            "from those of another group.");
+                }
+                case(2)->{
+                    out.println("Goal " + x + ": Four tiles of the same type in the four\n" +
+                            "corners of the bookshelf. ");
+                }
+                case(3)->{
+                    out.println("Goal " + x + ": Four groups each containing at least\n" +
+                            "4 tiles of the same type (not necessarily\n" +
+                            "in the depicted shape).\n" +
+                            "The tiles of one group can be different\n" +
+                            "from those of another group");
+                }
+                case(4)->{
+                    out.println("Goal " + x + ": Two groups each containing 4 tiles of\n" +
+                            "the same type in a 2x2 square. The tiles\n" +
+                            "of one square can be different from\n" +
+                            "those of the other square.");
+                }
+                case(5)->{
+                    out.println("Goal " + x + ": Three columns each formed by 6 tiles Five tiles of the same type forming an X.\n" +
+                            "of maximum three different types. One\n" +
+                            "column can show the same or a different\n" +
+                            "combination of another column.");
+                }
+                case(6)->{
+                    out.println("Goal " + x + ": Eight tiles of the same type. There’s no\n" +
+                            "restriction about the position of these\n" +
+                            "tiles.");
+                }
+                case(7)->{
+                    out.println("Goal " + x + ": Five tiles of the same type forming a\n" +
+                            "diagonal.");
+                }
+                case(8)->{
+                    out.println("Goal " + x + ": Four lines each formed by 5 tiles of\n" +
+                            "maximum three different types. One\n" +
+                            "line can show the same or a different\n" +
+                            "combination of another line.");
+                }
+                case(9)->{
+                    out.println("Goal " + x + ": Two columns each formed by 6\n" +
+                            "different types of tiles. ");
+                }
+                case(10)->{
+                    out.println("Goal " + x + ": Two lines each formed by 5 different\n" +
+                            "types of tiles. One line can show the\n" +
+                            "same or a different combination of the\n" +
+                            "other line.");
+                }
+                case(11)->{
+                    out.println("Goal " + x + ": Five tiles of the same type forming an X.");
+                }
+                case(12)->{
+                    out.println("Goal " + x + ": Five columns of increasing or decreasing\n" +
+                            "height. Starting from the first column on\n" +
+                            "the left or on the right, each next column\n" +
+                            "must be made of exactly one more tile.\n" +
+                            "Tiles can be of any type. ");
+                }
+
+            }
+            out.println();
+            x++;
+        }
     }
 
+    
     @Override
     public void createLobby(String lobbyName, int maxPlayers){
 
@@ -145,7 +224,7 @@ public class CLI implements View{
     }
 
     public void help(){
-        out.println("\u001B[31mThis the command list: \n" +
+        out.println("\u001B[31mThis is the command list: \n" +
                 "createlobby <Number of players>\n" +
                 "joinlobby <Lobby id>\n" +
                 "showlobby\n" +
@@ -155,7 +234,7 @@ public class CLI implements View{
                 "selectorder <First> <Second> <Third>\n" +
                 "selectcolumn <ShelfColumn>\n" +
                 "showpersonal\n" +
-                "showcommons (WIP)\u001B[0m");
+                "showcommons\u001B[0m");
     }
 /*
     //statica perchè non ha senso creare un oggetto cli, non so se è il massimo una funzione così vedremo

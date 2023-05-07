@@ -156,6 +156,7 @@ public class Player implements Serializable {
          return choice;
          }
      }
+
      public int maxSpaceInShelf(){
         int maxSpace=0;
         boolean firstFullRow=true;
@@ -170,7 +171,7 @@ public class Player implements Serializable {
                  maxSpace++;
                  if(maxSpace==3) return maxSpace;
              }
-             firstFullRow=false;
+             firstFullRow=true;
          }
         return maxSpace;
      }

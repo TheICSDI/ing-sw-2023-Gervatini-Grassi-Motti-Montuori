@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.Action;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 /*
 game-controller e' una classe che ha due macro funzionalita'
@@ -57,7 +58,11 @@ public class gameController {
         Game g = allGames.get(gameId);
         List<orderBook> toFind;
         Optional<orderBook> found = Optional.empty();
+        //int i=0;
         while(found.isEmpty()){
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+            }catch(Exception ignored){}
             List<orderBook> toFilter = pendingOrders;
             //applica un filtro a tutti i comandi inevasi e trova quelli che corrispondono all'azione corretta del giocatore
             //corretto nel game corretto, se ne trova piu di una per un qualche errore prende la piu recente id mes piu alto
@@ -67,7 +72,9 @@ public class gameController {
                     .filter(ob -> ob.a.equals(a))
                     .collect(Collectors.toList());
             if(!toFind.isEmpty()){// se ci sono pending piu richiesta della stessa azione dello stesso giocatore prendo la piu recente
-                pendingOrders.removeAll(toFind);//rimuovo l'ordine scelto e anche tutti quelli residuali doppioni
+                synchronized (queue) {
+                    pendingOrders.removeAll(toFind);//rimuovo l'ordine scelto e anche tutti quelli residuali doppioni
+                }
                 found = toFind.stream()
                         .reduce((ob1,ob2) -> ob1.num_mess > ob2.num_mess ? ob1 : ob2);
             }
@@ -103,14 +110,18 @@ public class gameController {
         Game g = allGames.get(gameId);
         orderBook pending = new orderBook(g,p,action,num_mess);
         pending.setOrder(order);
-        pendingOrders.add(pending);
+        synchronized (queue) {
+            pendingOrders.add(pending);
+        }
     }
     public  void selectColumn(String player, Action action, int numCol, int gameId, int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
         orderBook pending = new orderBook(g,p,action,num_mess);
         pending.setNum_col(numCol);
-        pendingOrders.add(pending);
+        synchronized (queue) {
+            pendingOrders.add(pending);
+        }
     }
 
 

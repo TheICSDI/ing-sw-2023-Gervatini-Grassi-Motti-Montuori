@@ -16,6 +16,7 @@ public interface View {
     void showLobby(List<String> usrs, int num_usrs);
     void showBoard(type[][] simpleBoard,Action action);
     void showChosenTiles(List<Tile> tiles);
+    void showCommons(List<Integer> cc);
     void joinLobby(int lobby_id);
     void exitLobby(int lobby_id);
     void startGame(int lobby_id);

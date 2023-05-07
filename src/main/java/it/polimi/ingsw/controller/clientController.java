@@ -71,6 +71,7 @@ public class clientController{
     public GeneralMessage checkMessageShape(String m,clientController controller){
         Action curr_action;
         List<String> curr_params;
+        m=m.trim();
         //parsing dell'input string
         String[] words = m.split(" "); //il delimitatore delle parole e' lo spazio
         String action = words[0];

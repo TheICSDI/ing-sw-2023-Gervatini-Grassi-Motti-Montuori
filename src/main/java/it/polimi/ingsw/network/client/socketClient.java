@@ -60,7 +60,7 @@ public class socketClient {
                 cli.showBoard(control.getSimpleGoal(), Action.UPDATESHELF);
             } else if(curr_action.equals(Action.SHOWCOMMONS)){
                 cli.displayMessage("Common goals: ");
-                cli.displayMessage(control.cc.get(0) + " " + control.cc.get(1));//temporaneo
+                cli.showCommons(control.cc);
             }else {
                 Out.println(toSend);
             }
@@ -153,7 +153,7 @@ public class socketClient {
                                 cli.displayMessage("\n  Your personal goal");
                                 cli.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
                                 cli.displayMessage("Common goals: ");
-                                cli.displayMessage(controller.cc.get(0) + " " + controller.cc.get(1));//temporaneo
+                                cli.showCommons(controller.cc);
                             }
                         }
                         case INGAMEEVENT -> {

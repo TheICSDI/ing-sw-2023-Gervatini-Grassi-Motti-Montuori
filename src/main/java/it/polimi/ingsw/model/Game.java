@@ -18,8 +18,7 @@ import java.util.*;
 public class Game {
     private static int count = 0;
     public int id;
-    private Boolean started = false;
-    private int nPlayers;// non puo essere final perche' il numero di player puo cambiare se qualcuno entra ed esce
+    private final int nPlayers;
     private final List<Player> players;
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>();
@@ -159,7 +158,10 @@ public class Game {
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
-                    p.getOut().println(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT));
+                    for (Player pb:
+                         players) {
+                        pb.getOut().println(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT));
+                    }
                 }
 
                 //At each turn the common card goals are calculated
