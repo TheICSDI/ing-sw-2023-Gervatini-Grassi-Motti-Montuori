@@ -132,7 +132,7 @@ public class socketClient {
                     reply.getCC(controller.cc);
                 }
 
-                //TODO COLLEGARE MESSAGGIO CHIUSURA GAME
+                //TODO Decidire cosa fare una volta finito il game
                 //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
                 //altrimenti non è questa sezione che li controlla(e invece ha senso):D
                 default -> {
@@ -188,10 +188,9 @@ public class socketClient {
         System.out.println(in.readLine());
         //Controllo unicità nome
         do {
-
-            //username = cli.askUsername();
-            //nick = new SetNameMessage(username,true);
-            nick = new SetNameMessage("Mayhem",true);
+            username = cli.askUsername();
+            nick = new SetNameMessage(username,true);
+            //nick = new SetNameMessage("Mayhem",true);
             out.println(nick);//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
             try{
                 //nick = new SetNameMessage(in.readLine());
@@ -212,15 +211,14 @@ public class socketClient {
                 throw new RuntimeException(e);
             }
         });
-        Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
-        //Ciclio per invio messaggi
+        cli.displayMessage("Write /help for command list.");
+        //Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
+        //Ciclo per invio messaggi
         while(true) { //Condizione da rivedere
-
             Client.sendMessage(input.nextLine(),controller,in,out,cli);
         }
 
         //executor.shutdownNow();//uccisione thread
-        //ToDo Controlli di fine game e riempimento board, punteggio
     }
 
 }

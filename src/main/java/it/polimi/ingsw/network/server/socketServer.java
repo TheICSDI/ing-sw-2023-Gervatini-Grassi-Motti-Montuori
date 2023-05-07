@@ -71,7 +71,6 @@ public class socketServer {
                         case PICKTILES -> mex = new PickTilesMessage(input);
                         case SELECTORDER -> mex = new SelectOrderMessage(input);
                         case SELECTCOLUMN -> mex = new SelectColumnMessage(input);
-                        //TODO Mettere tutti i casi nella ricezione messaggi
                     }
                     //il comando viene eseguito
                     if(!(mex ==null)){

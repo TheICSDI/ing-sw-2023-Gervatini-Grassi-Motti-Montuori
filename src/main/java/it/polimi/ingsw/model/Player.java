@@ -240,6 +240,28 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * Counts the points given by the personal card
+     */
+    public void personalPoint(){
+        int matches=0;
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                if (!(this.Shelf[i][j].getCategory().equals(type.EMPTY))&&(this.Shelf[i][j].getCategory().equals(this.getPersonalCard().getCard()[i][j].getCategory()))){
+                    matches++;
+                }
+            }
+        }
+        switch (matches){
+            case 1 -> totalPoints++;
+            case 2 -> totalPoints += 2;
+            case 3 -> totalPoints += 4;
+            case 4 -> totalPoints += 6;
+            case 5 -> totalPoints += 9;
+            case 6 -> totalPoints += 12;
+        }
+    }
+
     /** Recursive function that calculate the dimension of the current cluster.*/
     private int clusteringRes(int x, int y, boolean[][] checked){
         Tile t = this.Shelf[x][y];

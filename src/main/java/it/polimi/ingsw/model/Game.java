@@ -5,7 +5,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.gameController;
-import it.polimi.ingsw.exceptions.CannotAddPlayerException;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
@@ -158,39 +157,59 @@ public class Game {
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
-                    for (Player pb:
-                         players) {
+                    for (Player pb : players) {
                         pb.getOut().println(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT));
                     }
                 }
 
                 //At each turn the common card goals are calculated
                 if(CommonCards.get(0).control(p)){
+                    for (Player pcc : players) {
+                        pcc.getOut().println(new ReplyMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
+                                "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),Action.INGAMEEVENT));
+                    }
                     CommonCards.get(0).givePoints(p);
                 }
                 if(CommonCards.get(1).control(p)){
+                    for (Player pcc : players) {
+                        pcc.getOut().println(new ReplyMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
+                                "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),Action.INGAMEEVENT));
+                    }
                     CommonCards.get(1).givePoints(p);
                 }
 
                 //If the end game token has not been assigned and the current player has completed his shelf
                 //it assigns the end token and add 1 point
                 if (!check && p.isShelfFull()) {
+                    for (Player pe : players) {
+                        pe.getOut().println(new ReplyMessage(p.getNickname() + " filled his shelf first and gained a point! This is the last turn.",Action.INGAMEEVENT));
+                    }
                     p.setEndToken(true);
                     p.addPoints(1);
                     check = true;
-                }
-
-                //If the next player has the end game token the game ends
-                if (players.get((players.indexOf(p) + 1) % players.size()).getEndToken()) {
                     endGame = true;
                 }
+                //ToDo inviare a ogni player a fine partita le shelf di tutti i player cosicchè le possano stamapre in locale
+                //ToDo GAME DI PROVA
+                //If the next player has the end game token the game ends //THIS IS NOT THE RULE
+                /*if (players.get((players.indexOf(p) + 1) % players.size()).getEndToken()) {
+
+                }*/
             }
         }
         for(Player p : players){
             p.calculateGeneralPoints();
-
+            p.personalPoint();
         }
-        //Manca il conteggio di personal card
+        for (Player p : players) {
+            p.getOut().println(new ReplyMessage("Players' total points: ", Action.INGAMEEVENT));
+            for (Player ptp:players) {
+                p.getOut().println(new ReplyMessage(ptp.getNickname() + ": " + ptp.getTotalPoints(), Action.INGAMEEVENT));
+            }
+        }
+        for (Player p : players) {
+            p.getOut().println(new ReplyMessage("The winner is " + calculateWinner().getNickname(),Action.INGAMEEVENT));
+        }
     }
 
     /** Returns the winner of the game.

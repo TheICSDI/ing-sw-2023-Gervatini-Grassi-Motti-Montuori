@@ -84,7 +84,6 @@ public class gameController {
         return found;
     }
 
-    //TODO controllare se mancano comandi
 
 
 

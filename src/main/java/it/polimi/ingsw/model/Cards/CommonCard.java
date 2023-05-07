@@ -5,6 +5,11 @@ import it.polimi.ingsw.model.Player;
 
 public class CommonCard{
     private int points = 8;
+
+    public int getPoints() {
+        return points;
+    }
+
     private final boolean firstCard;
     private final CCStrategy strategy;
 
