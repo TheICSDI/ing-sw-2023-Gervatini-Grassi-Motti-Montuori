@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.model.Player;
 
 public class CC_06 implements CCStrategy {
+    private final int id=6;
+    @Override
+    public int getId(){return this.id;}
     /**
      * Checks if the common goal is completed.
      *

@@ -1,13 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Tile.type;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  * This class represents a message for warning the update of the board.
@@ -62,5 +56,4 @@ public class UpdateBoardMessage extends ReplyMessage {
         return new Gson().fromJson(json,UpdateBoardMessage.class);
     }
 
-    public type[][] getSimpleBoard(){return this.simpleBoard;}
 }

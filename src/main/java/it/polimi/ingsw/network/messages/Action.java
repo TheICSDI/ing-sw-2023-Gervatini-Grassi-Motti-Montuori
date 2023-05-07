@@ -17,6 +17,7 @@ public enum Action {
     INGAMEEVENT, //AZIONE PER INVIARE MESSAGGI DURANTE IL GAME
     CHOSENTILES,
     SHOWPERSONAL,
-    //TODO da implementare messaggi per mostrare le common e le personal goal
+
+    SHOWCOMMONS,
     ERROR
 }

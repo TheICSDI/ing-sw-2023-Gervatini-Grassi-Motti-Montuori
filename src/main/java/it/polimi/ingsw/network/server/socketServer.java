@@ -72,7 +72,7 @@ public class socketServer {
                         case PICKTILES -> mex = new PickTilesMessage(input);
                         case SELECTORDER -> mex = new SelectOrderMessage(input);
                         case SELECTCOLUMN -> mex = new SelectColumnMessage(input);
-                        //TODO Mettere tutti i casi nella ricezione messaggi
+                        //TODO Mettere tutti i casi nella ricezione messaggi CREDO MANCHI SOLO EXITLOBBY SE LO VOGLIAMO FARE
                     }
                     //il comando viene eseguito
                     if(!(mex ==null)){

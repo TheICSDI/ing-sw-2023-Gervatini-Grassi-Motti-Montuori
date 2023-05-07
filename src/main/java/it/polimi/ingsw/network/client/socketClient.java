@@ -44,18 +44,26 @@ public class socketClient {
      * @throws IOException
      */
     public void sendMessage(String message,clientController control,BufferedReader In,PrintWriter Out, CLI cli) throws IOException {
-        GeneralMessage clientMessage;
-        //Controlla che il formato del comando sia giusto
-        clientMessage = control.checkMessageShape(message,control);
-        Action curr_action=clientMessage.getAction();
-        String toSend = clientMessage.toString();
-        //Se il formato è sbagliato checkmessage restituisce un messaggio di tipo error e non viene inviato
-        if(curr_action.equals(Action.ERROR)) {
-            new ReplyMessage(toSend,Action.ERROR).print();
-        }else if(curr_action.equals(Action.SHOWPERSONAL)){
-            cli.showBoard(controller.getSimpleGoal(),Action.UPDATESHELF);
-        }else{
-            Out.println(toSend);
+        if(message.equals("/help")){
+            cli.help();
+        }else {
+            GeneralMessage clientMessage;
+            //Controlla che il formato del comando sia giusto
+            clientMessage = control.checkMessageShape(message, control);
+            Action curr_action = clientMessage.getAction();
+            String toSend = clientMessage.toString();
+            //Se il formato è sbagliato checkmessage restituisce un messaggio di tipo error e non viene inviato
+            if (curr_action.equals(Action.ERROR)) {
+                new ReplyMessage(toSend, Action.ERROR).print();
+            } else if (curr_action.equals(Action.SHOWPERSONAL)) {
+                cli.displayMessage("\n  Your personal goal");
+                cli.showBoard(control.getSimpleGoal(), Action.UPDATESHELF);
+            } else if(curr_action.equals(Action.SHOWCOMMONS)){
+                cli.displayMessage("Common goals: ");
+                cli.displayMessage(control.cc.get(0) + " " + control.cc.get(1));//temporaneo
+            }else {
+                Out.println(toSend);
+            }
         }
     }
 
@@ -76,7 +84,7 @@ public class socketClient {
     public void listenMessages(clientController controller, BufferedReader In) throws IOException, ParseException, InvalidKeyException {
         ReplyMessage reply;
         boolean isLobby;
-        CLI CLI = new CLI();
+        CLI cli = new CLI();
         while(true) {
             isLobby=false;
             String message = In.readLine();
@@ -103,6 +111,7 @@ public class socketClient {
                     controller.setIdLobby(0);
                     reply = StartGameReplyMessage.decrypt(message);
                     controller.setIdGame(reply.getIdGame());
+                    controller.setFirstTurn(true);
                     isLobby=true;
                 }
                 case UPDATEBOARD,UPDATESHELF -> {
@@ -118,8 +127,11 @@ public class socketClient {
                     reply = UpdateBoardMessage.decrypt(message);
                     controller.setSimpleGoal(reply.getSimpleBoard());
                 }
+                case SHOWCOMMONS -> {
+                    reply = SendCommonCards.decrypt(message);
+                    reply.getCC(controller.cc);
+                }
 
-                //TODO CARTE PERSONAL GOAL ETC;
                 //TODO COLLEGARE MESSAGGIO CHIUSURA GAME
                 //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
                 //altrimenti non è questa sezione che li controlla(e invece ha senso):D
@@ -135,7 +147,14 @@ public class socketClient {
                 }else{
                     switch (replyAction){
                         case UPDATEBOARD, UPDATESHELF -> {
-                            CLI.showBoard(reply.getSimpleBoard(),replyAction);
+                            cli.showBoard(reply.getSimpleBoard(),replyAction);
+                            if(controller.isFirstTurn()){
+                                controller.setFirstTurn(false);
+                                cli.displayMessage("\n  Your personal goal");
+                                cli.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+                                cli.displayMessage("Common goals: ");
+                                cli.displayMessage(controller.cc.get(0) + " " + controller.cc.get(1));//temporaneo
+                            }
                         }
                         case INGAMEEVENT -> {
                             reply.print(); //da implementare in cli
@@ -144,7 +163,7 @@ public class socketClient {
                             List<Tile> tile=new ArrayList<>();
                             reply.getTiles(tile);
                             //temporaneo
-                            CLI.showChosenTiles(tile);
+                            cli.showChosenTiles(tile);
                         }
                     }
                 }
@@ -200,8 +219,6 @@ public class socketClient {
             Client.sendMessage(input.nextLine(),controller,in,out,cli);
         }
         //executor.shutdownNow();//uccisione thread
-        //ToDo PERSONAL GOAL E PERSONAL CARDS: basta mandarle una volta a tutti a inizio game così il client non deve chiederle per stamparle ma le ha in locale
-        //ToDo Da fare il controllo per vedere se metti tiles in una colonna dove non ci stanno
         //ToDo Controlli di fine game e riempimento board, punteggio
     }
 

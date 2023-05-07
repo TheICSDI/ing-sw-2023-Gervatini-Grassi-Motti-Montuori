@@ -13,6 +13,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CC_10  implements CCStrategy {
+    private final int id=10;
+    @Override
+    public int getId(){return this.id;}
     /**
      * Checks if the common goal is completed.
      *

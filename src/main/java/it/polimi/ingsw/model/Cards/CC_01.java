@@ -10,6 +10,10 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 
 public class CC_01 implements CCStrategy {
+    private final int id=1;
+    @Override
+    public int getId(){return this.id;}
+
     /**
      * Checks if the common goal is completed.
      *

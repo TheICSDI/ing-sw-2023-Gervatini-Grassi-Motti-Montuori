@@ -132,8 +132,6 @@ public class serverController {
       }
    }
 
-    //todo CONTROLLO CONDIZIONI MESSAGGI
-
    /**
     * Search player in all lobbies
     * @param p player to look for

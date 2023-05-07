@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLI implements View{
-    //"\u001b[48;2;<R code>;<G code>;<B code>"
+    //"\u001b[48;2;<R code>;<G code>;<B code>m" BACKGROUND COLORS
+    //TODO  GRAFICHE PER LE COMMON CARDS
     public static final String RESET = "\033[0m";
 
     public static final String BLACK = "\033[0;30m";
@@ -140,7 +141,21 @@ public class CLI implements View{
 
     @Override
     public void displayMessage(String msg){
+        out.println(msg);
+    }
 
+    public void help(){
+        out.println("\u001B[31mThis the command list: \n" +
+                "createlobby <Number of players>\n" +
+                "joinlobby <Lobby id>\n" +
+                "showlobby\n" +
+                "exitlobby (WIP)\n" +
+                "startgame\n" +
+                "picktiles <Row1> <Column1> (up to three tiles)\n" +
+                "selectorder <First> <Second> <Third>\n" +
+                "selectcolumn <ShelfColumn>\n" +
+                "showpersonal\n" +
+                "showcommons (WIP)\u001B[0m");
     }
 /*
     //statica perchè non ha senso creare un oggetto cli, non so se è il massimo una funzione così vedremo

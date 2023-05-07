@@ -14,6 +14,9 @@ import java.util.Set;
 
 
 public class CC_08 implements CCStrategy {
+    private final int id=8;
+    @Override
+    public int getId(){return this.id;}
     /**
      * Checks if the common goal is completed.
      *

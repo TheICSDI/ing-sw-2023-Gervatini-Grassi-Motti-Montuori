@@ -11,6 +11,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.type;
 
 public class CC_12 implements CCStrategy {
+    private final int id=12;
+    @Override
+    public int getId(){return this.id;}
     /**
      * Checks if the common goal is completed.
      *

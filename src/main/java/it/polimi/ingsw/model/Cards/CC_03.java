@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 
 public class CC_03 implements CCStrategy {
+    private final int id=3;
+    @Override
+    public int getId(){return this.id;}
     Tile[][] shelf;
 
     boolean[][] Seen;

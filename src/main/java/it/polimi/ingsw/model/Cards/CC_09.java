@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CC_09 implements CCStrategy {
+    private final int id=9;
+    @Override
+    public int getId(){return this.id;}
     /**
      * Checks if the common goal is completed.
      *

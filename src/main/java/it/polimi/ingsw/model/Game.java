@@ -11,10 +11,7 @@ import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.network.messages.ChosenTilesMessage;
-import it.polimi.ingsw.network.messages.ReplyMessage;
-import it.polimi.ingsw.network.messages.UpdateBoardMessage;
+import it.polimi.ingsw.network.messages.*;
 
 import java.util.*;
 
@@ -27,6 +24,8 @@ public class Game {
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
+    List<Integer> ccId=new ArrayList<>();
+
     private final List<PersonalCard> allPC = new ArrayList<>();
     public final gameController controller;
 
@@ -66,6 +65,8 @@ public class Game {
         Collections.shuffle(allCC);
         CommonCards.add(new CommonCard(allCC.get(0),true));
         CommonCards.add(new CommonCard(allCC.get(1),false));
+        ccId.add(allCC.get(0).getId());
+        ccId.add(allCC.get(1).getId());
     }
 
 
@@ -80,10 +81,12 @@ public class Game {
         boolean endGame = false;
         boolean check = false;
         started = true;
-        /*for (Player p:
+
+        for (Player p:
              players) {
             sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
-        }*/ //ToDo FIXARE, dovrebbe mandare le personal goal ma fa esplodere tutto
+            p.getOut().println(new SendCommonCards(ccId));
+        }
         while(!endGame){
             for (Player p: players) {
                 for (Player p1:
@@ -102,7 +105,7 @@ public class Game {
 
                 //The player can pick some tiles from the board and insert it inside its shel//
                 List<Tile>  toInsert = new ArrayList<>();
-                while(toInsert.isEmpty()) { //todo è possibile prendere due tiles disponibili ma non adiacenti, è da fixare
+                while(toInsert.isEmpty()) {
                     Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
                     try{
                         toInsert = p.pickTiles(chosen, board,p);
@@ -237,23 +240,6 @@ public class Game {
         }
     }
 
-    /** Shows the board in a graphical way. Each tile is represented by a symbol. */
-    public void showBoard(){
-        for(int i=0;i<board.getNumRows();i++){
-            for(int j=0;j<board.getNumCols();j++){
-                switch (board.board[i][j].getCategory()) {
-                    case GAMES -> System.out.println("G");
-                    case CATS -> System.out.println("C");
-                    case BOOKS -> System.out.println("B");
-                    case FRAMES -> System.out.println("F");
-                    case PLANTS -> System.out.println("P");
-                    case TROPHIES -> System.out.println("T");
-                    //case not_accessible or empty
-                    default -> System.out.println("-");
-                }
-            }
-        }
-    }
 
     /** Gets the list of player. */
     public List<Player> getPlayers() {

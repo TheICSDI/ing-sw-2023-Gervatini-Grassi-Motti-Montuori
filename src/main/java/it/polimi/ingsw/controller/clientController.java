@@ -11,13 +11,25 @@ public class clientController{
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
     private final String nickname;
     private int idLobby=0;
-    private type[][] simpleGoal;
+    private type[][] simpleGoal=new type[6][5];
+    public List<Integer> cc=new ArrayList<>();
+
 
     public type[][] getSimpleGoal(){return simpleGoal;}
     public void setSimpleGoal(type[][] goal) {
         for (int i = 0; i < goal.length; i++) {
-            System.arraycopy(goal[i], 0, simpleGoal[i], 0, goal[1].length);
+            for (int j = 0; j < goal[0].length; j++) {
+                this.simpleGoal[i][j]=goal[i][j];
+            }
         }
+    }
+
+    public boolean isFirstTurn() {
+        return firstTurn;
+    }
+
+    public void setFirstTurn(boolean firstTurn) {
+        this.firstTurn = firstTurn;
     }
 
     public int getIdLobby() {
@@ -28,6 +40,8 @@ public class clientController{
         this.idLobby = idLobby;
     }
     private int idGame=0;
+
+    private boolean firstTurn=false;
 
     public int getIdGame() {
         return idGame;
@@ -133,8 +147,17 @@ public class clientController{
 
                 }
                 case SHOWPERSONAL -> {
-                    if(idGame!=0){
+                    if(idGame>0){
                         return new ShowPersonalCardMessage();
+                    }else{
+                        return new DefaultErrorMessage("Not in game");
+                    }
+                }
+                case SHOWCOMMONS -> {
+                    if(idGame>0){
+                        return new ShowCommonCards();
+                    }else{
+                        return new DefaultErrorMessage("Not in game");
                     }
                 }
 
@@ -145,7 +168,7 @@ public class clientController{
         catch(IllegalArgumentException e){
             idMex--;//M:secondo me e' tagliabile tanto gli id vanno solo in ordine cresciente anche se ne perdiamo
             // uno l'importante e' che non ce ne siano due ugali// A:boh mi sembra scema come cosa avere i messaggi con id: 1,2,7 perchè il giocatore non sa scrivere
-            return new DefaultErrorMessage("Invalid command");
+            return new DefaultErrorMessage("Invalid command: Write /help for commands list");
         }
 
         return null;

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 //Stampino di risposta del server, dato che spesso una stringa non basta
@@ -14,6 +15,10 @@ public class ReplyMessage extends GeneralMessage implements Serializable {
     protected int idLobby;
     protected boolean gameStart=false;
     type[][] simpleBoard;
+    List<Integer> cc=new ArrayList<>();
+    public void getCC(List<Integer> cc){
+        cc.addAll(this.cc);
+    }
 
     public String getMessage() {
         return message;
