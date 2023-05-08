@@ -1,3 +1,4 @@
+/** It implements the RMIconnection interface, in order to be able to establish a RMI connection. */
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.gameController;
@@ -13,12 +14,11 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection {
 
-    //
     public RMIserverImpl() throws RemoteException {
         super();
     }
 
-    //TODO Come idea ho fatto la stessa cosa del server anche da lato client così ho l'oggetto rmiclient in socketClient che serve a mandare i messaggi al client,
+    //TODO: Come idea ho fatto la stessa cosa del server anche da lato client così ho l'oggetto rmiclient in socketClient che serve a mandare i messaggi al client,
     //inoltre differenzio i messaggi che aspettano una risposta da quelli che non lo fanno(probabilmente non serve però, credo basti passare null quando non aspetti risposte e
     //con controlli fatti bene si risolve con una funzione) però praticamente dal client chiamo la funzione che manda un messaggio e li passo come parametro l'oggetto che serve al server
     //per rispondere

@@ -62,13 +62,13 @@ public class clientController{
     */
 
     /**
-     * Checks if the command called by the client is accepted by the server, with the right number of parameters and formats
-     * the message to be ready to send
-     * @param m message to check
-     * @param controller sender client's controller
-     * @return subclass of general message based on the action type
+     * Checks if the command called by the client is accepted by the server, with the right number of parameters and
+     * formats the message to be ready to send.
+     * @param m message to check.
+     * @param controller sender client's controller.
+     * @return subclass of general message based on the action type.
      */
-    public GeneralMessage checkMessageShape(String m,clientController controller){
+    public GeneralMessage checkMessageShape(String m, clientController controller){
         Action curr_action;
         List<String> curr_params;
         m=m.trim();

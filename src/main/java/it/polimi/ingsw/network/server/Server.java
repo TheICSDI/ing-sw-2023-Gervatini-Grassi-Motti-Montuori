@@ -1,3 +1,4 @@
+/** It represents a server able to establish connections with multiple client, both via socket and RMI. */
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.gameController;
@@ -23,9 +24,10 @@ import java.util.concurrent.TimeUnit;
 
 public class Server {
     private ServerSocket serverSocket;
-
     private static final serverController SC = new serverController();
 
+    /** It starts the socket server on the given port, that listen for clients to connect.
+     * @param port the server's port. */
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         while(true){
@@ -33,41 +35,50 @@ public class Server {
         }
     }
 
+    /** It closes the socket server. */
     public void end() throws IOException {
         serverSocket.close();
     }
 
+    /** It manages multiple client connections via socket. */
     private static class clientHandler extends Thread{
-        private Socket clientSocket;
+        private final Socket clientSocket;
         private PrintWriter out;
         private BufferedReader in;
 
+        /** Constructor that specify the client for the entire class. */
         public clientHandler(Socket socket){
             this.clientSocket = socket;
         }
+
+        /** It overrides the run() method to manage multiple thread, each one rearguing a single socket connection. */
         @Override
         public void run() {
             try {
+                //Creates the socket between client and sever via input/output
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 //clientSocket.setKeepAlive(true);
                 String input;
-                //Prima cosa dopo la connessione chiede un nickname finchè non ne riceve uno unico
+                //Firstly it ask for a nickname until the given one is available
+                //In this way each client is represented by a unique nickname
                 out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
                 SetNameMessage nickname;
-                nickname=SetNameMessage.decrypt(in.readLine());
+                nickname = SetNameMessage.decrypt(in.readLine());
                 while(gameController.allPlayers.containsKey(nickname.getUsername())){
                     out.println(new SetNameMessage("",false ));
-                    nickname=SetNameMessage.decrypt(in.readLine());
+                    nickname = SetNameMessage.decrypt(in.readLine());
                 }
-                //che poi viene aggiungo alla hashmap statica allPlayers e crea l'oggetto player associato
+                //If the nickname is not already taken, it is added to the static hashmap allPlayers, and the
+                //associated player object is created
                 gameController.allPlayers.put(nickname.getUsername(),new Player(nickname.getUsername(),out));
                 out.println(new SetNameMessage(nickname.getUsername(),true ));
 
+                //Infine loop that enable the reception of messages from the client
                 GeneralMessage mex = null;
-                //loop infinito che riceve i messaggi
-                while((input=in.readLine())!=null){
-                    //identify legge la action del messaggio e re istanzia mex come la corrispondente sottoclasse di General Message
+                while((input = in.readLine()) != null){
+                    //The method identify (from the class GeneralMessage) is called to generate a corresponding
+                    //message to the given action
                     switch (GeneralMessage.identify(input)){
                         case CREATELOBBY -> mex = new CreateLobbyMessage(input);
                         case SHOWLOBBY -> mex = new ShowLobbyMessage(input);
@@ -77,12 +88,14 @@ public class Server {
                         case SO -> mex = new SelectOrderMessage(input);
                         case SC -> mex = new SelectColumnMessage(input);
                     }
-                    //il comando viene eseguito
-                    if(!(mex ==null)){
+                    //If the message is valid the command is executed by the serverController
+                    if(!(mex == null)){
                         SC.executeMessage(mex,out);
                     }
-                    mex = null;//
+                    //To ensure that the loop can finish
+                    mex = null;
                 }
+                //If the while terminate the socket connection is closed
                 in.close();
                 out.close();
                 clientSocket.close();
@@ -92,12 +105,13 @@ public class Server {
         }
     }
 
+    /** It starts the server both via socket and RMI. */
     public static void main(String[] args) throws IOException {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() ->{
             try{
                 startRMI();
-            }catch (InterruptedException ignored){}
+            } catch (InterruptedException ignored){}
         });
         startSocket();
     }
@@ -113,7 +127,7 @@ public class Server {
                 executor.submit(() ->{
                     try{
                         ping();
-                    }catch (InterruptedException ignored){}
+                    } catch (InterruptedException ignored){}
                 });
 
             } catch (Exception e) {
@@ -122,16 +136,18 @@ public class Server {
             }
     }
 
+    /** It starts a server socket on the port 23450. */
     public static void startSocket() throws IOException {
         Server server = new Server();
         server.start(23450);
+        System.out.println("Socket server is ready!"); //Sarebbe carino che funzionasse :D
     }
 
+    /** It enables a ping between the server and the RMI client. */
     private static void ping() throws InterruptedException {
         while(true) {
             TimeUnit.SECONDS.sleep(30);
         }
-
     }
 
 }

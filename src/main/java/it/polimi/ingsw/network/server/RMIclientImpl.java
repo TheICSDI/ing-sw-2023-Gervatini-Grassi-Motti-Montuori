@@ -12,7 +12,6 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
     @Override
     public void RMIsend(String m, RMIconnection reply) throws RemoteException {
 
-
     }
 
     @Override

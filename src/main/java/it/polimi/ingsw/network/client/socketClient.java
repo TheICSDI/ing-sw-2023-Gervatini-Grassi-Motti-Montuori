@@ -210,7 +210,6 @@ public class socketClient {
         }else{
             System.out.println("Wrong input");
         }
-
     }
 
     public static void socket() throws IOException {
@@ -270,6 +269,7 @@ public class socketClient {
             RMIclientImpl rmIclient = new RMIclientImpl();
             Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer",rmIclient);
             //TODO MANCA IL PING E IL CICLO DEL CONTROLLO IN CASO DI NOME GIA' PRESO
+            System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             System.out.println("Enter your nickname: ");
             input = in.nextLine();
             input= new SetNameMessage(input,true).toString();

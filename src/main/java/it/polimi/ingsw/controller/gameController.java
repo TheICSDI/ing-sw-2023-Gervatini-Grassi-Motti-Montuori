@@ -1,4 +1,3 @@
-/** The clients have to call the controller's method to interact with the game's model.*/
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
@@ -34,7 +33,7 @@ public class gameController {
     public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;
         order = findTheRequest(player,gameId,Action.SC);
-        return order.get().getNum_col();
+        return order.get().getNumCol();
     }
     public List<Integer> chooseOrder(String player, int gameId){
         Optional<orderBook> order;
@@ -76,7 +75,7 @@ public class gameController {
                     pendingOrders.removeAll(toFind);//rimuovo l'ordine scelto e anche tutti quelli residuali doppioni
                 }
                 found = toFind.stream()
-                        .reduce((ob1,ob2) -> ob1.num_mess > ob2.num_mess ? ob1 : ob2);
+                        .reduce((ob1,ob2) -> ob1.numMess > ob2.numMess ? ob1 : ob2);
             }
             //System.out.println(i);
             //i++;
@@ -117,7 +116,7 @@ public class gameController {
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
         orderBook pending = new orderBook(g,p,action,num_mess);
-        pending.setNum_col(numCol);
+        pending.setNumCol(numCol);
         synchronized (queue) {
             pendingOrders.add(pending);
         }

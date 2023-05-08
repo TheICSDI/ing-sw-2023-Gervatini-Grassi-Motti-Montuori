@@ -1,3 +1,4 @@
+/** It manages the pending commands not yet fully executed. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
@@ -6,46 +7,53 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.Action;
 
 import java.util.List;
-//serve ad aggiungere comandi pendenti non ancora completamenti eseguiti.
+
 public class orderBook{
-    //se vediamo che risulta lento si puo anche fare storage solo del gameId e del Player nickname
     public Game g;
     public Player p;
     public Action a;
-    public int num_mess;
+    public int numMess;
     private List<Position> pos = null;
     private List<Integer> order = null;
-    private int num_col = 42;
+    private int numCol = 42;
 
-    public orderBook(Game g, Player p, Action a,int num_mess){
-        //si potrebbero conservare game e player solo come id e nickname
+    /** Constructor that creates a book of commands associated to a specific gmae, plater, action and a unique number
+     * of a message. */
+    public orderBook(Game g, Player p, Action a, int numMess){
+        //si potrebbero conservare game e player solo come id e nickname per velocizzare l'esecuzione
         this.g = g;
         this.p = p;
         this.a = a;
-        this.num_mess = num_mess;
+        this.numMess = numMess;
     }
 
+    /** It sets the list of position. */
     public void setPos(List<Position> pos) {
         this.pos = pos;
     }
 
+    /** It sets the list of order. */
     public void setOrder(List<Integer> order) {
         this.order = order;
     }
 
-    public void setNum_col(int num_col) {
-        this.num_col = num_col;
+    /** It sets the number of column. */
+    public void setNumCol(int numCol) {
+        this.numCol = numCol;
     }
 
+    /** It gets the list of position. */
     public List<Position> getPos() {
         return pos;
     }
 
+    /** It gets the list of order. */
     public List<Integer> getOrder() {
         return order;
     }
 
-    public int getNum_col() {
-        return num_col;
+    /** It gets the number of column. */
+    public int getNumCol() {
+        return numCol;
     }
 }

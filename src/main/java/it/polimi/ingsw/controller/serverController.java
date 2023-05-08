@@ -1,3 +1,4 @@
+/** It interacts with the server and the gameController, in order to modify the instance of the game. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
@@ -15,20 +16,17 @@ import java.util.concurrent.Executors;
 public class serverController {
    public gameController controller = new gameController();
    GeneralMessage message;
-   /*
-   ogni thread di questo pool permette di svolgere un game, numero di thread e' il massimo numero di partite
-   inizialibili in parallelo
-    */
+
+   /** Each thread of this pool allows maximum 10 games to be played at the same time. */
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
 
-   /**
-    *  ExecuteMessage takes a message from the client and provide to do the requested action for all commands divided by lobby and game commands
-    *    and pass the in-game requests to the game controller writing it in the orderbook, sends a reply if needed
+   /** It takes a message from the client and does the requested action for all commands divided by lobby
+    * and game commands and pass the in-game requests to the game controller writing it in the orderBook.
+    * It sends a reply if needed
     * @param received_message message to elaborate
     * @param out Output stream
     * @author Marco,Andrea
     */
-
    public void executeMessage(GeneralMessage received_message, PrintWriter out){
       message = received_message;
       int id = message.getMessage_id();
@@ -36,79 +34,94 @@ public class serverController {
       Action action = message.getAction();
       int gameId = message.getIdGame();
       int idLobby = message.getLobby_id();
-      //Different action based on message type
+
+      //Based on the message's action type
       switch(message.getAction()){
+
+         //It creates a new lobby whose first player is who have called the command
          case CREATELOBBY -> {
-            //Player must not be already in game
-            if (isInGame(gameController.allPlayers.get(message.getUsername()))){
-               out.println(new ReplyMessage("Already in game!", Action.ERROR).toString());
-            //Create a new lobby whose first player is who have called the command
-            }else if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){//player cannot be in a lobby
-               Player pl = gameController.allPlayers.get(message.getUsername());
-               int limit=message.getLimit();//lobby has a set amount of players needed to start
-               Lobby NewLobby=new Lobby(pl,limit);
-               gameController.allLobbies.add(NewLobby);//add in the list of lobbies
-               out.println(new CreateLobbyReplyMessage("Lobby created with id " +NewLobby.lobbyId, NewLobby.lobbyId, limit));
-            }else{
+            //It checks if the player is already in a game or in a lobby
+            if (isInAGame(gameController.allPlayers.get(message.getUsername()))){
+               out.println(new ReplyMessage("Already in game!", Action.ERROR));
+            } else if(isInALobby(gameController.allPlayers.get(message.getUsername()))){
                out.println(new ReplyMessage("Already in a lobby",Action.ERROR));
+            } else {
+               //Otherwise it creates the lobby
+               Player pl = gameController.allPlayers.get(message.getUsername());
+               int limit = message.getLimit();//lobby has a set amount of players needed to start
+               Lobby NewLobby = new Lobby(pl, limit);
+               gameController.allLobbies.add(NewLobby);
+               out.println(new CreateLobbyReplyMessage("Lobby created with id " + NewLobby.lobbyId, NewLobby.lobbyId, limit));
             }
 
          }
+
+         //It shows all the available lobbies
          case SHOWLOBBY -> {
-            if(isInGame(gameController.allPlayers.get(message.getUsername()))) {
+            //If the player is already in a game the command cannot be executed
+            if(isInAGame(gameController.allPlayers.get(message.getUsername()))) {
                out.println(new ReplyMessage("Invalid command",Action.ERROR));
-            }else{
-               out.println(new ShowLobbyReplyMessage("show",gameController.allLobbies));
+            } else {
+               out.println(new ShowLobbyReplyMessage("Show", gameController.allLobbies));
             }
-
-
          }
+
          case JOINLOBBY -> {
             boolean found=false;
-            //Player must not be already in game
-            if(isInGame(gameController.allPlayers.get(message.getUsername()))) {
-               out.println(new ReplyMessage("Already in game!",Action.ERROR));
-            }else if(!isInALobby(gameController.allPlayers.get(message.getUsername()))){//verifica che il player non
-               // sia in nessuna lobby
+            //It checks if the player is already in a game or in a lobby
+            if(isInAGame(gameController.allPlayers.get(message.getUsername()))) {
+               out.println(new ReplyMessage("Already in a game!", Action.ERROR));
+            }else if(isInALobby(gameController.allPlayers.get(message.getUsername()))){
+               out.println(new ReplyMessage("Already in a lobby!", Action.ERROR));
+            }else{
+               //Otherwise, it found the chosen lobby by the given id, and it added the player
                for (Lobby l: gameController.allLobbies) {
-                  if(l.lobbyId==message.getLobby_id()){//trova la lobby scelta
-                     found=true;
-                     l.Join(gameController.allPlayers.get(message.getUsername()));//aggiunge il nome del player ai giocatori di quella lobby
-                     out.println(new JoinLobbyReplyMessage("Lobby "+l.lobbyId+" Joined",l.lobbyId));
+                  if(l.lobbyId==message.getLobby_id()){
+                     //TODO: non va controllato il limite di player per lobby? cioè se una lobby è piena cosa succede?
+                     found = true;
+                     l.Join(gameController.allPlayers.get(message.getUsername()));
+                     out.println(new JoinLobbyReplyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId));
                   }
                }
-               if(!found) out.println(new ReplyMessage("Lobby does not exist",Action.ERROR));
-            }else{
-               out.println(new ReplyMessage("Already in a lobby",Action.ERROR));
+               //If the lobby is not found it is reported to the client
+               if(!found){
+                  out.println(new ReplyMessage("Lobby does not exist", Action.ERROR));
+               }
             }
          }
+
+         //It starts a game
          case STARTGAME -> {
             boolean notInLobby=true, gameStarted=false;
-            for (Lobby l:  gameController.allLobbies) {
+            //It checks each lobby in gameController
+            for (Lobby l: gameController.allLobbies) {
                if(idLobby==l.lobbyId){
                   notInLobby=false;
                   if(l.Players.size()==l.limit){
                      Game g = new Game(l.Players, controller);
                      gameController.allGames.put(g.id,g);
                      gameController.allLobbies.remove(l);
-                     for (Player p:
-                             l.Players) {
+                     for (Player p: l.Players) {
                         p.getOut().println(new StartGameReplyMessage(message.getUsername() + " started the game!" , g.id));
                      }
                      executorsService.submit(g::startGame);
                      gameStarted=true;
                      break; // se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce un foreach su una lista che viene modificata
                   }else{
-                     out.println(new ReplyMessage("Not enough ot too many players",Action.ERROR));
+                     out.println(new ReplyMessage("Not enough or too many players", Action.ERROR));
                   }
                }
             }
+            //If the game hasn't started it checks if the player is already in a game or is not in a lobby
             if(!gameStarted) {
-               if (isInGame(gameController.allPlayers.get(message.getUsername()))) {
+               if (isInAGame(gameController.allPlayers.get(message.getUsername()))) {
                   out.println(new ReplyMessage("Already in game!", Action.ERROR));
-               }else if (notInLobby) out.println(new ReplyMessage("Not in a Lobby", Action.ERROR));
+               } else if (notInLobby){
+                  out.println(new ReplyMessage("Not in a Lobby!", Action.ERROR));
+               }
             }
          }
+
          case PT -> {
             List<Position> pos=new ArrayList<>();
             ((PickTilesMessage) message).getPos(pos);
@@ -116,6 +129,7 @@ public class serverController {
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
+
          case SO -> {
             List<Integer> order = new ArrayList<>();
             ((SelectOrderMessage)message).getOrder(order);
@@ -123,6 +137,7 @@ public class serverController {
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
+
          case SC -> {
             int numCol = ((SelectColumnMessage) message).getCol();
             controller.selectColumn(player, action, numCol, gameId, id);
@@ -133,9 +148,9 @@ public class serverController {
    }
 
    /**
-    * Search player in all lobbies
-    * @param p player to look for
-    * @return true if found
+    * It searches a given player in all lobbies.
+    * @param p player to look for.
+    * @return true only if the player is in a lobby, false otherwise.
     */
    private boolean isInALobby(Player p){
          for (Lobby l: gameController.allLobbies) {
@@ -145,16 +160,15 @@ public class serverController {
          }
          return false;
    }
+
    /**
-    * Search player in all games
-    * @param p player to look for
-    * @return true if found
+    * It searches a given player in all games.
+    * @param p player to look for.
+    * @return true only if the player is in a game, false otherwise.
     */
-   public boolean isInGame(Player p){
-      for (Integer key:
-           gameController.allGames.keySet()) {
-         for (Player pl:
-                 gameController.allGames.get(key).getPlayers()) {
+   public boolean isInAGame(Player p){
+      for (Integer key: gameController.allGames.keySet()) {
+         for (Player pl: gameController.allGames.get(key).getPlayers()) {
             if(pl.getNickname().equals(p.getNickname())){
                return true;
             }
