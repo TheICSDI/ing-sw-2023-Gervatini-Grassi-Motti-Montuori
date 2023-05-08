@@ -26,7 +26,6 @@ public class Server {
 
     private static final serverController SC = new serverController();
 
-
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         while(true){
