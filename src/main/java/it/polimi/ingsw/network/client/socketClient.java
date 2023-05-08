@@ -44,7 +44,6 @@ public class socketClient {
      * @param control Sender client's controller
      * @param In Input stream
      * @param Out Output stream
-     * @throws IOException
      */
     public void sendMessage(String message, clientController control, BufferedReader In, PrintWriter Out, View view, boolean socket , RMIconnection stub) throws RemoteException {
         if (message.equals("/help")) {
