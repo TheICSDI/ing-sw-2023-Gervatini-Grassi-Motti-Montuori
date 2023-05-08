@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.network.server.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.View;
@@ -74,7 +75,7 @@ public class socketClient {
                     Out.println(toSend);
                 } else {
                     //RMI
-                    stub.RMIsend(toSend);
+                    //stub.RMIsend(toSend);
                 }
             }
         }
@@ -266,11 +267,13 @@ public class socketClient {
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-            //TODO MANCA IL PING
+            RMIclientImpl rmIclient = new RMIclientImpl();
+            Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer",rmIclient);
+            //TODO MANCA IL PING E IL CICLO DEL CONTROLLO IN CASO DI NOME GIA' PRESO
             System.out.println("Enter your nickname: ");
             input = in.nextLine();
             input= new SetNameMessage(input,true).toString();
-            stub.RMIsend(input);
+            stub.RMIsend(input,rmIclient);
             //c.sendMessage("",Client,null,null,cli,false,stub);
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             throw new RuntimeException(e);
@@ -284,7 +287,7 @@ private void ping() throws InterruptedException {
             try {
                 Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
                 RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-                stub.RMIsend("ping");
+                //stub.RMIsend("ping");
             } catch (RemoteException | NotBoundException | MalformedURLException e) {
                 throw new RuntimeException(e);
             }

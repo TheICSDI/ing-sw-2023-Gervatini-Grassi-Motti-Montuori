@@ -104,9 +104,10 @@ public class Server {
 
     public static void startRMI() throws InterruptedException{
             try{
-                RMIserverImpl s = new RMIserverImpl();
                 Registry registry =  LocateRegistry.createRegistry(23451);
+                RMIserverImpl s = new RMIserverImpl();
                 Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer",s);
+                RMIconnection skeleton = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
                 System.out.println("RMI server is ready");
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(() ->{
