@@ -56,18 +56,18 @@ public class Client3 {
         //thread che rimane in ascolto di messaggi
         executor.submit(()-> {
             try {
-                Client.listenMessages(controller,in);
+                Client.listenSocket(controller,in);
             } catch (IOException | ParseException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
         });
-        Client.sendMessage("joinlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
+        Client.sendMessage("joinlobby 2",controller,in,out,cli,true,null);//per velocizzare, sarà da rimuovere
         TimeUnit.SECONDS.sleep(1);
-        Client.sendMessage("startgame",controller,in,out,cli);//per velocizzare, sarà da rimuovere+
+        Client.sendMessage("startgame",controller,in,out,cli,true,null);//per velocizzare, sarà da rimuovere+
         //Ciclio per invio messaggi
         while (true) { //Condizione da rivedere
 
-            Client.sendMessage(input.nextLine(),controller,in,out,cli);
+            Client.sendMessage(input.nextLine(),controller,in,out,cli,true,null);
             out.flush();
         }
     }

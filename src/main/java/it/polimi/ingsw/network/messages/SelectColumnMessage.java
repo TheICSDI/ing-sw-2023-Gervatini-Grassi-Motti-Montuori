@@ -20,7 +20,7 @@ public class SelectColumnMessage extends GeneralMessage {
      * @param col the selected column by the user
      */
     public SelectColumnMessage(int message_id, String username, int col,int idGame) {
-        super(message_id, Action.SELECTCOLUMN, -1, username);
+        super(message_id, Action.SC, -1, username);
         this.col = col;
         this.idGame=idGame;
     }
@@ -35,7 +35,7 @@ public class SelectColumnMessage extends GeneralMessage {
         JSONObject msg_obj = (JSONObject) parser.parse(msg);
 
         // Validates that the 'action' key in the JSON object matches the expected action for this message type.
-        if(!msg_obj.get("action").toString().equals(Action.SELECTCOLUMN.toString()))
+        if(!msg_obj.get("action").toString().equals(Action.SC.toString()))
         {
             throw new InvalidActionException("Invalid SelectColumnMessage encoding");
         }

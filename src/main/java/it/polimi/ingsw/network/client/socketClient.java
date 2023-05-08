@@ -4,7 +4,9 @@ import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.view.CLI;
+import it.polimi.ingsw.view.View;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class socketClient {
     private Socket clientSocket;
@@ -43,10 +46,10 @@ public class socketClient {
      * @param Out Output stream
      * @throws IOException
      */
-    public void sendMessage(String message,clientController control,BufferedReader In,PrintWriter Out, CLI cli) throws IOException {
-        if(message.equals("/help")){
-            cli.help();
-        }else {
+    public void sendMessage(String message, clientController control, BufferedReader In, PrintWriter Out, View view, boolean socket , RMIconnection stub) throws RemoteException {
+        if (message.equals("/help")) {
+            view.help();
+        } else {
             GeneralMessage clientMessage;
             //Controlla che il formato del comando sia giusto
             clientMessage = control.checkMessageShape(message, control);
@@ -56,13 +59,18 @@ public class socketClient {
             if (curr_action.equals(Action.ERROR)) {
                 new ReplyMessage(toSend, Action.ERROR).print();
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
-                cli.displayMessage("\n  Your personal goal");
-                cli.showBoard(control.getSimpleGoal(), Action.UPDATESHELF);
-            } else if(curr_action.equals(Action.SHOWCOMMONS)){
-                cli.displayMessage("Common goals: ");
-                cli.showCommons(control.cc);
-            }else {
-                Out.println(toSend);
+                view.displayMessage("\n  Your personal goal");
+                view.showBoard(control.getSimpleGoal(), Action.UPDATESHELF);
+            } else if (curr_action.equals(Action.SHOWCOMMONS)) {
+                view.displayMessage("Common goals: ");
+                view.showCommons(control.cc);
+            } else {
+                if(socket) {
+                    Out.println(toSend);
+                } else {
+                    //RMI
+                    stub.RMIsend(toSend);
+                }
             }
         }
     }
@@ -81,102 +89,125 @@ public class socketClient {
      * @throws ParseException ??
      * @throws InvalidKeyException ??
      */
-    public void listenMessages(clientController controller, BufferedReader In) throws IOException, ParseException, InvalidKeyException {
-        ReplyMessage reply;
-        boolean isLobby;
-        CLI cli = new CLI();
+    public void listenSocket(clientController controller, BufferedReader In) throws IOException, ParseException, InvalidKeyException {
         while(true) {
-            isLobby=false;
             String message = In.readLine();
-            Action replyAction = ReplyMessage.identify(message);
-            switch (replyAction) {
-                case CREATELOBBY -> {
-                    reply = CreateLobbyReplyMessage.decrypt(message);
-                    controller.setIdLobby(reply.getIdLobby());
-                    isLobby=true;
-                }
-                //Semplicemente una stringa di successo/errore
-                case JOINLOBBY -> {
-                    reply = JoinLobbyReplyMessage.decrypt(message);
-                    controller.setIdLobby(reply.getIdLobby());
-                    isLobby=true;
-                }
-                //Lista di tutte le lobby disponibili
-                case SHOWLOBBY -> {
-                    reply = ShowLobbyReplyMessage.decrypt(message);
-                    isLobby=true;
-                }
-                //Conferma che il game può iniziare
-                case STARTGAME -> {
-                    controller.setIdLobby(0);
-                    reply = StartGameReplyMessage.decrypt(message);
-                    controller.setIdGame(reply.getIdGame());
-                    controller.setFirstTurn(true);
-                    isLobby=true;
-                }
-                case UPDATEBOARD,UPDATESHELF -> {
-                    reply = UpdateBoardMessage.decrypt(message);
-                }
-                case INGAMEEVENT -> {
-                    reply = ReplyMessage.decrypt(message);
-                }
-                case CHOSENTILES -> {
-                    reply = ChosenTilesMessage.decrypt(message);
-                }
-                case SHOWPERSONAL -> {
-                    reply = UpdateBoardMessage.decrypt(message);
-                    controller.setSimpleGoal(reply.getSimpleBoard());
-                }
-                case SHOWCOMMONS -> {
-                    reply = SendCommonCards.decrypt(message);
-                    reply.getCC(controller.cc);
-                }
-
-                //TODO Decidire cosa fare una volta finito il game
-                //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
-                //altrimenti non è questa sezione che li controlla(e invece ha senso):D
-                default -> {
-                    reply = ReplyMessage.decrypt(message);
-                    isLobby=true;
-                }
+            elaborate(controller,message);
+        }
+    }
+    public void listenRMI(clientController controller) throws ParseException, InvalidKeyException {
+        while(true){
+            String message="";//Ricevi messaggi in RMI
+            elaborate(controller,message);
+        }
+    }
+    public static void elaborate(clientController controller, String message) throws ParseException, InvalidKeyException {
+        CLI cli = new CLI();
+        ReplyMessage reply;
+        boolean isLobby=false;
+        Action replyAction = ReplyMessage.identify(message);
+        switch (replyAction) {
+            case CREATELOBBY -> {
+                reply = CreateLobbyReplyMessage.decrypt(message);
+                controller.setIdLobby(reply.getIdLobby());
+                isLobby=true;
             }
-            //distinzione cli gui
-            if(true/*isCLI*/){
-                if(isLobby){
-                    reply.print();
-                }else{
-                    switch (replyAction){
-                        case UPDATEBOARD, UPDATESHELF -> {
-                            cli.showBoard(reply.getSimpleBoard(),replyAction);
-                            if(controller.isFirstTurn()){
-                                controller.setFirstTurn(false);
-                                cli.displayMessage("\n  Your personal goal");
-                                cli.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
-                                cli.displayMessage("Common goals: ");
-                                cli.showCommons(controller.cc);
-                            }
-                        }
-                        case INGAMEEVENT -> {
-                            reply.print(); //da implementare in cli
-                        }
-                        case CHOSENTILES -> {
-                            List<Tile> tile=new ArrayList<>();
-                            reply.getTiles(tile);
-                            //temporaneo
-                            cli.showChosenTiles(tile);
+            //Semplicemente una stringa di successo/errore
+            case JOINLOBBY -> {
+                reply = JoinLobbyReplyMessage.decrypt(message);
+                controller.setIdLobby(reply.getIdLobby());
+                isLobby=true;
+            }
+            //Lista di tutte le lobby disponibili
+            case SHOWLOBBY -> {
+                reply = ShowLobbyReplyMessage.decrypt(message);
+                isLobby=true;
+            }
+            //Conferma che il game può iniziare
+            case STARTGAME -> {
+                controller.setIdLobby(0);
+                reply = StartGameReplyMessage.decrypt(message);
+                controller.setIdGame(reply.getIdGame());
+                controller.setFirstTurn(true);
+                isLobby=true;
+            }
+            case UPDATEBOARD,UPDATESHELF -> {
+                reply = UpdateBoardMessage.decrypt(message);
+            }
+            case INGAMEEVENT -> {
+                reply = ReplyMessage.decrypt(message);
+            }
+            case CHOSENTILES -> {
+                reply = ChosenTilesMessage.decrypt(message);
+            }
+            case SHOWPERSONAL -> {
+                reply = UpdateBoardMessage.decrypt(message);
+                controller.setSimpleGoal(reply.getSimpleBoard());
+            }
+            case SHOWCOMMONS -> {
+                reply = SendCommonCards.decrypt(message);
+                reply.getCC(controller.cc);
+            }
+
+            //TODO Decidire cosa fare una volta finito il game
+            //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
+            //altrimenti non è questa sezione che li controlla(e invece ha senso):D
+            default -> {
+                reply = ReplyMessage.decrypt(message);
+                isLobby=true;
+            }
+        }
+        //distinzione cli gui
+        if(true/*isCLI*/){
+            if(isLobby){
+                reply.print();
+            }else{
+                switch (replyAction){
+                    case UPDATEBOARD, UPDATESHELF -> {
+                        cli.showBoard(reply.getSimpleBoard(),replyAction);
+                        if(controller.isFirstTurn()){
+                            controller.setFirstTurn(false);
+                            cli.displayMessage("\n  Your personal goal");
+                            cli.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+                            cli.displayMessage("Common goals: ");
+                            cli.showCommons(controller.cc);
                         }
                     }
+                    case INGAMEEVENT -> {
+                        reply.print(); //da implementare in cli?
+                    }
+                    case CHOSENTILES -> {
+                        List<Tile> tile=new ArrayList<>();
+                        reply.getTiles(tile);
+                        cli.showChosenTiles(tile);
+                    }
                 }
-            }else{//GUI
-                /*
-
-                 */
             }
+        }else{//GUI
+            /*
 
+             */
         }
     }
 
     public static void main(String[] args) throws IOException {
+        System.out.println("""
+                Choose connection type:\s
+                [1]: for Socket
+                [2]: for RMI""");
+        Scanner input = new Scanner(System.in);
+        String connectionType=input.next();
+        if(connectionType.equals("1")){
+            socket();
+        }else if(connectionType.equals("2")){
+            RMI();
+        }else{
+            System.out.println("Wrong input");
+        }
+
+    }
+
+    public static void socket() throws IOException {
         socketClient Client = new socketClient();
         //Client.connection("192.168.1.234", 2345);
         Client.connection("127.0.0.1", 23450);
@@ -206,7 +237,7 @@ public class socketClient {
         //thread che rimane in ascolto di messaggi
         executor.submit(()-> {
             try {
-                Client.listenMessages(controller,in);
+                Client.listenSocket(controller,in);
             } catch (IOException | ParseException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
@@ -215,13 +246,53 @@ public class socketClient {
         //Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         //Ciclo per invio messaggi
         while(true) { //Condizione da rivedere
-            Client.sendMessage(input.nextLine(),controller,in,out,cli);
+            Client.sendMessage(input.nextLine(),controller,in,out,cli,true,null);
         }
 
         //executor.shutdownNow();//uccisione thread
     }
 
-}
+    public static void RMI(){
+        String input;
+        socketClient c = new socketClient();
+        clientController Client=new clientController("MarioIlMeccanico");
+        CLI cli=new CLI();
+        Scanner in = new Scanner(System.in);
+        try {
+            Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
+            RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
+            //TODO MANCA IL PING
+            System.out.println("Enter your nickname: ");
+            input = in.nextLine();
+            input= new SetNameMessage(input,true).toString();
+            stub.RMIsend(input);
+            //c.sendMessage("",Client,null,null,cli,false,stub);
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+private void ping() throws InterruptedException {
+        while(true) {
+            TimeUnit.SECONDS.sleep(30);
+
+            try {
+                Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
+                RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
+                stub.RMIsend("ping");
+            } catch (RemoteException | NotBoundException | MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    }
+
+
+
+
+
 
 /*
 -questione serializable

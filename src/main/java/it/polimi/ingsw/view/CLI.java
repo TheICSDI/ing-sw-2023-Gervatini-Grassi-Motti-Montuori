@@ -223,6 +223,7 @@ public class CLI implements View{
         out.println(msg);
     }
 
+    @Override
     public void help(){
         out.println("\u001B[31mThis is the command list: \n" +
                 "createlobby <Number of players>\n" +

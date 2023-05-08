@@ -26,7 +26,7 @@ public class PickTilesMessage extends GeneralMessage{
      * @param pos and array with position of the piked tiles
      */
     public PickTilesMessage(int message_id, String username, List<Position> pos,int idGame) {
-        super(message_id, Action.PICKTILES, -1, username);
+        super(message_id, Action.PT, -1, username);
         this.pos = pos;
         this.idGame=idGame;
     }
@@ -41,7 +41,7 @@ public class PickTilesMessage extends GeneralMessage{
         JSONObject msg_obj = (JSONObject) parser.parse(msg);
 
         // Validates that the 'action' key in the JSON object matches the expected action for this message type.
-        if(!msg_obj.get("action").toString().equals(Action.PICKTILES.toString()))
+        if(!msg_obj.get("action").toString().equals(Action.PT.toString()))
         {
             throw new InvalidActionException("Invalid PickTilesMessage encoding");
         }

@@ -106,9 +106,11 @@ public class clientController{
                 case STARTGAME -> {//words deve contenere action
                     return new StartGameMessage(idMex,controller.getIdLobby(),nickname);
                 }
-                case PICKTILES -> {//words deve contenere action e poi da 2 a 6 numeri che sono le coordinate delle tiles
+                case PT -> {//words deve contenere action e poi da 2 a 6 numeri che sono le coordinate delle tiles
                     //scelte sul tabellone, es. picktiles 2 3 2 4 5 6
-
+                    if(controller.getIdGame()==0){
+                        return new DefaultErrorMessage("Not in game");
+                    }
                     List<Position> pos=new ArrayList<>();
                     if (words.length<=7 && words.length%2==1 && words.length>=3) {//serve a fare le position
                         for (int i = 1; i < words.length; i=i+2) {
@@ -122,7 +124,7 @@ public class clientController{
                     }
                     return new PickTilesMessage(idMex, nickname, pos,controller.getIdGame());
                 }
-                case SELECTORDER -> {//action, da 1 a 3 interi es. selectorder 2 1 3
+                case SO -> {//action, da 1 a 3 interi es. selectorder 2 1 3
                     List<Integer> order =  new ArrayList<>();
                     for (int i = 1; i < words.length; i++) {//riempie order
                         order.add(Integer.parseInt(words[i]));
@@ -132,7 +134,10 @@ public class clientController{
                     }
                     return new SelectOrderMessage(idMex, nickname, order,controller.getIdGame());
                 }
-                case SELECTCOLUMN -> {
+                case SC -> {
+                    if(controller.getIdGame()==0){
+                        return new DefaultErrorMessage("Not in game");
+                    }
                     int col;
                     if(words.length == 2){//action, un numero
                         col = Integer.parseInt(words[1]);
@@ -148,6 +153,9 @@ public class clientController{
 
                 }
                 case SHOWPERSONAL -> {
+                    if(controller.getIdGame()==0){
+                        return new DefaultErrorMessage("Not in game");
+                    }
                     if(idGame>0){
                         return new ShowPersonalCardMessage();
                     }else{
@@ -155,6 +163,9 @@ public class clientController{
                     }
                 }
                 case SHOWCOMMONS -> {
+                    if(controller.getIdGame()==0){
+                        return new DefaultErrorMessage("Not in game");
+                    }
                     if(idGame>0){
                         return new ShowCommonCards();
                     }else{

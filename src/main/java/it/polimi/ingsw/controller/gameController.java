@@ -33,12 +33,12 @@ public class gameController {
     //Ritorna il numero di colonna richiesto dalla partita
     public int chooseColumn(String player, int gameId){
         Optional<orderBook> order;
-        order = findTheRequest(player,gameId,Action.SELECTCOLUMN);
+        order = findTheRequest(player,gameId,Action.SC);
         return order.get().getNum_col();
     }
     public List<Integer> chooseOrder(String player, int gameId){
         Optional<orderBook> order;
-        order = findTheRequest(player,gameId,Action.SELECTORDER);
+        order = findTheRequest(player,gameId,Action.SO);
         return order.get().getOrder();
     }
     //rimuove dall'orderbook il comando che dice quali posizioni di quali tiles ha scelto il player
@@ -46,7 +46,7 @@ public class gameController {
     //restituisce le posizioni al model
     public  Set<Position> chooseTiles(String player , int gameId){
         Optional<orderBook> order;
-        order = findTheRequest(player,gameId,Action.PICKTILES);
+        order = findTheRequest(player,gameId,Action.PT);
         return new HashSet<>(order.get().getPos());
     }
 

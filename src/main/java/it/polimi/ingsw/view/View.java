@@ -28,5 +28,6 @@ public interface View {
     void updateLobby(int lobby_id, List<String> players);
     void displayError(String msg);
     void displayMessage(String msg);
+    void help();
 }
 

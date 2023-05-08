@@ -14,8 +14,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public class socketServer {
+public class Server {
     private ServerSocket serverSocket;
 
     private static final serverController SC = new serverController();
@@ -68,9 +74,9 @@ public class socketServer {
                         case SHOWLOBBY -> mex = new ShowLobbyMessage(input);
                         case JOINLOBBY -> mex = new JoinLobbyMessage(input);
                         case STARTGAME -> mex = new StartGameMessage(input);
-                        case PICKTILES -> mex = new PickTilesMessage(input);
-                        case SELECTORDER -> mex = new SelectOrderMessage(input);
-                        case SELECTCOLUMN -> mex = new SelectColumnMessage(input);
+                        case PT -> mex = new PickTilesMessage(input);
+                        case SO -> mex = new SelectOrderMessage(input);
+                        case SC -> mex = new SelectColumnMessage(input);
                     }
                     //il comando viene eseguito
                     if(!(mex ==null)){
@@ -88,9 +94,46 @@ public class socketServer {
     }
 
     public static void main(String[] args) throws IOException {
-        socketServer server = new socketServer();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(() ->{
+            try{
+                startRMI();
+            }catch (InterruptedException ignored){}
+        });
+        startSocket();
+    }
+
+    public static void startRMI() throws InterruptedException{
+            try{
+                RMIserverImpl s = new RMIserverImpl();
+                Registry registry =  LocateRegistry.createRegistry(23451);
+                Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer",s);
+                System.out.println("RMI server is ready");
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.submit(() ->{
+                    try{
+                        ping();
+                    }catch (InterruptedException ignored){}
+                });
+
+            } catch (Exception e) {
+                System.err.println("Server exception");
+                e.printStackTrace();
+            }
+    }
+
+    public static void startSocket() throws IOException {
+        Server server = new Server();
         server.start(23450);
     }
+
+    private static void ping() throws InterruptedException {
+        while(true) {
+            TimeUnit.SECONDS.sleep(30);
+        }
+
+    }
+
 }
 
 

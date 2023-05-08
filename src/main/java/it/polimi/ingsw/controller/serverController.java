@@ -109,21 +109,21 @@ public class serverController {
                }else if (notInLobby) out.println(new ReplyMessage("Not in a Lobby", Action.ERROR));
             }
          }
-         case PICKTILES-> {
+         case PT -> {
             List<Position> pos=new ArrayList<>();
             ((PickTilesMessage) message).getPos(pos);
             controller.pickTiles(player, action, pos, gameId, id);
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
-         case SELECTORDER -> {
+         case SO -> {
             List<Integer> order = new ArrayList<>();
             ((SelectOrderMessage)message).getOrder(order);
             controller.selectOrder(player, action, order, gameId, id);
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
-         case SELECTCOLUMN -> {
+         case SC -> {
             int numCol = ((SelectColumnMessage) message).getCol();
             controller.selectColumn(player, action, numCol, gameId, id);
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita

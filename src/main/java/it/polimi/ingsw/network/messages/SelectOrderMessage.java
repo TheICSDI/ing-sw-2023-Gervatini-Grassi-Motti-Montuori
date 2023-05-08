@@ -25,7 +25,7 @@ public class SelectOrderMessage extends GeneralMessage{
      * @param order a list with the position in the chosen order
      */
     public SelectOrderMessage(int message_id, String username, List<Integer> order,int idGame) {
-        super(message_id, Action.SELECTORDER,-1, username);
+        super(message_id, Action.SO,-1, username);
         this.order = order;
         this.idGame = idGame;
     }
@@ -40,7 +40,7 @@ public class SelectOrderMessage extends GeneralMessage{
         JSONObject msg_obj = (JSONObject) parser.parse(msg);
 
         // Validates that the 'action' key in the JSON object matches the expected action for this message type.
-        if(!msg_obj.get("action").toString().equals(Action.SELECTORDER.toString()))
+        if(!msg_obj.get("action").toString().equals(Action.SO.toString()))
         {
             throw new InvalidActionException("Invalid SelectOrderMessage encoding");
         }
