@@ -191,15 +191,12 @@ public class Game {
                 }
                 //ToDo inviare a ogni player a fine partita le shelf di tutti i player cosicchè le possano stamapre in locale
                 //ToDo GAME DI PROVA
-                //If the next player has the end game token the game ends //THIS IS NOT THE RULE
-                /*if (players.get((players.indexOf(p) + 1) % players.size()).getEndToken()) {
-
-                }*/
             }
         }
         for(Player p : players){
             p.calculateGeneralPoints();
             p.personalPoint();
+            p.calculateCCPoints();
         }
         for (Player p : players) {
             p.getOut().println(new ReplyMessage("Players' total points: ", Action.INGAMEEVENT));

@@ -241,9 +241,12 @@ public class Player implements Serializable {
         }
     }
 
-    /**
-     * Counts the points given by the personal card
-     */
+    /** Calculates the total points gained from the common card goals. */
+    public void calculateCCPoints(){
+        this.totalPoints += this.scoreToken1 + this.scoreToken2;
+    }
+
+    /** Counts the points given by the personal card. */
     public void personalPoint(){
         int matches=0;
         for (int i = 0; i < numRows; i++) {

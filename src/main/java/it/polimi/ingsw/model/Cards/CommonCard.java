@@ -32,20 +32,17 @@ public class CommonCard{
     /** Sets the score token of the given player according to how many points are still available. */
     public void givePoints(Player p){
         if(this.points > 0){
-            //If the player has completed the common goal card
-            if(control(p)){
-                //If it is the first card of the game then it will modify the first score token
-                if(this.firstCard){
-                    if(p.getScoreToken1() == 0){
-                        p.setScoreToken1(points);
-                        this.points = points - 2;
-                    }
-                } else {
-                    //Otherwise it will modify the second score token
-                    if(p.getScoreToken2() == 0){
-                        p.setScoreToken2(points);
-                        this.points = points - 2;
-                    }
+            //If it is the first card of the game then it will modify the first score token
+            if(this.firstCard){
+                if(p.getScoreToken1() == 0){
+                    p.setScoreToken1(points);
+                    this.points = points - 2;
+                }
+            } else {
+                //Otherwise it will modify the second score token
+                if(p.getScoreToken2() == 0){
+                    p.setScoreToken2(points);
+                    this.points = points - 2;
                 }
             }
         }
