@@ -120,7 +120,7 @@ public class serverController {
                      executorsService.submit(() ->{
                         try{
                            g.startGame();
-                        } catch (RemoteException e) {
+                        } catch (RemoteException | InterruptedException e) {
                            throw new RuntimeException(e);
                         }
                      });

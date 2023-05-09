@@ -33,7 +33,6 @@ public class gameController {
 
     /*
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER
-
      */
     //Ritorna il numero di colonna richiesto dalla partita
     public int chooseColumn(String player, int gameId) throws InterruptedException {
@@ -87,9 +86,6 @@ public class gameController {
     }
 
 
-
-
-
     /*
     QUELLA CHE SEGUE LA PARTE DI METODI DEL GAMECONTROLLER CHE BASANDOSI SUI PARAMETRI (ESTRATTI IN UN MOMENTO
     PRECEDENTE DAI MESSAGE RICEVUTI DAL SERVER) MODIFICA E CHIAMA I METODI DEL MODEL
@@ -103,6 +99,7 @@ public class gameController {
         pending.setPos(pos);
         synchronized (queueLock) {
             queue.add(pending);
+            queueLock.notifyAll();
         }
 
     }
@@ -113,6 +110,7 @@ public class gameController {
         pending.setOrder(order);
         synchronized (queueLock) {
             queue.add(pending);
+            queueLock.notifyAll();
         }
     }
     public  void selectColumn(String player, Action action, int numCol, int gameId, int num_mess){
@@ -122,6 +120,7 @@ public class gameController {
         pending.setNumCol(numCol);
         synchronized (queueLock) {
             queue.add(pending);
+            queueLock.notifyAll();
         }
     }
 
@@ -152,7 +151,4 @@ public class gameController {
             serverController.sendMessage(new UpdateBoardMessage(action, information), p.getNickname());
         }
     }
-
-
-
 }
