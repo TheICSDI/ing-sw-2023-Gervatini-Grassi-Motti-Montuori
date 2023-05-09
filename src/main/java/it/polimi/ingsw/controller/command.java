@@ -8,7 +8,7 @@ import it.polimi.ingsw.network.messages.Action;
 
 import java.util.List;
 
-public class orderBook{
+public class command {
     public Game g;
     public Player p;
     public Action a;
@@ -19,7 +19,7 @@ public class orderBook{
 
     /** Constructor that creates a book of commands associated to a specific gmae, plater, action and a unique number
      * of a message. */
-    public orderBook(Game g, Player p, Action a, int numMess){
+    public command(Game g, Player p, Action a, int numMess){
         //si potrebbero conservare game e player solo come id e nickname per velocizzare l'esecuzione
         this.g = g;
         this.p = p;

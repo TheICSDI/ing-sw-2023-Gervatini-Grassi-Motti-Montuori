@@ -2,15 +2,20 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.messages.*;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class clientController{
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
-    private final String nickname;
+    private String nickname;
     private int idLobby=0;
+    private int idGame=0;
+
+    private boolean firstTurn=false;
     private type[][] simpleGoal=new type[6][5];
     public List<Integer> cc=new ArrayList<>();
 
@@ -39,9 +44,7 @@ public class clientController{
     public void setIdLobby(int idLobby) {
         this.idLobby = idLobby;
     }
-    private int idGame=0;
 
-    private boolean firstTurn=false;
 
     public int getIdGame() {
         return idGame;
@@ -54,6 +57,7 @@ public class clientController{
     public clientController(String nickname){
         this.nickname = nickname;
     }
+    public clientController(){}
 
 
     /*controlla che la stringa che rappresenta l'azione scelta corrisponda a un comando esistente e chiamabile dal client
@@ -234,5 +238,16 @@ public class clientController{
     }
     public boolean isAdjacentOnY(Position a ,Position b){
         return a.getY() == b.getY() && ((a.getX() == b.getX() - 1) || (a.getX() == b.getX() + 1));
+    }
+
+
+    public void getName(String input) throws RemoteException {
+        if(!SetNameMessage.decrypt(input).isAvailable()){
+            System.out.println("Nickname is already taken!");
+            Client.setName();
+        }else{
+            System.out.println("Nickname correctly set!");
+            this.nickname=SetNameMessage.decrypt(input).getUsername();
+        }
     }
 }

@@ -29,6 +29,7 @@ public class Player implements Serializable {
     private int scoreToken1, scoreToken2;
     private int totalPoints;
     private int turn;
+    boolean socket;
     private transient final PrintWriter out;
 
     public PrintWriter getOut() {

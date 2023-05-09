@@ -22,7 +22,7 @@ public class Client2 {
     private static clientController controller;
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        socketClient Client = new socketClient();
+        Client Client = new Client();
         //Client.connection("192.168.1.234", 2345); //Forse dovrei censurarlo il mio ip tbh
         Socket clientSocket = new Socket("127.0.0.1", 23450);
 

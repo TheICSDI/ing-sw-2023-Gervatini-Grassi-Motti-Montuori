@@ -22,21 +22,21 @@ public class gameController {
      */
     public static Map<String, Player> allPlayers = new HashMap<>();
     public static Map<Integer, Game> allGames = new HashMap<>();
-    public static List<orderBook> pendingOrders = new ArrayList<>();
+    public static List<command> queue = new ArrayList<>();
     public static List<Lobby> allLobbies=new ArrayList<>();
-    private final Object queue = new Object();
+    private final Object queueLock = new Object();
     /*
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER
 
      */
     //Ritorna il numero di colonna richiesto dalla partita
     public int chooseColumn(String player, int gameId){
-        Optional<orderBook> order;
+        Optional<command> order;
         order = findTheRequest(player,gameId,Action.SC);
         return order.get().getNumCol();
     }
     public List<Integer> chooseOrder(String player, int gameId){
-        Optional<orderBook> order;
+        Optional<command> order;
         order = findTheRequest(player,gameId,Action.SO);
         return order.get().getOrder();
     }
@@ -44,7 +44,7 @@ public class gameController {
     //rimuove eventuali vecchie richieste rimaste inevase nell'orderbook
     //restituisce le posizioni al model
     public  Set<Position> chooseTiles(String player , int gameId){
-        Optional<orderBook> order;
+        Optional<command> order;
         order = findTheRequest(player,gameId,Action.PT);
         return new HashSet<>(order.get().getPos());
     }
@@ -52,17 +52,17 @@ public class gameController {
     //trova la richiesta che match tra gli order-book, restituisce sempre un optional non null, se trova piu richieste che vanno bene
     //le cancella tutte e prende solo quella piu recente( in realta' non servirebbe ma la metto per sicurezza questa feature
 
-    private Optional<orderBook> findTheRequest(String player,int gameId, Action a){
+    private Optional<command> findTheRequest(String player, int gameId, Action a){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
-        List<orderBook> toFind;
-        Optional<orderBook> found = Optional.empty();
+        List<command> toFind;
+        Optional<command> found = Optional.empty();
         //int i=0;
         while(found.isEmpty()){
             try {
                 TimeUnit.MILLISECONDS.sleep(500);
             }catch(Exception ignored){}
-            List<orderBook> toFilter = pendingOrders;
+            List<command> toFilter = queue;
             //applica un filtro a tutti i comandi inevasi e trova quelli che corrispondono all'azione corretta del giocatore
             //corretto nel game corretto, se ne trova piu di una per un qualche errore prende la piu recente id mes piu alto
             toFind = toFilter.stream()
@@ -71,8 +71,8 @@ public class gameController {
                     .filter(ob -> ob.a.equals(a))
                     .collect(Collectors.toList());
             if(!toFind.isEmpty()){// se ci sono pending piu richiesta della stessa azione dello stesso giocatore prendo la piu recente
-                synchronized (queue) {
-                    pendingOrders.removeAll(toFind);//rimuovo l'ordine scelto e anche tutti quelli residuali doppioni
+                synchronized (queueLock) {
+                    queue.removeAll(toFind);//rimuovo l'ordine scelto e anche tutti quelli residuali doppioni
                 }
                 found = toFind.stream()
                         .reduce((ob1,ob2) -> ob1.numMess > ob2.numMess ? ob1 : ob2);
@@ -96,29 +96,29 @@ public class gameController {
     public void pickTiles(String player, Action action, List<Position> pos, int id_game,int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(id_game);
-        orderBook pending = new orderBook(g,p,action,num_mess);
+        command pending = new command(g,p,action,num_mess);
         pending.setPos(pos);
-        synchronized (queue) {
-            pendingOrders.add(pending);
+        synchronized (queueLock) {
+            queue.add(pending);
         }
 
     }
     public  void selectOrder(String player, Action action, List<Integer> order, int gameId, int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
-        orderBook pending = new orderBook(g,p,action,num_mess);
+        command pending = new command(g,p,action,num_mess);
         pending.setOrder(order);
-        synchronized (queue) {
-            pendingOrders.add(pending);
+        synchronized (queueLock) {
+            queue.add(pending);
         }
     }
     public  void selectColumn(String player, Action action, int numCol, int gameId, int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
-        orderBook pending = new orderBook(g,p,action,num_mess);
+        command pending = new command(g,p,action,num_mess);
         pending.setNumCol(numCol);
-        synchronized (queue) {
-            pendingOrders.add(pending);
+        synchronized (queueLock) {
+            queue.add(pending);
         }
     }
 

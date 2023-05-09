@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.concurrent.ExecutorService;
@@ -116,24 +117,32 @@ public class Server {
         startSocket();
     }
 
+    /** It starts the server via RMI on port 23451. */
     public static void startRMI() throws InterruptedException{
-            try{
-                Registry registry =  LocateRegistry.createRegistry(23451);
-                RMIserverImpl s = new RMIserverImpl();
-                Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer",s);
-                RMIconnection skeleton = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-                System.out.println("RMI server is ready");
-                ExecutorService executor = Executors.newSingleThreadExecutor();
+
+            try {
+                Registry registry = LocateRegistry.createRegistry(23451);
+                RMIserverImpl s = new RMIserverImpl(SC);
+
+                while(true) {
+                    Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", s);
+                    RMIconnection skeleton = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
+                    //System.out.println("RMI server is ready");
+                }
+
+
+                /*ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(() ->{
                     try{
                         ping();
                     } catch (InterruptedException ignored){}
-                });
+                });*/
 
             } catch (Exception e) {
                 System.err.println("Server exception");
                 e.printStackTrace();
             }
+
     }
 
     /** It starts a server socket on the port 23450. */
@@ -149,6 +158,7 @@ public class Server {
             TimeUnit.SECONDS.sleep(30);
         }
     }
+
 
 }
 

@@ -20,6 +20,7 @@ public abstract class GeneralMessage implements Serializable {
     private final String username;
     protected int limit;
 
+
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id the unique identification of the message (probabilmente da rimuovere)

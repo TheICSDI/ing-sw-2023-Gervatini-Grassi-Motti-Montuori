@@ -1,21 +1,32 @@
 /** It interacts with the server and the gameController, in order to modify the instance of the game. */
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.InvalidActionException;
+import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.network.server.RMIconnection;
+import it.polimi.ingsw.network.server.RMIserverImpl;
+import it.polimi.ingsw.network.server.connectionType;
+import org.json.simple.parser.ParseException;
 
 import java.io.PrintWriter;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class serverController {
+   public static Map<String, connectionType>  connections;
+
    public gameController controller = new gameController();
    GeneralMessage message;
+   private RMIserverImpl sRMI;
 
    /** Each thread of this pool allows maximum 10 games to be played at the same time. */
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
@@ -176,4 +187,38 @@ public class serverController {
       }
       return false;
    }
+
+   public void getName(String input, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
+      GeneralMessage mex;
+      System.out.println(input);
+      mex = SetNameMessage.decrypt(input);
+      if(gameController.allPlayers.containsKey(mex.getUsername())){
+
+          //Nickname already taken
+          reply.RMIsendName(new SetNameMessage("Taken",false).toString(), null);
+      }else{
+          //Nickname available
+          reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
+          gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername(),null));
+          connections.put(mex.getUsername(), new connectionType(false,null,reply));
+      }
+   }
+
+   public void getMessage(String input) throws ParseException, InvalidKeyException, InvalidActionException {
+      GeneralMessage mex = null;
+      switch (GeneralMessage.identify(input)){
+         case CREATELOBBY -> mex = new CreateLobbyMessage(input);
+         case SHOWLOBBY -> mex = new ShowLobbyMessage(input);
+         case JOINLOBBY -> mex = new JoinLobbyMessage(input);
+         case STARTGAME -> mex = new StartGameMessage(input);
+         case PT -> mex = new PickTilesMessage(input);
+         case SO -> mex = new SelectOrderMessage(input);
+         case SC -> mex = new SelectColumnMessage(input);
+      }
+      //If the message is valid the command is executed by the serverController
+      if(!(mex == null)){
+         //this.executeMessage(mex,out);
+      }
+   }
+
 }

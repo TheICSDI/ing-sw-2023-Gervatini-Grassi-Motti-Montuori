@@ -1,7 +1,7 @@
 package test.Network;
 
 import it.polimi.ingsw.exceptions.InvalidCommandException;
-import it.polimi.ingsw.network.client.socketClient;
+import it.polimi.ingsw.network.client.Client;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ class socketServerTest {
 
     @Test
     void client1() throws IOException, InvalidCommandException {
-        socketClient client1 = new socketClient();
+        Client client1 = new Client();
         /*client1.connection("127.0.0.1", 2345);
         String m1 = client1.sendMessage("hello");
         String m2 = client1.sendMessage("world");
@@ -23,7 +23,7 @@ class socketServerTest {
 
     @Test
     void client2() throws IOException, InvalidCommandException {
-        socketClient client2 = new socketClient();
+        Client client2 = new Client();
         client2.connection("127.0.0.1", 2345);
         /*String m1 = client2.sendMessage("hello");
         String m2 = client2.sendMessage("world");

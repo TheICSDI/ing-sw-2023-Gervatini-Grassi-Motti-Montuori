@@ -28,10 +28,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class socketClient {
+public class Client {
     private Socket clientSocket;
     private static PrintWriter out;
     private static BufferedReader in;
+
+    private static RMIconnection stub;
+    private static RMIclientImpl RMIclient;
+
     /*
     bisogna usare un id per il client handler, potremmo avere un id per il client e un id per i giocatore assegnato solo
     per il game per esempio (questione aperta, almeno per me)
@@ -75,7 +79,7 @@ public class socketClient {
                     Out.println(toSend);
                 } else {
                     //RMI
-                    //stub.RMIsend(toSend);
+                    //stub.RMIsendName(toSend);
                 }
             }
         }
@@ -179,9 +183,7 @@ public class socketClient {
                             cli.showCommons(controller.cc);
                         }
                     }
-                    case INGAMEEVENT -> {
-                        reply.print(); //da implementare in cli?
-                    }
+                    case INGAMEEVENT -> reply.print(); //da implementare in cli?
                     case CHOSENTILES -> {
                         List<Tile> tile=new ArrayList<>();
                         reply.getTiles(tile);
@@ -213,7 +215,7 @@ public class socketClient {
     }
 
     public static void socket() throws IOException {
-        socketClient Client = new socketClient();
+        Client Client = new Client();
         //Client.connection("192.168.1.234", 2345);
         Client.connection("127.0.0.1", 23450);
         Scanner input = new Scanner(System.in);
@@ -258,22 +260,19 @@ public class socketClient {
     }
 
     public static void RMI(){
-        String input;
-        socketClient c = new socketClient();
-        clientController Client=new clientController("MarioIlMeccanico");
+
+        Client c = new Client();
+        clientController Client=new clientController();
         CLI cli=new CLI();
-        Scanner in = new Scanner(System.in);
+
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
-            RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-            RMIclientImpl rmIclient = new RMIclientImpl();
-            Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer",rmIclient);
+            stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
+            RMIclient = new RMIclientImpl(Client); //per ricevere risposta
+            Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", RMIclient);
             //TODO MANCA IL PING E IL CICLO DEL CONTROLLO IN CASO DI NOME GIA' PRESO
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
-            System.out.println("Enter your nickname: ");
-            input = in.nextLine();
-            input= new SetNameMessage(input,true).toString();
-            stub.RMIsend(input,rmIclient);
+            setName();
             //c.sendMessage("",Client,null,null,cli,false,stub);
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             throw new RuntimeException(e);
@@ -287,7 +286,7 @@ private void ping() throws InterruptedException {
             try {
                 Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
                 RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-                //stub.RMIsend("ping");
+                //stub.RMIsendName("ping");
             } catch (RemoteException | NotBoundException | MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -295,7 +294,16 @@ private void ping() throws InterruptedException {
 
     }
 
+    public static void setName() throws RemoteException {
+        String input;
+        SetNameMessage nick;
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter your nickname: ");
+        input = in.nextLine();
+        nick= new SetNameMessage(input, true);
+        stub.RMIsendName(nick.toString(), RMIclient);
     }
+}
 
 
 

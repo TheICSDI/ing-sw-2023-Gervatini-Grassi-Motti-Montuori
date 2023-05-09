@@ -1,21 +1,19 @@
 /** It implements the RMIconnection interface, in order to be able to establish a RMI connection. */
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.controller.gameController;
+import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
-import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.network.messages.GeneralMessage;
-import it.polimi.ingsw.network.messages.SetNameMessage;
 import org.json.simple.parser.ParseException;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection {
-
-    public RMIserverImpl() throws RemoteException {
+    serverController s;
+    public RMIserverImpl(serverController s) throws RemoteException {
         super();
+        this.s=s;
     }
 
     //TODO: Come idea ho fatto la stessa cosa del server anche da lato client così ho l'oggetto rmiclient in socketClient che serve a mandare i messaggi al client,
@@ -30,32 +28,17 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
 
     //TODO thread per il multi client nel server
     @Override
-    public void RMIsend(String m, RMIconnection reply) throws RemoteException {
-        //server.getMessage(m)
-        GeneralMessage mex;
-        Action action=Action.ERROR;
-        try{
-            action=GeneralMessage.identify(m);
-
-
-        if(action.equals(Action.SETNAME)){
-            mex=new SetNameMessage(m);
-            if(gameController.allPlayers.containsKey(mex.getUsername())){
-                //Nickname already taken
-                reply.RMIsendOnly("The nickname is already taken!");
-
-            }else{
-                //Nickname available
-                reply.RMIsendOnly("Nickname correctly set.");
-            }
-        }
-        }catch(InvalidKeyException | InvalidActionException | ParseException ignored){}
-
+    public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
+        try {
+            s.getName(m, reply);
+        }catch(InvalidActionException | InvalidKeyException | ParseException ignored){}
     }
 
     @Override
-    public void RMIsendOnly(String m) throws RemoteException {
+    public void RMIsend(String m) throws RemoteException {
 
     }
+
+
 }
 
