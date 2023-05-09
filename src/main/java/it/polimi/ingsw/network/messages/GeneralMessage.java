@@ -61,7 +61,7 @@ public abstract class GeneralMessage implements Serializable {
         // Assigns the values from the JSON object to the instance variables.
         this.message_id = Integer.parseInt(msg_obj.get("message_id").toString());
         this.action = Action.valueOf(msg_obj.get("action").toString());
-        this.lobby_id = Integer.parseInt(msg_obj.get("lobby_id").toString());
+        this.idLobby = Integer.parseInt(msg_obj.get("lobby_id").toString());
         this.username = msg_obj.get("username").toString();
     }
 

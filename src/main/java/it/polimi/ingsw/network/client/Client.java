@@ -111,23 +111,24 @@ public class Client {
         boolean isLobby=false;
         Action replyAction = ReplyMessage.identify(message);
         switch (replyAction) {
+            //Crate a lobby
             case CREATELOBBY -> {
                 reply = CreateLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
                 isLobby=true;
             }
-            //Semplicemente una stringa di successo/errore
+            //Join a lobby given its id
             case JOINLOBBY -> {
                 reply = JoinLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
                 isLobby=true;
             }
-            //Lista di tutte le lobby disponibili
+            //List of available lobbies
             case SHOWLOBBY -> {
                 reply = ShowLobbyReplyMessage.decrypt(message);
                 isLobby=true;
             }
-            //Conferma che il game può iniziare
+            //Start the game
             case STARTGAME -> {
                 controller.setIdLobby(0);
                 reply = StartGameReplyMessage.decrypt(message);
@@ -204,18 +205,20 @@ public class Client {
         }
     }
 
+    /** It starts the connection based on the client's decision. */
     public static void main(String[] args) throws IOException {
+        String connectionType;
         System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
         Scanner input = new Scanner(System.in);
-        String connectionType=input.next();
-        if(connectionType.equals("1")){
+        connectionType = input.next();
+        if (connectionType.equals("1")) {
             socket();
-        }else if(connectionType.equals("2")){
+        } else if (connectionType.equals("2")) {
             RMI();
-        }else{
+        } else {
             System.out.println("Wrong input");
         }
     }
@@ -234,10 +237,8 @@ public class Client {
         do {
             username = virtualView.askUsername();
             nick = new SetNameMessage(username,true);
-            //nick = new SetNameMessage("Mayhem",true);
-            out.println(nick);//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
+            out.println(nick);
             try{
-                //nick = new SetNameMessage(in.readLine());
                 nick = SetNameMessage.decrypt(in.readLine());
             }catch(Exception ignored){}
 
@@ -265,6 +266,7 @@ public class Client {
         //executor.shutdownNow();//uccisione thread
     }
 
+    /** It starts the RMI connections. */
     public static void RMI(){
         Scanner in = new Scanner(System.in);
         Client c = new Client();
@@ -306,7 +308,7 @@ public class Client {
         Scanner in = new Scanner(System.in);
         System.out.println("Enter your nickname: ");
         input = in.nextLine();
-        nick= new SetNameMessage(input, true);
+        nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);
     }
 }

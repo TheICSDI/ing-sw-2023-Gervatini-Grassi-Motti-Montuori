@@ -141,27 +141,24 @@ public class serverController {
             }
          }
 
+         //Pick some tiles from the main board
          case PT -> {
             List<Position> pos=new ArrayList<>();
             ((PickTilesMessage) message).getPos(pos);
             controller.pickTiles(player, action, pos, gameId, id);
-            //manda un ok che rappresenta l'inoltro con successo all'interno della partita
-            //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
 
+         //Select the order of the selected tiles
          case SO -> {
             List<Integer> order = new ArrayList<>();
             ((SelectOrderMessage)message).getOrder(order);
             controller.selectOrder(player, action, order, gameId, id);
-            //manda un ok che rappresenta l'inoltro con successo all'interno della partita
-            //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
 
+         //Select che column in which to put the tiles
          case SC -> {
             int numCol = ((SelectColumnMessage) message).getCol();
             controller.selectColumn(player, action, numCol, gameId, id);
-            //manda un ok che rappresenta l'inoltro con successo all'interno della partita
-            //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
          }
 
          //Single chat with a specified player
