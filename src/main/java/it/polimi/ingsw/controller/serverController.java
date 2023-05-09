@@ -175,7 +175,7 @@ public class serverController {
                   if(l.lobbyId == idLobby){
                      //It sends the message to each player in lobby
                      for(Player p : l.Players){
-                        if(!p.getNickname().equals(player)) {
+                        if(p.getNickname().equals(player)) {
                            sendMessage(message, p.getNickname());
                         }
                      }
@@ -254,7 +254,7 @@ public class serverController {
          case SO -> mex = new SelectOrderMessage(input);
          case SC -> mex = new SelectColumnMessage(input);
          case C -> mex = ChatMessage.decrypt(input);
-         case CA -> mex = BroadcastMessage.decrypt(input);
+         case CA -> mex= BroadcastMessage.decrypt(input);
       }
       //If the message is valid the command is executed by the serverController
       if(!(mex == null)){

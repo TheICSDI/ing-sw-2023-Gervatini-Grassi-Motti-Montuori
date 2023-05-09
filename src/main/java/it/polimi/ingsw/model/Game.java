@@ -76,7 +76,7 @@ public class Game {
      *
      * @see Player,Board,CommonCard,PersonalCard
      */
-    public void startGame() throws RemoteException {
+    public void startGame() throws RemoteException, InterruptedException {
         //At the starting point no player has the endgame token
         boolean endGame = false;
         boolean check = false;

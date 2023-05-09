@@ -29,17 +29,19 @@ public class gameController {
     public static List<command> queue = new ArrayList<>();
     public static List<Lobby> allLobbies=new ArrayList<>();
     private final Object queueLock = new Object();
+    private Object waitObject = new Object();
+
     /*
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER
 
      */
     //Ritorna il numero di colonna richiesto dalla partita
-    public int chooseColumn(String player, int gameId){
+    public int chooseColumn(String player, int gameId) throws InterruptedException {
         Optional<command> order;
         order = findTheRequest(player,gameId,Action.SC);
         return order.get().getNumCol();
     }
-    public List<Integer> chooseOrder(String player, int gameId){
+    public List<Integer> chooseOrder(String player, int gameId) throws InterruptedException {
         Optional<command> order;
         order = findTheRequest(player,gameId,Action.SO);
         return order.get().getOrder();
@@ -47,7 +49,7 @@ public class gameController {
     //rimuove dall'orderbook il comando che dice quali posizioni di quali tiles ha scelto il player
     //rimuove eventuali vecchie richieste rimaste inevase nell'orderbook
     //restituisce le posizioni al model
-    public  Set<Position> chooseTiles(String player , int gameId){
+    public  Set<Position> chooseTiles(String player , int gameId) throws InterruptedException {
         Optional<command> order;
         order = findTheRequest(player,gameId,Action.PT);
         return new HashSet<>(order.get().getPos());
@@ -56,34 +58,30 @@ public class gameController {
     //trova la richiesta che match tra gli order-book, restituisce sempre un optional non null, se trova piu richieste che vanno bene
     //le cancella tutte e prende solo quella piu recente( in realta' non servirebbe ma la metto per sicurezza questa feature
 
-    private Optional<command> findTheRequest(String player, int gameId, Action a){
+    private Optional<command> findTheRequest(String player, int gameId, Action a) throws InterruptedException {
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
         List<command> toFind;
         Optional<command> found = Optional.empty();
         //int i=0;
         while(found.isEmpty()){
-            try {
-                TimeUnit.MILLISECONDS.sleep(500);
-            }catch(Exception ignored){}
-            List<command> toFilter = queue;
-            //applica un filtro a tutti i comandi inevasi e trova quelli che corrispondono all'azione corretta del giocatore
-            //corretto nel game corretto, se ne trova piu di una per un qualche errore prende la piu recente id mes piu alto
-            toFind = toFilter.stream()
-                    .filter(ob -> ob.g.id == g.id)
-                    .filter(ob -> ob.p.getNickname().equals(p.getNickname()))
-                    .filter(ob -> ob.a.equals(a))
-                    .collect(Collectors.toList());
-            if(!toFind.isEmpty()){// se ci sono pending piu richiesta della stessa azione dello stesso giocatore prendo la piu recente
-                synchronized (queueLock) {
+            synchronized (queueLock) {
+                List<command> toFilter = queue;
+                //applica un filtro a tutti i comandi inevasi e trova quelli che corrispondono all'azione corretta del giocatore
+                //corretto nel game corretto, se ne trova piu di una per un qualche errore prende la piu recente id mes piu alto
+                toFind = toFilter.stream()
+                        .filter(ob -> ob.g.id == g.id)
+                        .filter(ob -> ob.p.getNickname().equals(p.getNickname()))
+                        .filter(ob -> ob.a.equals(a))
+                        .collect(Collectors.toList());
+                if (!toFind.isEmpty()) {// se ci sono pending piu richiesta della stessa azione dello stesso giocatore prendo la piu recente
                     queue.removeAll(toFind);//rimuovo l'ordine scelto e anche tutti quelli residuali doppioni
+                    found = toFind.stream()
+                            .reduce((ob1, ob2) -> ob1.numMess > ob2.numMess ? ob1 : ob2);
                 }
-                found = toFind.stream()
-                        .reduce((ob1,ob2) -> ob1.numMess > ob2.numMess ? ob1 : ob2);
+                else
+                    queueLock.wait();
             }
-            
-            //System.out.println(i);
-            //i++;
         }
         return found;
     }
