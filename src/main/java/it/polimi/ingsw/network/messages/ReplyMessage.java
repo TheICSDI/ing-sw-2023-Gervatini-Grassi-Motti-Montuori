@@ -12,7 +12,7 @@ import java.util.List;
 public class ReplyMessage extends GeneralMessage implements Serializable {
     protected List<Tile> tiles;
     private final String message;
-    protected int idLobby;
+
     protected boolean gameStart=false;
     type[][] simpleBoard;
     List<Integer> cc=new ArrayList<>();
@@ -54,7 +54,6 @@ public class ReplyMessage extends GeneralMessage implements Serializable {
      * @return true if the game is starting
      */
     public boolean getGameStart(){return gameStart;}
-    public int getIdLobby(){return idLobby;}
 
     public type[][] getSimpleBoard() {
         return simpleBoard;

@@ -46,7 +46,7 @@ public class serverController {
       String player = message.getUsername();
       Action action = message.getAction();
       int gameId = message.getIdGame();
-      int idLobby = message.getLobby_id();
+      int idLobby = message.getIdLobby();
 
       //Based on the message's action type
       switch(message.getAction()){
@@ -89,7 +89,7 @@ public class serverController {
             }else{
                //Otherwise, it found the chosen lobby by the given id, and it added the player
                for (Lobby l: gameController.allLobbies) {
-                  if(l.lobbyId==message.getLobby_id()){
+                  if(l.lobbyId==message.getIdLobby()){
                      //TODO: non va controllato il limite di player per lobby? cioè se una lobby è piena cosa succede?
                      found = true;
                      l.Join(gameController.allPlayers.get(message.getUsername()));
@@ -233,7 +233,6 @@ public class serverController {
 
    public void getName(String input, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex;
-      System.out.println(input);
       mex = SetNameMessage.decrypt(input);
       if(gameController.allPlayers.containsKey(mex.getUsername())){
 
@@ -257,6 +256,8 @@ public class serverController {
          case PT -> mex = new PickTilesMessage(input);
          case SO -> mex = new SelectOrderMessage(input);
          case SC -> mex = new SelectColumnMessage(input);
+         case C -> mex = ChatMessage.decrypt(input);
+         case CA -> mex = BroadcastMessage.decrypt(input);
       }
       //If the message is valid the command is executed by the serverController
       if(!(mex == null)){
@@ -266,7 +267,6 @@ public class serverController {
 
    public static void sendMessage(GeneralMessage m, String nick) throws RemoteException {
       if(connections.get(nick).isSocket()){
-         System.out.println(m.toString());
          connections.get(nick).getOut().println(m);
       } else {
          connections.get(nick).getReply().RMIsend(m.toString());

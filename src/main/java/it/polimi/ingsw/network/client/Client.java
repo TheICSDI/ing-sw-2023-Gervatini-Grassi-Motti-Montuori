@@ -36,6 +36,8 @@ public class Client {
     private static RMIconnection stub;
     private static RMIclientImpl RMIclient;
 
+    private static View virtualView;
+
     /*
     bisogna usare un id per il client handler, potremmo avere un id per il client e un id per i giocatore assegnato solo
     per il game per esempio (questione aperta, almeno per me)
@@ -104,9 +106,7 @@ public class Client {
             String message="";//Ricevi messaggi in RMI
             elaborate(message);
         }
-    }
-    public static void elaborate( String message) throws ParseException, InvalidKeyException {
-        CLI cli = new CLI();
+    }public static void elaborate(String message) throws ParseException, InvalidKeyException {
         ReplyMessage reply;
         boolean isLobby=false;
         Action replyAction = ReplyMessage.identify(message);
@@ -167,26 +167,33 @@ public class Client {
             }
         }
         //distinzione cli gui
+        //TODO in realtà superfluo, basta chiamare solo metodi di view(FORSE)
         if(true/*isCLI*/){
             if(isLobby){
                 reply.print();
             }else{
                 switch (replyAction){
                     case UPDATEBOARD, UPDATESHELF -> {
-                        cli.showBoard(reply.getSimpleBoard(),replyAction);
+                        virtualView.showBoard(reply.getSimpleBoard(),replyAction);
                         if(controller.isFirstTurn()){
                             controller.setFirstTurn(false);
-                            cli.displayMessage("\n  Your personal goal");
-                            cli.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
-                            cli.displayMessage("Common goals: ");
-                            cli.showCommons(controller.cc);
+                            virtualView.displayMessage("\n  Your personal goal");
+                            virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+                            virtualView.displayMessage("Common goals: ");
+                            virtualView.showCommons(controller.cc);
                         }
                     }
                     case INGAMEEVENT -> reply.print(); //da implementare in cli?
                     case CHOSENTILES -> {
                         List<Tile> tile=new ArrayList<>();
                         reply.getTiles(tile);
-                        cli.showChosenTiles(tile);
+                        virtualView.showChosenTiles(tile);
+                    }
+                    case C ->{
+                        virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
+                    }
+                    case CA ->{
+                        virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
                     }
                 }
             }
@@ -220,12 +227,12 @@ public class Client {
         Scanner input = new Scanner(System.in);
         String username;
         SetNameMessage nick;
-        CLI cli = new CLI();
+        virtualView = new CLI();
         //Richiesta nickname unico
         System.out.println(in.readLine());
         //Controllo unicità nome
         do {
-            username = cli.askUsername();
+            username = virtualView.askUsername();
             nick = new SetNameMessage(username,true);
             //nick = new SetNameMessage("Mayhem",true);
             out.println(nick);//Avevo messo toString() all invio di ogni messaggio che lo traduce in json, non so perchè me lo dava ridondante e funziona anche senza no idea
@@ -233,8 +240,8 @@ public class Client {
                 //nick = new SetNameMessage(in.readLine());
                 nick = SetNameMessage.decrypt(in.readLine());
             }catch(Exception ignored){}
-            //
-            cli.printUsername(nick.getUsername(), nick.isAvailable());
+
+            virtualView.printUsername(nick.getUsername(), nick.isAvailable());
         } while (!nick.isAvailable());
         //Ogni player ha il suo clientController
         controller = new clientController(nick.getUsername());
@@ -248,11 +255,11 @@ public class Client {
                 throw new RuntimeException(e);
             }
         });
-        cli.displayMessage("Write /help for command list.");
+        virtualView.displayMessage("Write /help for command list.");
         //Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         //Ciclo per invio messaggi
         while(true) { //Condizione da rivedere
-            Client.sendMessage(input.nextLine(),cli,true);
+            Client.sendMessage(input.nextLine(),virtualView,true);
         }
 
         //executor.shutdownNow();//uccisione thread
@@ -262,7 +269,7 @@ public class Client {
         Scanner in = new Scanner(System.in);
         Client c = new Client();
         controller = new clientController();
-        CLI cli=new CLI();
+        virtualView = new CLI();//TODO differenziazione tra  cli e gui in futuro
 
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
@@ -273,7 +280,7 @@ public class Client {
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
             while(true){
-                c.sendMessage(in.nextLine(), cli, false);
+                c.sendMessage(in.nextLine(), virtualView, false);
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             throw new RuntimeException(e);

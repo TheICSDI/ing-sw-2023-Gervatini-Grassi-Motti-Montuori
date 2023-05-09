@@ -81,6 +81,7 @@ public class gameController {
                 found = toFind.stream()
                         .reduce((ob1,ob2) -> ob1.numMess > ob2.numMess ? ob1 : ob2);
             }
+            
             //System.out.println(i);
             //i++;
         }

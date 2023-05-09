@@ -15,9 +15,9 @@ public abstract class GeneralMessage implements Serializable {
 
     private final int message_id;
     private final Action action;
-    private final int lobby_id;
+    protected int idLobby;
     protected int idGame;
-    private final String username;
+    protected String username;
     protected int limit;
 
 
@@ -31,7 +31,7 @@ public abstract class GeneralMessage implements Serializable {
     {
         this.message_id = message_id;
         this.action = action;
-        this.lobby_id = lobby_id;
+        this.idLobby = lobby_id;
         this.username = username;
     }
 
@@ -74,7 +74,7 @@ public abstract class GeneralMessage implements Serializable {
         return "{" +
                 "\"message_id\":" + this.message_id + "," +
                 "\"action\":\"" + this.action + "\"," +
-                "\"lobby_id\":" + this.lobby_id + "," +
+                "\"lobby_id\":" + this.idLobby + "," +
                 "\"username\":\"" + this.username + "\"";
     }
 
@@ -86,8 +86,8 @@ public abstract class GeneralMessage implements Serializable {
         return action;
     }
 
-    public int getLobby_id() {
-        return lobby_id;
+    public int getIdLobby() {
+        return idLobby;
     }
 
     public String getUsername() {
