@@ -78,23 +78,6 @@ public class Server {
                 //GeneralMessage mex = null;
                 while((input = in.readLine()) != null){
                     SC.getMessage(input);
-                    //The method identify (from the class GeneralMessage) is called to generate a corresponding
-                    //message to the given action
-                    /*switch (GeneralMessage.identify(input)){
-                        case CREATELOBBY -> mex = new CreateLobbyMessage(input);
-                        case SHOWLOBBY -> mex = new ShowLobbyMessage(input);
-                        case JOINLOBBY -> mex = new JoinLobbyMessage(input);
-                        case STARTGAME -> mex = new StartGameMessage(input);
-                        case PT -> mex = new PickTilesMessage(input);
-                        case SO -> mex = new SelectOrderMessage(input);
-                        case SC -> mex = new SelectColumnMessage(input);
-                    }
-                    //If the message is valid the command is executed by the serverController
-                    if(!(mex == null)){
-                        SC.executeMessage(mex);
-                    }
-                    //To ensure that the loop can finish
-                    mex = null;*/
                 }
                 //If the while terminate the socket connection is closed
                 in.close();
@@ -108,6 +91,7 @@ public class Server {
 
     /** It starts the server both via socket and RMI. */
     public static void main(String[] args) throws IOException {
+        //TODO CRASH SERVER, SALVATAGGIO E RIPRESA PARTITA
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() ->{
             try{

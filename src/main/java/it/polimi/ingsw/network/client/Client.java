@@ -23,6 +23,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -101,12 +102,7 @@ public class Client {
             elaborate(message);
         }
     }
-    public void listenRMI() throws ParseException, InvalidKeyException {
-        while(true){
-            String message="";//Ricevi messaggi in RMI
-            elaborate(message);
-        }
-    }public static void elaborate(String message) throws ParseException, InvalidKeyException {
+    public static void elaborate(String message) throws ParseException, InvalidKeyException {
         ReplyMessage reply;
         boolean isLobby=false;
         Action replyAction = ReplyMessage.identify(message);
@@ -136,15 +132,9 @@ public class Client {
                 controller.setFirstTurn(true);
                 isLobby=true;
             }
-            case UPDATEBOARD,UPDATESHELF -> {
-                reply = UpdateBoardMessage.decrypt(message);
-            }
-            case INGAMEEVENT -> {
-                reply = ReplyMessage.decrypt(message);
-            }
-            case CHOSENTILES -> {
-                reply = ChosenTilesMessage.decrypt(message);
-            }
+            case UPDATEBOARD,UPDATESHELF -> reply = UpdateBoardMessage.decrypt(message);
+            case INGAMEEVENT -> reply = ReplyMessage.decrypt(message);
+            case CHOSENTILES -> reply = ChosenTilesMessage.decrypt(message);
             case SHOWPERSONAL -> {
                 reply = UpdateBoardMessage.decrypt(message);
                 controller.setSimpleGoal(reply.getSimpleBoard());
@@ -153,12 +143,8 @@ public class Client {
                 reply = SendCommonCards.decrypt(message);
                 reply.getCC(controller.cc);
             }
-            case C ->{
-                reply = ChatMessage.decrypt(message);
-            }
-            case CA -> {
-                reply=BroadcastMessage.decrypt(message);
-            }
+            case C -> reply = ChatMessage.decrypt(message);
+            case CA -> reply=BroadcastMessage.decrypt(message);
             //TODO Decidire cosa fare una volta finito il game
             //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
             //altrimenti non è questa sezione che li controlla(e invece ha senso):D
@@ -190,12 +176,8 @@ public class Client {
                         reply.getTiles(tile);
                         virtualView.showChosenTiles(tile);
                     }
-                    case C ->{
-                        virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
-                    }
-                    case CA ->{
-                        virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
-                    }
+                    case C -> virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
+                    case CA -> virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
                 }
             }
         }else{//GUI
@@ -207,13 +189,16 @@ public class Client {
 
     /** It starts the connection based on the client's decision. */
     public static void main(String[] args) throws IOException {
+        //TODO DISCONNESSIONI
         String connectionType;
-        System.out.println("""
+        do {
+            System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-        Scanner input = new Scanner(System.in);
-        connectionType = input.next();
+            Scanner input = new Scanner(System.in);
+            connectionType = input.next();
+        }while(!Objects.equals(connectionType, "1") && !connectionType.equals("2"));
         if (connectionType.equals("1")) {
             socket();
         } else if (connectionType.equals("2")) {
@@ -278,7 +263,7 @@ public class Client {
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
             RMIclient = new RMIclientImpl(controller); //per ricevere risposta
             Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", RMIclient);
-            //TODO MANCA IL PING E IL CICLO DEL CONTROLLO IN CASO DI NOME GIA' PRESO
+            //TODO MANCA IL PING PER SOCKET E CLIENT
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
             while(true){
@@ -288,7 +273,7 @@ public class Client {
             throw new RuntimeException(e);
         }
     }
-
+    //TODO da fare
     private void ping() throws InterruptedException {
         while(true) {
             TimeUnit.SECONDS.sleep(30);

@@ -11,7 +11,6 @@ import it.polimi.ingsw.network.messages.UpdateBoardMessage;
 
 import java.rmi.RemoteException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 /*
 game-controller e' una classe che ha due macro funzionalita'
@@ -29,7 +28,7 @@ public class gameController {
     public static List<command> queue = new ArrayList<>();
     public static List<Lobby> allLobbies=new ArrayList<>();
     private final Object queueLock = new Object();
-    private Object waitObject = new Object();
+
 
     /*
     QUESTA E LA PARTE DI METODI DEL MODEL CHE NECESSITA DI INFORMAZIONI DA FUORI E CHE LE RICHIEDE AL GAMECONTROLLER

@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.view.CLI;
 import org.json.simple.parser.ParseException;
 
 import java.rmi.RemoteException;
@@ -76,8 +75,7 @@ public class clientController{
      * @return subclass of general message based on the action type.
      */
     public GeneralMessage checkMessageShape(String m, clientController controller){
-        Action curr_action;
-        List<String> curr_params;
+        Action currAction;
         m = m.trim();
         //parsing dell'input string
         String[] words = m.split(" "); //il delimitatore delle parole e' lo spazio
@@ -85,11 +83,11 @@ public class clientController{
         action = action.toUpperCase();
         try{
             //vediamo se il comando esiste prima di tutto
-            curr_action = Action.valueOf(action);
-            //return new GeneralMessage(curr_action,curr_params);
+            currAction = Action.valueOf(action);
+            //return new GeneralMessage(currAction,curr_params);
 
             idMex++;//indice del messaggio, ogni player ha il suo perchè vengono contati da lato client
-            switch (curr_action){
+            switch (currAction){
                 case CREATELOBBY -> {//words deve contenere action, numero di giocatori partita
                     if(words.length==2 && Integer.parseInt(words[1])>=2 && Integer.parseInt(words[1])<=4){ //un parametro int compreso tra 2 e 4 (limite giocatori)
                         return new CreateLobbyMessage(idMex,nickname,Integer.parseInt(words[1]));

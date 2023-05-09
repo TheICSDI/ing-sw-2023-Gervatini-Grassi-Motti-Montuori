@@ -17,7 +17,7 @@ public class Tile {
 		this.category = type.valueOf(any.toUpperCase());
 		switch (category){
 			case NOT_ACCESSIBLE -> {
-				color ="\u001b[48;2;33;19;13m";
+				color =/*"\u001b[48;2;33;19;13m"*/"\u001b[48;2;117;61;34m";
 				initial=' ';
 			}
 			case EMPTY -> {  //"\u001b[48;2;<R code>;<G code>;<B code> + output text" //Formato per usare i colori rgb se serve

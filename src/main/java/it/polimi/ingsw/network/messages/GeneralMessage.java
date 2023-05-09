@@ -11,6 +11,8 @@ import java.io.Serializable;
  * This abstract class represents a general message in a client-server communication.
  * It implements the Serializable interface to allow for object serialization.
  */
+
+//ToDo REFRACTOR DI TUTTI I MESSAGGI, UNIFORMAZIONE DEL GSON E PULIZIA GENERALE DEL CODICE
 public abstract class GeneralMessage implements Serializable {
 
     private final int message_id;

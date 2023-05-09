@@ -56,7 +56,7 @@ public class Lobby {
     /** Return true only if there is more available space in the lobby.
      * A lobby is considered full when it reaches 4 players (maximum for the game)*/
     private boolean isLobbyFull(){
-        return Players.size() == 4;
+        return Players.size() == limit;
     }
 
     /**

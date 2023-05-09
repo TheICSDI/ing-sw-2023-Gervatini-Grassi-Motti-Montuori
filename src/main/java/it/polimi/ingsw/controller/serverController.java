@@ -8,19 +8,12 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
-import org.json.simple.parser.ParseException;
 import it.polimi.ingsw.network.server.RMIconnection;
-import it.polimi.ingsw.network.server.RMIserverImpl;
 import it.polimi.ingsw.network.server.connectionType;
 import org.json.simple.parser.ParseException;
 
-import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,7 +22,6 @@ public class serverController {
 
    public gameController controller = new gameController();
    GeneralMessage message;
-   private RMIserverImpl sRMI;
 
    /** Each thread of this pool allows maximum 10 games to be played at the same time. */
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
@@ -90,10 +82,13 @@ public class serverController {
                //Otherwise, it found the chosen lobby by the given id, and it added the player
                for (Lobby l: gameController.allLobbies) {
                   if(l.lobbyId==message.getIdLobby()){
-                     //TODO: non va controllato il limite di player per lobby? cioè se una lobby è piena cosa succede?
                      found = true;
-                     l.Join(gameController.allPlayers.get(message.getUsername()));
-                     sendMessage(new JoinLobbyReplyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
+                     try{
+                        l.Join(gameController.allPlayers.get(message.getUsername()));
+                        sendMessage(new JoinLobbyReplyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
+                     }catch(InputMismatchException x){
+                        sendMessage(new ReplyMessage("Lobby full!",Action.ERROR),player);
+                     }
                   }
                }
                //If the lobby is not found it is reported to the client

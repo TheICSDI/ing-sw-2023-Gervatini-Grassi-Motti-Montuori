@@ -12,12 +12,11 @@ import java.util.Scanner;
 
 public class CLI implements View{
     //"\u001b[48;2;<R code>;<G code>;<B code>m" BACKGROUND COLORS
-    //TODO  GRAFICHE PER LE COMMON CARDS
     public static final String RESET = "\033[0m";
-    public static final String BLACK = "\033[0;30m";
+
     public static final String DARK_BROWN= "\u001b[48;2;117;61;34m";
 
-    private PrintStream out;
+    private final PrintStream out;
 
     public CLI(){
         this.out = System.out;
@@ -88,71 +87,47 @@ public class CLI implements View{
         for (int i:
              cc) {
             switch (i){
-                case(1)->{
-                    out.println("Goal " + x + ": Six groups each containing at least\n" +
-                            "2 tiles of the same type (not necessarily\n" +
-                            "in the depicted shape).\n" +
-                            "The tiles of one group can be different\n" +
-                            "from those of another group.");
-                }
-                case(2)->{
-                    out.println("Goal " + x + ": Four tiles of the same type in the four\n" +
-                            "corners of the bookshelf. ");
-                }
-                case(3)->{
-                    out.println("Goal " + x + ": Four groups each containing at least\n" +
-                            "4 tiles of the same type (not necessarily\n" +
-                            "in the depicted shape).\n" +
-                            "The tiles of one group can be different\n" +
-                            "from those of another group");
-                }
-                case(4)->{
-                    out.println("Goal " + x + ": Two groups each containing 4 tiles of\n" +
-                            "the same type in a 2x2 square. The tiles\n" +
-                            "of one square can be different from\n" +
-                            "those of the other square.");
-                }
-                case(5)->{
-                    out.println("Goal " + x + ": Three columns each formed by 6 tiles Five tiles of the same type forming an X.\n" +
-                            "of maximum three different types. One\n" +
-                            "column can show the same or a different\n" +
-                            "combination of another column.");
-                }
-                case(6)->{
-                    out.println("Goal " + x + ": Eight tiles of the same type. There’s no\n" +
-                            "restriction about the position of these\n" +
-                            "tiles.");
-                }
-                case(7)->{
-                    out.println("Goal " + x + ": Five tiles of the same type forming a\n" +
-                            "diagonal.");
-                }
-                case(8)->{
-                    out.println("Goal " + x + ": Four lines each formed by 5 tiles of\n" +
-                            "maximum three different types. One\n" +
-                            "line can show the same or a different\n" +
-                            "combination of another line.");
-                }
-                case(9)->{
-                    out.println("Goal " + x + ": Two columns each formed by 6\n" +
-                            "different types of tiles. ");
-                }
-                case(10)->{
-                    out.println("Goal " + x + ": Two lines each formed by 5 different\n" +
-                            "types of tiles. One line can show the\n" +
-                            "same or a different combination of the\n" +
-                            "other line.");
-                }
-                case(11)->{
-                    out.println("Goal " + x + ": Five tiles of the same type forming an X.");
-                }
-                case(12)->{
-                    out.println("Goal " + x + ": Five columns of increasing or decreasing\n" +
-                            "height. Starting from the first column on\n" +
-                            "the left or on the right, each next column\n" +
-                            "must be made of exactly one more tile.\n" +
-                            "Tiles can be of any type. ");
-                }
+                case(1)-> out.println("Goal " + x + ": Six groups each containing at least\n" +
+                        "2 tiles of the same type (not necessarily\n" +
+                        "in the depicted shape).\n" +
+                        "The tiles of one group can be different\n" +
+                        "from those of another group.");
+                case(2)-> out.println("Goal " + x + ": Four tiles of the same type in the four\n" +
+                        "corners of the bookshelf. ");
+                case(3)-> out.println("Goal " + x + ": Four groups each containing at least\n" +
+                        "4 tiles of the same type (not necessarily\n" +
+                        "in the depicted shape).\n" +
+                        "The tiles of one group can be different\n" +
+                        "from those of another group");
+                case(4)-> out.println("Goal " + x + ": Two groups each containing 4 tiles of\n" +
+                        "the same type in a 2x2 square. The tiles\n" +
+                        "of one square can be different from\n" +
+                        "those of the other square.");
+                case(5)-> out.println("Goal " + x + ": Three columns each formed by 6 tiles Five tiles of the same type forming an X.\n" +
+                        "of maximum three different types. One\n" +
+                        "column can show the same or a different\n" +
+                        "combination of another column.");
+                case(6)-> out.println("Goal " + x + ": Eight tiles of the same type. There’s no\n" +
+                        "restriction about the position of these\n" +
+                        "tiles.");
+                case(7)-> out.println("Goal " + x + ": Five tiles of the same type forming a\n" +
+                        "diagonal.");
+                case(8)-> out.println("Goal " + x + ": Four lines each formed by 5 tiles of\n" +
+                        "maximum three different types. One\n" +
+                        "line can show the same or a different\n" +
+                        "combination of another line.");
+                case(9)-> out.println("Goal " + x + ": Two columns each formed by 6\n" +
+                        "different types of tiles. ");
+                case(10)-> out.println("Goal " + x + ": Two lines each formed by 5 different\n" +
+                        "types of tiles. One line can show the\n" +
+                        "same or a different combination of the\n" +
+                        "other line.");
+                case(11)-> out.println("Goal " + x + ": Five tiles of the same type forming an X.");
+                case(12)-> out.println("Goal " + x + ": Five columns of increasing or decreasing\n" +
+                        "height. Starting from the first column on\n" +
+                        "the left or on the right, each next column\n" +
+                        "must be made of exactly one more tile.\n" +
+                        "Tiles can be of any type. ");
 
             }
             out.println();
@@ -225,17 +200,22 @@ public class CLI implements View{
 
     @Override
     public void help(){
-        out.println("\u001B[31mThis is the command list: \n" +
-                "createlobby <Number of players>\n" +
-                "joinlobby <Lobby id>\n" +
-                "showlobby\n" +
-                "exitlobby (WIP)\n" +
-                "startgame\n" +
-                "picktiles <Row1> <Column1> (up to three tiles)\n" +
-                "selectorder <First> <Second> <Third>\n" +
-                "selectcolumn <ShelfColumn>\n" +
-                "showpersonal\n" +
-                "showcommons\u001B[0m");
+        out.println("""
+                \u001B[31mThis is the command list:\s
+                createlobby <Number of players>
+                joinlobby <Lobby id>
+                showlobby
+                exitlobby (WIP)
+                C <Player's name> <message>
+                CA <message>
+                startgame
+                pt <Row1> <Column1> (up to three tiles)
+                so <First> <Second> <Third>
+                sc <ShelfColumn>
+                showothers (WIP)
+                showpersonal
+                showcommons
+                exit (WIP)\u001B[0m""");
     }
 
     public Tile[][] recreateShelf(type[][] simpleShelf){

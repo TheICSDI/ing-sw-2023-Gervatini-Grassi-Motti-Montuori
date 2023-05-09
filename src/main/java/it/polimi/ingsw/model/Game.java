@@ -10,8 +10,10 @@ import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.network.messages.ChosenTilesMessage;
+import it.polimi.ingsw.network.messages.ReplyMessage;
+import it.polimi.ingsw.network.messages.SendCommonCards;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -19,7 +21,6 @@ import java.util.*;
 public class Game {
     private static int count = 0;
     public int id;
-    private final int nPlayers;
     private final List<Player> players;
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>();
@@ -39,12 +40,11 @@ public class Game {
         //Each game is represented by a unique id that can't be changed
         count++;
         this.id = count;
-        this.nPlayers = players.size();
         this.players = players;
 
 
         //Initializes the new board
-        this.board = new Board(nPlayers);
+        this.board = new Board(players.size());
         this.board.fillBoard();
 
         //Initializes the common and personal goal cards
@@ -55,7 +55,7 @@ public class Game {
         players.get(0).setFirstToken(true);
         //Shuffle the personal goal cards in order to randomically give them to the players
         Collections.shuffle(allPC);
-        for(int i = 0; i < nPlayers; i++){
+        for(int i = 0; i < players.size(); i++){
             //Sets the turn of each player
             players.get(i).setTurn(i);
             players.get(i).setPersonalCard(allPC.get(i));
@@ -191,7 +191,6 @@ public class Game {
                     endGame = true;
                 }
                 //ToDo inviare a ogni player a fine partita le shelf di tutti i player cosicchè le possano stamapre in locale
-                //ToDo GAME DI PROVA
             }
         }
         for(Player p : players){
