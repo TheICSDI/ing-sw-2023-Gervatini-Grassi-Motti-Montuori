@@ -152,7 +152,12 @@ public class Client {
                 reply = SendCommonCards.decrypt(message);
                 reply.getCC(controller.cc);
             }
-
+            case C ->{
+                reply = ChatMessage.decrypt(message);
+            }
+            case CA -> {
+                reply=BroadcastMessage.decrypt(message);
+            }
             //TODO Decidire cosa fare una volta finito il game
             //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
             //altrimenti non è questa sezione che li controlla(e invece ha senso):D

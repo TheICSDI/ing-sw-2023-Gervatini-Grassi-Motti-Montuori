@@ -78,7 +78,7 @@ public class clientController{
     public GeneralMessage checkMessageShape(String m, clientController controller){
         Action curr_action;
         List<String> curr_params;
-        m=m.trim();
+        m = m.trim();
         //parsing dell'input string
         String[] words = m.split(" "); //il delimitatore delle parole e' lo spazio
         String action = words[0];
@@ -177,6 +177,43 @@ public class clientController{
                         return new ShowCommonCards();
                     }else{
                         return new DefaultErrorMessage("Not in game");
+                    }
+                }
+                case C ->{
+                    if(words.length > 2){
+                        String phrase = "";
+                        String recipient = words[1];
+                        for (int i = 2; i < words.length; i++) {
+                            phrase = phrase.concat(words[i]);
+                            phrase = phrase.concat(" ");
+                        }
+                        if (idLobby > 0) {
+                            return new ChatMessage(nickname, phrase, recipient);
+                        } else if (idGame > 0) {
+                            return new ChatMessage(nickname, phrase, recipient);
+                        } else {
+                            return new DefaultErrorMessage("Not in a game nor in a lobby");
+                        }
+                    }else{
+                        return new DefaultErrorMessage("Blank message");
+                    }
+                }
+                case CA ->{
+                    if(words.length > 1){
+                        String phrase = "";
+                        for (int i = 1; i < words.length; i++) {
+                            phrase = phrase.concat(words[i]);
+                            phrase = phrase.concat(" ");
+                        }
+                        if (idLobby > 0) {
+                            return new BroadcastMessage(-1, idLobby, nickname, phrase);
+                        } else if (idGame > 0) {
+                            return new BroadcastMessage(idGame, -1, nickname, phrase);
+                        } else {
+                            return new DefaultErrorMessage("Not in a game nor in a lobby");
+                        }
+                    }else{
+                        return new DefaultErrorMessage("Blank message");
                     }
                 }
 

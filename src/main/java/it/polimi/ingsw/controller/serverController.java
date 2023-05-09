@@ -8,15 +8,18 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
+import org.json.simple.parser.ParseException;
 import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.network.server.RMIserverImpl;
 import it.polimi.ingsw.network.server.connectionType;
 import org.json.simple.parser.ParseException;
 
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -159,6 +162,41 @@ public class serverController {
             controller.selectColumn(player, action, numCol, gameId, id);
             //manda un ok che rappresenta l'inoltro con successo all'interno della partita
             //verra' dopo confermato se le cose scritte nel messaggio erano corrette o se va riscritto
+         }
+
+         //Single chat with a specified player
+         case C ->{
+            String recipient = ((ChatMessage)message).getRecipient();
+            sendMessage(message,recipient);
+         }
+
+         //Broadcast chat with the lobby or the game in which the player is
+         case CA -> {
+            //If the player is in a lobby
+            if(idLobby>0){
+               for(Lobby l: gameController.allLobbies){
+                  if(l.lobbyId == idLobby){
+                     //It sends the message to each player in lobby
+                     for(Player p : l.Players){
+                        if(!p.getNickname().equals(player)) {
+                           sendMessage(message, p.getNickname());
+                        }
+                     }
+                     break;
+                  }
+               }
+            } else if(gameId>0){
+               //If the player is in a game, it sends the message to each player
+               Game g = gameController.allGames.get(gameId);
+               for(Player p: g.getPlayers()){
+                  if(!p.getNickname().equals(player)){
+                     sendMessage(message, p.getNickname());
+                  }
+               }
+            }else{
+               //Otherwise there is no one to send the message to
+               sendMessage(new ReplyMessage("No one to send to",Action.ERROR),player);
+            }
          }
       }
    }
