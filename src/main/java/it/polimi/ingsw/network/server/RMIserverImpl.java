@@ -36,9 +36,12 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
 
     @Override
     public void RMIsend(String m) throws RemoteException {
-
+        try {
+            s.getMessage(m);
+        } catch (ParseException | InvalidKeyException | InvalidActionException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 
 }
 

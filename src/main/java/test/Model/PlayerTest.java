@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.rmi.RemoteException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,7 +58,7 @@ class PlayerTest {
     }
 
     @Test
-    void orderTiles() {
+    void orderTiles() throws RemoteException {
         List<Tile> selected = new ArrayList<>();
         List<Integer> order = new ArrayList<>();
         List<Tile> ordered;
@@ -100,7 +101,7 @@ class PlayerTest {
 
 
     @Test
-    void InsertInShelf() throws InvalidColumnException {
+    void InsertInShelf() throws InvalidColumnException, RemoteException {
         List<Tile> toInsert = new ArrayList<>();
         int col = 2;
 
@@ -147,7 +148,7 @@ class PlayerTest {
     }
 
     @Test
-    void pickTiles() throws InvalidPositionException {
+    void pickTiles() throws InvalidPositionException, RemoteException {
         Board b = new Board(4);
         b.fillBoard();
 

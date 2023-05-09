@@ -74,13 +74,14 @@ public class Server {
                 //associated player object is created
                 gameController.allPlayers.put(nickname.getUsername(),new Player(nickname.getUsername(),out));
                 out.println(new SetNameMessage(nickname.getUsername(),true ));
-
+                serverController.connections.put(nickname.getUsername(), new connectionType(true, out, null));
                 //Infine loop that enable the reception of messages from the client
-                GeneralMessage mex = null;
+                //GeneralMessage mex = null;
                 while((input = in.readLine()) != null){
+                    SC.getMessage(input);
                     //The method identify (from the class GeneralMessage) is called to generate a corresponding
                     //message to the given action
-                    switch (GeneralMessage.identify(input)){
+                    /*switch (GeneralMessage.identify(input)){
                         case CREATELOBBY -> mex = new CreateLobbyMessage(input);
                         case SHOWLOBBY -> mex = new ShowLobbyMessage(input);
                         case JOINLOBBY -> mex = new JoinLobbyMessage(input);
@@ -91,10 +92,10 @@ public class Server {
                     }
                     //If the message is valid the command is executed by the serverController
                     if(!(mex == null)){
-                        SC.executeMessage(mex,out);
+                        SC.executeMessage(mex);
                     }
                     //To ensure that the loop can finish
-                    mex = null;
+                    mex = null;*/
                 }
                 //If the while terminate the socket connection is closed
                 in.close();

@@ -1,9 +1,12 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.view.CLI;
+import org.json.simple.parser.ParseException;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -249,5 +252,9 @@ public class clientController{
             System.out.println("Nickname correctly set!");
             this.nickname=SetNameMessage.decrypt(input).getUsername();
         }
+    }
+
+    public void getMessage(String m) throws ParseException, InvalidKeyException {
+        Client.elaborate(m);
     }
 }

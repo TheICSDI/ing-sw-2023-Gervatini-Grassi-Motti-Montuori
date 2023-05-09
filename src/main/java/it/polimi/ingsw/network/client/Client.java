@@ -50,19 +50,18 @@ public class Client {
     }
 
     /**
-     * Function that checks if the message has the right format and sends them to server
-     * @param message Command to send
-     * @param control Sender client's controller
-     * @param In Input stream
-     * @param Out Output stream
+     * Function that checks if the message has the right format and sends them to server.
+     * @param message Command to send.
+     * @param view type of view.
+     * @param socket true if socket connection, false if RMI connection.
      */
-    public void sendMessage(String message, clientController control, BufferedReader In, PrintWriter Out, View view, boolean socket , RMIconnection stub) throws RemoteException {
+    public void sendMessage(String message, View view, boolean socket) throws RemoteException {
         if (message.equals("/help")) {
             view.help();
         } else {
             GeneralMessage clientMessage;
             //Controlla che il formato del comando sia giusto
-            clientMessage = control.checkMessageShape(message, control);
+            clientMessage = controller.checkMessageShape(message, controller);
             Action curr_action = clientMessage.getAction();
             String toSend = clientMessage.toString();
             //Se il formato è sbagliato checkmessage restituisce un messaggio di tipo error e non viene inviato
@@ -70,16 +69,16 @@ public class Client {
                 new ReplyMessage(toSend, Action.ERROR).print();
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
                 view.displayMessage("\n  Your personal goal");
-                view.showBoard(control.getSimpleGoal(), Action.UPDATESHELF);
+                view.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
                 view.displayMessage("Common goals: ");
-                view.showCommons(control.cc);
+                view.showCommons(controller.cc);
             } else {
                 if(socket) {
-                    Out.println(toSend);
+                    out.println(toSend);
                 } else {
                     //RMI
-                    //stub.RMIsendName(toSend);
+                    stub.RMIsend(toSend);
                 }
             }
         }
@@ -92,26 +91,21 @@ public class Client {
     }
 
     /**
-     * Function that receives json messages ,identifies them and acts differently upon the action they have
-     * @param controller receiver client's controller
-     * @param In input stream(server)
-     * @throws IOException ??
-     * @throws ParseException ??
-     * @throws InvalidKeyException ??
+     * Function that receives json messages ,identifies them and acts differently upon the action they have.
      */
-    public void listenSocket(clientController controller, BufferedReader In) throws IOException, ParseException, InvalidKeyException {
+    public void listenSocket() throws IOException, ParseException, InvalidKeyException {
         while(true) {
-            String message = In.readLine();
-            elaborate(controller,message);
+            String message = in.readLine();
+            elaborate(message);
         }
     }
-    public void listenRMI(clientController controller) throws ParseException, InvalidKeyException {
+    public void listenRMI() throws ParseException, InvalidKeyException {
         while(true){
             String message="";//Ricevi messaggi in RMI
-            elaborate(controller,message);
+            elaborate(message);
         }
     }
-    public static void elaborate(clientController controller, String message) throws ParseException, InvalidKeyException {
+    public static void elaborate( String message) throws ParseException, InvalidKeyException {
         CLI cli = new CLI();
         ReplyMessage reply;
         boolean isLobby=false;
@@ -244,7 +238,7 @@ public class Client {
         //thread che rimane in ascolto di messaggi
         executor.submit(()-> {
             try {
-                Client.listenSocket(controller,in);
+                Client.listenSocket();
             } catch (IOException | ParseException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
@@ -253,36 +247,37 @@ public class Client {
         //Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         //Ciclo per invio messaggi
         while(true) { //Condizione da rivedere
-            Client.sendMessage(input.nextLine(),controller,in,out,cli,true,null);
+            Client.sendMessage(input.nextLine(),cli,true);
         }
 
         //executor.shutdownNow();//uccisione thread
     }
 
     public static void RMI(){
-
+        Scanner in = new Scanner(System.in);
         Client c = new Client();
-        clientController Client=new clientController();
+        controller = new clientController();
         CLI cli=new CLI();
 
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-            RMIclient = new RMIclientImpl(Client); //per ricevere risposta
+            RMIclient = new RMIclientImpl(controller); //per ricevere risposta
             Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", RMIclient);
             //TODO MANCA IL PING E IL CICLO DEL CONTROLLO IN CASO DI NOME GIA' PRESO
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
-            //c.sendMessage("",Client,null,null,cli,false,stub);
+            while(true){
+                c.sendMessage(in.nextLine(), cli, false);
+            }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-private void ping() throws InterruptedException {
+    private void ping() throws InterruptedException {
         while(true) {
             TimeUnit.SECONDS.sleep(30);
-
             try {
                 Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
                 RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
@@ -291,7 +286,6 @@ private void ping() throws InterruptedException {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     public static void setName() throws RemoteException {

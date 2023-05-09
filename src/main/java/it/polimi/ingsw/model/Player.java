@@ -4,6 +4,7 @@
  */
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.PersonalCard;
@@ -14,6 +15,7 @@ import it.polimi.ingsw.network.messages.ReplyMessage;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -66,14 +68,14 @@ public class Player implements Serializable {
      * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
      * @return orderedTiles list of selected tiles in order.
      */
-    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws InputMismatchException {
+    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws InputMismatchException, RemoteException {
         List<Tile> orderedTiles = new ArrayList<>();
         if (selected.size() > order.size()) {
-            this.out.println(new ReplyMessage("The selected order is wrong, you have selected more tiles!",Action.INGAMEEVENT));
+            serverController.sendMessage(new ReplyMessage("The selected order is wrong, you have selected more tiles!",Action.INGAMEEVENT), nickname);
             throw new InputMismatchException("");
 
         } else if (selected.size() < order.size()){
-            this.out.println(new ReplyMessage("The selected order is wrong, you have selected less tiles!",Action.INGAMEEVENT));
+            serverController.sendMessage(new ReplyMessage("The selected order is wrong, you have selected less tiles!",Action.INGAMEEVENT), nickname);
             throw new InputMismatchException("");
         } else {
             for (int i = 0; i < selected.size(); i++) {
@@ -92,7 +94,7 @@ public class Player implements Serializable {
      * @throws InvalidColumnException if the parameter col is out of bound.
      * @return true only if the shelf has enough space for the given tiles, false otherwise.
      */
-    private boolean checkColumn(int numTiles, int col) throws InvalidColumnException {
+    private boolean checkColumn(int numTiles, int col) throws InvalidColumnException, RemoteException {
         for(int j = 0; j < numRows; j++){
             //Check how many empty spaces there are in the selected column
             if(this.Shelf[j][col].getCategory().equals(type.EMPTY)) {
@@ -101,7 +103,7 @@ public class Player implements Serializable {
                 //If numTiles < 0 then there is no enough space
                 if(numTiles == 0) return true;
             }else{
-                out.println(new ReplyMessage("This column is full!",Action.INGAMEEVENT));
+                serverController.sendMessage(new ReplyMessage("This column is full!",Action.INGAMEEVENT), nickname);
                 return false;
             }
         }
@@ -115,7 +117,7 @@ public class Player implements Serializable {
      * @param col chosen column.
      * @throws InvalidColumnException if the selected column has no enough space.
      */
-    public void insertInShelf(List<Tile> toInsert, int col) throws InvalidColumnException {
+    public void insertInShelf(List<Tile> toInsert, int col) throws InvalidColumnException, RemoteException {
         if(!checkColumn(toInsert.size(), col)){
             throw new InvalidColumnException("Selected column has no enough space!");
         } else {
@@ -139,15 +141,15 @@ public class Player implements Serializable {
      * @param chosen a set of position that the player has chosen.
      * @param b board from which the player can take the tiles.
      */
-    public List<Tile> pickTiles(Set<Position> chosen, Board b,Player player) throws InvalidPositionException {
+    public List<Tile> pickTiles(Set<Position> chosen, Board b,Player player) throws InvalidPositionException, RemoteException {
         List<Tile> choice = new ArrayList<>();
         if(maxSpaceInShelf() < chosen.size()){
-            out.println(new ReplyMessage("Not enough space in the shelf",Action.INGAMEEVENT));
+            serverController.sendMessage(new ReplyMessage("Not enough space in the shelf",Action.INGAMEEVENT), player.getNickname());
             return choice;
         }
          //Position chosen by the player
          if (!b.AvailableTiles().containsAll(chosen)) {
-             player.getOut().println(new ReplyMessage("The chosen tiles are not available to be taken!", Action.INGAMEEVENT));
+             serverController.sendMessage(new ReplyMessage("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), player.getNickname());
              return choice;
          }else {
              for (Position p : chosen) {

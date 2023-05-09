@@ -5,6 +5,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.gameController;
+import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.*;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class Game {
@@ -74,31 +76,29 @@ public class Game {
      *
      * @see Player,Board,CommonCard,PersonalCard
      */
-    public void startGame(){
+    public void startGame() throws RemoteException {
         //At the starting point no player has the endgame token
         boolean endGame = false;
         boolean check = false;
 
-        for (Player p:
-             players) {
-            sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
-            p.getOut().println(new SendCommonCards(ccId));
+        for (Player p: players) {
+            controller.sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
+            serverController.sendMessage(new SendCommonCards(ccId), p.getNickname());
         }
         while(!endGame){
             for (Player p: players) {
-                for (Player p1:
-                     players) {
+                for (Player p1: players) {
                     if(p1.getNickname().equals(p.getNickname())){
-                        p1.getOut().println(new ReplyMessage("It's your turn!",Action.INGAMEEVENT));
-                        sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                        serverController.sendMessage(new ReplyMessage("It's your turn!",Action.INGAMEEVENT), p1.getNickname());
+                        controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
                     }else{
-                        sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
-                        p1.getOut().println(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT));
+                        controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                        serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT), p1.getNickname());
                     }
                 }
-                p.getOut().println(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT));
-                sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
-                p.getOut().println(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT));
+                serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
+                controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
+                serverController.sendMessage(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT), p.getNickname());
 
                 //The player can pick some tiles from the board and insert it inside its shel//
                 List<Tile>  toInsert = new ArrayList<>();
@@ -110,8 +110,8 @@ public class Game {
                         //bisogna attivare un thread per comunicare che non ce la tiles
                     }
                 }
-                sendElement(board.board, List.of(p),Action.UPDATEBOARD);
-                p.getOut().println(new ChosenTilesMessage(toInsert));
+                controller.sendElement(board.board, List.of(p),Action.UPDATEBOARD);
+                serverController.sendMessage(new ChosenTilesMessage(toInsert), p.getNickname());
 
                 //CONTROLLO SE SERVE CHIEDERE L'ORDINE, ALTRIMENTI SALTO IL PASSAGGIO
                 boolean allTheSame=true;
@@ -127,7 +127,7 @@ public class Game {
                     if(!allTheSame) break;
                 }
                 if(!allTheSame){
-                    p.getOut().println(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT));
+                    serverController.sendMessage(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT), p.getNickname());
                     List<Integer> order = new ArrayList<>();
                     while(order.isEmpty()){
                         order = controller.chooseOrder(p.getNickname(), id);
@@ -139,9 +139,9 @@ public class Game {
                         }
 
                     }
-                    p.getOut().println(new ChosenTilesMessage(toInsert));
+                    serverController.sendMessage(new ChosenTilesMessage(toInsert), p.getNickname());
                 }
-                p.getOut().println(new ReplyMessage("Choose column: ",Action.INGAMEEVENT));
+                serverController.sendMessage(new ReplyMessage("Choose column: ",Action.INGAMEEVENT), p.getNickname());
                 int col = -1;
                 while(col == -1) {
                     col= controller.chooseColumn(p.getNickname(),id);
@@ -151,29 +151,29 @@ public class Game {
                         col = -1;//serve per il while
                     }
                 }
-                p.getOut().println(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT));
-                p.getOut().println(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT));
-                sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
+                serverController.sendMessage(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
+                serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
+                controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
                     for (Player pb : players) {
-                        pb.getOut().println(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT));
+                        serverController.sendMessage(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT), pb.getNickname());
                     }
                 }
 
                 //At each turn the common card goals are calculated
                 if(CommonCards.get(0).control(p)){
                     for (Player pcc : players) {
-                        pcc.getOut().println(new ReplyMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
-                                "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),Action.INGAMEEVENT));
+                        serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
+                                "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
                     }
                     CommonCards.get(0).givePoints(p);
                 }
                 if(CommonCards.get(1).control(p)){
                     for (Player pcc : players) {
-                        pcc.getOut().println(new ReplyMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
-                                "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),Action.INGAMEEVENT));
+                        serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
+                                "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
                     }
                     CommonCards.get(1).givePoints(p);
                 }
@@ -182,7 +182,8 @@ public class Game {
                 //it assigns the end token and add 1 point
                 if (!check && p.isShelfFull()) {
                     for (Player pe : players) {
-                        pe.getOut().println(new ReplyMessage(p.getNickname() + " filled his shelf first and gained a point! This is the last turn.",Action.INGAMEEVENT));
+                        serverController.sendMessage(new ReplyMessage(p.getNickname() + " filled his shelf first " +
+                                "and gained a point! This is the last turn.",Action.INGAMEEVENT), pe.getNickname());
                     }
                     p.setEndToken(true);
                     p.addPoints(1);
@@ -199,13 +200,13 @@ public class Game {
             p.calculateCCPoints();
         }
         for (Player p : players) {
-            p.getOut().println(new ReplyMessage("Players' total points: ", Action.INGAMEEVENT));
+            serverController.sendMessage(new ReplyMessage("Players' total points: ", Action.INGAMEEVENT), p.getNickname());
             for (Player ptp:players) {
-                p.getOut().println(new ReplyMessage(ptp.getNickname() + ": " + ptp.getTotalPoints(), Action.INGAMEEVENT));
+                serverController.sendMessage(new ReplyMessage(ptp.getNickname() + ": " + ptp.getTotalPoints(), Action.INGAMEEVENT), p.getNickname());
             }
         }
         for (Player p : players) {
-            p.getOut().println(new ReplyMessage("The winner is " + calculateWinner().getNickname(),Action.INGAMEEVENT));
+            serverController.sendMessage(new ReplyMessage("The winner is " + calculateWinner().getNickname(),Action.INGAMEEVENT), p.getNickname());
         }
     }
 
@@ -278,16 +279,5 @@ public class Game {
     public List<CCStrategy> getAllCC() {
         return allCC;
     }
-
-    public void sendElement(Tile[][] element, List<Player> playersToSendTo, Action action){
-        type[][] information = new type[element.length][element[0].length];
-        for(int i = 0; i< element.length;i++ ){
-            for(int j = 0; j<element[0].length;j++){
-                information[i][j] = element[i][j].getCategory();
-            }
-        }
-        for (Player p: playersToSendTo) {
-            p.getOut().println(new UpdateBoardMessage(action, information));
-        }
-    }
+    
 }
