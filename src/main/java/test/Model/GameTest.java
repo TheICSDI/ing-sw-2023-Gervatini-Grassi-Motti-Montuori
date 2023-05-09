@@ -13,10 +13,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-    Player p1 = new Player("CLR",null);
-    Player p2 = new Player("Jhonny",null);
-    Player p3 = new Player("Mayhem",null);
-    Player p4 = new Player("Fozy",null);
+    Player p1 = new Player("CLR");
+    Player p2 = new Player("Jhonny");
+    Player p3 = new Player("Mayhem");
+    Player p4 = new Player("Fozy");
     List<Player> playerList = new ArrayList<>();
 
     @Test

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.view.CLI;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +15,7 @@ public class PlayerTest extends TestCase {
                 new Tile[]{new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS")},
                 new Tile[]{new Tile("FRAMES"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS")},
                 new Tile[]{new Tile("TROPHIES"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS")}};
-        Player p=new Player("MarcoGervatarco",null);
+        Player p=new Player("MarcoGervatarco");
         p.setShelf(Shelf);
         int x=p.maxSpaceInShelf();
         assertEquals(2,x);

@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.concurrent.ExecutorService;
@@ -72,7 +71,7 @@ public class Server {
                 }
                 //If the nickname is not already taken, it is added to the static hashmap allPlayers, and the
                 //associated player object is created
-                gameController.allPlayers.put(nickname.getUsername(),new Player(nickname.getUsername(),out));
+                gameController.allPlayers.put(nickname.getUsername(),new Player(nickname.getUsername()));
                 out.println(new SetNameMessage(nickname.getUsername(),true ));
                 serverController.connections.put(nickname.getUsername(), new connectionType(true, out, null));
                 //Infine loop that enable the reception of messages from the client

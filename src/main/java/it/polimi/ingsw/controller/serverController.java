@@ -13,7 +13,6 @@ import it.polimi.ingsw.network.server.RMIserverImpl;
 import it.polimi.ingsw.network.server.connectionType;
 import org.json.simple.parser.ParseException;
 
-import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -205,7 +204,7 @@ public class serverController {
       }else{
           //Nickname available
           reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
-          gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername(),null));
+          gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername()));
           connections.put(mex.getUsername(), new connectionType(false,null,reply));
       }
    }

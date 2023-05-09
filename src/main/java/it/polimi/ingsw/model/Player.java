@@ -31,13 +31,6 @@ public class Player implements Serializable {
     private int scoreToken1, scoreToken2;
     private int totalPoints;
     private int turn;
-    boolean socket;
-    private transient final PrintWriter out;
-
-    public PrintWriter getOut() {
-        return out;
-    }
-
 
     /**
      * Create a player with a specified id and nickname.
@@ -47,9 +40,8 @@ public class Player implements Serializable {
      *
      * @param nick nickname of the player.
      */
-    public Player(String nick, PrintWriter out){
+    public Player(String nick){
         this.nickname = nick;
-        this.out=out;
         this.totalPoints = 0;
         this.Shelf = new Tile[numRows][numCols];
         for(int i=0; i<numRows; i++){

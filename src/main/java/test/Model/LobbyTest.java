@@ -12,11 +12,11 @@ import java.util.InputMismatchException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyTest {
-    Player p1 = new Player("CLR",null);
-    Player p2 = new Player("Jhonny",null);
-    Player p3 = new Player("Mayhem",null);
-    Player p4 = new Player("Fozy",null);
-    Player p5 = new Player("AndreDeGrass",null);
+    Player p1 = new Player("CLR");
+    Player p2 = new Player("Jhonny");
+    Player p3 = new Player("Mayhem");
+    Player p4 = new Player("Fozy");
+    Player p5 = new Player("AndreDeGrass");
     Lobby l1 = new Lobby(p1,2);
     Lobby l2 = new Lobby(p2,2);
 
