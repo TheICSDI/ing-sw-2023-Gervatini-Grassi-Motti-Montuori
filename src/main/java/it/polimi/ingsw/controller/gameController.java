@@ -103,6 +103,7 @@ public class gameController {
         }
 
     }
+
     public  void selectOrder(String player, Action action, List<Integer> order, int gameId, int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
@@ -113,6 +114,7 @@ public class gameController {
             queueLock.notifyAll();
         }
     }
+
     public  void selectColumn(String player, Action action, int numCol, int gameId, int num_mess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
