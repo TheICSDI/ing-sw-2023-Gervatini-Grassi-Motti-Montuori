@@ -205,13 +205,13 @@ public class Client {
                 [2]: for RMI""");
             Scanner input = new Scanner(System.in);
             connectionType = input.next();
-        }while(!Objects.equals(connectionType, "1") && !connectionType.equals("2"));
+        }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if (connectionType.equals("1")) {
+            System.out.println("Socket connection chosen");
             socket();
-        } else if (connectionType.equals("2")) {
-            RMI();
         } else {
-            System.out.println("Wrong input");
+            System.out.println("RMI connection chosen");
+            RMI();
         }
     }
 

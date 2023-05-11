@@ -1,4 +1,5 @@
-/** It interacts with the server and the gameController, in order to modify the instance of the game. */
+/** It interacts with the server and the gameController, in order to modify the instance of the game.
+ *  @author Andrea Grassi, Marco Gervatini, Caterina Motti. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.InvalidActionException;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.network.server.connectionType;
 import org.json.simple.parser.ParseException;
 
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -21,7 +23,6 @@ public class serverController {
    public static Map<String, connectionType>  connections = new HashMap<>();
 
    public gameController controller = new gameController();
-   GeneralMessage message;
 
    /** Each thread of this pool allows maximum 10 games to be played at the same time. */
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
@@ -29,88 +30,89 @@ public class serverController {
    /** It takes a message from the client and does the requested action for all commands divided by lobby
     * and game commands and pass the in-game requests to the game controller writing it in the orderBook.
     * It sends a reply if needed
-    * @param received_message message to elaborate
-    * @author Marco,Andrea
+    * @param message the received message to be elaborated
     */
-   public void executeMessage(GeneralMessage received_message) throws RemoteException {
-      message = received_message;
-      int id = message.getMessage_id();
-      String player = message.getUsername();
-      Action action = message.getAction();
-      int gameId = message.getIdGame();
-      int idLobby = message.getIdLobby();
+   public void executeMessage(GeneralMessage message) throws RemoteException {
+      //constants to lighten the code
+      final int id = message.getMessage_id();
+      final int gameId = message.getIdGame();
+      final int idLobby = message.getIdLobby();
+      final Action action = message.getAction();
+      final String player = message.getUsername();
 
       //Based on the message's action type
-      switch(message.getAction()){
-
+      switch(action){
          //It creates a new lobby whose first player is who have called the command
          case CREATELOBBY -> {
             //It checks if the player is already in a game or in a lobby
-            if (isInAGame(gameController.allPlayers.get(message.getUsername()))){
-               sendMessage(new ReplyMessage("Already in game!", Action.ERROR), player);
-            } else if(isInALobby(gameController.allPlayers.get(message.getUsername()))){
-               sendMessage(new ReplyMessage("Already in a lobby",Action.ERROR), player);
+            if (isInAGame(gameController.allPlayers.get(player))){
+               sendMessage(new ReplyMessage("Already in a game!", Action.ERROR), player);
+            } else if(isInALobby(gameController.allPlayers.get(player))){
+               sendMessage(new ReplyMessage("Already in a lobby!",Action.ERROR), player);
             } else {
                //Otherwise it creates the lobby
-               Player pl = gameController.allPlayers.get(message.getUsername());
+               Player pl = gameController.allPlayers.get(player);
                int limit = message.getLimit();//lobby has a set amount of players needed to start
                Lobby NewLobby = new Lobby(pl, limit);
                gameController.allLobbies.add(NewLobby);
                sendMessage(new CreateLobbyReplyMessage("Lobby created with id " + NewLobby.lobbyId, NewLobby.lobbyId, limit), player);
             }
-
          }
 
          //It shows all the available lobbies
          case SHOWLOBBY -> {
             //If the player is already in a game the command cannot be executed
-            if(isInAGame(gameController.allPlayers.get(message.getUsername()))) {
-               sendMessage(new ReplyMessage("Invalid command",Action.ERROR), player);
+            if(isInAGame(gameController.allPlayers.get(player))) {
+               sendMessage(new ReplyMessage("Invalid command", Action.ERROR), player);
             } else {
                sendMessage(new ShowLobbyReplyMessage("Show", gameController.allLobbies), player);
             }
          }
 
+         //It makes the player join a designated lobby
          case JOINLOBBY -> {
-            boolean found=false;
+            boolean found = false;
             //It checks if the player is already in a game or in a lobby
-            if(isInAGame(gameController.allPlayers.get(message.getUsername()))) {
+            if(isInAGame(gameController.allPlayers.get(player))) {
                sendMessage(new ReplyMessage("Already in a game!", Action.ERROR), player);
-            }else if(isInALobby(gameController.allPlayers.get(message.getUsername()))){
+            }else if(isInALobby(gameController.allPlayers.get(player))){
                sendMessage(new ReplyMessage("Already in a lobby!", Action.ERROR), player);
             }else{
                //Otherwise, it found the chosen lobby by the given id, and it added the player
                for (Lobby l: gameController.allLobbies) {
-                  if(l.lobbyId==message.getIdLobby()){
+                  if(l.lobbyId == idLobby){
                      found = true;
                      try{
-                        l.Join(gameController.allPlayers.get(message.getUsername()));
+                        l.Join(gameController.allPlayers.get(player));
                         sendMessage(new JoinLobbyReplyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
                      }catch(InputMismatchException x){
-                        sendMessage(new ReplyMessage("Lobby full!",Action.ERROR),player);
+                        sendMessage(new ReplyMessage("The selected lobby is full!", Action.ERROR), player);
                      }
                   }
                }
                //If the lobby is not found it is reported to the client
                if(!found){
-                  sendMessage(new ReplyMessage("Lobby does not exist", Action.ERROR), player);
+                  sendMessage(new ReplyMessage("The selected lobby does not exist!", Action.ERROR), player);
                }
             }
          }
 
          //It starts a game
          case STARTGAME -> {
-            boolean notInLobby=true, gameStarted=false;
+            boolean notInLobby = true, gameStarted = false;
             //It checks each lobby in gameController
             for (Lobby l: gameController.allLobbies) {
-               if(idLobby==l.lobbyId){
-                  notInLobby=false;
-                  if(l.Players.size()==l.limit){
+               if(idLobby == l.lobbyId){
+                  //If it found the lobby of the player
+                  notInLobby = false;
+                  //If the lobby is full, the game is created
+                  if(l.Players.size() == l.limit){
                      Game g = new Game(l.Players, controller);
                      gameController.allGames.put(g.id,g);
                      gameController.allLobbies.remove(l);
                      for (Player p: l.Players) {
-                        sendMessage(new StartGameReplyMessage(message.getUsername() + " started the game!" , g.id), p.getNickname());
+                        sendMessage(new StartGameReplyMessage(player + " started the game!" ,
+                                g.id), p.getNickname());
                      }
                      executorsService.submit(() ->{
                         try{
@@ -119,16 +121,19 @@ public class serverController {
                            throw new RuntimeException(e);
                         }
                      });
-                     gameStarted=true;
-                     break; // se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce un foreach su una lista che viene modificata
+                     gameStarted = true;
+                     break;
+                     // TODO: se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce
+                     //  un foreach su una lista che viene modificata
+                     // NON ho capito cosa significa allora l'ho segnato
                   }else{
                      sendMessage(new ReplyMessage("Not enough or too many players", Action.ERROR), player);
                   }
                }
             }
-            //If the game hasn't started it checks if the player is already in a game or is not in a lobby
+            //Otherwise it checks if the player is already in a game or is not in a lobby
             if(!gameStarted) {
-               if (isInAGame(gameController.allPlayers.get(message.getUsername()))) {
+               if (isInAGame(gameController.allPlayers.get(player))) {
                   sendMessage(new ReplyMessage("Already in game!", Action.ERROR), player);
                } else if (notInLobby){
                   sendMessage(new ReplyMessage("Not in a Lobby!", Action.ERROR), player);
@@ -138,8 +143,8 @@ public class serverController {
 
          //Pick some tiles from the main board
          case PT -> {
-            List<Position> pos=new ArrayList<>();
-            ((PickTilesMessage) message).getPos(pos);
+            List<Position> pos = new ArrayList<>();
+            ((PickTilesMessage)message).getPos(pos);
             controller.pickTiles(player, action, pos, gameId, id);
          }
 
@@ -152,7 +157,7 @@ public class serverController {
 
          //Select che column in which to put the tiles
          case SC -> {
-            int numCol = ((SelectColumnMessage) message).getCol();
+            int numCol = ((SelectColumnMessage)message).getCol();
             controller.selectColumn(player, action, numCol, gameId, id);
          }
 
@@ -223,21 +228,32 @@ public class serverController {
       return false;
    }
 
-   public void getName(String input, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
+   /** It gets a nickname from the server via RMI connection.
+    * If the nickname is not already taken it is putted in the list of players (in gameController) and in the map of
+    * connections (in this class). Otherwise, it replies with false. */
+   public void getName(String input, boolean isSocket, PrintWriter out, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex;
       mex = SetNameMessage.decrypt(input);
       if(gameController.allPlayers.containsKey(mex.getUsername())){
-
           //Nickname already taken
-          reply.RMIsendName(new SetNameMessage("Taken",false).toString(), null);
+          if(isSocket){
+             out.println(new SetNameMessage("Nickname already taken!",false ));
+          } else {
+             reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);
+          }
       }else{
           //Nickname available
-          reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
+          if(isSocket){
+             out.println(new SetNameMessage(mex.getUsername(),true ));
+          } else {
+             reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
+          }
           gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername()));
           connections.put(mex.getUsername(), new connectionType(false,null,reply));
       }
    }
 
+   /** It gets a message from the server, and it calls the method execute. */
    public void getMessage(String input) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex = null;
       switch (GeneralMessage.identify(input)){
@@ -257,6 +273,9 @@ public class serverController {
       }
    }
 
+   /** It sends a message to a designated client.
+    * @param m the message to be sent.
+    * @param nick the client. */
    public static void sendMessage(GeneralMessage m, String nick) throws RemoteException {
       if(connections.get(nick).isSocket()){
          connections.get(nick).getOut().println(m);
