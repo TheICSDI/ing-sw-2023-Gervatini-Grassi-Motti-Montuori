@@ -1,3 +1,5 @@
+/** Represent a connection with is type (socket or RMI) and the way to talk with the client
+ * (PrintWriter or RMIconnection). */
 package it.polimi.ingsw.network.server;
 
 import java.io.PrintWriter;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Lobby;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
@@ -8,6 +10,7 @@ import it.polimi.ingsw.network.messages.Action;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CLI implements View{
@@ -42,6 +45,10 @@ public class CLI implements View{
     @Override
     public void showBoard(type[][] board,Action action){
         Tile[][] shelf=recreateShelf(board);
+        printBoard(shelf,action);
+    }
+
+    public void printBoard(Tile[][] shelf,Action action){
         if(action.equals(Action.UPDATEBOARD)){
             System.out.println("    0  1  2  3  4  5  6  7  8");
         }
@@ -142,8 +149,24 @@ public class CLI implements View{
     }
 
     @Override
-    public void showLobby(List<String> usrs, int num_usrs){
-
+    public void showLobby(List<Lobby> Lobbies){
+        System.out.println("Lobby disponibili: ");
+        for (Lobby l:
+                Lobbies) {
+            System.out.print("Lobby "+l.lobbyId + ": ");
+            for (Player p:
+                    l.Players) {
+                System.out.print(p.getNickname()+ " ");
+            }
+            System.out.println();
+        }
+    }
+    @Override
+    public void showOthers(Map<String,Player> others){
+        for (String nick:others.keySet()) {
+            System.out.println("  " + nick + "'s shelf");
+            printBoard(others.get(nick).getShelf(),Action.UPDATESHELF);
+        }
     }
 
     @Override

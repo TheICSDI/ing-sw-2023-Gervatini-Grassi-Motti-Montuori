@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.client.Client;
@@ -8,14 +9,16 @@ import it.polimi.ingsw.network.messages.*;
 import org.json.simple.parser.ParseException;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class clientController{
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
     private String nickname;
     private int idLobby=0;
     private int idGame=0;
+
+    private Map<String,Player> others=new HashMap<>();
+
 
     private boolean firstTurn=false;
     private type[][] simpleGoal=new type[6][5];
@@ -177,6 +180,13 @@ public class clientController{
                         return new DefaultErrorMessage("Not in game");
                     }
                 }
+                case SHOWOTHERS -> {
+                    if(idGame>0){
+                        return new ReplyMessage("",Action.SHOWOTHERS);
+                    }else{
+                        return new DefaultErrorMessage("Not in game");
+                    }
+                }
                 case C ->{
                     if(words.length > 2){
                         String phrase = "";
@@ -291,5 +301,11 @@ public class clientController{
 
     public void getMessage(String m) throws ParseException, InvalidKeyException {
         Client.elaborate(m);
+    }
+
+
+
+    public Map<String,Player> getOthers() {
+        return others;
     }
 }

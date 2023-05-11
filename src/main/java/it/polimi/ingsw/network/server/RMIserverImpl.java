@@ -30,7 +30,7 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
     @Override
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
         try {
-            s.getName(m, reply);
+            s.getName(m, false, null, reply);
         }catch(InvalidActionException | InvalidKeyException | ParseException ignored){}
     }
 

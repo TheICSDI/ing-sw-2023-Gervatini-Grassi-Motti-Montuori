@@ -33,12 +33,6 @@ public class ReplyMessage extends GeneralMessage implements Serializable {
         return new Gson().toJson(this);
     }
 
-    /**
-     * Converts the message in string and prints, useful if overriden in a subclass with more complex data to print
-     */
-    public void print(){
-        System.out.println(this.message);
-    }
 
     /**
      * Translate a message from json to an object
