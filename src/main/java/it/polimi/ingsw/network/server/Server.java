@@ -6,7 +6,7 @@ import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.network.messages.SetNameMessage;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -20,7 +20,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Server {
     private ServerSocket serverSocket;
@@ -54,6 +53,7 @@ public class Server {
         /** It overrides the run() method to manage multiple thread, each one rearguing a single socket connection. */
         @Override
         public void run() {
+            SetNameMessage nickname=null;
             try {
                 //Creates the socket between client and sever via input/output
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -63,7 +63,6 @@ public class Server {
                 //Firstly it ask for a nickname until the given one is available
                 //In this way each client is represented by a unique nickname
                 out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
-                SetNameMessage nickname;
                 nickname = SetNameMessage.decrypt(in.readLine());
                 while(gameController.allPlayers.containsKey(nickname.getUsername())){
                     out.println(new SetNameMessage("",false ));
@@ -79,12 +78,23 @@ public class Server {
                 while((input = in.readLine()) != null){
                     SC.getMessage(input);
                 }
-                //If the while terminate the socket connection is closed
-                in.close();
-                out.close();
-                clientSocket.close();
-            } catch (IOException | ParseException | InvalidKeyException | InvalidActionException e) {
-                throw new RuntimeException(e);
+            } catch (IOException e) {
+                if(nickname != null) {
+                    System.out.println(nickname.getUsername() + " has disconnected");
+                    if(gameController.allPlayers.containsKey(nickname.getUsername())){
+                        gameController.allPlayers.get(nickname.getUsername()).setConnected(false);
+                    }
+                }else{
+                    System.out.println("Client has disconnected!");
+                }
+            } catch (ParseException | InvalidKeyException | InvalidActionException ignored ){
+            } finally {
+                try {
+                    //If the client disconnect the socket connection is closed
+                    in.close();
+                    out.close();
+                    clientSocket.close();
+                } catch (IOException ignored) {}
             }
         }
     }
@@ -111,17 +121,7 @@ public class Server {
                 while(true) {
                     Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", s);
                     RMIconnection skeleton = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-                    //System.out.println("RMI server is ready");
                 }
-
-
-                /*ExecutorService executor = Executors.newSingleThreadExecutor();
-                executor.submit(() ->{
-                    try{
-                        ping();
-                    } catch (InterruptedException ignored){}
-                });*/
-
             } catch (Exception e) {
                 System.err.println("Server exception");
                 e.printStackTrace();
@@ -134,13 +134,6 @@ public class Server {
         Server server = new Server();
         server.start(23450);
         System.out.println("Socket server is ready!"); //Sarebbe carino che funzionasse :D
-    }
-
-    /** It enables a ping between the server and the RMI client. */
-    private static void ping() throws InterruptedException {
-        while(true) {
-            TimeUnit.SECONDS.sleep(30);
-        }
     }
 
 

@@ -62,7 +62,7 @@ public class gameController {
         List<command> toFind;
         Optional<command> found = Optional.empty();
         //int i=0;
-        while(found.isEmpty()){
+        while(found.isEmpty() && p.isConnected()){
             synchronized (queueLock) {
                 List<command> toFilter = queue;
                 //applica un filtro a tutti i comandi inevasi e trova quelli che corrispondono all'azione corretta del giocatore

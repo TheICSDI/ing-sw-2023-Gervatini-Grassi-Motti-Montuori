@@ -7,5 +7,4 @@ import java.rmi.RemoteException;
 public interface RMIconnection extends Remote {
     void RMIsendName(String m, RMIconnection reply) throws RemoteException;
     void RMIsend(String m) throws RemoteException;
-    //void RMIsendClient(String m) throws RemoteException;
 }

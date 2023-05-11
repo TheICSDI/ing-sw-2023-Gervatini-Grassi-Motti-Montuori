@@ -1,20 +1,22 @@
 package it.polimi.ingsw.view.GUI;
 
-import javafx.application.Application;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.view.View;
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Map;
 
 public class GUI extends Application implements View
 {
@@ -34,7 +36,7 @@ public class GUI extends Application implements View
     }
 
     @Override
-    public void showLobby(List<String> usrs, int num_usrs) {
+    public void showLobby(List<Lobby> Lobbies) {
 
     }
 
@@ -53,6 +55,10 @@ public class GUI extends Application implements View
 
     }
 
+    @Override
+    public void showOthers(Map<String, Player> others){
+
+    }
     @Override
     public void joinLobby(int lobby_id) {
 

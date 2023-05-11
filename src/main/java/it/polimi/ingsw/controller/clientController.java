@@ -13,6 +13,8 @@ import java.util.*;
 
 public class clientController{
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
+
+
     private String nickname;
     private int idLobby=0;
     private int idGame=0;
@@ -299,7 +301,7 @@ public class clientController{
         }
     }
 
-    public void getMessage(String m) throws ParseException, InvalidKeyException {
+    public void getMessage(String m) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
         Client.elaborate(m);
     }
 
@@ -307,5 +309,9 @@ public class clientController{
 
     public Map<String,Player> getOthers() {
         return others;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }

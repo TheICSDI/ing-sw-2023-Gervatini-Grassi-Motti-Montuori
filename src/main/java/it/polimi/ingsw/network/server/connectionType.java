@@ -9,10 +9,13 @@ public class connectionType {
      private final PrintWriter out;
      private final RMIconnection reply;
 
+     private int ping;
+
     public connectionType(boolean socket, PrintWriter out, RMIconnection reply) {
         this.socket = socket;
         this.out = out;
         this.reply = reply;
+        ping=0;
     }
 
     public boolean isSocket() {
@@ -26,4 +29,8 @@ public class connectionType {
     public RMIconnection getReply() {
         return reply;
     }
+
+    public int getPing(){return ping;}
+
+    public void addPing(){ping++;}
 }

@@ -24,7 +24,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,6 +33,7 @@ public class Client {
     private Socket clientSocket;
     private static PrintWriter out;
 
+    private static final int pingTime=3;
 
 
     private static BufferedReader in;
@@ -43,7 +43,9 @@ public class Client {
 
     private static View virtualView;
 
+    private static int ping=0;
 
+    public static boolean connected=true;
 
     /*
         bisogna usare un id per il client handler, potremmo avere un id per il client e un id per i giocatore assegnato solo
@@ -103,14 +105,14 @@ public class Client {
     /**
      * Function that receives json messages ,identifies them and acts differently upon the action they have.
      */
-    public static void listenSocket() throws IOException, ParseException, InvalidKeyException {
+    public static void listenSocket() throws IOException, ParseException, InvalidKeyException, InterruptedException {
         while(true) {
             String message = in.readLine();
             elaborate(message);
         }
     }
-    public static void elaborate(String message) throws ParseException, InvalidKeyException {
-        ReplyMessage reply;
+    public static void elaborate(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
+        GeneralMessage reply;
         Action replyAction = ReplyMessage.identify(message);
         switch (replyAction) {
             //Crate a lobby
@@ -140,7 +142,7 @@ public class Client {
             }
             case UPDATEBOARD,UPDATESHELF -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                virtualView.showBoard(reply.getSimpleBoard(),replyAction);
+                virtualView.showBoard(((ReplyMessage)reply).getSimpleBoard(),replyAction);
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
                     virtualView.displayMessage("\n  Your personal goal");
@@ -156,16 +158,16 @@ public class Client {
             case CHOSENTILES ->{
                 reply = ChosenTilesMessage.decrypt(message);
                 List<Tile> tile=new ArrayList<>();
-                reply.getTiles(tile);
+                ((ReplyMessage)reply).getTiles(tile);
                 virtualView.showChosenTiles(tile);
             }
             case SHOWPERSONAL -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                controller.setSimpleGoal(reply.getSimpleBoard());
+                controller.setSimpleGoal(((ReplyMessage)reply).getSimpleBoard());
             }
             case SHOWCOMMONS -> {
                 reply = SendCommonCards.decrypt(message);
-                reply.getCC(controller.cc);
+                ((ReplyMessage)reply).getCC(controller.cc);
             }
             case SHOWOTHERS -> {
                 reply = OtherPlayersMessage.decrypt(message);
@@ -181,11 +183,16 @@ public class Client {
                 reply=BroadcastMessage.decrypt(message);
                 virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
             }
-            //TODO Decidire cosa fare una volta finito il game
             //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
             //altrimenti non è questa sezione che li controlla(e invece ha senso):D
             case ENDGAME -> {
                 controller.setIdGame(0);
+            }
+            case PING ->{
+                //RMI
+                ping++;
+                TimeUnit.SECONDS.sleep(pingTime);
+                stub.RMIsend(new PingMessage(controller.getNickname()).toString());
             }
             default -> {
                 reply = ReplyMessage.decrypt(message);
@@ -244,7 +251,7 @@ public class Client {
         executor.submit(()-> {
             try {
                 listenSocket();
-            } catch (IOException | ParseException | InvalidKeyException e) {
+            } catch (IOException | ParseException | InvalidKeyException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -264,7 +271,6 @@ public class Client {
         Client c = new Client();
         controller = new clientController();
         virtualView = new CLI();//TODO differenziazione tra  cli e gui in futuro
-
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
@@ -273,25 +279,43 @@ public class Client {
             //TODO MANCA IL PING PER SOCKET E CLIENT
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
-            while(true){
+            ExecutorService executor2 = Executors.newSingleThreadExecutor();
+            //thread che rimane in ascolto di messaggi
+            executor2.submit(()-> {
+                try {
+                    stub.RMIsend(new PingMessage(controller.getNickname()).toString());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            ExecutorService executor1 = Executors.newSingleThreadExecutor();
+            //thread che rimane in ascolto di messaggi
+            executor1.submit(()-> {
+                try {
+                    ping(stub);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            while(connected){
                 sendMessage(in.nextLine(), false);
             }
+            executor1.shutdownNow();
+            executor2.shutdownNow();
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             throw new RuntimeException(e);
         }
     }
     //TODO da fare
-    private void ping() throws InterruptedException {
-        while(true) {
-            TimeUnit.SECONDS.sleep(30);
-            try {
-                Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
-                RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-                //stub.RMIsendName("ping");
-            } catch (RemoteException | NotBoundException | MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+    private static void ping(RMIconnection stub) throws InterruptedException {
+        int x=-1;
+        while(x<ping) {
+            x=ping;
+            //System.out.println("Ping n^" + ping);
+            TimeUnit.SECONDS.sleep(pingTime);
         }
+        System.out.println("Disconnected");
+        connected=false;
     }
 
     public static void setName() throws RemoteException {

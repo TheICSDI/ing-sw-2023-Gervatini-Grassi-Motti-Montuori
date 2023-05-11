@@ -1,5 +1,4 @@
-/** It interacts with the server and the gameController, in order to modify the instance of the game.
- *  @author Andrea Grassi, Marco Gervatini, Caterina Motti. */
+/** It interacts with the server and the gameController, in order to modify the instance of the game. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.InvalidActionException;
@@ -12,17 +11,19 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.network.server.connectionType;
 import org.json.simple.parser.ParseException;
-
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class serverController {
    public static Map<String, connectionType>  connections = new HashMap<>();
 
    public gameController controller = new gameController();
+
+   private int ping=0;
 
    /** Each thread of this pool allows maximum 10 games to be played at the same time. */
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
@@ -121,11 +122,8 @@ public class serverController {
                            throw new RuntimeException(e);
                         }
                      });
-                     gameStarted = true;
-                     break;
-                     // TODO: se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce
-                     //  un foreach su una lista che viene modificata
-                     // NON ho capito cosa significa allora l'ho segnato
+                     gameStarted=true;
+                     break; // se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce un foreach su una lista che viene modificata
                   }else{
                      sendMessage(new ReplyMessage("Not enough or too many players", Action.ERROR), player);
                   }
@@ -250,6 +248,22 @@ public class serverController {
           }
           gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername()));
           connections.put(mex.getUsername(), new connectionType(false,null,reply));
+          ExecutorService executor = Executors.newSingleThreadExecutor();
+          executor.submit(() ->{
+                int x=-1;
+                while(x<connections.get(mex.getUsername()).getPing()) {
+                   x=connections.get(mex.getUsername()).getPing();
+                   //System.out.println("Ping n^" + connections.get(mex.getUsername()).getPing());
+                   try {
+                      TimeUnit.SECONDS.sleep(3);
+                   } catch (InterruptedException e) {
+                      throw new RuntimeException(e);
+                   }
+                }
+                System.out.println(mex.getUsername() + " disconnected");
+                gameController.allPlayers.get(mex.getUsername()).setConnected(false);
+          });
+
       }
    }
 
@@ -265,10 +279,15 @@ public class serverController {
          case SO -> mex = new SelectOrderMessage(input);
          case SC -> mex = new SelectColumnMessage(input);
          case C -> mex = ChatMessage.decrypt(input);
-         case CA -> mex= BroadcastMessage.decrypt(input);
+         case CA -> mex = BroadcastMessage.decrypt(input);
+         case PING-> {
+            mex=PingMessage.decrypt(input);
+            connections.get(mex.getUsername()).addPing();
+            sendMessage(new PingMessage(""), mex.getUsername());
+         }
       }
       //If the message is valid the command is executed by the serverController
-      if(!(mex == null)){
+      if (!(mex == null)) {
          this.executeMessage(mex);
       }
    }

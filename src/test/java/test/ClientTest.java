@@ -1,22 +1,14 @@
 package test;
 
 import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.messages.SetNameMessage;
 import it.polimi.ingsw.view.CLI;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
-import test.Message.SetNameTest;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +34,7 @@ class ClientTest {
         executor.submit(()-> {
             try {
                 Client.listenSocket();
-            } catch (IOException | ParseException | InvalidKeyException e) {
+            } catch (IOException | ParseException | InvalidKeyException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -80,7 +72,7 @@ class ClientTest {
         executor.submit(()-> {
             try {
                 Client.listenSocket();
-            } catch (IOException | ParseException | InvalidKeyException e) {
+            } catch (IOException | ParseException | InvalidKeyException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
