@@ -20,6 +20,7 @@ public enum Action {
     C,
     CA,
     SHOWCOMMONS,
+    SHOWOTHERS,
     ERROR;
 
 }

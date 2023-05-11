@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIclientImpl;
@@ -73,14 +74,16 @@ public class Client {
             String toSend = clientMessage.toString();
             //Se il formato è sbagliato checkmessage restituisce un messaggio di tipo error e non viene inviato
             if (curr_action.equals(Action.ERROR)) {
-                new ReplyMessage(toSend, Action.ERROR).print();
+                virtualView.displayMessage(toSend);
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
                 virtualView.displayMessage("\n  Your personal goal");
                 virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
                 virtualView.displayMessage("Common goals: ");
                 virtualView.showCommons(controller.cc);
-            } else {
+            } else if(curr_action.equals(Action.SHOWOTHERS)){
+                virtualView.showOthers(controller.getOthers());
+            }else {
                 if(socket) {
                     out.println(toSend);
                 } else {
@@ -108,25 +111,24 @@ public class Client {
     }
     public static void elaborate(String message) throws ParseException, InvalidKeyException {
         ReplyMessage reply;
-        boolean isLobby=false;
         Action replyAction = ReplyMessage.identify(message);
         switch (replyAction) {
             //Crate a lobby
             case CREATELOBBY -> {
                 reply = CreateLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
-                isLobby=true;
+                virtualView.displayMessage(reply.getMessage());
             }
             //Join a lobby given its id
             case JOINLOBBY -> {
                 reply = JoinLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
-                isLobby=true;
+                virtualView.displayMessage(reply.getMessage());
             }
             //List of available lobbies
             case SHOWLOBBY -> {
                 reply = ShowLobbyReplyMessage.decrypt(message);
-                isLobby=true;
+                virtualView.showLobby(((ShowLobbyReplyMessage)reply).getLobbies());
             }
             //Start the game
             case STARTGAME -> {
@@ -134,11 +136,29 @@ public class Client {
                 reply = StartGameReplyMessage.decrypt(message);
                 controller.setIdGame(reply.getIdGame());
                 controller.setFirstTurn(true);
-                isLobby=true;
+                virtualView.displayMessage(reply.getMessage());
             }
-            case UPDATEBOARD,UPDATESHELF -> reply = UpdateBoardMessage.decrypt(message);
-            case INGAMEEVENT -> reply = ReplyMessage.decrypt(message);
-            case CHOSENTILES -> reply = ChosenTilesMessage.decrypt(message);
+            case UPDATEBOARD,UPDATESHELF -> {
+                reply = UpdateBoardMessage.decrypt(message);
+                virtualView.showBoard(reply.getSimpleBoard(),replyAction);
+                if(controller.isFirstTurn()){
+                    controller.setFirstTurn(false);
+                    virtualView.displayMessage("\n  Your personal goal");
+                    virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+                    virtualView.displayMessage("Common goals: ");
+                    virtualView.showCommons(controller.cc);
+                }
+            }
+            case INGAMEEVENT -> {
+                reply = ReplyMessage.decrypt(message);
+                virtualView.displayMessage(reply.getMessage());
+            }
+            case CHOSENTILES ->{
+                reply = ChosenTilesMessage.decrypt(message);
+                List<Tile> tile=new ArrayList<>();
+                reply.getTiles(tile);
+                virtualView.showChosenTiles(tile);
+            }
             case SHOWPERSONAL -> {
                 reply = UpdateBoardMessage.decrypt(message);
                 controller.setSimpleGoal(reply.getSimpleBoard());
@@ -147,48 +167,31 @@ public class Client {
                 reply = SendCommonCards.decrypt(message);
                 reply.getCC(controller.cc);
             }
-            case C -> reply = ChatMessage.decrypt(message);
-            case CA -> reply=BroadcastMessage.decrypt(message);
+            case SHOWOTHERS -> {
+                reply = OtherPlayersMessage.decrypt(message);
+                String nick=((OtherPlayersMessage) reply).getP().getNickname();
+                Player p=((OtherPlayersMessage) reply).getP();
+                controller.getOthers().put(nick,p);
+            }
+            case C -> {
+                reply = ChatMessage.decrypt(message);
+                virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
+            }
+            case CA -> {
+                reply=BroadcastMessage.decrypt(message);
+                virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
+            }
             //TODO Decidire cosa fare una volta finito il game
             //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
             //altrimenti non è questa sezione che li controlla(e invece ha senso):D
+            case ENDGAME -> {
+                controller.setIdGame(0);
+            }
             default -> {
                 reply = ReplyMessage.decrypt(message);
-                isLobby=true;
             }
         }
         //distinzione cli gui
-        //TODO in realtà superfluo, basta chiamare solo metodi di view(FORSE)
-        if(true/*isCLI*/){
-            if(isLobby){
-                reply.print();
-            }else{
-                switch (replyAction){
-                    case UPDATEBOARD, UPDATESHELF -> {
-                        virtualView.showBoard(reply.getSimpleBoard(),replyAction);
-                        if(controller.isFirstTurn()){
-                            controller.setFirstTurn(false);
-                            virtualView.displayMessage("\n  Your personal goal");
-                            virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
-                            virtualView.displayMessage("Common goals: ");
-                            virtualView.showCommons(controller.cc);
-                        }
-                    }
-                    case INGAMEEVENT -> reply.print(); //da implementare in cli?
-                    case CHOSENTILES -> {
-                        List<Tile> tile=new ArrayList<>();
-                        reply.getTiles(tile);
-                        virtualView.showChosenTiles(tile);
-                    }
-                    case C -> virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
-                    case CA -> virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
-                }
-            }
-        }else{//GUI
-            /*
-
-             */
-        }
     }
 
     /** It starts the connection based on the client's decision. */

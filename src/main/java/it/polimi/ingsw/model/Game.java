@@ -10,10 +10,7 @@ import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.network.messages.ChosenTilesMessage;
-import it.polimi.ingsw.network.messages.ReplyMessage;
-import it.polimi.ingsw.network.messages.SendCommonCards;
+import it.polimi.ingsw.network.messages.*;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -84,6 +81,11 @@ public class Game {
         for (Player p: players) {
             controller.sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
             serverController.sendMessage(new SendCommonCards(ccId), p.getNickname());
+            for (Player other: players) {
+                if(!other.getNickname().equals(p.getNickname())){
+                    serverController.sendMessage(new OtherPlayersMessage(other),p.getNickname());
+                }
+            }
         }
         while(!endGame){
             for (Player p: players) {
@@ -154,6 +156,12 @@ public class Game {
                 serverController.sendMessage(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
                 serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
                 controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
+
+                for (Player other: players) {
+                    if(!other.getNickname().equals(p.getNickname())){
+                        serverController.sendMessage(new OtherPlayersMessage(p),other.getNickname());
+                    }
+                }
                 //If the board is empty it will be randomically filled
                 if(board.isBoardEmpty()){
                     board.fillBoard();
@@ -206,6 +214,8 @@ public class Game {
         }
         for (Player p : players) {
             serverController.sendMessage(new ReplyMessage("The winner is " + calculateWinner().getNickname(),Action.INGAMEEVENT), p.getNickname());
+            serverController.sendMessage(new ReplyMessage("",Action.ENDGAME), p.getNickname());
+            gameController.allGames.remove(id);
         }
     }
 
