@@ -32,6 +32,9 @@ import java.util.concurrent.TimeUnit;
 public class Client {
     private Socket clientSocket;
     private static PrintWriter out;
+
+
+
     private static BufferedReader in;
 
     private static RMIconnection stub;
@@ -39,10 +42,12 @@ public class Client {
 
     private static View virtualView;
 
+
+
     /*
-    bisogna usare un id per il client handler, potremmo avere un id per il client e un id per i giocatore assegnato solo
-    per il game per esempio (questione aperta, almeno per me)
-     */
+        bisogna usare un id per il client handler, potremmo avere un id per il client e un id per i giocatore assegnato solo
+        per il game per esempio (questione aperta, almeno per me)
+         */
     private static clientController controller;
     public void connection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);
@@ -55,12 +60,11 @@ public class Client {
     /**
      * Function that checks if the message has the right format and sends them to server.
      * @param message Command to send.
-     * @param view type of view.
      * @param socket true if socket connection, false if RMI connection.
      */
-    public void sendMessage(String message, View view, boolean socket) throws RemoteException {
+    public static void sendMessage(String message, boolean socket) throws RemoteException {
         if (message.equals("/help")) {
-            view.help();
+            virtualView.help();
         } else {
             GeneralMessage clientMessage;
             //Controlla che il formato del comando sia giusto
@@ -71,11 +75,11 @@ public class Client {
             if (curr_action.equals(Action.ERROR)) {
                 new ReplyMessage(toSend, Action.ERROR).print();
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
-                view.displayMessage("\n  Your personal goal");
-                view.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+                virtualView.displayMessage("\n  Your personal goal");
+                virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
-                view.displayMessage("Common goals: ");
-                view.showCommons(controller.cc);
+                virtualView.displayMessage("Common goals: ");
+                virtualView.showCommons(controller.cc);
             } else {
                 if(socket) {
                     out.println(toSend);
@@ -96,7 +100,7 @@ public class Client {
     /**
      * Function that receives json messages ,identifies them and acts differently upon the action they have.
      */
-    public void listenSocket() throws IOException, ParseException, InvalidKeyException {
+    public static void listenSocket() throws IOException, ParseException, InvalidKeyException {
         while(true) {
             String message = in.readLine();
             elaborate(message);
@@ -236,7 +240,7 @@ public class Client {
         //thread che rimane in ascolto di messaggi
         executor.submit(()-> {
             try {
-                Client.listenSocket();
+                listenSocket();
             } catch (IOException | ParseException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
@@ -245,7 +249,7 @@ public class Client {
         //Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
         //Ciclo per invio messaggi
         while(true) { //Condizione da rivedere
-            Client.sendMessage(input.nextLine(),virtualView,true);
+            sendMessage(input.nextLine(),true);
         }
 
         //executor.shutdownNow();//uccisione thread
@@ -267,7 +271,7 @@ public class Client {
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
             while(true){
-                c.sendMessage(in.nextLine(), virtualView, false);
+                sendMessage(in.nextLine(), false);
             }
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             throw new RuntimeException(e);
@@ -296,7 +300,41 @@ public class Client {
         nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);
     }
+
+    //FORTEST
+    public static PrintWriter getOut() {
+        return out;
+    }
+
+    public static void setOut(PrintWriter out) {
+        Client.out = out;
+    }
+
+    public static BufferedReader getIn() {
+        return in;
+    }
+
+    public static void setIn(BufferedReader in) {
+        Client.in = in;
+    }
+
+    public static clientController getController() {
+        return controller;
+    }
+
+    public static void setController(clientController controller) {
+        Client.controller = controller;
+    }
+    public static View getVirtualView() {
+        return virtualView;
+    }
+
+    public static void setVirtualView(View virtualView) {
+        Client.virtualView = virtualView;
+    }
 }
+
+
 
 
 
