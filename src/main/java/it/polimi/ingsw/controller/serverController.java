@@ -1,4 +1,5 @@
-/** It interacts with the server and the gameController, in order to modify the instance of the game. */
+/** It interacts with the server and the gameController, in order to modify the instance of the game.
+ * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.InvalidActionException;
@@ -11,7 +12,6 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.network.server.connectionType;
 import org.json.simple.parser.ParseException;
-import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -20,17 +20,13 @@ import java.util.concurrent.TimeUnit;
 
 public class serverController {
    public static Map<String, connectionType>  connections = new HashMap<>();
-
    public gameController controller = new gameController();
 
-   private int ping=0;
-
-   /** Each thread of this pool allows maximum 10 games to be played at the same time. */
+   //Each thread of this pool allows maximum 10 games to be played at the same time.
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
 
-   /** It takes a message from the client and does the requested action for all commands divided by lobby
-    * and game commands and pass the in-game requests to the game controller writing it in the orderBook.
-    * It sends a reply if needed
+   /** It takes a message from the client and does the requested action.
+    * It sends a reply if needed.
     * @param message the received message to be elaborated
     */
    public void executeMessage(GeneralMessage message) throws RemoteException {
@@ -229,23 +225,15 @@ public class serverController {
    /** It gets a nickname from the server via RMI connection.
     * If the nickname is not already taken it is putted in the list of players (in gameController) and in the map of
     * connections (in this class). Otherwise, it replies with false. */
-   public void getName(String input, boolean isSocket, PrintWriter out, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
+   public void getName(String input, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex;
       mex = SetNameMessage.decrypt(input);
       if(gameController.allPlayers.containsKey(mex.getUsername())){
           //Nickname already taken
-          if(isSocket){
-             out.println(new SetNameMessage("Nickname already taken!",false ));
-          } else {
-             reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);
-          }
+          reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);
       }else{
           //Nickname available
-          if(isSocket){
-             out.println(new SetNameMessage(mex.getUsername(),true ));
-          } else {
-             reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
-          }
+          reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
           gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername()));
           connections.put(mex.getUsername(), new connectionType(false,null,reply));
           ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -281,7 +269,7 @@ public class serverController {
          case C -> mex = ChatMessage.decrypt(input);
          case CA -> mex = BroadcastMessage.decrypt(input);
          case PING-> {
-            mex=PingMessage.decrypt(input);
+            mex = PingMessage.decrypt(input);
             connections.get(mex.getUsername()).addPing();
             sendMessage(new PingMessage(""), mex.getUsername());
          }

@@ -1,3 +1,5 @@
+/** It implements the RMIconnection interface, in order to be able to establish RMI connection client side.
+ * @author Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.clientController;
