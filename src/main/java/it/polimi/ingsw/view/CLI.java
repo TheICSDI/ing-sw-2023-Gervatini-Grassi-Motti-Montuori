@@ -26,6 +26,10 @@ public class CLI implements View{
     }
 
     @Override
+    public void init(){
+        out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
+    }
+    @Override
     public String askUsername(){
         Scanner input = new Scanner(System.in);
         out.print("Enter your nickname: ");
@@ -40,6 +44,11 @@ public class CLI implements View{
         else {
             out.println("Username not available\n");
         }
+    }
+
+    @Override
+    public void createLobby(String lobbyName, int maxPlayers) {
+
     }
 
     @Override
@@ -142,11 +151,12 @@ public class CLI implements View{
         }
     }
 
-    
+    /*
     @Override
     public void createLobby(String lobbyName, int maxPlayers){
 
     }
+     */
 
     @Override
     public void showLobby(List<Lobby> Lobbies){
@@ -161,6 +171,12 @@ public class CLI implements View{
             System.out.println();
         }
     }
+
+    @Override
+    public void showLobby(List<String> usrs, int num_usrs) {
+
+    }
+
     @Override
     public void showOthers(Map<String,Player> others){
         for (String nick:others.keySet()) {

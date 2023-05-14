@@ -46,7 +46,10 @@ public class Client {
 
 
     /*
-        bisogna usare un id per il client handler, potremmo avere un id per il client e un id per i giocatore assegnato solo
+        bisogna usare un id per il client handler, potremmo avere un
+
+        // Load root layout from fxml file.
+        FXMLLoader loader = new FXMLLid per il client e un id per i giocatore assegnato solo
         per il game per esempio (questione aperta, almeno per me)
          */
     private static clientController controller;

@@ -1,8 +1,7 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.Gui;
 
-import javafx.application.Application;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import it.polimi.ingsw.model.Lobby;
+import it.polimi.ingsw.model.Player;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Position;
@@ -10,14 +9,20 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.view.View;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Map;
 
-public class GUI extends Application implements View
+import static javafx.application.Application.launch;
+
+public class GUI implements View
 {
+
+    @Override
+    public void init(){
+
+    }
+
     @Override
     public String askUsername() {
         return null;
@@ -30,6 +35,11 @@ public class GUI extends Application implements View
 
     @Override
     public void createLobby(String lobbyName, int maxPlayers) {
+
+    }
+
+    @Override
+    public void showLobby(List<Lobby> Lobbies) {
 
     }
 
@@ -50,6 +60,11 @@ public class GUI extends Application implements View
 
     @Override
     public void showCommons(List<Integer> cc) {
+
+    }
+
+    @Override
+    public void showOthers(Map<String, Player> others) {
 
     }
 
@@ -106,19 +121,5 @@ public class GUI extends Application implements View
     @Override
     public void help() {
 
-    }
-
-    private Parent createContent() {
-        return new StackPane(new Text("Hello World"));
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(createContent(), 300, 300));
-        stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

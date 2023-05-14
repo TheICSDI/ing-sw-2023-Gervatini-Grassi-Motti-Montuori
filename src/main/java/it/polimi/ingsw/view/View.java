@@ -13,11 +13,16 @@ import java.util.Map;
 
 public interface View {
 
+    void init();
+
     String askUsername();
     void printUsername(String username, boolean isAvailable);
     void createLobby(String lobbyName, int maxPlayers);
     void showLobby(List<Lobby> Lobbies);
-    void showBoard(type[][] simpleBoard,Action action);
+
+    void showLobby(List<String> usrs, int num_usrs);
+
+    void showBoard(type[][] simpleBoard, Action action);
     void showChosenTiles(List<Tile> tiles);
     void showCommons(List<Integer> cc);
     void showOthers(Map<String,Player> others);
