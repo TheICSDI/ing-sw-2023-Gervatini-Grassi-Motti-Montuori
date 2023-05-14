@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.network.messages.ReplyMessage;
 
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ public class Player implements Serializable {
     private int scoreToken1, scoreToken2;
     private int totalPoints;
     private int turn;
+    private boolean connected = true;
 
     /**
      * Create a player with a specified id and nickname.
@@ -361,5 +361,15 @@ public class Player implements Serializable {
     /** Sets the number of turn of the player. */
     public void setTurn(int turn) {
         this.turn = turn;
+    }
+
+    /** Sets the connection status of the player. */
+    public boolean isConnected() {
+        return connected;
+    }
+
+    /** Gets the connection status of the player. */
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

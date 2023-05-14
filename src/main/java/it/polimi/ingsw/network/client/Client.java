@@ -1,3 +1,5 @@
+/** It represents a client able to establish connections with a sever, both via socket and RMI (exclusive).
+ * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
@@ -24,7 +26,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,17 +33,17 @@ import java.util.concurrent.TimeUnit;
 
 public class Client {
     private Socket clientSocket;
+    private static clientController controller;
     private static PrintWriter out;
-
-
-
     private static BufferedReader in;
-
     private static RMIconnection stub;
     private static RMIclientImpl RMIclient;
-
     private static View virtualView;
+    private static int ping=0;
+    private static final int pingTime = 3;
+    public static boolean connected=true;
 
+<<<<<<< HEAD
 
 
     /*
@@ -53,67 +54,31 @@ public class Client {
         per il game per esempio (questione aperta, almeno per me)
          */
     private static clientController controller;
+    /** It starts the socket connection on the given ip and port. */
     public void connection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);
-
         //Directed communication between client and server
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    /**
-     * Function that checks if the message has the right format and sends them to server.
-     * @param message Command to send.
-     * @param socket true if socket connection, false if RMI connection.
-     */
-    public static void sendMessage(String message, boolean socket) throws RemoteException {
-        if (message.equals("/help")) {
-            virtualView.help();
-        } else {
-            GeneralMessage clientMessage;
-            //Controlla che il formato del comando sia giusto
-            clientMessage = controller.checkMessageShape(message, controller);
-            Action curr_action = clientMessage.getAction();
-            String toSend = clientMessage.toString();
-            //Se il formato è sbagliato checkmessage restituisce un messaggio di tipo error e non viene inviato
-            if (curr_action.equals(Action.ERROR)) {
-                virtualView.displayMessage(toSend);
-            } else if (curr_action.equals(Action.SHOWPERSONAL)) {
-                virtualView.displayMessage("\n  Your personal goal");
-                virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
-            } else if (curr_action.equals(Action.SHOWCOMMONS)) {
-                virtualView.displayMessage("Common goals: ");
-                virtualView.showCommons(controller.cc);
-            } else if(curr_action.equals(Action.SHOWOTHERS)){
-                virtualView.showOthers(controller.getOthers());
-            }else {
-                if(socket) {
-                    out.println(toSend);
-                } else {
-                    //RMI
-                    stub.RMIsend(toSend);
-                }
-            }
-        }
-    }
-
+    /** It closes the socket connection. */
     public void endConnection() throws IOException {
         in.close();
         out.close();
         clientSocket.close();
     }
 
-    /**
-     * Function that receives json messages ,identifies them and acts differently upon the action they have.
-     */
-    public static void listenSocket() throws IOException, ParseException, InvalidKeyException {
+    /** It listens to the messages received by via socket, and it calls the elaborate method. */
+    public static void listenSocket() throws IOException, ParseException, InvalidKeyException, InterruptedException {
         while(true) {
             String message = in.readLine();
             elaborate(message);
         }
     }
-    public static void elaborate(String message) throws ParseException, InvalidKeyException {
-        ReplyMessage reply;
+
+    public static void elaborate(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
+        GeneralMessage reply;
         Action replyAction = ReplyMessage.identify(message);
         switch (replyAction) {
             //Crate a lobby
@@ -143,7 +108,7 @@ public class Client {
             }
             case UPDATEBOARD,UPDATESHELF -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                virtualView.showBoard(reply.getSimpleBoard(),replyAction);
+                virtualView.showBoard(((ReplyMessage)reply).getSimpleBoard(),replyAction);
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
                     virtualView.displayMessage("\n  Your personal goal");
@@ -159,16 +124,16 @@ public class Client {
             case CHOSENTILES ->{
                 reply = ChosenTilesMessage.decrypt(message);
                 List<Tile> tile=new ArrayList<>();
-                reply.getTiles(tile);
+                ((ReplyMessage)reply).getTiles(tile);
                 virtualView.showChosenTiles(tile);
             }
             case SHOWPERSONAL -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                controller.setSimpleGoal(reply.getSimpleBoard());
+                controller.setSimpleGoal(((ReplyMessage)reply).getSimpleBoard());
             }
             case SHOWCOMMONS -> {
                 reply = SendCommonCards.decrypt(message);
-                reply.getCC(controller.cc);
+                ((ReplyMessage)reply).getCC(controller.cc);
             }
             case SHOWOTHERS -> {
                 reply = OtherPlayersMessage.decrypt(message);
@@ -184,23 +149,62 @@ public class Client {
                 reply=BroadcastMessage.decrypt(message);
                 virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
             }
-            //TODO Decidire cosa fare una volta finito il game
-            //Per gli altri comandi si aspetta errore perchè se non è in una lobby non li può chiamare
-            //altrimenti non è questa sezione che li controlla(e invece ha senso):D
             case ENDGAME -> {
                 controller.setIdGame(0);
+            }
+            case PING ->{
+                //RMI
+                ping++;
+                TimeUnit.SECONDS.sleep(pingTime);
+                stub.RMIsend(new PingMessage(controller.getNickname()).toString());
             }
             default -> {
                 reply = ReplyMessage.decrypt(message);
             }
         }
-        //distinzione cli gui
+    }
+
+    /**
+     * Function that checks if the message has the right format and sends them to server.
+     * @param message to be sent.
+     * @param socket true if socket connection, false if RMI connection.
+     */
+    public static void sendMessage(String message, boolean socket) throws RemoteException {
+        if (message.equals("/help")) {
+            virtualView.help();
+        } else {
+            GeneralMessage clientMessage;
+            //Check the format
+            clientMessage = controller.checkMessageShape(message, controller);
+            Action curr_action = clientMessage.getAction();
+            String toSend = clientMessage.toString();
+            //If the format is wrong the function checkMessageShape return an error message
+            if (curr_action.equals(Action.ERROR)) {
+                virtualView.displayMessage(toSend);
+            } else if (curr_action.equals(Action.SHOWPERSONAL)) {
+                virtualView.displayMessage("\n  Your personal goal");
+                virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+            } else if (curr_action.equals(Action.SHOWCOMMONS)) {
+                virtualView.displayMessage("Common goals: ");
+                virtualView.showCommons(controller.cc);
+            } else if(curr_action.equals(Action.SHOWOTHERS)){
+                virtualView.showOthers(controller.getOthers());
+            } else {
+                //The message is sent
+                if(socket) {
+                    out.println(toSend);
+                } else {
+                    //RMI
+                    stub.RMIsend(toSend);
+                }
+            }
+        }
     }
 
     /** It starts the connection based on the client's decision. */
     public static void main(String[] args) throws IOException {
-        //TODO DISCONNESSIONI
         String connectionType;
+        //TODO dovrebbe essere in View
         do {
             System.out.println("""
                 Choose connection type:\s
@@ -210,14 +214,17 @@ public class Client {
             connectionType = input.next();
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if (connectionType.equals("1")) {
+            //TODO dovrebbe essere in View
             System.out.println("Socket connection chosen");
             socket();
         } else {
+            //TODO dovrebbe essere in View
             System.out.println("RMI connection chosen");
             RMI();
         }
     }
 
+    /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
         //Client.connection("192.168.1.234", 2345);
@@ -241,60 +248,77 @@ public class Client {
         } while (!nick.isAvailable());
         //Ogni player ha il suo clientController
         controller = new clientController(nick.getUsername());
-        //inizio connessione
+
+        //Connection starts with a pool of thread
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        //thread che rimane in ascolto di messaggi
         executor.submit(()-> {
             try {
                 listenSocket();
-            } catch (IOException | ParseException | InvalidKeyException e) {
+            } catch (IOException | ParseException | InvalidKeyException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
         virtualView.displayMessage("Write /help for command list.");
-        //Client.sendMessage("createlobby 2",controller,in,out,cli);//per velocizzare, sarà da rimuovere
-        //Ciclo per invio messaggi
-        while(true) { //Condizione da rivedere
+
+        //TODO: condizione valida sse il client è connesso, da rivedere
+        while(true) {
             sendMessage(input.nextLine(),true);
         }
-
-        //executor.shutdownNow();//uccisione thread
+        //executor.shutdownNow();
     }
 
-    /** It starts the RMI connections. */
+    /** It starts the RMI connection with the server. */
     public static void RMI(){
         Scanner in = new Scanner(System.in);
-        Client c = new Client();
+        Client Client = new Client();
         controller = new clientController();
         virtualView = new CLI();//TODO differenziazione tra  cli e gui in futuro
-
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
             RMIclient = new RMIclientImpl(controller); //per ricevere risposta
             Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", RMIclient);
-            //TODO MANCA IL PING PER SOCKET E CLIENT
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
-            while(true){
+
+            //Pool of thread for the ping messages
+            ExecutorService executor1 = Executors.newSingleThreadExecutor();
+            executor1.submit(()-> {
+                try {
+                    stub.RMIsend(new PingMessage(controller.getNickname()).toString());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            ExecutorService executor2 = Executors.newSingleThreadExecutor();
+            executor2.submit(()-> {
+                try {
+                    ping();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            //While the client is connected it send the messages to the server
+            while(connected){
                 sendMessage(in.nextLine(), false);
             }
+            //Otherwise it closes the threads
+            executor1.shutdownNow();
+            executor2.shutdownNow();
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
             throw new RuntimeException(e);
         }
     }
-    //TODO da fare
-    private void ping() throws InterruptedException {
-        while(true) {
-            TimeUnit.SECONDS.sleep(30);
-            try {
-                Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
-                RMIconnection stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-                //stub.RMIsendName("ping");
-            } catch (RemoteException | NotBoundException | MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+
+    private static void ping() throws InterruptedException {
+        int x=-1;
+        while(x<ping) {
+            x=ping;
+            //System.out.println("Ping n^" + ping);
+            TimeUnit.SECONDS.sleep(pingTime);
         }
+        System.out.println("Disconnected");
+        connected=false;
     }
 
     public static void setName() throws RemoteException {
@@ -307,51 +331,7 @@ public class Client {
         stub.RMIsendName(nick.toString(), RMIclient);
     }
 
-    //FORTEST
-    public static PrintWriter getOut() {
-        return out;
-    }
-
-    public static void setOut(PrintWriter out) {
-        Client.out = out;
-    }
-
-    public static BufferedReader getIn() {
-        return in;
-    }
-
-    public static void setIn(BufferedReader in) {
-        Client.in = in;
-    }
-
-    public static clientController getController() {
-        return controller;
-    }
-
-    public static void setController(clientController controller) {
-        Client.controller = controller;
-    }
-    public static View getVirtualView() {
-        return virtualView;
-    }
-
     public static void setVirtualView(View virtualView) {
         Client.virtualView = virtualView;
     }
 }
-
-
-
-
-
-
-
-
-/*
--questione serializable
--dove aggiungere i messaggi di tipo server (farei un'altra classe)
--definire count dei turni lato client, e anche se siamo in game avviato e anche se siamo in lobby, possiamo chiedere a server
--questione degli id in game e in lobby dato che virtualmente un player esiste quando comincia una partita,
-ma un client esiste da quando avvia l'applicazione e comunque fa anche le operazioni riguardo alla lobby che non sono gestibili in partita
--problema dello static
- */

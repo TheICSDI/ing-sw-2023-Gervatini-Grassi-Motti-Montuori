@@ -4,7 +4,9 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
@@ -40,12 +42,10 @@ public class GUI implements View
 
     @Override
     public void showLobby(List<Lobby> Lobbies) {
-
     }
 
     @Override
     public void showLobby(List<String> usrs, int num_usrs) {
-
     }
 
     @Override
@@ -68,6 +68,9 @@ public class GUI implements View
 
     }
 
+    public void showOthers(Map<String, Player> others){
+
+    }
     @Override
     public void joinLobby(int lobby_id) {
 

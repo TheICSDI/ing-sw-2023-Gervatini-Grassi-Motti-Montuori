@@ -1,4 +1,5 @@
-/** It manages the pending commands not yet fully executed. */
+/** It manages the pending commands not yet fully executed.
+ * @author Marco Gervatini. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
@@ -15,12 +16,11 @@ public class command {
     public int numMess;
     private List<Position> pos = null;
     private List<Integer> order = null;
-    private int numCol = 42;
+    private int numCol;
 
-    /** Constructor that creates a book of commands associated to a specific gmae, plater, action and a unique number
+    /** Constructor that creates a book of commands associated to a specific game, player, action and a unique number
      * of a message. */
     public command(Game g, Player p, Action a, int numMess){
-        //si potrebbero conservare game e player solo come id e nickname per velocizzare l'esecuzione
         this.g = g;
         this.p = p;
         this.a = a;
@@ -38,14 +38,10 @@ public class command {
     }
 
     /** It sets the number of column. */
-    public void setNumCol(int numCol) {
-        this.numCol = numCol;
-    }
+    public void setNumCol(int numCol) {this.numCol = numCol;}
 
     /** It gets the list of position. */
-    public List<Position> getPos() {
-        return pos;
-    }
+    public List<Position> getPos() {return pos;}
 
     /** It gets the list of order. */
     public List<Integer> getOrder() {

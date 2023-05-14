@@ -87,118 +87,121 @@ public class Game {
                 }
             }
         }
+        //Start turns
         while(!endGame){
             for (Player p: players) {
-                for (Player p1: players) {
-                    if(p1.getNickname().equals(p.getNickname())){
-                        serverController.sendMessage(new ReplyMessage("It's your turn!",Action.INGAMEEVENT), p1.getNickname());
-                        controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
-                    }else{
-                        controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
-                        serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT), p1.getNickname());
-                    }
-                }
-                serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
-                controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
-                serverController.sendMessage(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT), p.getNickname());
-
-                //The player can pick some tiles from the board and insert it inside its shel//
-                List<Tile>  toInsert = new ArrayList<>();
-                while(toInsert.isEmpty()) {
-                    Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
-                    try{
-                        toInsert = p.pickTiles(chosen, board,p);
-                    } catch (InvalidPositionException e) {
-                        //bisogna attivare un thread per comunicare che non ce la tiles
-                    }
-                }
-                controller.sendElement(board.board, List.of(p),Action.UPDATEBOARD);
-                serverController.sendMessage(new ChosenTilesMessage(toInsert), p.getNickname());
-
-                //CONTROLLO SE SERVE CHIEDERE L'ORDINE, ALTRIMENTI SALTO IL PASSAGGIO
-                boolean allTheSame=true;
-                for (Tile t1:
-                     toInsert) {
-                    for (Tile t2:
-                         toInsert) {
-                        if ((!t1.equals(t2)) && (!t1.getCategory().equals(t2.getCategory()))) {
-                            allTheSame = false;
-                            break;
+                if(p.isConnected()){
+                    for (Player p1: players) {
+                        if(p1.getNickname().equals(p.getNickname())){
+                            serverController.sendMessage(new ReplyMessage("It's your turn!",Action.INGAMEEVENT), p1.getNickname());
+                            controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                        }else{
+                            controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                            serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT), p1.getNickname());
                         }
                     }
-                    if(!allTheSame) break;
-                }
-                if(!allTheSame){
-                    serverController.sendMessage(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT), p.getNickname());
-                    List<Integer> order = new ArrayList<>();
-                    while(order.isEmpty()){
-                        order = controller.chooseOrder(p.getNickname(), id);
+                    serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
+                    controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
+                    serverController.sendMessage(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT), p.getNickname());
+
+                    //The player can pick some tiles from the board and insert it inside its shel//
+                    List<Tile>  toInsert = new ArrayList<>();
+                    while(toInsert.isEmpty()) {
+                        Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
                         try{
-                            toInsert = p.orderTiles(toInsert, order);
+                            toInsert = p.pickTiles(chosen, board,p);
+                        } catch (InvalidPositionException e) {
+                            //bisogna attivare un thread per comunicare che non ce la tiles
                         }
-                        catch (InputMismatchException e){
-                            order.clear();//serve per la condizione del while
-                        }
-
                     }
+                    controller.sendElement(board.board, List.of(p),Action.UPDATEBOARD);
                     serverController.sendMessage(new ChosenTilesMessage(toInsert), p.getNickname());
-                }
-                serverController.sendMessage(new ReplyMessage("Choose column: ",Action.INGAMEEVENT), p.getNickname());
-                int col = -1;
-                while(col == -1) {
-                    col= controller.chooseColumn(p.getNickname(),id);
-                    try {
-                        p.insertInShelf(toInsert, (col-1));
-                    } catch (InvalidColumnException e) {
-                        col = -1;//serve per il while
-                    }
-                }
-                serverController.sendMessage(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
-                serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
-                controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
 
-                for (Player other: players) {
-                    if(!other.getNickname().equals(p.getNickname())){
-                        serverController.sendMessage(new OtherPlayersMessage(p),other.getNickname());
+                    //CONTROLLO SE SERVE CHIEDERE L'ORDINE, ALTRIMENTI SALTO IL PASSAGGIO
+                    boolean allTheSame=true;
+                    for (Tile t1:
+                         toInsert) {
+                        for (Tile t2:
+                             toInsert) {
+                            if ((!t1.equals(t2)) && (!t1.getCategory().equals(t2.getCategory()))) {
+                                allTheSame = false;
+                                break;
+                            }
+                        }
+                        if(!allTheSame) break;
                     }
-                }
-                //If the board is empty it will be randomically filled
-                if(board.isBoardEmpty()){
-                    board.fillBoard();
-                    for (Player pb : players) {
-                        serverController.sendMessage(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT), pb.getNickname());
-                    }
-                }
+                    if(!allTheSame){
+                        serverController.sendMessage(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT), p.getNickname());
+                        List<Integer> order = new ArrayList<>();
+                        while(order.isEmpty()){
+                            order = controller.chooseOrder(p.getNickname(), id);
+                            try{
+                                toInsert = p.orderTiles(toInsert, order);
+                            }
+                            catch (InputMismatchException e){
+                                order.clear();//serve per la condizione del while
+                            }
 
-                //At each turn the common card goals are calculated
-                if(CommonCards.get(0).control(p)){
-                    for (Player pcc : players) {
-                        serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
-                                "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
+                        }
+                        serverController.sendMessage(new ChosenTilesMessage(toInsert), p.getNickname());
                     }
-                    CommonCards.get(0).givePoints(p);
-                }
-                if(CommonCards.get(1).control(p)){
-                    for (Player pcc : players) {
-                        serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
-                                "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
+                    serverController.sendMessage(new ReplyMessage("Choose column: ",Action.INGAMEEVENT), p.getNickname());
+                    int col = -1;
+                    while(col == -1) {
+                        col= controller.chooseColumn(p.getNickname(),id);
+                        try {
+                            p.insertInShelf(toInsert, (col-1));
+                        } catch (InvalidColumnException e) {
+                            col = -1;//serve per il while
+                        }
                     }
-                    CommonCards.get(1).givePoints(p);
-                }
+                    serverController.sendMessage(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
+                    serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
+                    controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
 
-                //If the end game token has not been assigned and the current player has completed his shelf
-                //it assigns the end token and add 1 point
-                if (!check && p.isShelfFull()) {
-                    for (Player pe : players) {
-                        serverController.sendMessage(new ReplyMessage(p.getNickname() + " filled his shelf first " +
-                                "and gained a point! This is the last turn.",Action.INGAMEEVENT), pe.getNickname());
+                    for (Player other: players) {
+                        if(!other.getNickname().equals(p.getNickname())){
+                            serverController.sendMessage(new OtherPlayersMessage(p),other.getNickname());
+                        }
                     }
-                    p.setEndToken(true);
-                    p.addPoints(1);
-                    check = true;
-                    endGame = true;
-                }
+                    //If the board is empty it will be randomically filled
+                    if(board.isBoardEmpty()){
+                        board.fillBoard();
+                        for (Player pb : players) {
+                            serverController.sendMessage(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT), pb.getNickname());
+                        }
+                    }
+
+                    //At each turn the common card goals are calculated
+                    if(CommonCards.get(0).control(p)){
+                        for (Player pcc : players) {
+                            serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
+                                    "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
+                        }
+                        CommonCards.get(0).givePoints(p);
+                    }
+                    if(CommonCards.get(1).control(p)){
+                        for (Player pcc : players) {
+                            serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
+                                    "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
+                        }
+                        CommonCards.get(1).givePoints(p);
+                    }
+
+                    //If the end game token has not been assigned and the current player has completed his shelf
+                    //it assigns the end token and add 1 point
+                    if (!check && p.isShelfFull()) {
+                        for (Player pe : players) {
+                            serverController.sendMessage(new ReplyMessage(p.getNickname() + " filled his shelf first " +
+                                    "and gained a point! This is the last turn.",Action.INGAMEEVENT), pe.getNickname());
+                        }
+                        p.setEndToken(true);
+                        p.addPoints(1);
+                        check = true;
+                        endGame = true;
+                    }
                 //ToDo inviare a ogni player a fine partita le shelf di tutti i player cosicchè le possano stamapre in locale
+                }
             }
         }
         for(Player p : players){

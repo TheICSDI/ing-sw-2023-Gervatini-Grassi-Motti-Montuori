@@ -114,4 +114,5 @@ public abstract class GeneralMessage implements Serializable {
     }
 
     public int getLimit(){return limit;}
+    public String getMessage(){return null;}
 }

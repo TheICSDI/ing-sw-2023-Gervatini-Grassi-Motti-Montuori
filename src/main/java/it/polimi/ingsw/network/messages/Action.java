@@ -21,6 +21,7 @@ public enum Action {
     CA,
     SHOWCOMMONS,
     SHOWOTHERS,
+    PING,
     ERROR;
 
 }
