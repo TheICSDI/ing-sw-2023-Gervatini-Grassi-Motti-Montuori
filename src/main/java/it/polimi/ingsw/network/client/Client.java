@@ -83,6 +83,7 @@ public class Client extends Application {
             case CREATELOBBY -> {
                 reply = CreateLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
+                virtualView.createLobby(reply.getMessage());
                 virtualView.displayMessage(reply.getMessage());
             }
             //Join a lobby given its id
@@ -280,7 +281,7 @@ public class Client extends Application {
 
         //TODO: condizione valida sse il client è connesso, da rivedere
         while(true) {
-            sendMessage(input.nextLine(),true);
+            sendMessage(virtualView.getInput(),true);
         }
         //executor.shutdownNow();
     }

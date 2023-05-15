@@ -32,9 +32,14 @@ import static javafx.application.Application.launch;
 //TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
 public class GUI implements View
 {
+
+    private Stage stage;
     public static String Name="";
+    public static String message;
     public static final Object NameLock = new Object();
+    public static final Object Lock = new Object();
     public nameSceneController nsc;
+    public lobbySceneController lsc;
     private Stage primaryStage;
 //sencojone -Emi
     @Override
@@ -58,27 +63,37 @@ public class GUI implements View
 
     @Override
     public void printUsername(String username, boolean isAvailable) {
-        System.out.println(username);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 if (isAvailable) {
-                    nsc.showName(username);
+                    Name = username;
+                    openLobbyScene();
+                    synchronized (Lock) {
+                        message = "showlobby";
+                        Lock.notifyAll();
+                    }
                 } else {
+
                     nsc.showName("NotAvailable");
                 }
             }
         });
-
     }
 
     @Override
-    public void createLobby(String lobbyName, int maxPlayers) {
-
+    public void createLobby(String lobbyName/*, int maxPlayers non serve?*/) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                lsc.setText(lobbyName);//provvisorio
+            }
+        });
     }
 
     @Override
     public void showLobby(List<Lobby> Lobbies) {
+        lsc.showLobbies(Lobbies);
     }
 
     @Override
@@ -158,6 +173,22 @@ public class GUI implements View
     public void help() {
 
     }
+
+    //METODO PER MANDARE I MESSAGGI AL SERVER, QUANDO X PULSANTE VIENE PREMUTO BISOGNA SETTARE IL MESSAGE DI QUESTA CLASSE
+    // AL MESSAGGIO DA MANDARE E FARE MESSAGELOCK.NOTIFYALL E IL MESSAGGIO VIENE INVIATO
+    //TODO TUTTI I PULSANTI CHE INVIANO I MESSAGGI PER LE LOBBY E UNIFORMARE I METODI CHE RICEVONO LE RISPOSTE IN GUI E CONTROLLARE SIANO FATTI IN CLI
+    @Override
+    public String getInput() {
+        synchronized (Lock){
+            try {
+                Lock.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return message;
+    }
+
     /**
      * Loads an FXML file and returns the associated controller instance.
      * This method assumes that the FXML file is stored in the "src/resources/fxml/" directory.
@@ -175,7 +206,7 @@ public class GUI implements View
         return loader.getController();
     }
 
-    public void startGUI(Stage stage){
+    public void startGUI(Stage primaryStage){
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
         Parent root=null;
@@ -183,9 +214,24 @@ public class GUI implements View
             root=loader.load();
         }catch(Exception ignored){}
         nsc=loader.getController();
+        stage=primaryStage;
         stage.setTitle("NameScene");
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    private void openLobbyScene(){
+        FXMLLoader loader = new FXMLLoader();
+        Parent root1 = null;
+        loader.setLocation(getClass().getResource("/fxml/LobbyScene.fxml"));
+        try {
+            root1 = loader.load();
+        } catch (Exception ignored) {
+        }
+        lsc = loader.getController();
+        lsc.setName(Name);
+        stage.setTitle("NameScene");
+        stage.setScene(new Scene(root1));
     }
 
 }
