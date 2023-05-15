@@ -11,7 +11,10 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.view.View;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +22,7 @@ import static javafx.application.Application.launch;
 
 public class GUI implements View
 {
+    private Stage primaryStage;
 
     @Override
     public void init(){
@@ -65,10 +69,6 @@ public class GUI implements View
 
     @Override
     public void showOthers(Map<String, Player> others) {
-
-    }
-
-    public void showOthers(Map<String, Player> others){
 
     }
     @Override
@@ -125,4 +125,21 @@ public class GUI implements View
     public void help() {
 
     }
+    /**
+     * Loads an FXML file and returns the associated controller instance.
+     * This method assumes that the FXML file is stored in the "src/resources/fxml/" directory.
+     *
+     * @param fxmlFileName    The name of the FXML file to load.
+     * @param controllerClass The class of the associated controller.
+     * @param <T>             The type of the controller.
+     * @return The controller instance associated with the loaded FXML file.
+     * @throws IOException If an error occurs while loading the FXML file.
+     */
+    private <T> T loadFXML(String fxmlFileName, Class<T> controllerClass) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(controllerClass.getClassLoader().getResource("fxml/" + fxmlFileName));
+        loader.load();
+        return loader.getController();
+    }
+
 }

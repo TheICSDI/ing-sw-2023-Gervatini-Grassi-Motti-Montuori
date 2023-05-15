@@ -43,9 +43,6 @@ public class Client {
     private static final int pingTime = 3;
     public static boolean connected=true;
 
-<<<<<<< HEAD
-
-
     /*
         bisogna usare un id per il client handler, potremmo avere un
 
@@ -53,7 +50,6 @@ public class Client {
         FXMLLoader loader = new FXMLLid per il client e un id per i giocatore assegnato solo
         per il game per esempio (questione aperta, almeno per me)
          */
-    private static clientController controller;
     /** It starts the socket connection on the given ip and port. */
     public void connection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);

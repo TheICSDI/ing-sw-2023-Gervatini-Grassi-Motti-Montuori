@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Circle fill="DODGERBLUE" layoutX="166.0" layoutY="141.0" radius="127.0" stroke="BLACK" strokeType="INSIDE" />
+      <CheckBox layoutX="386.0" layoutY="120.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="186.0" text="CheckBox" />
+   </children>
+</AnchorPane>
