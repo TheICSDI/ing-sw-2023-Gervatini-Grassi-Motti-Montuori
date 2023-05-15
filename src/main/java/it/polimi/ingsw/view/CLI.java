@@ -26,8 +26,23 @@ public class CLI implements View{
     }
 
     @Override
-    public void init(){
+    public String showMain(){
         out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
+        String reply;
+        do {
+            System.out.println("""
+                Choose connection type:\s
+                [1]: for Socket
+                [2]: for RMI""");
+            Scanner input = new Scanner(System.in);
+            reply = input.next();
+        }while(!(reply.equals("1") || reply.equals("2")));
+        if (reply.equals("1")) {
+            System.out.println("Socket connection chosen");
+        } else {
+            System.out.println("RMI connection chosen");
+        }
+        return reply;
     }
     @Override
     public String askUsername(){

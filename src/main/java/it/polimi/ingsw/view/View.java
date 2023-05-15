@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface View {
 
-    void init();
+    String showMain();
 
     String askUsername();
     void printUsername(String username, boolean isAvailable);

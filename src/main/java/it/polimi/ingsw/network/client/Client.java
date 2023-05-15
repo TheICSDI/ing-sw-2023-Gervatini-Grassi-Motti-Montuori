@@ -10,7 +10,10 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.view.CLI;
+import it.polimi.ingsw.view.Gui.GUI;
+import it.polimi.ingsw.view.Gui.JFXStart;
 import it.polimi.ingsw.view.View;
+import javafx.application.Application;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -199,23 +202,26 @@ public class Client {
 
     /** It starts the connection based on the client's decision. */
     public static void main(String[] args) throws IOException {
-        String connectionType;
-        //TODO dovrebbe essere in View
-        do {
-            System.out.println("""
-                Choose connection type:\s
-                [1]: for Socket
-                [2]: for RMI""");
-            Scanner input = new Scanner(System.in);
-            connectionType = input.next();
-        }while(!(connectionType.equals("1") || connectionType.equals("2")));
+        String connectionType = null;
+        boolean iscli = false;
+
+        for (String arg : args) {
+            if (arg.equals("--cli") || arg.equals("-c")) {
+                iscli = true;
+                break;
+            }
+        }
+
+        if (iscli) {
+            virtualView = new CLI();
+            connectionType = virtualView.showMain();
+        } else {
+            virtualView = new GUI();
+            Application.launch(JFXStart.class);
+        }
         if (connectionType.equals("1")) {
-            //TODO dovrebbe essere in View
-            System.out.println("Socket connection chosen");
             socket();
         } else {
-            //TODO dovrebbe essere in View
-            System.out.println("RMI connection chosen");
             RMI();
         }
     }
@@ -228,7 +234,6 @@ public class Client {
         Scanner input = new Scanner(System.in);
         String username;
         SetNameMessage nick;
-        virtualView = new CLI();
         //Richiesta nickname unico
         System.out.println(in.readLine());
         //Controllo unicità nome
@@ -313,7 +318,7 @@ public class Client {
             //System.out.println("Ping n^" + ping);
             TimeUnit.SECONDS.sleep(pingTime);
         }
-        System.out.println("Disconnected");
+        System.out.println("Disconnected"); //TODO dovrebbe essere in view
         connected=false;
     }
 
@@ -321,7 +326,7 @@ public class Client {
         String input;
         SetNameMessage nick;
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter your nickname: ");
+        System.out.println("Enter your nickname: "); //TODO dovrebbe essere in view
         input = in.nextLine();
         nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);

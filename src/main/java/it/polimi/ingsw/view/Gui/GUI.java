@@ -4,12 +4,11 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
-import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.view.Gui.SceneController.ShowMain;
 import it.polimi.ingsw.view.View;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -25,8 +24,16 @@ public class GUI implements View
     private Stage primaryStage;
 
     @Override
-    public void init(){
-
+    public String showMain(){
+        ShowMain controller = null;
+        try {
+            controller = loadFXML("main_menu.fxml", ShowMain.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        controller.init(this);
+        primaryStage.setScene(controller.getScene());
+        return null;
     }
 
     @Override

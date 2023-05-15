@@ -20,7 +20,7 @@ public class JFXStart extends Application {
         FXMLLoader loader = new FXMLLoader();
 
         //load the .fxml file
-        loader.setLocation(getClass().getResource("/fxml/test_2.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/show_start.fxml"));
 
         Parent root = null;
 
@@ -46,10 +46,6 @@ public class JFXStart extends Application {
         stage.show();
     }
  */
-    public static void main(String[] args) {
-        launch(args);
-        //metodo per lanciare la javafx
-    }
 
     @Override //per gestire la chiusura
     public void stop() {
