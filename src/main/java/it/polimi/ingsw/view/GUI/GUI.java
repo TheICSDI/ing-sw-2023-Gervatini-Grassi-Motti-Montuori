@@ -1,20 +1,17 @@
-package it.polimi.ingsw.view.Gui;
-
-import it.polimi.ingsw.model.Lobby;
-import it.polimi.ingsw.model.Player;
+package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Lobby;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.view.Gui.SceneController.ShowMainController;
-import it.polimi.ingsw.view.Gui.SceneController.lobbySceneController;
-import it.polimi.ingsw.view.Gui.SceneController.nameSceneController;
+import it.polimi.ingsw.view.GUI.SceneController.ShowMainController;
+import it.polimi.ingsw.view.GUI.SceneController.lobbySceneController;
+import it.polimi.ingsw.view.GUI.SceneController.nameSceneController;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,8 +20,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
-import static javafx.application.Application.launch;
 //TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
 public class GUI implements View
 {
@@ -67,37 +62,31 @@ public class GUI implements View
 
     @Override
     public void printUsername(String username, boolean isAvailable) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (isAvailable) {
-                    Name = username;
-                    openLobbyScene();
-                    synchronized (Lock) {
-                        message = "showlobby";
-                        Lock.notifyAll();
-                    }
-                } else {
-
-                    nsc.showName("NotAvailable");
+        Platform.runLater(() -> {
+            if (isAvailable) {
+                Name = username;
+                openLobbyScene();
+                synchronized (Lock) {
+                    message = "showlobby";
+                    Lock.notifyAll();
                 }
+            } else {
+
+                nsc.showName("NotAvailable");
             }
         });
     }
 
     @Override
     public void createLobby(String lobbyName/*, int maxPlayers non serve?*/) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                lsc.setText(lobbyName);//provvisorio
-            }
+        Platform.runLater(() -> {
+            lsc.setText(lobbyName);//provvisorio
         });
     }
 
     @Override
     public void showLobby(List<Lobby> Lobbies) {
-        lsc.showLobbies(Lobbies);
+        Platform.runLater(() -> lsc.showLobbies(Lobbies));
     }
 
     @Override
@@ -165,12 +154,16 @@ public class GUI implements View
 
     @Override
     public void displayError(String msg) {
-
+        Platform.runLater(() -> {
+            lsc.setText(msg);//TODO controlli per vedere in che pagina sei forse
+        });
     }
 
     @Override
     public void displayMessage(String msg) {
-
+        Platform.runLater(() -> {
+            lsc.setText(msg);//TODO controlli per vedere in che pagina sei forse
+        });
     }
 
     @Override

@@ -5,7 +5,7 @@
 <?import javafx.scene.text.*?>
 
 
-<GridPane  fx:controller="it.polimi.ingsw.view.Gui.JFXStartController"
+<GridPane  fx:controller="it.polimi.ingsw.view.GUI.JFXStartController"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10"
           styleClass="root">
     <padding><Insets top="25" right="25" bottom="10" left="25" /></padding>

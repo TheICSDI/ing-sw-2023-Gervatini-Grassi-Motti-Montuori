@@ -1,6 +1,6 @@
-package it.polimi.ingsw.view.Gui.SceneController;
+package it.polimi.ingsw.view.GUI.SceneController;
 
-import it.polimi.ingsw.view.Gui.GUI;
+import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;

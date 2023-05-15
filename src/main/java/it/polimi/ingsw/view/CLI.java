@@ -244,7 +244,7 @@ public class CLI implements View{
 
     @Override
     public void displayError(String msg){
-
+        out.println(msg);
     }
 
     @Override
@@ -278,6 +278,11 @@ public class CLI implements View{
         Scanner input=new Scanner(System.in);
         return input.nextLine();
     }
+
+    /*@Override
+    public void setNamePage(Stage stage) {
+
+    }*/
 
     public Tile[][] recreateShelf(type[][] simpleShelf){
         Tile[][] shelf=new Tile[simpleShelf.length][simpleShelf[0].length];

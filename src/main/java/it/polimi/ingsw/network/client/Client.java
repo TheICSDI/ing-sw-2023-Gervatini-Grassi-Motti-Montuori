@@ -10,16 +10,10 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.view.CLI;
-import it.polimi.ingsw.view.Gui.GUI;
-
-import it.polimi.ingsw.view.Gui.JFXStart;
-import it.polimi.ingsw.view.View;
-import javafx.application.Application;
-
+import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.View;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -163,6 +157,10 @@ public class Client extends Application {
                 TimeUnit.SECONDS.sleep(pingTime);
                 stub.RMIsend(new PingMessage(controller.getNickname()).toString());
             }
+            case ERROR -> {
+                reply = ReplyMessage.decrypt(message);
+                virtualView.displayError(reply.getMessage());
+            }
             default -> {
                 reply = ReplyMessage.decrypt(message);
             }
@@ -232,7 +230,7 @@ public class Client extends Application {
         }
          */
         Scanner input = new Scanner(System.in);
-        String connectionType;
+        //String connectionType;
         String viewType;
         //TODO dovrebbe essere in View?
         do {
@@ -260,6 +258,11 @@ public class Client extends Application {
             });
         }else{
             virtualView=new CLI();
+        }
+        if (connectionType.equals("1")) {//da aggiungere lo switch da gui
+            socket();
+        } else {
+            RMI();
         }
     }
 
@@ -297,7 +300,10 @@ public class Client extends Application {
                 throw new RuntimeException(e);
             }
         });
-        virtualView.displayMessage("Write /help for command list.");
+        //
+        //
+        //
+        // virtualView.displayMessage("Write /help for command list.");
 
         //TODO: condizione valida sse il client è connesso, da rivedere
         while(true) {

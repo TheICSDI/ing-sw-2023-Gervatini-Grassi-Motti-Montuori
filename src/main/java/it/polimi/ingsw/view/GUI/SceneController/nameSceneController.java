@@ -1,16 +1,12 @@
-package it.polimi.ingsw.view.Gui.SceneController;
+package it.polimi.ingsw.view.GUI.SceneController;
 
-import it.polimi.ingsw.view.Gui.GUI;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import javax.print.DocFlavor;
-
-import static it.polimi.ingsw.view.Gui.GUI.NameLock;
+import static it.polimi.ingsw.view.GUI.GUI.NameLock;
 
 public class nameSceneController {
     @FXML

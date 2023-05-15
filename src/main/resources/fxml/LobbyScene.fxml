@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.Gui.SceneController.lobbySceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.SceneController.lobbySceneController">
    <children>
-      <ScrollPane layoutY="49.0" prefHeight="351.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="49.0">
+      <ScrollPane layoutY="49.0" prefHeight="351.0" prefWidth="493.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="49.0">
          <content>
-            <TextArea fx:id="Lobbies" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="Lobbies" prefHeight="353.0" prefWidth="492.0">
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </ListView>
          </content>
       </ScrollPane>
-      <Label fx:id="Name" layoutX="2.0" layoutY="14.0" prefHeight="18.0" prefWidth="600.0" text="Label" textAlignment="CENTER" />
-      <Button fx:id="CreateLobby" layoutX="329.0" layoutY="11.0" mnemonicParsing="false" onAction="#createLobby" text="Create" />
-      <Label fx:id="text" layoutX="468.0" layoutY="15.0" />
-      <Button fx:id="Refresh" layoutX="217.0" layoutY="11.0" mnemonicParsing="false" onAction="#showLobbies" text="Refresh" />
+      <Label fx:id="Name" layoutX="2.0" layoutY="14.0" prefHeight="18.0" prefWidth="193.0" text="Label" textAlignment="CENTER" />
+      <Button fx:id="CreateLobby" layoutX="522.0" layoutY="60.0" mnemonicParsing="false" onAction="#createLobby" text="Create" />
+      <Label fx:id="text" layoutX="468.0" layoutY="15.0" prefHeight="17.0" prefWidth="134.0" />
+      <Button fx:id="Refresh" layoutX="520.0" layoutY="347.0" mnemonicParsing="false" onAction="#showLobbies" text="Refresh" />
+      <Button fx:id="Join" layoutX="529.0" layoutY="310.0" mnemonicParsing="false" onAction="#Join" text="Join" />
+      <Group id="Prova" layoutX="505.0" layoutY="98.0">
+         <children>
+            <RadioButton fx:id="limit2" layoutX="3.0" layoutY="-6.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="24.0" prefWidth="80.0" selected="true" text="2 players">
+               <toggleGroup>
+                  <ToggleGroup fx:id="Prova" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="limit3" layoutX="2.0" layoutY="19.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="17.0" prefWidth="77.0" text="3 players" toggleGroup="$Prova" />
+            <RadioButton fx:id="limit4" layoutX="2.0" layoutY="37.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="23.0" prefWidth="82.0" text="4 players" toggleGroup="$Prova" />
+         </children>
+      </Group>
    </children>
 </AnchorPane>

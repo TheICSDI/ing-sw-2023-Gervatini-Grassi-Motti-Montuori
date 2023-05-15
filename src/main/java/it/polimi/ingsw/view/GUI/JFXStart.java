@@ -1,14 +1,11 @@
-package it.polimi.ingsw.view.Gui;
+package it.polimi.ingsw.view.GUI;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.Objects;
 
 /*
 Imposta l'inizio della gui e di javafx
