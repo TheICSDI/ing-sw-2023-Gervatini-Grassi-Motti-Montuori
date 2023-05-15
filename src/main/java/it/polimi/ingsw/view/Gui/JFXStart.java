@@ -4,10 +4,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /*
 Imposta l'inizio della gui e di javafx
@@ -18,17 +19,18 @@ public class JFXStart extends Application {
     public void start(Stage stage) {
         GUI view = new GUI();
         FXMLLoader loader = new FXMLLoader();
-
         //load the .fxml file
         loader.setLocation(getClass().getResource("/fxml/show_start.fxml"));
 
-        Parent root = null;
+        Parent root= null;
 
         try {
             root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            //root=FXMLLoader.load(Objects.requireNonNull(getClass().getResource("src/resources/fxml/test_2.fxml")));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
         stage.setTitle("Test");
         stage.setScene(new Scene(root));
@@ -46,6 +48,10 @@ public class JFXStart extends Application {
         stage.show();
     }
  */
+    public static void main(String[] args) {
+        Application.launch(args);
+        //metodo per lanciare la javafx
+    }
 
     @Override //per gestire la chiusura
     public void stop() {

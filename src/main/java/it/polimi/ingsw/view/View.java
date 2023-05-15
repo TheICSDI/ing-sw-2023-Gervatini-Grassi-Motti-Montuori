@@ -17,7 +17,7 @@ public interface View {
 
     String askUsername();
     void printUsername(String username, boolean isAvailable);
-    void createLobby(String lobbyName, int maxPlayers);
+    void createLobby(String lobbyName/*, int maxPlayers*/);
     void showLobby(List<Lobby> Lobbies);
 
     void showLobby(List<String> usrs, int num_usrs);
@@ -38,5 +38,8 @@ public interface View {
     void displayError(String msg);
     void displayMessage(String msg);
     void help();
+
+
+    String getInput();
 }
 

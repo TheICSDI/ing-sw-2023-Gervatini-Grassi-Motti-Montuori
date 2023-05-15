@@ -62,8 +62,8 @@ public class CLI implements View{
     }
 
     @Override
-    public void createLobby(String lobbyName, int maxPlayers) {
-
+    public void createLobby(String lobbyName/*, int maxPlayers*/) {
+        System.out.println(lobbyName);
     }
 
     @Override
@@ -270,6 +270,13 @@ public class CLI implements View{
                 showpersonal
                 showcommons
                 exit (WIP)\u001B[0m""");
+    }
+
+
+    @Override
+    public String getInput() {
+        Scanner input=new Scanner(System.in);
+        return input.nextLine();
     }
 
     public Tile[][] recreateShelf(type[][] simpleShelf){

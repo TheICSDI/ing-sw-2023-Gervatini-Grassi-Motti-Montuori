@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-public class ShowMain {
+public class ShowMainController {
 
     @FXML
     private BorderPane showMain;

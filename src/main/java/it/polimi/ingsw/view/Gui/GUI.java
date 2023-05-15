@@ -8,9 +8,16 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.view.Gui.SceneController.ShowMain;
+import it.polimi.ingsw.view.Gui.SceneController.ShowMainController;
+import it.polimi.ingsw.view.Gui.SceneController.lobbySceneController;
+import it.polimi.ingsw.view.Gui.SceneController.nameSceneController;
 import it.polimi.ingsw.view.View;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,16 +25,24 @@ import java.util.List;
 import java.util.Map;
 
 import static javafx.application.Application.launch;
-
+//TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
 public class GUI implements View
 {
-    private Stage primaryStage;
 
+    private Stage stage;
+    public static String Name="";
+    public static String message;
+    public static final Object NameLock = new Object();
+    public static final Object Lock = new Object();
+    public nameSceneController nsc;
+    public lobbySceneController lsc;
+    private Stage primaryStage;
+//sencojone -Emi
     @Override
     public String showMain(){
-        ShowMain controller = null;
+        ShowMainController controller = null;
         try {
-            controller = loadFXML("main_menu.fxml", ShowMain.class);
+            controller = loadFXML("main_menu.fxml", ShowMainController.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -38,21 +53,51 @@ public class GUI implements View
 
     @Override
     public String askUsername() {
-        return null;
+        synchronized (NameLock) {
+            while (Name.equals("")) {
+                try {
+                    NameLock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return Name;
+        }
     }
 
     @Override
     public void printUsername(String username, boolean isAvailable) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (isAvailable) {
+                    Name = username;
+                    openLobbyScene();
+                    synchronized (Lock) {
+                        message = "showlobby";
+                        Lock.notifyAll();
+                    }
+                } else {
 
+                    nsc.showName("NotAvailable");
+                }
+            }
+        });
     }
 
     @Override
-    public void createLobby(String lobbyName, int maxPlayers) {
-
+    public void createLobby(String lobbyName/*, int maxPlayers non serve?*/) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                lsc.setText(lobbyName);//provvisorio
+            }
+        });
     }
 
     @Override
     public void showLobby(List<Lobby> Lobbies) {
+        lsc.showLobbies(Lobbies);
     }
 
     @Override
@@ -132,6 +177,22 @@ public class GUI implements View
     public void help() {
 
     }
+
+    //METODO PER MANDARE I MESSAGGI AL SERVER, QUANDO X PULSANTE VIENE PREMUTO BISOGNA SETTARE IL MESSAGE DI QUESTA CLASSE
+    // AL MESSAGGIO DA MANDARE E FARE MESSAGELOCK.NOTIFYALL E IL MESSAGGIO VIENE INVIATO
+    //TODO TUTTI I PULSANTI CHE INVIANO I MESSAGGI PER LE LOBBY E UNIFORMARE I METODI CHE RICEVONO LE RISPOSTE IN GUI E CONTROLLARE SIANO FATTI IN CLI
+    @Override
+    public String getInput() {
+        synchronized (Lock){
+            try {
+                Lock.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return message;
+    }
+
     /**
      * Loads an FXML file and returns the associated controller instance.
      * This method assumes that the FXML file is stored in the "src/resources/fxml/" directory.
@@ -147,6 +208,34 @@ public class GUI implements View
         loader.setLocation(controllerClass.getClassLoader().getResource("fxml/" + fxmlFileName));
         loader.load();
         return loader.getController();
+    }
+
+    public void startGUI(Stage primaryStage){
+        FXMLLoader loader=new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
+        Parent root=null;
+        try{
+            root=loader.load();
+        }catch(Exception ignored){}
+        nsc=loader.getController();
+        stage=primaryStage;
+        stage.setTitle("NameScene");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    private void openLobbyScene(){
+        FXMLLoader loader = new FXMLLoader();
+        Parent root1 = null;
+        loader.setLocation(getClass().getResource("/fxml/LobbyScene.fxml"));
+        try {
+            root1 = loader.load();
+        } catch (Exception ignored) {
+        }
+        lsc = loader.getController();
+        lsc.setName(Name);
+        stage.setTitle("NameScene");
+        stage.setScene(new Scene(root1));
     }
 
 }
