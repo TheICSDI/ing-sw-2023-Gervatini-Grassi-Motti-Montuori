@@ -43,6 +43,7 @@ public class Client {
     private static final int pingTime = 3;
     public static boolean connected=true;
 
+
     /*
         bisogna usare un id per il client handler, potremmo avere un
 
@@ -329,5 +330,44 @@ public class Client {
 
     public static void setVirtualView(View virtualView) {
         Client.virtualView = virtualView;
+    }
+
+
+
+
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
+    public void setClientSocket(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
+
+    public static clientController getController() {
+        return controller;
+    }
+
+    public static void setController(clientController controller) {
+        Client.controller = controller;
+    }
+
+    public static PrintWriter getOut() {
+        return out;
+    }
+
+    public static void setOut(PrintWriter out) {
+        Client.out = out;
+    }
+
+    public static BufferedReader getIn() {
+        return in;
+    }
+
+    public static void setIn(BufferedReader in) {
+        Client.in = in;
+    }
+
+    public static View getVirtualView() {
+        return virtualView;
     }
 }

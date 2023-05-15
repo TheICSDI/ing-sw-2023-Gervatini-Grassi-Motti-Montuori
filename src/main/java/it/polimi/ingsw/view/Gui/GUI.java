@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static javafx.application.Application.launch;
-
+//TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
 public class GUI implements View
 {
     private Stage primaryStage;
