@@ -58,6 +58,7 @@ public class GUI implements View
 
     @Override
     public void printUsername(String username, boolean isAvailable) {
+        System.out.println(username);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
