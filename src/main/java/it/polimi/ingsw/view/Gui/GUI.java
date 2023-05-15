@@ -11,12 +11,22 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.view.View;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.lang.model.element.Name;
 import java.io.IOException;
+import java.util.FormatterClosedException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static javafx.application.Application.launch;
 //TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
@@ -48,6 +58,16 @@ public class GUI implements View
 
     @Override
     public void printUsername(String username, boolean isAvailable) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (isAvailable) {
+                    nsc.showName(username);
+                } else {
+                    nsc.showName("NotAvailable");
+                }
+            }
+        });
 
     }
 
@@ -152,6 +172,19 @@ public class GUI implements View
         loader.setLocation(controllerClass.getClassLoader().getResource("fxml/" + fxmlFileName));
         loader.load();
         return loader.getController();
+    }
+
+    public void startGUI(Stage stage){
+        FXMLLoader loader=new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
+        Parent root=null;
+        try{
+            root=loader.load();
+        }catch(Exception ignored){}
+        nsc=loader.getController();
+        stage.setTitle("NameScene");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
 }

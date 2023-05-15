@@ -10,7 +10,10 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
 import it.polimi.ingsw.view.CLI;
+import it.polimi.ingsw.view.Gui.GUI;
 import it.polimi.ingsw.view.View;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -31,7 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Client {
+public class Client extends Application {
     private Socket clientSocket;
     private static clientController controller;
     private static PrintWriter out;
@@ -40,13 +43,11 @@ public class Client {
     private static RMIclientImpl RMIclient;
     private static View virtualView;
     private static int ping=0;
-    private static final int pingTime = 3;
+    private static final int pingTime = 30;
     public static boolean connected=true;
 
 
     /*
-        bisogna usare un id per il client handler, potremmo avere un
-
         // Load root layout from fxml file.
         FXMLLoader loader = new FXMLLid per il client e un id per i giocatore assegnato solo
         per il game per esempio (questione aperta, almeno per me)
@@ -75,7 +76,7 @@ public class Client {
     }
 
     public static void elaborate(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
-        GeneralMessage reply;
+        ReplyMessage reply;
         Action replyAction = ReplyMessage.identify(message);
         switch (replyAction) {
             //Crate a lobby
@@ -105,7 +106,7 @@ public class Client {
             }
             case UPDATEBOARD,UPDATESHELF -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                virtualView.showBoard(((ReplyMessage)reply).getSimpleBoard(),replyAction);
+                virtualView.showBoard(reply.getSimpleBoard(),replyAction);
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
                     virtualView.displayMessage("\n  Your personal goal");
@@ -121,16 +122,16 @@ public class Client {
             case CHOSENTILES ->{
                 reply = ChosenTilesMessage.decrypt(message);
                 List<Tile> tile=new ArrayList<>();
-                ((ReplyMessage)reply).getTiles(tile);
+                reply.getTiles(tile);
                 virtualView.showChosenTiles(tile);
             }
             case SHOWPERSONAL -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                controller.setSimpleGoal(((ReplyMessage)reply).getSimpleBoard());
+                controller.setSimpleGoal(reply.getSimpleBoard());
             }
             case SHOWCOMMONS -> {
                 reply = SendCommonCards.decrypt(message);
-                ((ReplyMessage)reply).getCC(controller.cc);
+                reply.getCC(controller.cc);
             }
             case SHOWOTHERS -> {
                 reply = OtherPlayersMessage.decrypt(message);
@@ -200,16 +201,36 @@ public class Client {
 
     /** It starts the connection based on the client's decision. */
     public static void main(String[] args) throws IOException {
+        Scanner input = new Scanner(System.in);
         String connectionType;
-        //TODO dovrebbe essere in View
+        String viewType;
+        //TODO dovrebbe essere in View?
+        do {
+            System.out.println("""
+                Choose connection type:\s
+                [1]: for CLI
+                [2]: for GUI""");
+
+            //viewType = input.next();
+            viewType="2";
+        }while(!(viewType.equals("1") || viewType.equals("2")));
         do {
             System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            Scanner input = new Scanner(System.in);
-            connectionType = input.next();
+            //connectionType = input.next();
+            connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
+        if(viewType.equals("2")){
+            virtualView=new GUI();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.submit(()-> {
+                launch(args);
+            });
+        }else{
+            virtualView=new CLI();
+        }
         if (connectionType.equals("1")) {
             //TODO dovrebbe essere in View
             System.out.println("Socket connection chosen");
@@ -229,7 +250,7 @@ public class Client {
         Scanner input = new Scanner(System.in);
         String username;
         SetNameMessage nick;
-        virtualView = new CLI();
+        //virtualView = new CLI();
         //Richiesta nickname unico
         System.out.println(in.readLine());
         //Controllo unicità nome
@@ -328,12 +349,15 @@ public class Client {
         stub.RMIsendName(nick.toString(), RMIclient);
     }
 
+    @Override
+    public void start(Stage stage) {
+        ((GUI)virtualView).startGUI(stage);
+    }
+
+    //GETTER/SETTER
     public static void setVirtualView(View virtualView) {
         Client.virtualView = virtualView;
     }
-
-
-
 
     public Socket getClientSocket() {
         return clientSocket;

@@ -243,7 +243,7 @@ public class serverController {
                    x=connections.get(mex.getUsername()).getPing();
                    //System.out.println("Ping n^" + connections.get(mex.getUsername()).getPing());
                    try {
-                      TimeUnit.SECONDS.sleep(3);
+                      TimeUnit.SECONDS.sleep(30);
                    } catch (InterruptedException e) {
                       throw new RuntimeException(e);
                    }
