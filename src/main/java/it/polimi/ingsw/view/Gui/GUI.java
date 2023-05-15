@@ -22,8 +22,11 @@ import static javafx.application.Application.launch;
 //TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
 public class GUI implements View
 {
+    public static String Name="";
+    public static final Object NameLock = new Object();
+    public nameSceneController nsc;
     private Stage primaryStage;
-
+//sencojone -Emi
     @Override
     public void init(){
 
@@ -31,7 +34,16 @@ public class GUI implements View
 
     @Override
     public String askUsername() {
-        return null;
+        synchronized (NameLock) {
+            while (Name.equals("")) {
+                try {
+                    NameLock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return Name;
+        }
     }
 
     @Override

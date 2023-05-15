@@ -20,7 +20,7 @@ public class JFXStart extends Application {
     public void start(Stage stage) {
         GUI view = new GUI();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/test_2.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
         //load the .fxml file
 
         Parent root= null;

@@ -3,8 +3,8 @@
     <CLASSES />
     <JAVADOC />
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../../../../../../../Program Files/Java/javafx-sdk-20.0.1" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-20.0.1" />
     </SOURCES>
-    <jarDirectory url="file://$PROJECT_DIR$/../../../../../../../Program Files/Java/javafx-sdk-20.0.1" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-20.0.1" recursive="false" type="SOURCES" />
   </library>
 </component>
