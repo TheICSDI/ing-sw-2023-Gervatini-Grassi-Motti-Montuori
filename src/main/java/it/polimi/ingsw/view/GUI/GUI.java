@@ -212,7 +212,7 @@ public class GUI implements View
         }catch(Exception ignored){}
         nsc=loader.getController();
         stage=primaryStage;
-        stage.setTitle("NameScene");
+        stage.setTitle("My Shelfie");
         stage.setScene(new Scene(root));
         stage.show();
     }
