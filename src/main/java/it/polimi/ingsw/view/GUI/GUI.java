@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.view.GUI.SceneController.ShowMainController;
+import it.polimi.ingsw.view.GUI.SceneController.gameSceneController;
 import it.polimi.ingsw.view.GUI.SceneController.lobbySceneController;
 import it.polimi.ingsw.view.GUI.SceneController.nameSceneController;
 import it.polimi.ingsw.view.View;
@@ -15,11 +16,14 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 //TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
 public class GUI implements View
 {
@@ -31,6 +35,7 @@ public class GUI implements View
     public static final Object Lock = new Object();
     public nameSceneController nsc;
     public lobbySceneController lsc;
+    public gameSceneController gsc;
     private Stage primaryStage;
 //sencojone -Emi
     @Override
@@ -71,7 +76,6 @@ public class GUI implements View
                     Lock.notifyAll();
                 }
             } else {
-
                 nsc.showName("NotAvailable");
             }
         });
@@ -123,8 +127,8 @@ public class GUI implements View
     }
 
     @Override
-    public void startGame(int lobby_id) {
-
+    public void startGame(String message) {
+        Platform.runLater(this::openGameScene);
     }
 
     @Override
@@ -182,8 +186,9 @@ public class GUI implements View
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            return message;
         }
-        return message;
+
     }
 
     /**
@@ -213,22 +218,36 @@ public class GUI implements View
         nsc=loader.getController();
         stage=primaryStage;
         stage.setTitle("My Shelfie");
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
+        //stage.setFullScreen(true);
+        //stage.setMaximized(true);
         stage.setScene(new Scene(root));
         stage.show();
     }
 
     private void openLobbyScene(){
         FXMLLoader loader = new FXMLLoader();
-        Parent root1 = null;
+        Parent root = null;
         loader.setLocation(getClass().getResource("/fxml/LobbyScene.fxml"));
         try {
-            root1 = loader.load();
+            root = loader.load();
         } catch (Exception ignored) {
         }
         lsc = loader.getController();
         lsc.setName(Name);
-        stage.setTitle("NameScene");
-        stage.setScene(new Scene(root1));
+        stage.setScene(new Scene(root));
+    }
+
+    private void openGameScene(){
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = null;
+        loader.setLocation(getClass().getResource("/fxml/GameScene.fxml"));
+        try {
+            root = loader.load();
+        } catch (Exception ignored) {
+        }
+        gsc = loader.getController();
+        stage.setScene(new Scene(root));
     }
 
 }

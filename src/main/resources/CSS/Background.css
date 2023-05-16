@@ -1,0 +1,5 @@
+.root {
+    -fx-background-image: url("/Images/Publisher%20material/Display_5.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}

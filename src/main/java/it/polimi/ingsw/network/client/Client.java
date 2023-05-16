@@ -83,7 +83,7 @@ public class Client extends Application {
             case CREATELOBBY -> {
                 reply = CreateLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
-                virtualView.createLobby(reply.getMessage());
+                //virtualView.createLobby(reply.getMessage());
                 virtualView.displayMessage(reply.getMessage());
             }
             //Join a lobby given its id
@@ -104,6 +104,7 @@ public class Client extends Application {
                 controller.setIdGame(reply.getIdGame());
                 controller.setFirstTurn(true);
                 virtualView.displayMessage(reply.getMessage());
+                virtualView.startGame(reply.getMessage());
             }
             case UPDATEBOARD,UPDATESHELF -> {
                 reply = UpdateBoardMessage.decrypt(message);
@@ -322,7 +323,7 @@ public class Client extends Application {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
             RMIclient = new RMIclientImpl(controller); //per ricevere risposta
-            Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", RMIclient);
+            //Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", RMIclient);
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
 

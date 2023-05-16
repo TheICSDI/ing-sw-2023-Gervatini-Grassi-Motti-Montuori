@@ -28,7 +28,7 @@ public interface View {
     void showOthers(Map<String,Player> others);
     void joinLobby(int lobby_id);
     void exitLobby(int lobby_id);
-    void startGame(int lobby_id);
+    void startGame(String message);
     void pickTiles(int lobby_id, Position pos);
     void selectOrder(int lobby_id, List<Integer> order);
     void selectColumn(int lobby_id, int col);

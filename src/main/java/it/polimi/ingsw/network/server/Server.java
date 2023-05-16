@@ -11,6 +11,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
     private ServerSocket serverSocket;
@@ -47,10 +48,8 @@ public class Server {
             try {
                 Registry registry = LocateRegistry.createRegistry(23451);
                 RMIserverImpl s = new RMIserverImpl(SC);
-                while(true) {
-                    Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", s);
-                    RMIconnection skeleton = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-                }
+                Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", s);
+
             } catch (Exception e) {
                 System.err.println("Server exception");
                 e.printStackTrace();

@@ -6,10 +6,7 @@ import it.polimi.ingsw.view.GUI.GUI;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 
 import java.util.List;
 
@@ -29,6 +26,9 @@ public class lobbySceneController {
     public RadioButton limit2;
     public RadioButton limit3;
     public RadioButton limit4;
+    public ToggleGroup Prova;
+    @FXML
+    public Button Start;
 
     private List<Lobby> AvailableLobbies;
     private int limit=2;
@@ -87,6 +87,14 @@ public class lobbySceneController {
             limit=3;
         }else{
             limit=4;
+        }
+    }
+
+    @FXML
+    public void StartGame(ActionEvent actionEvent) {
+        synchronized (GUI.Lock) {
+            GUI.message = "startgame";
+            GUI.Lock.notifyAll();
         }
     }
 }

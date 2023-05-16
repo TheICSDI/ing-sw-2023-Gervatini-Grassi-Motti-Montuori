@@ -211,8 +211,8 @@ public class CLI implements View{
     }
 
     @Override
-    public void startGame(int lobby_id){
-
+    public void startGame(String message){
+        System.out.println(message);
     }
 
     @Override
