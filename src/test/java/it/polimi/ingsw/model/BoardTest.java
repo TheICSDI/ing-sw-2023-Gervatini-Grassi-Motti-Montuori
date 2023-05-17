@@ -1,7 +1,7 @@
 /** Tests for class Board.java.
  * @author Caterina Motti.
  */
-package test.Model;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Board;

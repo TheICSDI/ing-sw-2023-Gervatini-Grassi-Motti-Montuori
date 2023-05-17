@@ -1,7 +1,7 @@
 /** Tests for class Game.java.
  * @author Caterina Motti.
  */
-package test.Model;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;

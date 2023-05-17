@@ -1,7 +1,7 @@
 /** Tests for class CommonCard.java.
  * @author Caterina Motti.
  */
-package test.Model;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Player;

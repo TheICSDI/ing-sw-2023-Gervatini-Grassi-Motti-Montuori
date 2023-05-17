@@ -136,7 +136,7 @@ public class Player implements Serializable {
     public List<Tile> pickTiles(Set<Position> chosen, Board b,Player player) throws InvalidPositionException, RemoteException {
         List<Tile> choice = new ArrayList<>();
         if(maxSpaceInShelf() < chosen.size()){
-            serverController.sendMessage(new ReplyMessage("Not enough space in the shelf",Action.INGAMEEVENT), player.getNickname());
+            serverController.sendMessage(new ReplyMessage("Not enough space in the shelf", Action.INGAMEEVENT), player.getNickname());
             return choice;
         }
          //Position chosen by the player

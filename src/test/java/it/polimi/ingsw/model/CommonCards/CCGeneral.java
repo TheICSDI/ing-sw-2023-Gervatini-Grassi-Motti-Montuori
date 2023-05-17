@@ -1,7 +1,7 @@
 /** Parser for JSON files. Used to test common goal cards.
  * @author Andrea Grassi, Giulio Montuori.
  */
-package test.Model.CommonCards;
+package it.polimi.ingsw.model.CommonCards;
 
 import it.polimi.ingsw.model.Cards.CCStrategy;
 import it.polimi.ingsw.model.Player;

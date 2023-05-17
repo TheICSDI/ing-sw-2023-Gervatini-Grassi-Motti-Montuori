@@ -1,4 +1,4 @@
-package test.Model.CommonCards;
+package it.polimi.ingsw.model.CommonCards;
 
 import it.polimi.ingsw.model.Cards.CCStrategy;
 import it.polimi.ingsw.model.Cards.CC_06;

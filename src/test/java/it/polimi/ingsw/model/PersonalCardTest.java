@@ -1,4 +1,4 @@
-package test.Model;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Tile.Tile;
