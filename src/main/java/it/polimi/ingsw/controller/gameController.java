@@ -54,8 +54,9 @@ public class gameController {
         List<command> toFind;
         Optional<command> found = Optional.empty();
 
-        while(found.isEmpty() && p.isConnected()){
-            synchronized (queueLock) {
+        synchronized (queueLock) {
+            while(found.isEmpty() && p.isConnected()){
+                System.out.println("locked queue, finding request " + action);
                 toFind = queue.stream()
                         .filter(ob -> ob.g.id == gameId)
                         .filter(ob -> ob.p.getNickname().equals(player))
@@ -67,8 +68,13 @@ public class gameController {
                     queue.removeAll(toFind);
                     found = toFind.stream()
                             .reduce((ob1, ob2) -> ob1.numMess > ob2.numMess ? ob1 : ob2);
+                } else {
+                    try {
+                        queueLock.wait();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                else queueLock.wait();
             }
         }
         return found;
@@ -81,6 +87,7 @@ public class gameController {
         command pending = new command(g,p,action,numMess);
         pending.setPos(pos);
         synchronized (queueLock) {
+            System.out.println("Adding pick to the request");
             queue.add(pending);
             queueLock.notifyAll();
         }
@@ -93,6 +100,7 @@ public class gameController {
         command pending = new command(g,p,action,numMess);
         pending.setOrder(order);
         synchronized (queueLock) {
+            System.out.println("Adding order selection");
             queue.add(pending);
             queueLock.notifyAll();
         }
@@ -105,6 +113,7 @@ public class gameController {
         command pending = new command(g,p,action,numMess);
         pending.setNumCol(numCol);
         synchronized (queueLock) {
+            System.out.println("Adding column selection");
             queue.add(pending);
             queueLock.notifyAll();
         }
@@ -134,4 +143,5 @@ public class gameController {
             serverController.sendMessage(new UpdateBoardMessage(action, information), p.getNickname());
         }
     }
+
 }

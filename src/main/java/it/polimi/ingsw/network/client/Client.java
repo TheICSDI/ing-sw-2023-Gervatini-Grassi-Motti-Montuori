@@ -103,7 +103,7 @@ public class Client extends Application {
                 reply = StartGameReplyMessage.decrypt(message);
                 controller.setIdGame(reply.getIdGame());
                 controller.setFirstTurn(true);
-                virtualView.displayMessage(reply.getMessage());
+                //virtualView.displayMessage(reply.getMessage());
                 virtualView.startGame(reply.getMessage());
             }
             case UPDATEBOARD,UPDATESHELF -> {
@@ -240,16 +240,16 @@ public class Client extends Application {
                 [1]: for CLI
                 [2]: for GUI""");
 
-            //viewType = input.next();
-            viewType="2";
+            viewType = input.next();
+            //viewType="2";
         }while(!(viewType.equals("1") || viewType.equals("2")));
         do {
             System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            //connectionType = input.next();
-            connectionType="1";
+            connectionType = input.next();
+            //connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if(viewType.equals("2")){
             virtualView=new GUI();

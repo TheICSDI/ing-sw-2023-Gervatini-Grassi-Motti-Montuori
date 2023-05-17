@@ -19,11 +19,12 @@ public class clientHandler extends Thread{
     private final Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-    private final serverController SC = new serverController();
+    private serverController SC;
 
     /** Constructor that specify the client for the entire class. */
-    public clientHandler(Socket socket){
+    public clientHandler(Socket socket, serverController controller){
         this.clientSocket = socket;
+        this.SC = controller;
     }
 
     /** It overrides the run() method to manage multiple thread, each one rearguing a single socket connection. */

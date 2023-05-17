@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class serverController {
    public static Map<String, connectionType>  connections = new HashMap<>();
-   public gameController controller = new gameController();
+   public static gameController controller = new gameController();
 
    //Each thread of this pool allows maximum 10 games to be played at the same time.
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
@@ -137,6 +137,7 @@ public class serverController {
 
          //Pick some tiles from the main board
          case PT -> {
+            System.out.println("Operating the pick of tiles");
             List<Position> pos = new ArrayList<>();
             ((PickTilesMessage)message).getPos(pos);
             controller.pickTiles(player, action, pos, gameId, id);
@@ -285,6 +286,7 @@ public class serverController {
     * @param nick the client. */
    public static void sendMessage(GeneralMessage m, String nick) throws RemoteException {
       if(connections.get(nick).isSocket()){
+         System.out.println("Sending message "+ m.getAction() + " to " + nick);
          connections.get(nick).getOut().println(m);
       } else {
          connections.get(nick).getReply().RMIsend(m.toString());

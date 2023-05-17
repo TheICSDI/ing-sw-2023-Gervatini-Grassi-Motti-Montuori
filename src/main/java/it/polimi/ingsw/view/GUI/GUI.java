@@ -99,7 +99,10 @@ public class GUI implements View
 
     @Override
     public void showBoard(type[][] simpleBoard, Action action) {
-
+        /*Tile[][] shelf=recreateShelf(board);
+        printBoard(shelf,action);*/
+        Platform.runLater(gsc::showBoard);
+        //gsc.showBoard();
     }
 
     @Override
@@ -221,6 +224,7 @@ public class GUI implements View
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
         //stage.setFullScreen(true);
         //stage.setMaximized(true);
+
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -235,7 +239,9 @@ public class GUI implements View
         }
         lsc = loader.getController();
         lsc.setName(Name);
+        stage.centerOnScreen();
         stage.setScene(new Scene(root));
+        stage.show();
     }
 
     private void openGameScene(){
@@ -247,7 +253,11 @@ public class GUI implements View
         } catch (Exception ignored) {
         }
         gsc = loader.getController();
+        //stage.setFullScreen(true);
+        stage.setX(0);
+        stage.setY(0);
         stage.setScene(new Scene(root));
+        stage.show();
     }
 
 }

@@ -22,7 +22,7 @@ public class Server {
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         while(true){
-            new clientHandler(serverSocket.accept()).start();
+            new clientHandler(serverSocket.accept(), SC).start();
         }
     }
 
