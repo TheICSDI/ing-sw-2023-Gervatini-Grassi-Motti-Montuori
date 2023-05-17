@@ -20,7 +20,7 @@ public class Game {
     public int id;
     private final List<Player> players;
     private final Board board;
-    private final List<CCStrategy> allCC = new ArrayList<>();
+    private final List<CCStrategy> allCC = new ArrayList<>(); //TODO i punti delle common cambiano in base al n player
     private final List<CommonCard> CommonCards = new ArrayList<>();
     List<Integer> ccId = new ArrayList<>();
 

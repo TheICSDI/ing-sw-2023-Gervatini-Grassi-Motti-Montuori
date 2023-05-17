@@ -284,7 +284,7 @@ public class CLI implements View{
 
     }*/
 
-    public Tile[][] recreateShelf(type[][] simpleShelf){
+    public static Tile[][] recreateShelf(type[][] simpleShelf){
         Tile[][] shelf=new Tile[simpleShelf.length][simpleShelf[0].length];
         for (int i = 0; i < simpleShelf.length; i++) {
             for (int j = 0; j < simpleShelf[0].length; j++) {

@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.SceneController.ShowMainController;
 import it.polimi.ingsw.view.GUI.SceneController.gameSceneController;
 import it.polimi.ingsw.view.GUI.SceneController.lobbySceneController;
@@ -98,10 +99,10 @@ public class GUI implements View
     }
 
     @Override
-    public void showBoard(type[][] simpleBoard, Action action) {
-        /*Tile[][] shelf=recreateShelf(board);
-        printBoard(shelf,action);*/
-        Platform.runLater(gsc::showBoard);
+    public void showBoard(type[][] simpleBoard, Action action) {//TODO le shelf dei player da differenziare per nome player e addattare alla cli
+        Tile[][] board= CLI.recreateShelf(simpleBoard);
+
+        Platform.runLater(() -> gsc.showBoard(board));
         //gsc.showBoard();
     }
 
@@ -256,6 +257,8 @@ public class GUI implements View
         //stage.setFullScreen(true);
         stage.setX(0);
         stage.setY(0);
+        stage.setResizable(false);
+        stage.setFullScreenExitHint("SOOOOOOOOOOCA");
         stage.setScene(new Scene(root));
         stage.show();
     }

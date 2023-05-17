@@ -17,7 +17,7 @@
          <top>
             <FlowPane prefHeight="192.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="544.0" />
+                  <Pane prefHeight="200.0" prefWidth="1090.0" />
                   <GridPane gridLinesVisible="true" maxHeight="192.0" maxWidth="160.0" minHeight="192.0" minWidth="160.0" prefHeight="192.0" prefWidth="160.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
@@ -35,7 +35,7 @@
                         <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-                  <Pane prefHeight="192.0" prefWidth="544.0" />
+                  <Pane prefHeight="200.0" prefWidth="29.0" />
                </children>
             </FlowPane>
          </top>
@@ -79,7 +79,7 @@
          <bottom>
             <FlowPane orientation="VERTICAL" prefHeight="201.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane prefHeight="192.0" prefWidth="544.0" />
+                  <Pane prefHeight="192.0" prefWidth="1091.0" />
                   <GridPane gridLinesVisible="true" maxHeight="192.0" maxWidth="160.0" minHeight="192.0" minWidth="160.0" prefHeight="192.0" prefWidth="160.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
@@ -97,7 +97,7 @@
                         <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                   </GridPane>
-                  <Pane prefHeight="192.0" prefWidth="544.0" />
+                  <Pane prefHeight="192.0" prefWidth="26.0" />
                </children>
             </FlowPane>
          </bottom>
@@ -139,13 +139,6 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
-                                 <children>
-                                    <ImageView fx:id="Tile40" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-                                       <image>
-                                          <Image url="@../Images/item%20tiles/Cornici1.1.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
                               </GridPane>
                            </children>
                         </Pane>

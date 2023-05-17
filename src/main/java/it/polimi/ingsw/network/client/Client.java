@@ -108,6 +108,7 @@ public class Client extends Application {
             }
             case UPDATEBOARD,UPDATESHELF -> {
                 reply = UpdateBoardMessage.decrypt(message);
+                System.out.println(reply.getAction());
                 virtualView.showBoard(reply.getSimpleBoard(),replyAction);
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
@@ -240,16 +241,16 @@ public class Client extends Application {
                 [1]: for CLI
                 [2]: for GUI""");
 
-            viewType = input.next();
-            //viewType="2";
+            //viewType = input.next();
+            viewType="2";
         }while(!(viewType.equals("1") || viewType.equals("2")));
         do {
             System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            connectionType = input.next();
-            //connectionType="1";
+            //connectionType = input.next();
+            connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if(viewType.equals("2")){
             virtualView=new GUI();
