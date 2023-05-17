@@ -24,7 +24,6 @@ public class PersonalCard{
 
 	/** Creates a personal goal card based on the id.
 	 * Each card has unique id.
-	 *
 	 * @param uid represent the number of the card to be created. It goes from 0 to 11.
 	 */
 	public PersonalCard(int uid)
@@ -34,9 +33,7 @@ public class PersonalCard{
 		personalCardParser();
 	}
 
-	/**
-	 * A parser for the personal_card.json that contains all 12 personal goal cards.
-	 */
+	/** A parser for the personal_card.json that contains all 12 personal goal cards. */
 	private void personalCardParser()
 	{
 
@@ -107,5 +104,10 @@ public class PersonalCard{
 	/** Gets the personal card */
 	public Tile[][] getCard() {
 		return card;
+	}
+
+	/** Gets the id of the personal card. */
+	public int getId() {
+		return id;
 	}
 }

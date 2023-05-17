@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.network.messages.UpdateBoardMessage;
 
@@ -133,10 +132,10 @@ public class gameController {
     } */
 
     public void sendElement(Tile[][] element, List<Player> playersToSendTo, Action action) throws RemoteException {
-        type[][] information = new type[element.length][element[0].length];
+        Tile[][] information = new Tile[element.length][element[0].length];
         for(int i = 0; i< element.length;i++ ){
             for(int j = 0; j<element[0].length;j++){
-                information[i][j] = element[i][j].getCategory();
+                information[i][j] = new Tile(element[i][j].getCategory().toString());
             }
         }
         for (Player p: playersToSendTo) {

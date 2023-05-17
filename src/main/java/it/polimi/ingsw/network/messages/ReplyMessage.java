@@ -14,7 +14,7 @@ public class ReplyMessage extends GeneralMessage implements Serializable {
     private final String message;
 
     protected boolean gameStart=false;
-    type[][] simpleBoard;
+    Tile[][] simpleBoard;
     List<Integer> cc=new ArrayList<>();
     public void getCC(List<Integer> cc){
         cc.addAll(this.cc);
@@ -49,7 +49,7 @@ public class ReplyMessage extends GeneralMessage implements Serializable {
      */
     public boolean getGameStart(){return gameStart;}
 
-    public type[][] getSimpleBoard() {
+    public Tile[][] getSimpleBoard() {
         return simpleBoard;
     }
 

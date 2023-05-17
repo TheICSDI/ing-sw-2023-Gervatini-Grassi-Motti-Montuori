@@ -103,20 +103,22 @@ public class Client extends Application {
                 reply = StartGameReplyMessage.decrypt(message);
                 controller.setIdGame(reply.getIdGame());
                 controller.setFirstTurn(true);
-                //virtualView.displayMessage(reply.getMessage());
                 virtualView.startGame(reply.getMessage());
             }
-            case UPDATEBOARD,UPDATESHELF -> {
+            case UPDATEBOARD -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                System.out.println(reply.getAction());
-                virtualView.showBoard(reply.getSimpleBoard(),replyAction);
+                virtualView.showBoard(reply.getSimpleBoard());
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
                     virtualView.displayMessage("\n  Your personal goal");
-                    virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+                    virtualView.showPersonal(controller.getSimpleGoal());
                     virtualView.displayMessage("Common goals: ");
                     virtualView.showCommons(controller.cc);
                 }
+            }
+            case UPDATESHELF -> {
+                reply = UpdateBoardMessage.decrypt(message);
+                virtualView.showShelf(reply.getSimpleBoard());
             }
             case INGAMEEVENT -> {
                 reply = ReplyMessage.decrypt(message);
@@ -188,7 +190,7 @@ public class Client extends Application {
                 virtualView.displayMessage(toSend);
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
                 virtualView.displayMessage("\n  Your personal goal");
-                virtualView.showBoard(controller.getSimpleGoal(), Action.UPDATESHELF);
+                virtualView.showPersonal(controller.getSimpleGoal());
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
                 virtualView.displayMessage("Common goals: ");
                 virtualView.showCommons(controller.cc);
@@ -199,7 +201,6 @@ public class Client extends Application {
                 if(socket) {
                     out.println(toSend);
                 } else {
-                    //RMI
                     stub.RMIsend(toSend);
                 }
             }
@@ -241,16 +242,16 @@ public class Client extends Application {
                 [1]: for CLI
                 [2]: for GUI""");
 
-            //viewType = input.next();
-            viewType="2";
+            viewType = input.next();
+            //viewType="2";
         }while(!(viewType.equals("1") || viewType.equals("2")));
         do {
             System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            //connectionType = input.next();
-            connectionType="1";
+            connectionType = input.next();
+            //connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if(viewType.equals("2")){
             virtualView=new GUI();
@@ -317,14 +318,12 @@ public class Client extends Application {
     /** It starts the RMI connection with the server. */
     public static void RMI(){
         Scanner in = new Scanner(System.in);
-        Client Client = new Client();
         controller = new clientController();
         virtualView = new CLI();//TODO differenziazione tra  cli e gui in futuro
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
             RMIclient = new RMIclientImpl(controller); //per ricevere risposta
-            //Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", RMIclient);
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
 

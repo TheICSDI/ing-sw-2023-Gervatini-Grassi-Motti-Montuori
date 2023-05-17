@@ -45,7 +45,7 @@
                   <Pane minWidth="160.0" prefHeight="72.0" prefWidth="177.0" />
                   <Pane>
                      <children>
-                        <GridPane gridLinesVisible="true" layoutX="0.5" layoutY="0.5" maxHeight="192.0" maxWidth="160.0" minHeight="192.0" minWidth="160.0" prefHeight="192.0" prefWidth="160.0">
+                        <GridPane fx:id="myShelf" gridLinesVisible="true" layoutX="0.5" layoutY="0.5" maxHeight="192.0" maxWidth="160.0" minHeight="192.0" minWidth="160.0" prefHeight="192.0" prefWidth="160.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />

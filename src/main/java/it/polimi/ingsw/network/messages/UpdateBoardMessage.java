@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 
 /**
@@ -14,7 +15,7 @@ public class UpdateBoardMessage extends ReplyMessage {
      * Constructor that initializes a message with the provided parameters.
      *
      */
-    public UpdateBoardMessage(Action action, type[][] simpleShelf) {
+    public UpdateBoardMessage(Action action, Tile[][] simpleShelf) {
         super("", action);
         this.simpleBoard = simpleShelf;
     }

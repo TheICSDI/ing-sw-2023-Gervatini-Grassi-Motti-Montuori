@@ -1,12 +1,11 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.network.messages.Action;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -66,42 +65,53 @@ public class CLI implements View{
         System.out.println(lobbyName);
     }
 
-    @Override
-    public void showBoard(type[][] board,Action action){
-        Tile[][] shelf=recreateShelf(board);
-        printBoard(shelf,action);
-    }
+    //@Override
+    //public void showBoard(type[][] board,Action action){
+        //Tile[][] shelf=recreateShelf(board);
+        //printBoard(shelf,action);
+    //}
 
-    public void printBoard(Tile[][] shelf,Action action){
-        if(action.equals(Action.UPDATEBOARD)){
-            System.out.println("    0  1  2  3  4  5  6  7  8");
-        }
-        for (int i = 0; i < shelf.length; i++){  //stampa della board
-            if(action.equals(Action.UPDATESHELF)) {
-                out.print(RESET + "  ");
-            }
-            for (int j = -1; j < shelf[0].length; j++) {
-                if(action.equals(Action.UPDATEBOARD)){
-                    if(j==-1){
-                        out.print(" " + i + " ");
-                    }else {
-                        out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
-                    }
-                }else if(action.equals(Action.UPDATESHELF)){
-                    if(j==-1) j++;
-                    out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
-                    if(j< shelf[0].length - 1){
-                        out.print(DARK_BROWN+" ");
-                    }
+    @Override
+    public void showBoard(Tile[][] board){
+        System.out.println("    0  1  2  3  4  5  6  7  8");
+        //It prints out the board
+        for (int i = 0; i < board.length; i++){
+            for (int j = -1; j < board[0].length; j++) {
+                if(j==-1){
+                    out.print(" " + i + " ");
+                }else {
+                    out.print(board[i][j].getColor() + " " + board[i][j].getInitial() + " ");
                 }
             }
             out.println(RESET);
         }
-        if(action.equals(Action.UPDATESHELF)){
-            out.println("\033[48;5;94m   1   2   3   4   5   " + RESET);
-        }
         out.println();
     }
+
+    @Override
+    public void showShelf(Tile[][] shelf){
+        for (int i = 0; i < shelf.length; i++){
+            out.print(RESET + "  ");
+            for (int j = -1; j < shelf[0].length; j++) {
+                if(j==-1) j++;
+                out.print(shelf[i][j].getColor() + " " + shelf[i][j].getInitial() + " ");
+                if(j< shelf[0].length - 1){
+                    out.print(DARK_BROWN+" ");
+                }
+            }
+            out.println(RESET);
+        }
+        out.println("\033[48;5;94m   1   2   3   4   5   " + RESET);
+        out.println();
+    }
+
+    @Override
+    public void showPersonal(Tile[][] PC){
+        showShelf(PC);
+        //TODO: se qui come parametro ho una personal mi basta questo comando
+        //showShelf(PC.getCard());
+    }
+
     @Override
     public void showChosenTiles(List<Tile> tiles){
         out.print("Tiles chosen:");
@@ -175,7 +185,7 @@ public class CLI implements View{
 
     @Override
     public void showLobby(List<Lobby> Lobbies){
-        System.out.println("Lobby disponibili: ");
+        System.out.println("Available lobbies: ");
         for (Lobby l:
                 Lobbies) {
             System.out.print("Lobby "+l.lobbyId + ": ");
@@ -196,7 +206,7 @@ public class CLI implements View{
     public void showOthers(Map<String,Player> others){
         for (String nick:others.keySet()) {
             System.out.println("  " + nick + "'s shelf");
-            printBoard(others.get(nick).getShelf(),Action.UPDATESHELF);
+            showShelf(others.get(nick).getShelf());
         }
     }
 
@@ -284,6 +294,9 @@ public class CLI implements View{
 
     }*/
 
+    /*
+    Se passiamo direttamete Tile[][] nei messaggi non serve più questa parte
+    @Deprecated
     public static Tile[][] recreateShelf(type[][] simpleShelf){
         Tile[][] shelf=new Tile[simpleShelf.length][simpleShelf[0].length];
         for (int i = 0; i < simpleShelf.length; i++) {
@@ -292,6 +305,6 @@ public class CLI implements View{
             }
         }
         return shelf;
-    }
+    }*/
 
 }

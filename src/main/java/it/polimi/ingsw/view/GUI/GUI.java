@@ -1,12 +1,12 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.SceneController.ShowMainController;
 import it.polimi.ingsw.view.GUI.SceneController.gameSceneController;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-//TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column
+//TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column 4-fine gioco
 public class GUI implements View
 {
 
@@ -99,11 +99,20 @@ public class GUI implements View
     }
 
     @Override
-    public void showBoard(type[][] simpleBoard, Action action) {//TODO le shelf dei player da differenziare per nome player e addattare alla cli
-        Tile[][] board= CLI.recreateShelf(simpleBoard);
-
+    public void showBoard(Tile[][] board) {//TODO le shelf dei player da differenziare per nome player e addattare alla cli
         Platform.runLater(() -> gsc.showBoard(board));
         //gsc.showBoard();
+    }
+
+    @Override
+    public void showShelf(Tile[][] shelf) {
+        Platform.runLater(() -> gsc.showShelf(shelf));
+    }
+
+    @Override
+    public void showPersonal(Tile[][] PC) {
+        //TODO: se qui per parametro ho una personalCard mi basta questo comando
+        //Platform.runLater(() -> gsc.showPersonal(PC.getId()));
     }
 
     @Override

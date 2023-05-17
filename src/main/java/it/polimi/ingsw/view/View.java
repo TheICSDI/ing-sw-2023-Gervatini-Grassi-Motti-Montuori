@@ -1,12 +1,12 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.network.messages.Action;
 
 import java.util.List;
 import java.util.Map;
@@ -19,10 +19,10 @@ public interface View {
     void printUsername(String username, boolean isAvailable);
     void createLobby(String lobbyName/*, int maxPlayers*/);
     void showLobby(List<Lobby> Lobbies);
-
     void showLobby(List<String> usrs, int num_usrs);
-
-    void showBoard(type[][] simpleBoard, Action action);
+    void showBoard(Tile[][] Board);
+    void showShelf(Tile[][] Shelf);
+    void showPersonal(Tile[][] PC);
     void showChosenTiles(List<Tile> tiles);
     void showCommons(List<Integer> cc);
     void showOthers(Map<String,Player> others);
@@ -41,5 +41,6 @@ public interface View {
 
 
     String getInput();
+
 }
 
