@@ -80,7 +80,7 @@ public class CLI implements View{
                 if(j==-1){
                     out.print(" " + i + " ");
                 }else {
-                    out.print(board[i][j].getColor() + " " + board[i][j].getInitial() + " ");
+                    out.print(board[j][i].getColor() + " " + board[j][i].getInitial() + " ");
                 }
             }
             out.println(RESET);

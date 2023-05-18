@@ -110,9 +110,8 @@ public class GUI implements View
     }
 
     @Override
-    public void showPersonal(Tile[][] PC) {
-        //TODO: se qui per parametro ho una personalCard mi basta questo comando
-        //Platform.runLater(() -> gsc.showPersonal(PC.getId()));
+    public void showPersonal(PersonalCard PC) {
+        Platform.runLater(() -> gsc.showPersonal(PC.getId()));
     }
 
     @Override
@@ -179,7 +178,11 @@ public class GUI implements View
     @Override
     public void displayMessage(String msg) {
         Platform.runLater(() -> {
-            lsc.setText(msg);//TODO controlli per vedere in che pagina sei forse
+            if(nPage==2) {
+                lsc.setText(msg);//TODO controlli per vedere in che pagina sei forse
+            }else if(nPage==3) {
+                gsc.newMessage(msg);
+            }
         });
     }
 
@@ -250,6 +253,7 @@ public class GUI implements View
         lsc = loader.getController();
         lsc.setName(Name);
         stage.centerOnScreen();
+        nPage=2;
         stage.setScene(new Scene(root));
         stage.show();
     }

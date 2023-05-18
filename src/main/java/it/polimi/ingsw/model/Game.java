@@ -79,7 +79,9 @@ public class Game {
         boolean check = false;
 
         for (Player p: players) {
-            controller.sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
+            String personalId=String.valueOf(p.getPersonalCard().getId());
+            serverController.sendMessage(new ReplyMessage(personalId,Action.SHOWPERSONAL), p.getNickname());
+            //controller.sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
             serverController.sendMessage(new SendCommonCards(ccId), p.getNickname());
             for (Player other: players) {
                 if(!other.getNickname().equals(p.getNickname())){

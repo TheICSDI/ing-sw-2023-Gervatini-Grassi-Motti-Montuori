@@ -110,9 +110,9 @@ public class Client extends Application {
                 virtualView.showBoard(reply.getSimpleBoard());
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
-                    virtualView.displayMessage("\n  Your personal goal");
+                    //virtualView.displayMessage("\n  Your personal goal");
                     virtualView.showPersonal(controller.getSimpleGoal());
-                    virtualView.displayMessage("Common goals: ");
+                    //virtualView.displayMessage("Common goals: ");
                     virtualView.showCommons(controller.cc);
                 }
             }
@@ -132,7 +132,7 @@ public class Client extends Application {
             }
             case SHOWPERSONAL -> {
                 reply = UpdateBoardMessage.decrypt(message);
-                controller.setSimpleGoal(reply.getSimpleBoard());
+                controller.setSimpleGoal(Integer.parseInt(reply.getMessage()));
             }
             case SHOWCOMMONS -> {
                 reply = SendCommonCards.decrypt(message);
@@ -250,8 +250,8 @@ public class Client extends Application {
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            connectionType = input.next();
-            //connectionType="1";
+            //connectionType = input.next();
+            connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if(viewType.equals("2")){
             virtualView=new GUI();
