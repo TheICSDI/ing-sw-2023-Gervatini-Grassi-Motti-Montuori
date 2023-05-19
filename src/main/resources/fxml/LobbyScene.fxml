@@ -47,10 +47,10 @@
                         <RadioButton fx:id="limit4" layoutX="2.0" layoutY="37.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="23.0" prefWidth="82.0" text="4 players" textFill="WHITE" toggleGroup="$Prova" />
                      </children>
                   </Group>
-                  <Button fx:id="CreateLobby" alignment="CENTER" mnemonicParsing="false" onAction="#createLobby" prefHeight="26.0" prefWidth="54.0" text="Create" />
-                  <Button fx:id="Join" mnemonicParsing="false" onAction="#Join" prefHeight="26.0" prefWidth="56.0" text="Join" />
-                  <Button fx:id="Refresh" mnemonicParsing="false" onAction="#showLobbies" text="Refresh" />
-                  <Button fx:id="Start" mnemonicParsing="false" onAction="#StartGame" prefHeight="26.0" prefWidth="56.0" text="Start" />
+                  <Button fx:id="CreateLobby" alignment="CENTER" mnemonicParsing="false" onAction="#createLobby" prefHeight="26.0" prefWidth="54.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Create" />
+                  <Button fx:id="Join" mnemonicParsing="false" onAction="#Join" prefHeight="26.0" prefWidth="56.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Join" />
+                  <Button fx:id="Refresh" mnemonicParsing="false" onAction="#showLobbies" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Refresh" />
+                  <Button fx:id="Start" mnemonicParsing="false" onAction="#StartGame" prefHeight="26.0" prefWidth="56.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Start" />
                </children>
             </FlowPane>
          </right>

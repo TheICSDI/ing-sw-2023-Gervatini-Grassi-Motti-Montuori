@@ -87,7 +87,6 @@ public class gameSceneController {
                 localBoard[i][j] = new Tile("NOT_ACCESSIBLE");
             }
         }
-
     }
     public void initialize(){
         YourName.setText(GUI.Name);
@@ -100,7 +99,6 @@ public class gameSceneController {
     /** It updates the board on the panel with the right image. */
     @FXML
     public void showBoard(Tile[][] board){
-        System.out.println("called showboard");
         //For each element in the board
         //this.board.getChildren().clear();
         for (int i = 0; i < this.dim; i++) {

@@ -76,10 +76,11 @@
                               </FlowPane>
                            </children>
                         </HBox>
-                     </children></Pane>
+                     </children>
+                  </Pane>
                   <Pane prefHeight="220.0" prefWidth="191.0">
                      <children>
-                        <GridPane fx:id="p4shelf" gridLinesVisible="true" hgap="2.0" layoutX="0.5" layoutY="20.5" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
+                        <GridPane fx:id="p4shelf" hgap="2.0" layoutX="0.5" layoutY="20.5" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
@@ -266,7 +267,7 @@
                   <Pane minWidth="160.0" prefHeight="47.0" prefWidth="177.0" />
                   <Pane prefHeight="220.0" prefWidth="143.0">
                      <children>
-                        <GridPane fx:id="p3shelf" gridLinesVisible="true" hgap="2.0" layoutX="0.5" layoutY="0.5" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
+                        <GridPane fx:id="p3shelf" hgap="2.0" layoutX="1.0" layoutY="16.0" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
@@ -283,7 +284,7 @@
                               <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                         </GridPane>
-                        <ImageView fx:id="p3ImageShelf" fitHeight="220.0" fitWidth="251.0" layoutX="-27.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                        <ImageView fx:id="p3ImageShelf" fitHeight="220.0" fitWidth="251.0" layoutX="-27.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" visible="false">
                            <image>
                               <Image url="@../Images/boards/bookshelf.png" />
                            </image>

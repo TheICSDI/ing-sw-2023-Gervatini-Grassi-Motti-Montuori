@@ -234,7 +234,8 @@ public class GUI implements View {
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
         //stage.setFullScreen(true);
         //stage.setMaximized(true);
-
+        root.requestFocus();
+        stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -251,6 +252,7 @@ public class GUI implements View {
         lsc.setName(Name);
         stage.centerOnScreen();
         nPage=2;
+        stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
     }

@@ -231,7 +231,7 @@ public class serverController {
       mex = SetNameMessage.decrypt(input);
       if(gameController.allPlayers.containsKey(mex.getUsername())){
           //Nickname already taken
-          reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);
+          reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);//TODO funziona ma a volte tira una serie di errori così potente che mi esplode il pc
       }else{
           //Nickname available
           reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
