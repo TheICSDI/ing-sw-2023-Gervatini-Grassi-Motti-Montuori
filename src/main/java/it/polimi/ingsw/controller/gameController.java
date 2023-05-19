@@ -7,11 +7,8 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
-import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.network.messages.UpdateBoardMessage;
 
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,28 +24,28 @@ public class gameController {
     private final Object queueLock = new Object();
 
     /** It returns the chosen number of column of the given player in the game. */
-    public int chooseColumn(String player, int gameId) throws InterruptedException {
+    public int chooseColumn(String player, int gameId) {
         Optional<command> order;
         order = findTheRequest(player,gameId,Action.SC);
         return order.get().getNumCol();
     }
 
     /** It returns the chosen order of tiles of the given player in the game. */
-    public List<Integer> chooseOrder(String player, int gameId) throws InterruptedException {
+    public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order;
         order = findTheRequest(player,gameId,Action.SO);
         return order.get().getOrder();
     }
 
     /** It returns the chosen position (regarding the tiles in the board) of the given player in the game. */
-    public  Set<Position> chooseTiles(String player , int gameId) throws InterruptedException {
+    public  Set<Position> chooseTiles(String player , int gameId) {
         Optional<command> order;
         order = findTheRequest(player,gameId,Action.PT);
         return new HashSet<>(order.get().getPos());
     }
 
     /** It finds the request of the given player in the queue of commands. */
-    private Optional<command> findTheRequest(String player, int gameId, Action action) throws InterruptedException {
+    private Optional<command> findTheRequest(String player, int gameId, Action action) {
         Player p = allPlayers.get(player);
         List<command> toFind;
         Optional<command> found = Optional.empty();

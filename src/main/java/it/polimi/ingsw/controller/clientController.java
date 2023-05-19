@@ -16,15 +16,10 @@ import java.util.Map;
 
 public class clientController{
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
-
-
     private String nickname;
     private int idLobby=0;
     private int idGame=0;
-
-    private Map<String,Player> others=new HashMap<>();
-
-
+    private Map<String,Player> others = new HashMap<>();
     private boolean firstTurn=false;
     private PersonalCard simpleGoal;
     public List<Integer> cc=new ArrayList<>();
