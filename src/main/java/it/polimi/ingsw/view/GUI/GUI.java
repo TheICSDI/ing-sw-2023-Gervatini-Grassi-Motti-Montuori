@@ -6,8 +6,6 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.SceneController.ShowMainController;
 import it.polimi.ingsw.view.GUI.SceneController.gameSceneController;
 import it.polimi.ingsw.view.GUI.SceneController.lobbySceneController;
@@ -109,8 +107,8 @@ public class GUI implements View {
     }
 
     @Override
-    public void showChosenTiles(List<Tile> tiles) {
-        Platform.runLater(() -> gsc.showChosenTiles(tiles));
+    public void showChosenTiles(List<Tile> tiles,boolean toOrder) {
+        Platform.runLater(() -> gsc.showChosenTiles(tiles,toOrder));
     }
 
     @Override

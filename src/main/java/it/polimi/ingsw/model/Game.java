@@ -117,7 +117,7 @@ public class Game {
                         }
                     }
                     controller.sendElement(board.board, List.of(p),Action.UPDATEBOARD);
-                    serverController.sendMessage(new ChosenTilesMessage(toInsert), p.getNickname());
+
 
                     //CONTROLLO SE SERVE CHIEDERE L'ORDINE, ALTRIMENTI SALTO IL PASSAGGIO
                     boolean allTheSame=true;
@@ -132,6 +132,7 @@ public class Game {
                         }
                         if(!allTheSame) break;
                     }
+                    serverController.sendMessage(new ChosenTilesMessage(toInsert,!allTheSame), p.getNickname());
                     if(!allTheSame){
                         serverController.sendMessage(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT), p.getNickname());
                         List<Integer> order = new ArrayList<>();
@@ -145,7 +146,7 @@ public class Game {
                             }
 
                         }
-                        serverController.sendMessage(new ChosenTilesMessage(toInsert), p.getNickname());
+                        serverController.sendMessage(new ChosenTilesMessage(toInsert,false), p.getNickname());
                     }
                     serverController.sendMessage(new ReplyMessage("Choose column: ",Action.INGAMEEVENT), p.getNickname());
                     int col = -1;

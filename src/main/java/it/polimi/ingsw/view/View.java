@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.model.Tile.type;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,7 @@ public interface View {
     void showBoard(Tile[][] Board);
     void showShelf(Tile[][] Shelf);
     void showPersonal(PersonalCard PC);
-    void showChosenTiles(List<Tile> tiles);
+    void showChosenTiles(List<Tile> tiles,boolean toOrder);
     void showCommons(List<Integer> cc);
     void showOthers(Map<String,Player> others);
     void joinLobby(int lobby_id);

@@ -23,6 +23,11 @@ import java.util.List;
 
 public class gameSceneController {
     private final int dim = 9;
+
+    private int pickedTiles;
+    private int tilesOrdered;
+    private boolean toShow=true;
+    private List<Integer> newOrder=new ArrayList<>();
     @FXML
     public Button pickTiles;
     @FXML
@@ -35,8 +40,16 @@ public class gameSceneController {
     public VBox chat;
     @FXML
     public ScrollPane scrollChat;
+    @FXML
+    public Label ChosenText;
+    @FXML
+    public GridPane chosenTiles;
+    @FXML
+    public Label OrderText;
+    @FXML
+    public GridPane orderedTiles;
     private List<Position> Chosen=new ArrayList<>();
-    private Tile[][] localBoard = new Tile[dim][dim];
+    private final Tile[][] localBoard = new Tile[dim][dim];
     @FXML
     public GridPane board;
     @FXML
@@ -108,11 +121,7 @@ public class gameSceneController {
                                 }
                             }
                             if(!alreadyChosen){
-                                if(finalPane.getStyle().equals("-fx-background-color: #ff0000;")){
-                                    finalPane.setStyle("");
-                                }else{
-                                    finalPane.setStyle("-fx-background-color: #ff0000;");
-                                }
+                                finalPane.setStyle("-fx-background-color: #ff0000;");
                                 if(Chosen.size()==3) {
                                     Node node = this.board.getChildren().stream()
                                             .filter(child -> GridPane.getColumnIndex(child) == Chosen.get(0).getY() && GridPane.getRowIndex(child) == Chosen.get(0).getX())
@@ -122,6 +131,7 @@ public class gameSceneController {
                                     if (node instanceof HBox) {
                                         toDes = (HBox) node;
                                     }
+                                    assert toDes != null;
                                     toDes.setStyle("");
                                     Chosen.remove(0);
                                 }
@@ -151,6 +161,13 @@ public class gameSceneController {
 
     @FXML
     public void showShelf(Tile[][] shelf){
+        //reset variables for picked tiles
+        ChosenText.setVisible(false);
+        OrderText.setVisible(false);
+        chosenTiles.getChildren().clear();
+        orderedTiles.getChildren().clear();
+        toShow=true;
+
         for (int i = 0; i < shelf.length; i++) {
             for (int j = 0; j < shelf[0].length; j++) {
                 if(!shelf[i][j].getCategory().equals(type.EMPTY)) {
@@ -246,8 +263,58 @@ public class gameSceneController {
     }
 
     @FXML
-    public void showChosenTiles(List<Tile> tiles) {
+    public void showChosenTiles(List<Tile> tiles,boolean toOrder) {
+        if(toShow) {
+            if(toOrder){
+                OrderText.setVisible(true);
+                OrderText.setText("Choose the order to insert them : ");
+            }
+            ChosenText.setVisible(true);
+            pickedTiles = tiles.size();
+            for (int i = 0; i < pickedTiles; i++) {
+                Image image = new Image(tiles.get(i).getImage());
+                ImageView Tile = new ImageView(image);
+                Tile.setFitHeight(50);
+                Tile.setFitWidth(50);
+                chosenTiles.setAlignment(Pos.CENTER);
+                if (toOrder) {
+                    int finalI = i;
+                    Tile.setOnMouseClicked(event -> {
+                        orderedTiles.add(Tile, tilesOrdered, 0);
+                        newOrder.add(finalI + 1);
+                        tilesOrdered++;
+                        Node node = chosenTiles.getChildren().stream()
+                                .filter(child -> GridPane.getColumnIndex(child) ==  finalI)
+                                .findFirst()
+                                .orElse(null);
+                        ImageView toCancel = null;
+                        if (node instanceof ImageView) {
+                            toCancel = (ImageView) node;
+                        }
+                        chosenTiles.getChildren().remove(toCancel);
+                        if (tilesOrdered == pickedTiles) {
 
+                            StringBuilder so = new StringBuilder("so");
+                            for (int o :
+                                    newOrder) {
+                                so.append(" ").append(o);
+                            }
+                            System.out.println(so);
+                            synchronized (GUI.Lock) {
+                                GUI.message = String.valueOf(so);
+                                GUI.Lock.notifyAll();
+                            }
+                            tilesOrdered=0;
+                            newOrder.clear();
+                            ChosenText.setVisible(false);
+                            OrderText.setText("Your ordered Tiles: ");
+                        }
+                    });
+                }
+                chosenTiles.add(Tile, i, 0);
+            }
+            toShow=false;
+        }
     }
 
     public void choose1(MouseEvent mouseEvent) {

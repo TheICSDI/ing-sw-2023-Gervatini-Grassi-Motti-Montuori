@@ -128,7 +128,7 @@ public class Client extends Application {
                 reply = ChosenTilesMessage.decrypt(message);
                 List<Tile> tile = new ArrayList<>();
                 reply.getTiles(tile);
-                virtualView.showChosenTiles(tile);
+                virtualView.showChosenTiles(tile,((ChosenTilesMessage) reply).isToOrder());
             }
             case SHOWPERSONAL -> {
                 reply = UpdateBoardMessage.decrypt(message);
@@ -250,8 +250,8 @@ public class Client extends Application {
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            //connectionType = input.next();
-            connectionType="1";
+            connectionType = input.next();
+            //connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if(viewType.equals("2")){
             virtualView=new GUI();
@@ -317,9 +317,8 @@ public class Client extends Application {
 
     /** It starts the RMI connection with the server. */
     public static void RMI(){
-        Scanner in = new Scanner(System.in);
+
         controller = new clientController();
-        virtualView = new CLI();//TODO differenziazione tra  cli e gui in futuro
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
@@ -346,7 +345,7 @@ public class Client extends Application {
             });
             //While the client is connected it send the messages to the server
             while(connected){
-                sendMessage(in.nextLine(), false);
+                sendMessage(virtualView.getInput(), false);
             }
             //Otherwise it closes the threads
             executor1.shutdownNow();
@@ -371,8 +370,8 @@ public class Client extends Application {
         String input;
         SetNameMessage nick;
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter your nickname: "); //TODO dovrebbe essere in view
-        input = in.nextLine();
+        virtualView.displayMessage("enter your nickname"); //TODO dovrebbe essere in view
+        input = virtualView.askUsername();
         nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);
     }

@@ -107,7 +107,7 @@ public class CLI implements View{
     }
 
     @Override
-    public void showChosenTiles(List<Tile> tiles){
+    public void showChosenTiles(List<Tile> tiles,boolean toOrder){
         out.print("Tiles chosen:");
         for (Tile t:
              tiles) {

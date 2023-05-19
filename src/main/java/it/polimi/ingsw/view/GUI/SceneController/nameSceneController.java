@@ -8,8 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-import static it.polimi.ingsw.view.GUI.GUI.NameLock;
-
 public class nameSceneController {
     
     
@@ -25,9 +23,9 @@ public class nameSceneController {
 
     @FXML
     public void getText(){
-        synchronized (NameLock) {
+        synchronized (GUI.NameLock) {
             GUI.Name = GetNickname.getText();
-            NameLock.notifyAll();
+            GUI.NameLock.notifyAll();
         }
     }
 
