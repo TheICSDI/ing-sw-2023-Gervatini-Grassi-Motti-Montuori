@@ -130,17 +130,4 @@ public class gameController {
             throw new GameStartedException("The game is started you can't leave now!");
         }
     } */
-
-    public void sendElement(Tile[][] element, List<Player> playersToSendTo, Action action) throws RemoteException {
-        Tile[][] information = new Tile[element.length][element[0].length];
-        for(int i = 0; i< element.length;i++ ){
-            for(int j = 0; j<element[0].length;j++){
-                information[i][j] = new Tile(element[i][j].getCategory().toString());
-            }
-        }
-        for (Player p: playersToSendTo) {
-            serverController.sendMessage(new UpdateBoardMessage(action, information), p.getNickname());
-        }
-    }
-
 }

@@ -39,7 +39,6 @@ public class Game {
         this.id = count;
         this.players = players;
 
-
         //Initializes the new board
         this.board = new Board(players.size());
         this.board.fillBoard();
@@ -81,7 +80,6 @@ public class Game {
         for (Player p: players) {
             String personalId=String.valueOf(p.getPersonalCard().getId());
             serverController.sendMessage(new ReplyMessage(personalId,Action.SHOWPERSONAL), p.getNickname());
-            //controller.sendElement(p.getPersonalCard().getCard(),List.of(p),Action.SHOWPERSONAL);
             serverController.sendMessage(new SendCommonCards(ccId), p.getNickname());
             for (Player other: players) {
                 if(!other.getNickname().equals(p.getNickname())){
@@ -96,14 +94,13 @@ public class Game {
                     for (Player p1: players) {
                         if(p1.getNickname().equals(p.getNickname())){
                             serverController.sendMessage(new ReplyMessage("It's your turn!",Action.INGAMEEVENT), p1.getNickname());
-                            controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
                         }else{
-                            controller.sendElement(board.board, List.of(p1),Action.UPDATEBOARD);
+                            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
                             serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT), p1.getNickname());
                         }
                     }
-                    //serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
-                    controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
+                    serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
                     serverController.sendMessage(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT), p.getNickname());
 
                     //The player can pick some tiles from the board and insert it inside its shel//
@@ -116,7 +113,7 @@ public class Game {
                             //bisogna attivare un thread per comunicare che non ce la tiles
                         }
                     }
-                    controller.sendElement(board.board, List.of(p),Action.UPDATEBOARD);
+                    serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
 
 
                     //CONTROLLO SE SERVE CHIEDERE L'ORDINE, ALTRIMENTI SALTO IL PASSAGGIO
@@ -159,8 +156,7 @@ public class Game {
                         }
                     }
                     serverController.sendMessage(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
-                    //serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
-                    controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
+                    serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
 
                     for (Player other: players) {
                         if(!other.getNickname().equals(p.getNickname())){
@@ -203,7 +199,6 @@ public class Game {
                         check = true;
                         endGame = true;
                     }
-                //ToDo inviare a ogni player a fine partita le shelf di tutti i player cosicchè le possano stamapre in locale
                 }
             }
         }
