@@ -26,7 +26,10 @@
                      <children>
                         <HBox prefHeight="202.0" prefWidth="1094.0">
                            <children>
-                              <Pane prefHeight="202.0" prefWidth="502.0" />
+                              <Pane prefHeight="202.0" prefWidth="502.0">
+                                 <children>
+                                    <Label fx:id="YourName" layoutX="19.0" layoutY="17.0" />
+                                 </children></Pane>
                               <FlowPane prefHeight="202.0" prefWidth="310.0">
                                  <children>
                                     <HBox prefHeight="100.0" prefWidth="309.0">
@@ -44,6 +47,8 @@
                                                       <RowConstraints maxHeight="52.0" minHeight="52.0" prefHeight="52.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
+                                                <Label fx:id="p4Name" layoutX="500.0" layoutY="6.0" />
+                                                <Label fx:id="p3Name" layoutX="500.0" layoutY="350.0" />
                                              </children>
                                           </Pane>
                                        </children>
@@ -72,24 +77,33 @@
                            </children>
                         </HBox>
                      </children></Pane>
-                  <GridPane gridLinesVisible="true" maxHeight="192.0" maxWidth="160.0" minHeight="192.0" minWidth="160.0" prefHeight="192.0" prefWidth="160.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                  </GridPane>
-                  <Pane prefHeight="200.0" prefWidth="29.0" />
+                  <Pane prefHeight="220.0" prefWidth="191.0">
+                     <children>
+                        <GridPane fx:id="p4shelf" gridLinesVisible="true" hgap="2.0" layoutX="0.5" layoutY="20.5" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="32.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="32.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                        <ImageView fx:id="p4ImageShelf" fitHeight="220.0" fitWidth="217.0" layoutX="-27.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../Images/boards/bookshelf.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="220.0" prefWidth="0.0" />
                </children>
             </FlowPane>
          </top>
@@ -126,7 +140,7 @@
                         </ImageView>
                         <HBox prefHeight="209.0" prefWidth="163.0">
                            <children>
-                              <Pane fx:id="c1" onMouseClicked="#choose1" prefHeight="200.0" prefWidth="200.0" />
+                              <Pane onMouseClicked="#choose1" prefHeight="200.0" prefWidth="200.0" />
                               <Pane onMouseClicked="#choose2" prefHeight="200.0" prefWidth="200.0" />
                               <Pane onMouseClicked="#choose3" prefHeight="200.0" prefWidth="200.0" />
                               <Pane onMouseClicked="#choose4" prefHeight="200.0" prefWidth="200.0" />
@@ -147,32 +161,42 @@
                <children>
                   <Pane prefHeight="192.0" prefWidth="1091.0">
                      <children>
-                        <Button fx:id="pickTiles" layoutX="632.0" layoutY="17.0" mnemonicParsing="false" onAction="#pickTiles" text="Pick TIles" />
-                        <ScrollPane fx:id="scrollChat" layoutX="848.0" layoutY="-43.0">
+                        <Button fx:id="pickTiles" layoutX="632.0" layoutY="-80.0" mnemonicParsing="false" onAction="#pickTiles" text="Pick TIles" />
+                        <ImageView fx:id="common2" fitHeight="115.0" fitWidth="156.0" layoutX="33.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="common1" fitHeight="115.0" fitWidth="156.0" layoutX="265.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+                        <ScrollPane fx:id="scrollChat" layoutX="495.0" layoutY="-8.0" prefHeight="202.0" prefWidth="346.0">
                            <content>
                               <VBox fx:id="chat" prefHeight="200.0" prefWidth="209.0" />
                            </content>
                         </ScrollPane>
-                        <ImageView fx:id="common2" fitHeight="115.0" fitWidth="156.0" layoutX="33.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="common1" fitHeight="115.0" fitWidth="156.0" layoutX="265.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="p2Name" layoutX="993.0" layoutY="5.0" text="Label" />
                      </children></Pane>
-                  <GridPane gridLinesVisible="true" maxHeight="192.0" maxWidth="160.0" minHeight="192.0" minWidth="160.0" prefHeight="192.0" prefWidth="160.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                  </GridPane>
+                  <Pane prefHeight="220.0" prefWidth="169.0">
+                     <children>
+                        <GridPane fx:id="p2shelf" gridLinesVisible="true" hgap="2.0" layoutX="0.5" layoutY="0.5" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="32.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="32.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                        <ImageView fitHeight="220.0" fitWidth="227.0" layoutX="-27.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Images/boards/bookshelf.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
                   <Pane prefHeight="192.0" prefWidth="26.0" />
                </children>
             </FlowPane>
@@ -232,7 +256,7 @@
                   <Pane prefHeight="17.0" prefWidth="488.0" BorderPane.alignment="CENTER" />
                </bottom>
                <right>
-                  <Pane disable="true" maxHeight="288.0" maxWidth="470.0" minHeight="288.0" minWidth="100.0" mouseTransparent="true" opacity="0.0" prefHeight="288.0" prefWidth="470.0" visible="false" BorderPane.alignment="CENTER" />
+                  <Pane maxHeight="288.0" maxWidth="470.0" minHeight="288.0" minWidth="100.0" mouseTransparent="true" opacity="0.0" prefHeight="288.0" prefWidth="470.0" BorderPane.alignment="CENTER" />
                </right>
             </BorderPane>
          </center>
@@ -240,23 +264,32 @@
             <FlowPane maxHeight="336.0" minWidth="170.0" orientation="VERTICAL" prefHeight="300.0" prefWidth="208.0" BorderPane.alignment="CENTER">
                <children>
                   <Pane minWidth="160.0" prefHeight="47.0" prefWidth="177.0" />
-                  <GridPane gridLinesVisible="true" maxHeight="192.0" maxWidth="160.0" minHeight="192.0" minWidth="160.0" prefHeight="192.0" prefWidth="160.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                  </GridPane>
+                  <Pane prefHeight="220.0" prefWidth="143.0">
+                     <children>
+                        <GridPane fx:id="p3shelf" gridLinesVisible="true" hgap="2.0" layoutX="0.5" layoutY="0.5" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="32.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="32.0" vgrow="SOMETIMES" />
+                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                        <ImageView fx:id="p3ImageShelf" fitHeight="220.0" fitWidth="251.0" layoutX="-27.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../Images/boards/bookshelf.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
                   <Pane minWidth="146.0" prefHeight="72.0" prefWidth="146.0" />
                </children>
                <padding>

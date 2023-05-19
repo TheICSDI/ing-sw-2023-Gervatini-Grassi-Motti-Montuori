@@ -36,7 +36,6 @@ public class lobbySceneController {
     public void setName(String name){
         Name.setText("Name set: " + name);
     }
-    //TODO to end
     public void showLobbies(List<Lobby> Lobbies){
         AvailableLobbies=Lobbies;
         this.Lobbies.getItems().clear();
@@ -53,7 +52,7 @@ public class lobbySceneController {
 
     public void createLobby(ActionEvent actionEvent) {
         synchronized (GUI.Lock) {
-            GUI.message = "createlobby " + limit;//TODO DA vedere il limite
+            GUI.message = "createlobby " + limit;
             GUI.Lock.notifyAll();
         }
     }

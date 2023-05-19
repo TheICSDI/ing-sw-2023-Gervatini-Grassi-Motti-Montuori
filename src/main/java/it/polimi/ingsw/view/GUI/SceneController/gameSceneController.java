@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI.SceneController;
 
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
@@ -20,10 +21,25 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+//TODO CHAT, SCHERMATA DI ENDGAME, PUNTEGGI SULLE COMMON
 public class gameSceneController {
-    private final int dim = 9;
+    @FXML
+    public Label YourName;
+    @FXML
+    public Label p2Name;
+    @FXML
+    public Label p3Name;
+    @FXML
+    public Label p4Name;
+    @FXML
+    public ImageView p4ImageShelf;
+    @FXML
+    public ImageView p3ImageShelf;
+    private boolean firstOthers;
 
+    private final int dim = 9;
     private int pickedTiles;
     private int tilesOrdered;
     private boolean toShow=true;
@@ -54,8 +70,17 @@ public class gameSceneController {
     public GridPane board;
     @FXML
     public GridPane myShelf;
+    @FXML
+    private List<GridPane> othersShelf=new ArrayList<>();
+    @FXML
+    public GridPane p2shelf;
+    @FXML
+    public GridPane p3shelf;
+    @FXML
+    public GridPane p4shelf;
 
     /** It initialises the version of the local board to not_accessible type. */
+    // Non ho capito quando lo chiama però se non lo metto non funziona :P
     public gameSceneController(){
         for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
@@ -64,10 +89,18 @@ public class gameSceneController {
         }
 
     }
+    public void initialize(){
+        YourName.setText(GUI.Name);
+        othersShelf.add(p2shelf);
+        othersShelf.add(p3shelf);
+        othersShelf.add(p4shelf);
+        firstOthers=true;
+    }
 
     /** It updates the board on the panel with the right image. */
     @FXML
     public void showBoard(Tile[][] board){
+        System.out.println("called showboard");
         //For each element in the board
         //this.board.getChildren().clear();
         for (int i = 0; i < this.dim; i++) {
@@ -85,7 +118,6 @@ public class gameSceneController {
                     //If the tile is now empty the previous image is removed
                     if(board[i][j].getCategory().equals(type.EMPTY) &&
                             !(this.localBoard[i][j].getCategory().equals(type.EMPTY))){
-                        //CHATGDL SAID:
                         //It removes the previous image
                         int finalI1 = i;
                         int finalJ1 = j;
@@ -131,29 +163,16 @@ public class gameSceneController {
                                     if (node instanceof HBox) {
                                         toDes = (HBox) node;
                                     }
-                                    assert toDes != null;
                                     toDes.setStyle("");
                                     Chosen.remove(0);
                                 }
                                 Chosen.add(new Position(finalJ, finalI));
                             }
-                            /*StringBuilder pt= new StringBuilder("pt");
-                            for (Position p:
-                                    Chosen) {
-                                pt.append(" ").append(p.getY()).append(" ").append(p.getX());
-                            }
-                            System.out.println(pt);*/
                         });
                         this.board.add(pane, i, j);
-                        /*GridPane.setHalignment(Tile, HPos.CENTER);
-                        GridPane.setValignment(Tile, VPos.CENTER);*/
                         this.board.setAlignment(Pos.CENTER);
                     }
                     this.localBoard[i][j] = board[i][j];
-
-                    // TODO: indici sbagliati
-                    // gli indici sono sbagliati (confrontare out in CLI con out in GUI), è come se la board fosse rotata
-                    //sinceramente non penso sia un problema, la soluzione più semplice sarebbe rinominarli tutti direttamente nel model credo
                 }
             }
         }
@@ -180,6 +199,46 @@ public class gameSceneController {
                     this.myShelf.add(Tile, j, i);
                 }
             }
+        }
+    }
+
+    @FXML
+    public void showOthers(Map<String, Player> others){
+        if(firstOthers){
+            firstOthers=false;
+            List<String> names= new ArrayList<>(others.keySet());//sperando gli metta in ordine
+            for (String s:
+                 names) {
+                System.out.println(s);
+            }
+            p2Name.setText(names.get(0) + "'s shelf:");
+            if(names.size()>1){
+                p3Name.setText(names.get(1) + "'s shelf:");
+                p3ImageShelf.setVisible(true);
+            }
+            if(names.size()>2){
+                p4Name.setText(names.get(2) + "'s shelf:");
+                p4ImageShelf.setVisible(true);
+            }
+        }
+        int k=0;
+        for (String s:
+             others.keySet()) {
+            Tile[][] shelf=others.get(s).getShelf();
+            for (int i = 0; i < shelf.length; i++) {
+                for (int j = 0; j < shelf[0].length; j++) {
+                    if(!shelf[i][j].getCategory().equals(type.EMPTY)) {
+                        ImageView Tile = new ImageView();
+                        Tile.setFitHeight(30);
+                        Tile.setFitWidth(30);
+                        Image image = new Image(shelf[i][j].getImage());
+                        Tile.setImage(image);
+                        othersShelf.get(k).setAlignment(Pos.CENTER);
+                        othersShelf.get(k).add(Tile, j, i);
+                    }
+                }
+            }
+            k++;
         }
     }
 

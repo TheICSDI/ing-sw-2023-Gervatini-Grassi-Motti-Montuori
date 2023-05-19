@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-//TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column 4-fine gioco
+//TODO SCHERMATE: 1-GetName(done) 2-Lobbies(done) 3-Schermata picktiles/order/column(done) 4-fine gioco
+//TODO RENDERLO BELLO GRAFICAMENTE :D
 public class GUI implements View {
     private int nPage=1;
     private Stage stage;
@@ -121,6 +122,10 @@ public class GUI implements View {
 
     }
     @Override
+    public void updateOthers(Map<String,Player> others){
+        Platform.runLater(() ->gsc.showOthers(others));
+    }
+    @Override
     public void joinLobby(int lobby_id) {
 
     }
@@ -132,7 +137,7 @@ public class GUI implements View {
 
     @Override
     public void startGame(String message) {
-        Platform.runLater(this::openGameScene);
+        Platform.runLater(()->openGameScene());
     }
 
     @Override
@@ -163,7 +168,7 @@ public class GUI implements View {
     @Override
     public void displayError(String msg) {
         Platform.runLater(() -> {
-            lsc.setText(msg);//TODO controlli per vedere in che pagina sei forse
+            lsc.setText(msg);
         });
     }
 
@@ -171,7 +176,7 @@ public class GUI implements View {
     public void displayMessage(String msg) {
         Platform.runLater(() -> {
             if(nPage==2) {
-                lsc.setText(msg);//TODO controlli per vedere in che pagina sei forse
+                lsc.setText(msg);
             }else if(nPage==3) {
                 gsc.newMessage(msg);
             }
@@ -185,7 +190,7 @@ public class GUI implements View {
 
     //METODO PER MANDARE I MESSAGGI AL SERVER, QUANDO X PULSANTE VIENE PREMUTO BISOGNA SETTARE IL MESSAGE DI QUESTA CLASSE
     // AL MESSAGGIO DA MANDARE E FARE MESSAGELOCK.NOTIFYALL E IL MESSAGGIO VIENE INVIATO
-    //TODO TUTTI I PULSANTI CHE INVIANO I MESSAGGI PER LE LOBBY E UNIFORMARE I METODI CHE RICEVONO LE RISPOSTE IN GUI E CONTROLLARE SIANO FATTI IN CLI
+
     @Override
     public String getInput() {
         synchronized (Lock){
@@ -259,6 +264,7 @@ public class GUI implements View {
         } catch (Exception ignored) {
         }
         gsc = loader.getController();
+        Platform.runLater(()->gsc.initialize());
         //stage.setFullScreen(true);
         stage.setX(0);
         stage.setY(0);

@@ -11,7 +11,7 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
+//TODO CONTROLLARE che funzioni tutto in cli
 public class CLI implements View{
     //"\u001b[48;2;<R code>;<G code>;<B code>m" BACKGROUND COLORS
     public static final String RESET = "\033[0m";
@@ -197,6 +197,11 @@ public class CLI implements View{
             System.out.println("  " + nick + "'s shelf");
             showShelf(others.get(nick).getShelf());
         }
+    }
+
+    @Override
+    public void updateOthers(Map<String,Player> others){
+
     }
 
     @Override

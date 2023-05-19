@@ -27,7 +27,6 @@ public class clientController{
 
     private boolean firstTurn=false;
     private PersonalCard simpleGoal;
-    //TODO: secondo me qui ci va una PersonalGoal, perchè in GUI ho bisongo dell'id della carta per poter scegliere l'immagine giusta
     public List<Integer> cc=new ArrayList<>();
 
 

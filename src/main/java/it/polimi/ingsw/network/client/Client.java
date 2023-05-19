@@ -143,6 +143,7 @@ public class Client extends Application {
                 String nick=((OtherPlayersMessage) reply).getP().getNickname();
                 Player p=((OtherPlayersMessage) reply).getP();
                 controller.getOthers().put(nick,p);
+                virtualView.updateOthers(controller.getOthers());
             }
             case C -> {
                 reply = ChatMessage.decrypt(message);
@@ -370,7 +371,6 @@ public class Client extends Application {
         String input;
         SetNameMessage nick;
         Scanner in = new Scanner(System.in);
-        virtualView.displayMessage("enter your nickname"); //TODO dovrebbe essere in view
         input = virtualView.askUsername();
         nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);

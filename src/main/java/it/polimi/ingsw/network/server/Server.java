@@ -32,7 +32,7 @@ public class Server {
 
     /** It starts the server both via socket and RMI. */
     public static void main(String[] args) throws IOException {
-        //TODO CRASH SERVER, SALVATAGGIO E RIPRESA PARTITA
+        //TODO terza funzione aggiuntiva se vogliamo
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() ->{
             try{

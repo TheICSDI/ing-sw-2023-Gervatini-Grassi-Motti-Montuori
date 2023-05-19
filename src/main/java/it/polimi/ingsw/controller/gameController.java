@@ -119,7 +119,7 @@ public class gameController {
     }
 
     /*permette di uscire da una partita a patto che non sia cominciata
-    TODO: integrare uscita da una lobby , non so se questa funzione va qui non sembra in linea con le altre
+    TODO: integrare uscita da una lobby
     public void leaveLobby(String player, int gameId) throws GameStartedException {
         Game g = allGames.get(gameId);
         Player p = allPlayers.get(player);
