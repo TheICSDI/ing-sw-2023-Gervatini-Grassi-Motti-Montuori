@@ -102,7 +102,7 @@ public class Game {
                             serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT), p1.getNickname());
                         }
                     }
-                    serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
+                    //serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
                     controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
                     serverController.sendMessage(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT), p.getNickname());
 
@@ -158,7 +158,7 @@ public class Game {
                         }
                     }
                     serverController.sendMessage(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
-                    serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
+                    //serverController.sendMessage(new ReplyMessage("  Your shelf" , Action.INGAMEEVENT), p.getNickname());
                     controller.sendElement(p.getShelf(), List.of(p),Action.UPDATESHELF);
 
                     for (Player other: players) {

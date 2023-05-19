@@ -126,7 +126,7 @@ public class Client extends Application {
             }
             case CHOSENTILES ->{
                 reply = ChosenTilesMessage.decrypt(message);
-                List<Tile> tile=new ArrayList<>();
+                List<Tile> tile = new ArrayList<>();
                 reply.getTiles(tile);
                 virtualView.showChosenTiles(tile);
             }

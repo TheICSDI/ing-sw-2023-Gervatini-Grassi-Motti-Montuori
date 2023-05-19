@@ -26,9 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 
 //TODO SCHERMATE: 1-GetName 2-Lobbies 3-Schermata picktiles/order/column 4-fine gioco
-public class GUI implements View
-{
-
+public class GUI implements View {
+    private int nPage=1;
     private Stage stage;
     public static String Name="";
     public static String message;
@@ -38,7 +37,7 @@ public class GUI implements View
     public lobbySceneController lsc;
     public gameSceneController gsc;
     private Stage primaryStage;
-//sencojone -Emi
+
     @Override
     public String showMain(){
         ShowMainController controller = null;
@@ -95,13 +94,8 @@ public class GUI implements View
     }
 
     @Override
-    public void showLobby(List<String> usrs, int num_usrs) {
-    }
-
-    @Override
-    public void showBoard(Tile[][] board) {//TODO le shelf dei player da differenziare per nome player e addattare alla cli
+    public void showBoard(Tile[][] board) {
         Platform.runLater(() -> gsc.showBoard(board));
-        //gsc.showBoard();
     }
 
     @Override
@@ -116,12 +110,12 @@ public class GUI implements View
 
     @Override
     public void showChosenTiles(List<Tile> tiles) {
-
+        Platform.runLater(() -> gsc.showChosenTiles(tiles));
     }
 
     @Override
     public void showCommons(List<Integer> cc) {
-
+        Platform.runLater(() -> gsc.showCommons(cc));
     }
 
     @Override
@@ -271,7 +265,8 @@ public class GUI implements View
         stage.setX(0);
         stage.setY(0);
         stage.setResizable(false);
-        stage.setFullScreenExitHint("SOOOOOOOOOOCA");
+        nPage=3;
+        stage.setFullScreenExitHint("");
         stage.setScene(new Scene(root));
         stage.show();
     }

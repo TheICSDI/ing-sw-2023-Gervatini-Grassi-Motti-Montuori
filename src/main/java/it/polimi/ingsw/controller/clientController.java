@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
@@ -24,18 +25,15 @@ public class clientController{
 
 
     private boolean firstTurn=false;
-    private Tile[][] simpleGoal=new Tile[6][5];
+    private PersonalCard simpleGoal;
     //TODO: secondo me qui ci va una PersonalGoal, perchè in GUI ho bisongo dell'id della carta per poter scegliere l'immagine giusta
     public List<Integer> cc=new ArrayList<>();
 
 
-    public Tile[][] getSimpleGoal(){return simpleGoal;}
-    public void setSimpleGoal(Tile[][] goal) {
-        for (int i = 0; i < goal.length; i++) {
-            for (int j = 0; j < goal[0].length; j++) {
-                this.simpleGoal[i][j]=goal[i][j];
-            }
-        }
+    public PersonalCard getSimpleGoal(){return this.simpleGoal;}
+
+    public void setSimpleGoal(int id) {
+        this.simpleGoal = new PersonalCard(id);
     }
 
     public boolean isFirstTurn() {

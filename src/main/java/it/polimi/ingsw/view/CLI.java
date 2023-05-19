@@ -65,12 +65,6 @@ public class CLI implements View{
         System.out.println(lobbyName);
     }
 
-    //@Override
-    //public void showBoard(type[][] board,Action action){
-        //Tile[][] shelf=recreateShelf(board);
-        //printBoard(shelf,action);
-    //}
-
     @Override
     public void showBoard(Tile[][] board){
         System.out.println("    0  1  2  3  4  5  6  7  8");
@@ -90,6 +84,7 @@ public class CLI implements View{
 
     @Override
     public void showShelf(Tile[][] shelf){
+        out.println("  Your shelf  ");
         for (int i = 0; i < shelf.length; i++){
             out.print(RESET + "  ");
             for (int j = -1; j < shelf[0].length; j++) {
@@ -106,10 +101,9 @@ public class CLI implements View{
     }
 
     @Override
-    public void showPersonal(Tile[][] PC){
-        showShelf(PC);
-        //TODO: se qui come parametro ho una personal mi basta questo comando
-        //showShelf(PC.getCard());
+    public void showPersonal(PersonalCard PC){
+        out.println("  Your personal goal:  ");
+        showShelf(PC.getCard());
     }
 
     @Override
@@ -124,9 +118,9 @@ public class CLI implements View{
     
     @Override
     public void showCommons(List<Integer> cc){
+        out.println("Common goals:");
         int x=1;
-        for (int i:
-             cc) {
+        for (int i: cc) {
             switch (i){
                 case(1)-> out.println("Goal " + x + ": Six groups each containing at least\n" +
                         "2 tiles of the same type (not necessarily\n" +
@@ -195,11 +189,6 @@ public class CLI implements View{
             }
             System.out.println();
         }
-    }
-
-    @Override
-    public void showLobby(List<String> usrs, int num_usrs) {
-
     }
 
     @Override

@@ -14,15 +14,13 @@ import java.util.Map;
 public interface View {
 
     String showMain();
-
     String askUsername();
     void printUsername(String username, boolean isAvailable);
     void createLobby(String lobbyName/*, int maxPlayers*/);
     void showLobby(List<Lobby> Lobbies);
-    void showLobby(List<String> usrs, int num_usrs);
     void showBoard(Tile[][] Board);
     void showShelf(Tile[][] Shelf);
-    void showPersonal(Tile[][] PC);
+    void showPersonal(PersonalCard PC);
     void showChosenTiles(List<Tile> tiles);
     void showCommons(List<Integer> cc);
     void showOthers(Map<String,Player> others);
@@ -38,8 +36,6 @@ public interface View {
     void displayError(String msg);
     void displayMessage(String msg);
     void help();
-
-
     String getInput();
 
 }

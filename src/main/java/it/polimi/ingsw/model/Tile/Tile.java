@@ -16,7 +16,6 @@ public class Tile {
 
 	/** Creates a tile according to a given type. */
 	public Tile(String any) {
-
 		this.category = type.valueOf(any.toUpperCase());
 		switch (category){
 			case NOT_ACCESSIBLE -> {
