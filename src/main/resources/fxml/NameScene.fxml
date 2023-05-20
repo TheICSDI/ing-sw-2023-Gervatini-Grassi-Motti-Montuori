@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorpane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.SceneController.nameSceneController">
    <children>
@@ -25,22 +26,18 @@
          <center>
             <FlowPane alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" orientation="VERTICAL" prefHeight="298.0" prefWidth="502.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane>
-                     <FlowPane.margin>
-                        <Insets left="39.0" />
-                     </FlowPane.margin>
-                  </Pane>
-                  <HBox prefHeight="30.0" prefWidth="322.0">
+                  <HBox alignment="CENTER" prefHeight="60.0" prefWidth="244.0" spacing="11.0">
                      <children>
-                        <Pane prefHeight="30.0" prefWidth="38.0" />
-                        <TextField fx:id="GetNickname" prefHeight="26.0" prefWidth="193.0" promptText="Enter your nickname" />
-                        <Pane prefHeight="30.0" prefWidth="32.0" />
-                        <Pane fx:id="Button">
-                           <children>
-                              <Button fx:id="ConfirmNickname" mnemonicParsing="false" onAction="#getText" prefHeight="26.0" prefWidth="33.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="-&gt;" />
-                           </children>
-                        </Pane>
+                        <TextField fx:id="GetNickname" prefHeight="40.0" prefWidth="193.0" promptText="Enter your nickname" />
+                        <Button fx:id="ConfirmNickname" mnemonicParsing="false" onAction="#getText" prefHeight="40.0" prefWidth="40.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="➜">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Button>
                      </children>
+                     <FlowPane.margin>
+                        <Insets left="38.0" right="38.0" />
+                     </FlowPane.margin>
                   </HBox>
                   <Label fx:id="Information" prefHeight="18.0" prefWidth="180.0" textFill="#d37c7c">
                      <FlowPane.margin>
@@ -50,7 +47,7 @@
             </FlowPane>
          </center>
          <top>
-            <ImageView fx:id="Title" fitHeight="105.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <ImageView fx:id="Title" fitHeight="105.0" fitWidth="600.0" layoutY="-41.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
                   <Image url="@../Images/Publisher%20material/Title%202000x618px.png" />
                </image>
@@ -59,14 +56,8 @@
                </BorderPane.margin>
             </ImageView>
          </top>
-         <left>
-            <Pane prefHeight="200.0" prefWidth="146.0" BorderPane.alignment="CENTER" />
-         </left>
-         <right>
-            <Pane prefHeight="200.0" prefWidth="99.0" BorderPane.alignment="CENTER" />
-         </right>
          <bottom>
-            <Pane prefHeight="98.0" prefWidth="758.0" BorderPane.alignment="CENTER">
+            <Pane prefHeight="98.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fitHeight="56.0" fitWidth="56.0" layoutX="544.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
                      <image>

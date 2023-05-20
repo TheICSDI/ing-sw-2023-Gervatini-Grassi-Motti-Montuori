@@ -35,6 +35,8 @@ public interface View {
     void updateLobby(int lobby_id, List<String> players);
     void displayError(String msg);
     void displayMessage(String msg);
+    void playersTurn(String msg);
+    void showChat(String msg);
     void help();
     String getInput();
 

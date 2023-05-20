@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
@@ -8,21 +9,28 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="601.0" styleClass="root" stylesheets="@../CSS/Background.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.SceneController.lobbySceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.SceneController.lobbySceneController">
    <children>
-      <BorderPane prefHeight="400.0" prefWidth="601.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <Pane prefHeight="296.0" prefWidth="86.0" BorderPane.alignment="CENTER" />
-         </left>
+      <Pane prefHeight="400.0" prefWidth="601.0" styleClass="root" stylesheets="@../CSS/Background.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <effect>
+            <GaussianBlur />
+         </effect>
+      </Pane>
+      <Pane opacity="0.75" prefHeight="400.0" prefWidth="601.0" style="-fx-background-color: #1c1c1c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <BorderPane prefHeight="400.0" prefWidth="601.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <center>
             <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                <content>
-                  <ListView fx:id="Lobbies" prefHeight="353.0" prefWidth="492.0">
+                  <ListView fx:id="Lobbies" prefHeight="243.0" prefWidth="415.0">
                      <padding>
                         <Insets left="5.0" />
                      </padding>
@@ -30,37 +38,77 @@
                </content>
             </ScrollPane>
          </center>
-         <bottom>
-            <Pane prefHeight="61.0" prefWidth="602.0" BorderPane.alignment="CENTER" />
-         </bottom>
          <right>
-            <FlowPane alignment="TOP_RIGHT" orientation="VERTICAL" prefHeight="365.0" prefWidth="143.0" vgap="30.0" BorderPane.alignment="CENTER">
+            <FlowPane alignment="TOP_RIGHT" prefHeight="365.0" prefWidth="143.0" vgap="50.0">
                <children>
-                  <Group id="Prova">
+                  <VBox prefHeight="310.0" prefWidth="144.0" spacing="20.0">
                      <children>
-                        <RadioButton fx:id="limit2" layoutX="3.0" layoutY="-6.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="24.0" prefWidth="80.0" selected="true" text="2 players" textFill="WHITE">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="Prova" />
-                           </toggleGroup>
-                        </RadioButton>
-                        <RadioButton fx:id="limit3" layoutX="2.0" layoutY="19.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="17.0" prefWidth="77.0" text="3 players" textFill="WHITE" toggleGroup="$Prova" />
-                        <RadioButton fx:id="limit4" layoutX="2.0" layoutY="37.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="23.0" prefWidth="82.0" text="4 players" textFill="WHITE" toggleGroup="$Prova" />
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <Group id="Prova">
+                                 <children>
+                                    <RadioButton fx:id="limit2" layoutX="3.0" layoutY="-6.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="24.0" prefWidth="80.0" selected="true" text="2 players" textFill="WHITE">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="Prova" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="limit3" layoutX="2.0" layoutY="19.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="17.0" prefWidth="77.0" text="3 players" textFill="WHITE" toggleGroup="$Prova" />
+                                    <RadioButton fx:id="limit4" layoutX="2.0" layoutY="37.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="23.0" prefWidth="82.0" text="4 players" textFill="WHITE" toggleGroup="$Prova" />
+                                 </children>
+                              </Group>
+                              <Button fx:id="CreateLobby" alignment="CENTER" mnemonicParsing="false" onAction="#createLobby" prefHeight="26.0" prefWidth="54.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Create">
+                                 <HBox.margin>
+                                    <Insets top="20.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="Refresh" alignment="CENTER" mnemonicParsing="false" onAction="#showLobbies" prefHeight="27.0" prefWidth="59.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Refresh">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="Join" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#Join" prefHeight="27.0" prefWidth="59.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Join">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="Start" mnemonicParsing="false" onAction="#StartGame" prefHeight="27.0" prefWidth="59.0" stylesheets="@../CSS/button.css" text="Start">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <styleClass>
+                                    <String fx:value="custom-button" />
+                                    <String fx:value="custom-button-start" />
+                                 </styleClass>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <Label fx:id="text" alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="144.0" textFill="WHITE" />
                      </children>
-                  </Group>
-                  <Button fx:id="CreateLobby" alignment="CENTER" mnemonicParsing="false" onAction="#createLobby" prefHeight="26.0" prefWidth="54.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Create" />
-                  <Button fx:id="Join" mnemonicParsing="false" onAction="#Join" prefHeight="26.0" prefWidth="56.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Join" />
-                  <Button fx:id="Refresh" mnemonicParsing="false" onAction="#showLobbies" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Refresh" />
-                  <Button fx:id="Start" mnemonicParsing="false" onAction="#StartGame" prefHeight="26.0" prefWidth="56.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Start" />
+                  </VBox>
                </children>
             </FlowPane>
          </right>
          <top>
-            <FlowPane prefHeight="42.0" prefWidth="602.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="50.0" prefWidth="561.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="Name" prefHeight="29.0" prefWidth="194.0" text="Name" textAlignment="CENTER" textFill="WHITE" />
-                  <Label fx:id="text" alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="402.0" textFill="WHITE" />
+                  <Label fx:id="Name" prefHeight="11.0" prefWidth="194.0" text="Name" textAlignment="CENTER" textFill="#ababab" />
+                  <Label prefHeight="38.0" prefWidth="217.0" text="LOBBIES:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="22.0" />
+                     </font>
+                  </Label>
                </children>
-            </FlowPane>
+            </VBox>
          </top>
       </BorderPane>
    </children>

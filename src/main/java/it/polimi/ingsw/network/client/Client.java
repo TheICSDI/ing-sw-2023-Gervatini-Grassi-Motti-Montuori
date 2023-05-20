@@ -124,6 +124,10 @@ public class Client extends Application {
                 reply = ReplyMessage.decrypt(message);
                 virtualView.displayMessage(reply.getMessage());
             }
+            case TURN -> {
+                reply = ReplyMessage.decrypt(message);
+                virtualView.playersTurn(reply.getMessage());
+            }
             case CHOSENTILES ->{
                 reply = ChosenTilesMessage.decrypt(message);
                 List<Tile> tile = new ArrayList<>();
@@ -147,11 +151,13 @@ public class Client extends Application {
             }
             case C -> {
                 reply = ChatMessage.decrypt(message);
-                virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
+                //virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
             }
             case CA -> {
                 reply=BroadcastMessage.decrypt(message);
-                virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
+                //virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
             }
             case ENDGAME -> {
                 controller.setIdGame(0);
@@ -243,16 +249,16 @@ public class Client extends Application {
                 [1]: for CLI
                 [2]: for GUI""");
 
-            viewType = input.next();
-            //viewType="2";
+            //viewType = input.next();
+            viewType="2";
         }while(!(viewType.equals("1") || viewType.equals("2")));
         do {
             System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            connectionType = input.next();
-            //connectionType="1";
+            //connectionType = input.next();
+            connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if(viewType.equals("2")){
             virtualView=new GUI();

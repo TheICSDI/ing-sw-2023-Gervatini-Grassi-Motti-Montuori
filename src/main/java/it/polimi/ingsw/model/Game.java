@@ -93,11 +93,11 @@ public class Game {
                 if(p.isConnected()){
                     for (Player p1: players) {
                         if(p1.getNickname().equals(p.getNickname())){
-                            serverController.sendMessage(new ReplyMessage("It's your turn!",Action.INGAMEEVENT), p1.getNickname());
+                            serverController.sendMessage(new ReplyMessage("It's your turn!",Action.TURN), p1.getNickname());
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
                         }else{
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
-                            serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.INGAMEEVENT), p1.getNickname());
+                            serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.TURN), p1.getNickname());
                         }
                     }
                     serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());

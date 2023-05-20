@@ -12,8 +12,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -37,6 +39,12 @@ public class gameSceneController {
     public ImageView p4ImageShelf;
     @FXML
     public ImageView p3ImageShelf;
+    @FXML
+    public Label ingameEvents;
+    @FXML
+    public Label turn;
+    @FXML
+    public TextField Chat;
     private boolean firstOthers;
 
     private final int dim = 9;
@@ -94,6 +102,11 @@ public class gameSceneController {
         othersShelf.add(p3shelf);
         othersShelf.add(p4shelf);
         firstOthers=true;
+        Chat.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                sendChatMessage();
+            }
+        });
     }
 
     /** It updates the board on the panel with the right image. */
@@ -412,5 +425,24 @@ public class gameSceneController {
         messageLabel.setWrapText(true);
 
         chat.getChildren().add(messageLabel);
+    }
+    public void Turn(String msg){
+        turn.setText(msg);
+    }
+
+    public void setIngameEvents(String msg){
+        ingameEvents.setText(msg);
+    }
+
+    public void sendChatMessage(){
+        String message= Chat.getText();
+        Chat.setText("");
+        if (message.charAt(0)!='c'){
+            message= "ca " + message;
+        }
+        synchronized (GUI.Lock){
+            GUI.message= message;
+            GUI.Lock.notifyAll();
+        }
     }
 }

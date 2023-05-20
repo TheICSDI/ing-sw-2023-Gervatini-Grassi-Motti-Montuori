@@ -1,6 +1,14 @@
 .custom-button {
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-background-color: white;
-    -fx-text-fill: black;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color:#d7b97e;
+    -fx-background-color: transparent;
+    -fx-text-fill: #d7b97e;
+}
+.custom-button-start {
+    -fx-border-color: #501b6c;
+    -fx-background-color:  #d7b97e;
+    -fx-border-width: 2 2 2 2;
+    -fx-text-fill: #501b6c;
 }

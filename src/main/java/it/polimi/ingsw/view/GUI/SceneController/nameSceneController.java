@@ -8,7 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
@@ -45,10 +47,18 @@ public class nameSceneController implements Initializable {
         }
         //Setting the font
         GetNickname.setFont(font);
+        /*try {
+            font = Font.loadFont(Objects.requireNonNull(getClass().getResource("/fonts/Poppins-Black.ttf")).openStream(), 12);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ConfirmNickname.setFont(font);*/
         //Setting color of the text
         GetNickname.setPromptText("Enter your nickname");
         GetNickname.setFocusTraversable(false);
-
+        GetNickname.setStyle("-fx-text-fill: WHITE;-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: WHITE; -fx-prompt-text-fill: WHITE");
+        HBox.setHgrow(GetNickname, Priority.ALWAYS);
+        HBox.setHgrow(ConfirmNickname, Priority.ALWAYS);
     }
 
     @FXML

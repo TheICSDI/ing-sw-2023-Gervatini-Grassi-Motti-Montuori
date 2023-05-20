@@ -255,6 +255,15 @@ public class CLI implements View{
     public void displayMessage(String msg){
         out.println(msg);
     }
+    @Override
+    public void playersTurn(String msg){
+        System.out.println(msg);
+    }
+
+    @Override
+    public void showChat(String msg) {
+        System.out.println(msg);
+    }
 
     @Override
     public void help(){

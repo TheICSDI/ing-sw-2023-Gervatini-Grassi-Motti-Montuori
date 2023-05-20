@@ -178,10 +178,20 @@ public class GUI implements View {
             if(nPage==2) {
                 lsc.setText(msg);
             }else if(nPage==3) {
-                gsc.newMessage(msg);
+                gsc.setIngameEvents(msg);
             }
         });
     }
+
+    @Override
+    public void playersTurn(String msg){
+        Platform.runLater(()->gsc.Turn(msg));
+    }
+    @Override
+    public void showChat(String msg) {
+        Platform.runLater(()->gsc.newMessage(msg));
+    }
+
 
     @Override
     public void help() {
