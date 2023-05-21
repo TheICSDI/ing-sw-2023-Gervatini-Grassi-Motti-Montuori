@@ -219,30 +219,9 @@ public class CLI implements View{
         System.out.println(message);
     }
 
-    @Override
-    public void pickTiles(int lobby_id, Position pos){
-
-    }
 
     @Override
-    public void selectOrder(int lobby_id, List<Integer> order){
-
-    }
-
-    @Override
-    public void selectColumn(int lobby_id, int col){
-
-    }
-
-    @Override
-    public void updateBoard(int lobby_id, Board board){
-
-    }
-
-    // void endGame(int lobbyId, List<PlayerScore> scores); // da controllare input
-
-    @Override
-    public void updateLobby(int lobby_id, List<String> players){
+    public void endGame() {
 
     }
 
@@ -285,29 +264,9 @@ public class CLI implements View{
                 exit (WIP)\u001B[0m""");
     }
 
-
     @Override
     public String getInput() {
         Scanner input=new Scanner(System.in);
         return input.nextLine();
     }
-
-    /*@Override
-    public void setNamePage(Stage stage) {
-
-    }*/
-
-    /*
-    Se passiamo direttamete Tile[][] nei messaggi non serve più questa parte
-    @Deprecated
-    public static Tile[][] recreateShelf(type[][] simpleShelf){
-        Tile[][] shelf=new Tile[simpleShelf.length][simpleShelf[0].length];
-        for (int i = 0; i < simpleShelf.length; i++) {
-            for (int j = 0; j < simpleShelf[0].length; j++) {
-                shelf[i][j]=new Tile(String.valueOf(simpleShelf[i][j]));
-            }
-        }
-        return shelf;
-    }*/
-
 }

@@ -6,10 +6,7 @@ import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.view.GUI.SceneController.ShowMainController;
-import it.polimi.ingsw.view.GUI.SceneController.gameSceneController;
-import it.polimi.ingsw.view.GUI.SceneController.lobbySceneController;
-import it.polimi.ingsw.view.GUI.SceneController.nameSceneController;
+import it.polimi.ingsw.view.GUI.SceneController.*;
 import it.polimi.ingsw.view.View;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +32,7 @@ public class GUI implements View {
     public nameSceneController nsc;
     public lobbySceneController lsc;
     public gameSceneController gsc;
+    public endSceneController esc;
     private Stage primaryStage;
 
     @Override
@@ -93,6 +91,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void startGame(String message) {
+        Platform.runLater(()->openGameScene());
+    }
+
+    @Override
     public void showBoard(Tile[][] board) {
         Platform.runLater(() -> gsc.showBoard(board));
     }
@@ -108,7 +111,7 @@ public class GUI implements View {
     }
 
     @Override
-    public void showChosenTiles(List<Tile> tiles,boolean toOrder) {
+    public void showChosenTiles(List<Tile> tiles, boolean toOrder) {
         Platform.runLater(() -> gsc.showChosenTiles(tiles,toOrder));
     }
 
@@ -121,6 +124,7 @@ public class GUI implements View {
     public void showOthers(Map<String, Player> others) {
 
     }
+
     @Override
     public void updateOthers(Map<String,Player> others){
         Platform.runLater(() ->gsc.showOthers(others));
@@ -136,33 +140,8 @@ public class GUI implements View {
     }
 
     @Override
-    public void startGame(String message) {
-        Platform.runLater(()->openGameScene());
-    }
-
-    @Override
-    public void pickTiles(int lobby_id, Position pos) {
-
-    }
-
-    @Override
-    public void selectOrder(int lobby_id, List<Integer> order) {
-
-    }
-
-    @Override
-    public void selectColumn(int lobby_id, int col) {
-
-    }
-
-    @Override
-    public void updateBoard(int lobby_id, Board board) {
-
-    }
-
-    @Override
-    public void updateLobby(int lobby_id, List<String> players) {
-
+    public void endGame() {
+        Platform.runLater(()->openEndScene());
     }
 
     @Override
@@ -211,7 +190,6 @@ public class GUI implements View {
             }
             return message;
         }
-
     }
 
     /**
@@ -275,12 +253,31 @@ public class GUI implements View {
         } catch (Exception ignored) {
         }
         gsc = loader.getController();
-        Platform.runLater(()->gsc.initialize());
+        Platform.runLater(()-> gsc.initialize());
         //stage.setFullScreen(true);
         stage.setX(0);
         stage.setY(0);
         stage.setResizable(false);
         nPage=3;
+        stage.setFullScreenExitHint("");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    private void openEndScene(){
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = null;
+        loader.setLocation(getClass().getResource("/fxml/test_2.fxml"));
+        try {
+            root = loader.load();
+        } catch (Exception ignored) {
+        }
+        esc = loader.getController();
+        //stage.setFullScreen(true);
+        stage.setX(0);
+        stage.setY(0);
+        stage.setResizable(false);
+        nPage=4;
         stage.setFullScreenExitHint("");
         stage.setScene(new Scene(root));
         stage.show();

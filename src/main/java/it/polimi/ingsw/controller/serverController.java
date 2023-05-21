@@ -232,7 +232,7 @@ public class serverController {
       if(gameController.allPlayers.containsKey(mex.getUsername())){
           //Nickname already taken
           reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);//TODO funziona ma a volte tira una serie di errori così potente che mi esplode il pc
-      }else{
+      } else {
           //Nickname available
           reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
           gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername()));
@@ -269,7 +269,7 @@ public class serverController {
          case SC -> mex = new SelectColumnMessage(input);
          case C -> mex = ChatMessage.decrypt(input);
          case CA -> mex = BroadcastMessage.decrypt(input);
-         case PING-> {
+         case PING -> {
             mex = PingMessage.decrypt(input);
             connections.get(mex.getUsername()).addPing();
             sendMessage(new PingMessage(""), mex.getUsername());

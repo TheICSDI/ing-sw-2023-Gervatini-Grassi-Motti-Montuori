@@ -296,4 +296,5 @@ public class clientController{
     public void setIdGame(int idGame) {
         this.idGame = idGame;
     }
+    public String getNickname(){return this.nickname;}
 }

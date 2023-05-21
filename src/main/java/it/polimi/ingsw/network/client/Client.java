@@ -152,8 +152,11 @@ public class Client extends Application {
                 reply=BroadcastMessage.decrypt(message);
                 virtualView.showChat(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
             }
-            case ENDGAME -> controller.setIdGame(0);
-            case PING ->{
+            case ENDGAME -> {
+                controller.setIdGame(0);
+                virtualView.endGame();
+            }
+            case PING -> {
                 //RMI
                 ping++;
                 TimeUnit.SECONDS.sleep(pingTime);
@@ -205,7 +208,6 @@ public class Client extends Application {
 
     /** It starts the connection based on the client's decision. */
     public static void main(String[] args) throws IOException {
-        String connectionType = null;
         /*
         boolean iscli = false;
 
@@ -229,8 +231,8 @@ public class Client extends Application {
         }
          */
         Scanner input = new Scanner(System.in);
-        //String connectionType;
-        String viewType;
+        String connectionType = null;
+        String viewType = null;
         //TODO dovrebbe essere in View?
         do {
             System.out.println("""
@@ -238,25 +240,25 @@ public class Client extends Application {
                 [1]: for CLI
                 [2]: for GUI""");
 
-            //viewType = input.next();
-            viewType="2";
+            viewType = input.next();
+            //viewType="2";
         }while(!(viewType.equals("1") || viewType.equals("2")));
         do {
             System.out.println("""
                 Choose connection type:\s
                 [1]: for Socket
                 [2]: for RMI""");
-            //connectionType = input.next();
-            connectionType="1";
+            connectionType = input.next();
+            //connectionType="1";
         }while(!(connectionType.equals("1") || connectionType.equals("2")));
         if(viewType.equals("2")){
-            virtualView=new GUI();
+            virtualView = new GUI();
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(()-> {
                 launch(args);
             });
         }else{
-            virtualView=new CLI();
+            virtualView = new CLI();
         }
         if (connectionType.equals("1")) {//da aggiungere lo switch da gui
             socket();

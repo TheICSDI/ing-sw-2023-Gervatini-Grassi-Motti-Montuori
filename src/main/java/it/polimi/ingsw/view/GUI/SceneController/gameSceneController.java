@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-//TODO CHAT, SCHERMATA DI ENDGAME, PUNTEGGI SULLE COMMON
+//TODO SCHERMATA DI ENDGAME, PUNTEGGI SULLE COMMON
 public class gameSceneController {
     @FXML
     public Label YourName;
@@ -308,8 +308,7 @@ public class gameSceneController {
     @FXML
     public void pickTiles(ActionEvent actionEvent) {
         StringBuilder pt= new StringBuilder("pt");
-        for (Position p:
-                Chosen) {
+        for (Position p: Chosen) {
             pt.append(" ").append(p.getY()).append(" ").append(p.getX());
         }
         System.out.println(pt);
@@ -317,8 +316,7 @@ public class gameSceneController {
             GUI.message= String.valueOf(pt);
             GUI.Lock.notifyAll();
         }
-        for (Position p:
-             Chosen) {
+        for (Position p: Chosen) {
             Node node = this.board.getChildren().stream()
                     .filter(child -> GridPane.getColumnIndex(child) == p.getY() && GridPane.getRowIndex(child) == p.getX())
                     .findFirst()
@@ -329,7 +327,7 @@ public class gameSceneController {
             }
             toDes.setStyle("");
         }
-        Chosen=new ArrayList<>();
+        Chosen = new ArrayList<>();
     }
 
     @FXML
@@ -363,7 +361,6 @@ public class gameSceneController {
                         }
                         chosenTiles.getChildren().remove(toCancel);
                         if (tilesOrdered == pickedTiles) {
-
                             StringBuilder so = new StringBuilder("so");
                             for (int o :
                                     newOrder) {
@@ -383,7 +380,7 @@ public class gameSceneController {
                 }
                 chosenTiles.add(Tile, i, 0);
             }
-            toShow=false;
+            toShow = false;
         }
     }
 
@@ -426,6 +423,7 @@ public class gameSceneController {
 
         chat.getChildren().add(messageLabel);
     }
+
     public void Turn(String msg){
         turn.setText(msg);
     }

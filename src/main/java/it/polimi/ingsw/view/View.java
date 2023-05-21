@@ -27,12 +27,7 @@ public interface View {
     void joinLobby(int lobby_id);
     void exitLobby(int lobby_id);
     void startGame(String message);
-    void pickTiles(int lobby_id, Position pos);
-    void selectOrder(int lobby_id, List<Integer> order);
-    void selectColumn(int lobby_id, int col);
-    void updateBoard(int lobby_id, Board board);
-    // void endGame(int lobbyId, List<PlayerScore> scores); // da controllare input
-    void updateLobby(int lobby_id, List<String> players);
+    void endGame(); // da controllare input
     void displayError(String msg);
     void displayMessage(String msg);
     void playersTurn(String msg);

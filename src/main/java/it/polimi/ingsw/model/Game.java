@@ -209,13 +209,13 @@ public class Game {
         }
         for (Player p : players) {
             serverController.sendMessage(new ReplyMessage("Players' total points: ", Action.INGAMEEVENT), p.getNickname());
-            for (Player ptp:players) {
-                serverController.sendMessage(new ReplyMessage(ptp.getNickname() + ": " + ptp.getTotalPoints(), Action.INGAMEEVENT), p.getNickname());
+            for (Player pp: players) {
+                serverController.sendMessage(new ReplyMessage(pp.getNickname() + ": " + pp.getTotalPoints(), Action.INGAMEEVENT), p.getNickname());
             }
         }
         for (Player p : players) {
-            serverController.sendMessage(new ReplyMessage("The winner is " + calculateWinner().getNickname(),Action.INGAMEEVENT), p.getNickname());
-            serverController.sendMessage(new ReplyMessage("",Action.ENDGAME), p.getNickname());
+            serverController.sendMessage(new ReplyMessage("The winner is " + calculateWinner().getNickname(), Action.INGAMEEVENT), p.getNickname());
+            serverController.sendMessage(new ReplyMessage("", Action.ENDGAME), p.getNickname());
             gameController.allGames.remove(id);
         }
     }
