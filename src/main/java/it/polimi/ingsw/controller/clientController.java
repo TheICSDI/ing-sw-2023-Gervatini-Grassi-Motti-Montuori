@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class clientController{
+    //TODO: secondo me non serve idMex
     private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
     private String nickname;
     private int idLobby=0;
@@ -23,38 +24,6 @@ public class clientController{
     private boolean firstTurn=false;
     private PersonalCard simpleGoal;
     public List<Integer> cc=new ArrayList<>();
-
-
-    public PersonalCard getSimpleGoal(){return this.simpleGoal;}
-
-    public void setSimpleGoal(int id) {
-        this.simpleGoal = new PersonalCard(id);
-    }
-
-    public boolean isFirstTurn() {
-        return firstTurn;
-    }
-
-    public void setFirstTurn(boolean firstTurn) {
-        this.firstTurn = firstTurn;
-    }
-
-    public int getIdLobby() {
-        return idLobby;
-    }
-
-    public void setIdLobby(int idLobby) {
-        this.idLobby = idLobby;
-    }
-
-
-    public int getIdGame() {
-        return idGame;
-    }
-
-    public void setIdGame(int idGame) {
-        this.idGame = idGame;
-    }
 
     public clientController(String nickname){
         this.nickname = nickname;
@@ -285,30 +254,46 @@ public class clientController{
         return a.getY() == b.getY() && ((a.getX() == b.getX() - 1) || (a.getX() == b.getX() + 1));
     }
 
-
+    /** It elaborates the nickname from a client connected via RMI.*/
     public void getName(String input) throws RemoteException {
-
         if(!SetNameMessage.decrypt(input).isAvailable()){
-            //System.out.println("Nickname is already taken!");
             Client.getVirtualView().printUsername(SetNameMessage.decrypt(input).getUsername(),SetNameMessage.decrypt(input).isAvailable());
             Client.setName();
-        }else{
+        } else {
             Client.getVirtualView().printUsername(SetNameMessage.decrypt(input).getUsername(),SetNameMessage.decrypt(input).isAvailable());
-            this.nickname=SetNameMessage.decrypt(input).getUsername();
+            this.nickname = SetNameMessage.decrypt(input).getUsername();
         }
     }
 
+    /** It elaborates a message from a client connected via RMI. */
     public void getMessage(String m) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
         Client.elaborate(m);
     }
 
-
-
+    //SETTER and GETTER methods
     public Map<String,Player> getOthers() {
         return others;
     }
-
-    public String getNickname() {
-        return nickname;
+    public PersonalCard getSimpleGoal(){return this.simpleGoal;}
+    public void setSimpleGoal(int id) {
+        this.simpleGoal = new PersonalCard(id);
+    }
+    public boolean isFirstTurn() {
+        return firstTurn;
+    }
+    public void setFirstTurn(boolean firstTurn) {
+        this.firstTurn = firstTurn;
+    }
+    public int getIdLobby() {
+        return idLobby;
+    }
+    public void setIdLobby(int idLobby) {
+        this.idLobby = idLobby;
+    }
+    public int getIdGame() {
+        return idGame;
+    }
+    public void setIdGame(int idGame) {
+        this.idGame = idGame;
     }
 }

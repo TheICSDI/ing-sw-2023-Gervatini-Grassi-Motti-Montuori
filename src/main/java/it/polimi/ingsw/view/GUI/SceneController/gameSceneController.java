@@ -46,12 +46,11 @@ public class gameSceneController {
     @FXML
     public TextField Chat;
     private boolean firstOthers;
-
     private final int dim = 9;
     private int pickedTiles;
     private int tilesOrdered;
     private boolean toShow=true;
-    private List<Integer> newOrder=new ArrayList<>();
+    private List<Integer> newOrder = new ArrayList<>();
     @FXML
     public Button pickTiles;
     @FXML
@@ -72,7 +71,7 @@ public class gameSceneController {
     public Label OrderText;
     @FXML
     public GridPane orderedTiles;
-    private List<Position> Chosen=new ArrayList<>();
+    private List<Position> Chosen = new ArrayList<>();
     private final Tile[][] localBoard = new Tile[dim][dim];
     @FXML
     public GridPane board;
@@ -96,6 +95,7 @@ public class gameSceneController {
             }
         }
     }
+
     public void initialize(){
         YourName.setText(GUI.Name);
         othersShelf.add(p2shelf);

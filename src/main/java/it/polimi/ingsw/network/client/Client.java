@@ -1,4 +1,4 @@
-/** It represents a client able to establish connections with a sever, both via socket and RMI (exclusive).
+/** It represents a client that is able to establish connection with a sever, both via socket and RMI (exclusive).
  * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 package it.polimi.ingsw.network.client;
 
@@ -42,9 +42,9 @@ public class Client extends Application {
     private static RMIconnection stub;
     private static RMIclientImpl RMIclient;
     private static View virtualView;
-    private static int ping=0;
+    private static int ping = 0;
     private static final int pingTime = 30;
-    public static boolean connected=true;
+    public static boolean connected = true;
 
 
     /*
@@ -75,29 +75,26 @@ public class Client extends Application {
         }
     }
 
+    /** It elaborates the given message and creates the equivalent message type based on the action.
+     * It interacts with the instance of clientController and with the virtualView. */
     public static void elaborate(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
         ReplyMessage reply;
         Action replyAction = ReplyMessage.identify(message);
         switch (replyAction) {
-            //Crate a lobby
             case CREATELOBBY -> {
                 reply = CreateLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
-                //virtualView.createLobby(reply.getMessage());
                 virtualView.displayMessage(reply.getMessage());
             }
-            //Join a lobby given its id
             case JOINLOBBY -> {
                 reply = JoinLobbyReplyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
                 virtualView.displayMessage(reply.getMessage());
             }
-            //List of available lobbies
             case SHOWLOBBY -> {
                 reply = ShowLobbyReplyMessage.decrypt(message);
                 virtualView.showLobby(((ShowLobbyReplyMessage)reply).getLobbies());
             }
-            //Start the game
             case STARTGAME -> {
                 controller.setIdLobby(0);
                 reply = StartGameReplyMessage.decrypt(message);
@@ -110,9 +107,7 @@ public class Client extends Application {
                 virtualView.showBoard(reply.getSimpleBoard());
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
-                    //virtualView.displayMessage("\n  Your personal goal");
                     virtualView.showPersonal(controller.getSimpleGoal());
-                    //virtualView.displayMessage("Common goals: ");
                     virtualView.showCommons(controller.cc);
                 }
             }
@@ -152,16 +147,12 @@ public class Client extends Application {
             case C -> {
                 reply = ChatMessage.decrypt(message);
                 virtualView.showChat(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
-                //virtualView.displayMessage(reply.getUsername() + ": " + ((ChatMessage)reply).getPhrase());
             }
             case CA -> {
                 reply=BroadcastMessage.decrypt(message);
                 virtualView.showChat(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
-                //virtualView.displayMessage(reply.getUsername() + ": " + ((BroadcastMessage)reply).getPhrase());
             }
-            case ENDGAME -> {
-                controller.setIdGame(0);
-            }
+            case ENDGAME -> controller.setIdGame(0);
             case PING ->{
                 //RMI
                 ping++;
@@ -172,9 +163,7 @@ public class Client extends Application {
                 reply = ReplyMessage.decrypt(message);
                 virtualView.displayError(reply.getMessage());
             }
-            default -> {
-                reply = ReplyMessage.decrypt(message);
-            }
+            default -> reply = ReplyMessage.decrypt(message);
         }
     }
 
@@ -204,7 +193,7 @@ public class Client extends Application {
             } else if(curr_action.equals(Action.SHOWOTHERS)){
                 virtualView.showOthers(controller.getOthers());
             } else {
-                //The message is sent
+                //The message is sent to the right output
                 if(socket) {
                     out.println(toSend);
                 } else {
