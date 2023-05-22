@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class lobbySceneController {
     @FXML
@@ -18,6 +19,8 @@ public class lobbySceneController {
     public ListView<String> Lobbies;
     @FXML
     public Button CreateLobby;
+    @FXML
+    public Button Refresh;
     @FXML
     public Label text;
     @FXML
@@ -48,13 +51,14 @@ public class lobbySceneController {
         }
     }
 
-    public void createLobby(ActionEvent actionEvent) {
+    public void createLobby() throws InterruptedException {
         synchronized (GUI.Lock) {
             GUI.message = "createlobby " + limit;
             GUI.Lock.notifyAll();
         }
-        showLobbies(gameController.allLobbies);
-        CreateLobby.setOnMouseClicked(event -> {showLobbies();});
+        //showLobbies(gameController.allLobbies);
+        TimeUnit.MILLISECONDS.sleep(250);
+        showLobbies();
     }
 
     public void setText(String text){
@@ -68,7 +72,7 @@ public class lobbySceneController {
         }
     }
 
-    public void Join() {
+    public void Join() throws InterruptedException {
         ObservableList<Integer> selectedIndices = this.Lobbies.getSelectionModel().getSelectedIndices();
         for(Integer o : selectedIndices){
             synchronized (GUI.Lock) {
@@ -76,8 +80,9 @@ public class lobbySceneController {
                 GUI.Lock.notifyAll();
             }
         }
-        showLobbies(gameController.allLobbies);
-        Join.setOnMouseClicked(event -> {showLobbies();});
+        //showLobbies(gameController.allLobbies);
+        TimeUnit.MILLISECONDS.sleep(250);
+        showLobbies();
     }
 
     public void setLimit() {
