@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.view.GUI.SceneController.*;
 import it.polimi.ingsw.view.View;
@@ -13,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -52,7 +49,7 @@ public class GUI implements View {
     @Override
     public String askUsername() {
         synchronized (NameLock) {
-            while (Name.equals("")) {
+            while (Name.equals("") || Name.charAt(0) == '\\') {
                 try {
                     NameLock.wait();
                 } catch (InterruptedException e) {
@@ -248,18 +245,17 @@ public class GUI implements View {
     private void openGameScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
-        loader.setLocation(getClass().getResource("/fxml/new_game_Gui.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/GameScene.fxml"));
         try {
             root = loader.load();
         } catch (Exception ignored) {
         }
         gsc = loader.getController();
-        Platform.runLater(()-> gsc.initialize());
-        stage.setFullScreen(true);
+        stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
-        stage.setResizable(true);
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setResizable(false);
+        //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=3;
         //stage.setFullScreenExitHint("");
         stage.setScene(new Scene(root));

@@ -73,13 +73,13 @@ public class nameSceneController implements Initializable {
     public void showName(String name){
         Information.setText("Nickname is not available!");
         Information.setFont(font);
-        /*GetNickname.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-padding: 5px;");//figo ma rompe tutto io boh
-        try {
+        //GetNickname.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-padding: 5px;");//figo ma rompe tutto io boh
+        /*try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
-        GetNickname.setStyle("");*/
+        }*/
+        //GetNickname.setStyle("");
     }
 
 

@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -20,13 +21,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.net.URL;
+import java.util.*;
 
 //TODO SCHERMATA DI ENDGAME, PUNTEGGI SULLE COMMON
-public class gameSceneController {
+public class gameSceneController implements Initializable {
     @FXML
     public Label YourName;
     @FXML
@@ -80,11 +81,11 @@ public class gameSceneController {
     @FXML
     private List<GridPane> othersShelf=new ArrayList<>();
     @FXML
-    public GridPane p2shelf;
+    public GridPane p2Shelf;
     @FXML
-    public GridPane p3shelf;
+    public GridPane p3Shelf;
     @FXML
-    public GridPane p4shelf;
+    public GridPane p4Shelf;
 
     /** It initialises the version of the local board to not_accessible type. */
     // Non ho capito quando lo chiama però se non lo metto non funziona :P
@@ -96,18 +97,21 @@ public class gameSceneController {
         }
     }
 
-    public void initialize(){
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         YourName.setText(GUI.Name);
-        othersShelf.add(p2shelf);
-        othersShelf.add(p3shelf);
-        othersShelf.add(p4shelf);
+        othersShelf.add(p2Shelf);
+        othersShelf.add(p3Shelf);
+        othersShelf.add(p4Shelf);
         firstOthers=true;
         Chat.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 sendChatMessage();
             }
         });
+        scrollChat.setMaxHeight(Double.MAX_VALUE);
     }
+
 
     /** It updates the board on the panel with the right image. */
     @FXML
@@ -312,7 +316,8 @@ public class gameSceneController {
     @FXML
     public void pickTiles(ActionEvent actionEvent) {
         StringBuilder pt= new StringBuilder("pt");
-        for (Position p: Chosen) {
+        for (Position p:
+                Chosen) {
             pt.append(" ").append(p.getY()).append(" ").append(p.getX());
         }
         System.out.println(pt);
@@ -320,9 +325,10 @@ public class gameSceneController {
             GUI.message= String.valueOf(pt);
             GUI.Lock.notifyAll();
         }
-        for (Position p: Chosen) {
+        for (Position p:
+                Chosen) {
             Node node = this.board.getChildren().stream()
-                    .filter(child -> GridPane.getColumnIndex(child) == p.getY()+1 && GridPane.getRowIndex(child) == p.getX()+1)
+                    .filter(child -> GridPane.getColumnIndex(child) == p.getY() && GridPane.getRowIndex(child) == p.getX())
                     .findFirst()
                     .orElse(null);
             HBox toDes = null;
@@ -331,7 +337,7 @@ public class gameSceneController {
             }
             toDes.setStyle("");
         }
-        Chosen = new ArrayList<>();
+        Chosen=new ArrayList<>();
     }
 
     @FXML
@@ -352,6 +358,7 @@ public class gameSceneController {
                 if (toOrder) {
                     int finalI = i;
                     Tile.setOnMouseClicked(event -> {
+                        Tile.setOnMouseClicked(null);
                         orderedTiles.add(Tile, tilesOrdered, 0);
                         newOrder.add(finalI + 1);
                         tilesOrdered++;
@@ -424,8 +431,8 @@ public class gameSceneController {
     public void newMessage(String message){
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
-
-        chat.getChildren().add(messageLabel);
+        messageLabel.setTextFill(Paint.valueOf("#ffffff"));
+        chat.getChildren().add(0,messageLabel);
     }
 
     public void Turn(String msg){
@@ -437,14 +444,17 @@ public class gameSceneController {
     }
 
     public void sendChatMessage(){
+
         String message= Chat.getText();
         Chat.setText("");
-        if (message.charAt(0)!='c'){
-            message= "ca " + message;
-        }
-        synchronized (GUI.Lock){
-            GUI.message= message;
-            GUI.Lock.notifyAll();
+        if(!Objects.equals(message, "")) {
+            if (message.charAt(0) != 'c') {
+                message = "ca " + message;
+            }
+            synchronized (GUI.Lock) {
+                GUI.message = message;
+                GUI.Lock.notifyAll();
+            }
         }
     }
 }
