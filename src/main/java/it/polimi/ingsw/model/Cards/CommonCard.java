@@ -4,7 +4,7 @@ package it.polimi.ingsw.model.Cards;
 import it.polimi.ingsw.model.Player;
 
 public class CommonCard{
-    private int points = 8;
+    private int points;
 
     public int getPoints() {
         return points;
@@ -17,9 +17,10 @@ public class CommonCard{
      *
      * @param currStrategy type of card that has to be created.
      * @param first true only if is the first card of the game, false otherwise. */
-    public CommonCard(CCStrategy currStrategy, boolean first){
+    public CommonCard(CCStrategy currStrategy, boolean first, int nPlayers){
         this.strategy = currStrategy;
         this.firstCard = first;
+        this.points=2 * nPlayers;
     }
 
     /** Controls if the given player has completed the common goal card.

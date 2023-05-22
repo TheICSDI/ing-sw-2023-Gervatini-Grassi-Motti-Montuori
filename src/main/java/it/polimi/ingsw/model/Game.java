@@ -58,9 +58,10 @@ public class Game {
         }
 
         //Shuffle the common goal cards to randomically draws two of them
+
         Collections.shuffle(allCC);
-        CommonCards.add(new CommonCard(allCC.get(0),true));
-        CommonCards.add(new CommonCard(allCC.get(1),false));
+        CommonCards.add(new CommonCard(allCC.get(0),true , players.size()));
+        CommonCards.add(new CommonCard(allCC.get(1),false , players.size()));
         ccId.add(allCC.get(0).getId());
         ccId.add(allCC.get(1).getId());
     }

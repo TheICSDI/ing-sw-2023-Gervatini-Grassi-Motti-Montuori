@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -247,19 +248,20 @@ public class GUI implements View {
     private void openGameScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
-        loader.setLocation(getClass().getResource("/fxml/GameScene.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/new_game_Gui.fxml"));
         try {
             root = loader.load();
         } catch (Exception ignored) {
         }
         gsc = loader.getController();
         Platform.runLater(()-> gsc.initialize());
-        //stage.setFullScreen(true);
+        stage.setFullScreen(true);
         stage.setX(0);
         stage.setY(0);
-        stage.setResizable(false);
+        stage.setResizable(true);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=3;
-        stage.setFullScreenExitHint("");
+        //stage.setFullScreenExitHint("");
         stage.setScene(new Scene(root));
         stage.show();
     }
