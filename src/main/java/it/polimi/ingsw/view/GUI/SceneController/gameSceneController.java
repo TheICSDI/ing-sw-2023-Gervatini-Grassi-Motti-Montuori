@@ -117,19 +117,19 @@ public class gameSceneController implements Initializable {
     @FXML
     public void showBoard(Tile[][] board){
         //For each element in the board
+        //this.board.getChildren().clear();
         for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
-                //because the gui's board goes form 1 to 9 instead of 0 to 8
                 //If the current tile is accessible and different from the local board
                 //its corresponding image is set
                 if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) &&
                         (!board[i][j].getCategory().equals(this.localBoard[i][j].getCategory()))){
                     ImageView Tile = new ImageView();
                     HBox pane= new HBox();
-                    pane.setMaxWidth(49);
-                    pane.setMaxHeight(49);
-                    Tile.setFitHeight(45);
-                    Tile.setFitWidth(45);
+                    pane.setMaxWidth(47);
+                    pane.setMaxHeight(47);
+                    Tile.setFitHeight(43);
+                    Tile.setFitWidth(43);
                     //If the tile is now empty the previous image is removed
                     if(board[i][j].getCategory().equals(type.EMPTY) &&
                             !(this.localBoard[i][j].getCategory().equals(type.EMPTY))){
@@ -137,13 +137,14 @@ public class gameSceneController implements Initializable {
                         int finalI1 = i;
                         int finalJ1 = j;
                         Node node = this.board.getChildren().stream()
-                                .filter(child -> GridPane.getColumnIndex(child) == Chosen.get(finalJ1).getY() && GridPane.getRowIndex(child) == Chosen.get(finalI1).getX())
+                                .filter(child -> GridPane.getColumnIndex(child) == finalI1 && GridPane.getRowIndex(child) == finalJ1)
                                 .findFirst()
                                 .orElse(null);
 
                         if (node instanceof HBox) {
                             pane = (HBox) node;
                         }
+                        //this.board.add(Tile, i, j);
                         this.board.getChildren().remove(pane);
                     } else {
                         Image image = new Image(board[i][j].getImage());
@@ -156,8 +157,10 @@ public class gameSceneController implements Initializable {
                         HBox finalPane = pane;
                         pane.setOnMouseClicked(event -> {
                             boolean alreadyChosen=false;
-                            for (Position p: Chosen) {
-                                if(p.getY()==finalI && p.getX()==finalJ) {
+                            for (Position p:
+                                    Chosen) {
+                                if(p.getY()==finalI && p.getX()==finalJ)
+                                {
                                     finalPane.setStyle("");
                                     Chosen.remove(p);
                                     alreadyChosen=true;
@@ -167,27 +170,21 @@ public class gameSceneController implements Initializable {
                             if(!alreadyChosen){
                                 finalPane.setStyle("-fx-background-color: #ff0000;");
                                 if(Chosen.size()==3) {
-                                    Position firstPosition = Chosen.get(0);
                                     Node node = this.board.getChildren().stream()
-                                            .filter(child -> {
-                                                Integer columnIndex = GridPane.getColumnIndex(child);
-                                                Integer rowIndex = GridPane.getRowIndex(child);
-                                                return columnIndex != null && rowIndex != null && columnIndex == firstPosition.getY() && rowIndex == firstPosition.getX();
-                                            })
+                                            .filter(child -> GridPane.getColumnIndex(child) == Chosen.get(0).getY() && GridPane.getRowIndex(child) == Chosen.get(0).getX())
                                             .findFirst()
                                             .orElse(null);
-                                    GridPane toDes = null;
-                                    if (node instanceof GridPane) {
-                                        toDes = (GridPane) node;
+                                    HBox toDes = null;
+                                    if (node instanceof HBox) {
+                                        toDes = (HBox) node;
                                     }
                                     toDes.setStyle("");
                                     Chosen.remove(0);
                                 }
                                 Chosen.add(new Position(finalJ, finalI));
-                                System.out.println("x: " + finalJ + " y: " + finalI);
                             }
                         });
-                        this.board.add(pane, i, j );
+                        this.board.add(pane, i, j);
                         this.board.setAlignment(Pos.CENTER);
                     }
                     this.localBoard[i][j] = board[i][j];
@@ -196,22 +193,21 @@ public class gameSceneController implements Initializable {
         }
     }
 
-
     @FXML
-    public void showShelf(Tile[][] shelf){
+    public void showShelf(Tile[][] shelf) {
         //reset variables for picked tiles
         ChosenText.setVisible(false);
         OrderText.setVisible(false);
         chosenTiles.getChildren().clear();
         orderedTiles.getChildren().clear();
-        toShow=true;
+        toShow = true;
 
         for (int i = 0; i < shelf.length; i++) {
             for (int j = 0; j < shelf[0].length; j++) {
-                if(!shelf[i][j].getCategory().equals(type.EMPTY)) {
+                if (!shelf[i][j].getCategory().equals(type.EMPTY)) {
                     ImageView Tile = new ImageView();
-                    Tile.setFitHeight(35);
-                    Tile.setFitWidth(35);
+                    Tile.setFitHeight(34);
+                    Tile.setFitWidth(34);
                     Image image = new Image(shelf[i][j].getImage());
                     Tile.setImage(image);
                     this.myShelf.setAlignment(Pos.CENTER);
