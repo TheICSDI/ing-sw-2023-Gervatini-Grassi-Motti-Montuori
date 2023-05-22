@@ -20,7 +20,7 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="root" stylesheets="@../CSS/GameBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.SceneController.gameSceneController">
    <children>
-      <BorderPane layoutX="245.0" layoutY="130.0" prefHeight="625.0" prefWidth="831.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="245.0" layoutY="130.0" prefHeight="625.0" prefWidth="831.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <top>
             <FlowPane prefHeight="192.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
                <children>
@@ -110,8 +110,15 @@
                            </image>
                         </ImageView>
                      </children>
+                     <FlowPane.margin>
+                        <Insets />
+                     </FlowPane.margin>
                   </Pane>
-                  <Pane prefHeight="220.0" prefWidth="0.0" />
+                  <Button fx:id="pickTiles" mnemonicParsing="false" onAction="#pickTiles" snapToPixel="false" text="Pick TIles">
+                     <FlowPane.margin>
+                        <Insets left="607.0" />
+                     </FlowPane.margin>
+                  </Button>
                </children>
             </FlowPane>
          </top>
@@ -124,7 +131,7 @@
                      </children></Pane>
                   <Pane>
                      <children>
-                        <GridPane fx:id="myShelf" gridLinesVisible="true" hgap="2.0" layoutX="1.0" layoutY="11.0" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
+                        <GridPane fx:id="myShelf" hgap="2.0" layoutX="2.0" layoutY="11.0" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="ALWAYS" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="32.0" minWidth="32.0" prefWidth="32.0" />
@@ -169,12 +176,11 @@
                <children>
                   <Pane prefHeight="192.0" prefWidth="1091.0">
                      <children>
-                        <Button fx:id="pickTiles" layoutX="632.0" layoutY="-80.0" mnemonicParsing="false" onAction="#pickTiles" text="Pick TIles" />
                         <ImageView fx:id="common2" fitHeight="115.0" fitWidth="156.0" layoutX="33.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="common1" fitHeight="115.0" fitWidth="156.0" layoutX="265.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
                         <Pane layoutX="495.0" layoutY="-8.0" prefHeight="201.0" prefWidth="346.0">
                            <children>
-                              <ScrollPane fx:id="scrollChat" prefHeight="159.0" prefWidth="346.0">
+                              <ScrollPane fx:id="scrollChat" hbarPolicy="NEVER" prefHeight="159.0" prefWidth="346.0">
                                  <content>
                                     <VBox fx:id="chat" prefHeight="160.0" prefWidth="345.0">
                                        <children>
@@ -222,7 +228,7 @@
          <center>
             <BorderPane maxHeight="288.0" maxWidth="1217.0" minHeight="288.0" minWidth="588.0" prefHeight="288.0" prefWidth="1217.0" BorderPane.alignment="CENTER">
                <left>
-                  <Pane maxHeight="288.0" maxWidth="448.0" minHeight="288.0" minWidth="0.0" mouseTransparent="true" prefHeight="288.0" prefWidth="448.0" BorderPane.alignment="CENTER">
+                  <Pane maxHeight="288.0" maxWidth="448.0" minHeight="288.0" minWidth="0.0" mouseTransparent="true" prefHeight="288.0" prefWidth="282.0" BorderPane.alignment="CENTER">
                      <children>
                         <ImageView fx:id="personal" fitHeight="180.0" fitWidth="156.0" layoutX="61.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" />
                         <Label layoutX="60.0" layoutY="60.0" text="Your Personal goal:" />
@@ -265,23 +271,19 @@
                            </children>
                         </Pane>
                      </children>
+                     <BorderPane.margin>
+                        <Insets right="210.0" />
+                     </BorderPane.margin>
                   </FlowPane>
                </center>
-               <top>
-                  <Pane prefHeight="9.0" prefWidth="488.0" BorderPane.alignment="CENTER" />
-               </top>
-               <bottom>
-                  <Pane prefHeight="17.0" prefWidth="488.0" BorderPane.alignment="CENTER" />
-               </bottom>
-               <right>
-                  <Pane maxHeight="288.0" maxWidth="470.0" minHeight="288.0" minWidth="100.0" mouseTransparent="true" opacity="0.0" prefHeight="288.0" prefWidth="470.0" BorderPane.alignment="CENTER" />
-               </right>
+               <BorderPane.margin>
+                  <Insets right="47.0" />
+               </BorderPane.margin>
             </BorderPane>
          </center>
          <right>
             <FlowPane maxHeight="336.0" minWidth="170.0" orientation="VERTICAL" prefHeight="300.0" prefWidth="208.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane minWidth="160.0" prefHeight="47.0" prefWidth="177.0" />
                   <Pane prefHeight="220.0" prefWidth="143.0">
                      <children>
                         <GridPane fx:id="p3shelf" hgap="2.0" layoutX="1.0" layoutY="16.0" maxHeight="192.0" maxWidth="160.0" minHeight="180.0" minWidth="160.0" prefHeight="180.0" prefWidth="160.0">
@@ -307,12 +309,17 @@
                            </image>
                         </ImageView>
                      </children>
+                     <FlowPane.margin>
+                        <Insets top="47.0" />
+                     </FlowPane.margin>
                   </Pane>
-                  <Pane minWidth="146.0" prefHeight="72.0" prefWidth="146.0" />
                </children>
                <padding>
                   <Insets left="20.0" />
                </padding>
+               <BorderPane.margin>
+                  <Insets right="10.0" />
+               </BorderPane.margin>
             </FlowPane>
          </right>
       </BorderPane>
