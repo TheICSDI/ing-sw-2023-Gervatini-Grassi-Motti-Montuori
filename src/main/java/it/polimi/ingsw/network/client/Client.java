@@ -208,59 +208,29 @@ public class Client extends Application {
 
     /** It starts the connection based on the client's decision. */
     public static void main(String[] args) throws IOException {
-        /*
         boolean iscli = false;
-
+        Scanner input = new Scanner(System.in);
+        String connectionType = null;
+        String viewType = null;
+        virtualView = null;
         for (String arg : args) {
             if (arg.equals("--cli") || arg.equals("-c")) {
                 iscli = true;
                 break;
             }
         }
-
-        if (iscli) {
+        if(iscli){
             virtualView = new CLI();
-            connectionType = virtualView.showMain();
-        } else {
-            virtualView = new GUI();
-            Application.launch(JFXStart.class);
-        if (connectionType.equals("1")) {//da aggiungere lo switch da gui
-            socket();
-        } else {
-            RMI();
         }
-         */
-        Scanner input = new Scanner(System.in);
-        String connectionType = null;
-        String viewType = null;
-        //TODO dovrebbe essere in View?
-        do {
-            System.out.println("""
-                Choose connection type:\s
-                [1]: for CLI
-                [2]: for GUI""");
-
-            //viewType = input.next();
-            viewType="2";
-        }while(!(viewType.equals("1") || viewType.equals("2")));
-        do {
-            System.out.println("""
-                Choose connection type:\s
-                [1]: for Socket
-                [2]: for RMI""");
-            //connectionType = input.next();
-            connectionType="1";
-        }while(!(connectionType.equals("1") || connectionType.equals("2")));
-        if(viewType.equals("2")){
+        else{
             virtualView = new GUI();
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(()-> {
                 launch(args);
             });
-        }else{
-            virtualView = new CLI();
         }
-        if (connectionType.equals("1")) {//da aggiungere lo switch da gui
+        connectionType = virtualView.chooseConnection();
+        if (connectionType.equals("1")) {
             socket();
         } else {
             RMI();
@@ -375,7 +345,7 @@ public class Client extends Application {
 
     @Override
     public void start(Stage stage) {
-        ((GUI)virtualView).startGUI(stage);
+        ((GUI)virtualView).startGuiConnection(stage);
     }
 
     //GETTER/SETTER

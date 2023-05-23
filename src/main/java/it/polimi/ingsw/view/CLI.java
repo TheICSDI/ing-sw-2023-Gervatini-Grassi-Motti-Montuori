@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 
 import java.io.PrintStream;
@@ -25,7 +23,7 @@ public class CLI implements View{
     }
 
     @Override
-    public String showMain(){
+    public String chooseConnection(){
         out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
         String reply;
         do {

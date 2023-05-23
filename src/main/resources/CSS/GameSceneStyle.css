@@ -9,31 +9,16 @@
     -fx-opacity: 0.4;
 }
 
-/* Style for the GridPane */
-.GridPane {
-    -fx-background-color: #ffffff;
-    -fx-padding: 10px;
-}
-
 /* Style for the ImageView */
 .ImageView {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);
-}
-
-/* Style for all Buttons */
-.Button {
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-    -fx-border-width: 1 1 1 1;
-    -fx-border-color:#d7b97e;
-    -fx-background-color: transparent;
-    -fx-text-fill: #d7b97e;
 }
 
 /* Specific style for the 'pickTiles' Button */
 .ButtonPickTiles {
     -fx-border-color: #501b6c;
     -fx-background-color:  #d7b97e;
+    -fx-opacity: 0.8;
     -fx-border-width: 2 2 2 2;
     -fx-text-fill: #501b6c;
 }

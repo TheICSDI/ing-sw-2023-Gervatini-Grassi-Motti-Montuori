@@ -83,5 +83,10 @@ public class nameSceneController implements Initializable {
     }
 
 
+    public void setText(String text){
+        this.Information.setText(text);
+    }
+
+
 
 }

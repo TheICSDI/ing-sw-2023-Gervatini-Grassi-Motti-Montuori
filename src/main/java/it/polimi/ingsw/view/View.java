@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 
 import java.util.List;
@@ -12,7 +10,7 @@ import java.util.Map;
 
 public interface View {
 
-    String showMain();
+    String chooseConnection();
     String askUsername();
     void printUsername(String username, boolean isAvailable);
     void createLobby(String lobbyName/*, int maxPlayers*/);
@@ -34,6 +32,5 @@ public interface View {
     void showChat(String msg);
     void help();
     String getInput();
-
 }
 

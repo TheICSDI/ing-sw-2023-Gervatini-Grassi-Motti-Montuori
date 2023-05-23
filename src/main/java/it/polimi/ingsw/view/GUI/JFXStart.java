@@ -17,7 +17,7 @@ public class JFXStart extends Application {
         GUI view = new GUI();
         FXMLLoader loader = new FXMLLoader();
         //load the .fxml file
-        loader.setLocation(getClass().getResource("/fxml/show_start.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/ChooseConnectionScene.fxml"));
 
         Parent root= null;
 

@@ -16,10 +16,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1040.0" prefWidth="1700.0" styleClass="root" stylesheets="@../CSS/GameBackground.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.SceneController.gameSceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1040.0" prefWidth="1700.0" styleClass="root" stylesheets="@../CSS/GameSceneStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.SceneController.gameSceneController">
     <children>
-        <Pane opacity="0.4" prefHeight="1040.0" prefWidth="1700.0" style="-fx-background-color: #291700;" stylesheets="@../CSS/GameBackground.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1040.0" prefWidth="1700.0" stylesheets="@../CSS/GameBackground.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="20.0">
+        <Pane opacity="0.4" prefHeight="1040.0" prefWidth="1700.0" style="-fx-background-color: #291700;" stylesheets="@../CSS/GameSceneStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1040.0" prefWidth="1700.0" stylesheets="@../CSS/GameSceneStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="20.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="460.0" />
                 <ColumnConstraints hgrow="SOMETIMES" />
@@ -41,7 +41,7 @@
                <children>
                   <Pane>
                      <children>
-                            <GridPane fx:id="myShelf" hgap="8.0" layoutX="5.0" layoutY="-23.0" stylesheets="@../CSS/GameBackground.css" vgap="5.0">
+                            <GridPane fx:id="myShelf" hgap="8.0" layoutX="5.0" layoutY="-23.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="5.0">
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="33.0" minWidth="33.0" prefWidth="33.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />
@@ -93,7 +93,7 @@
                <children>
                   <Pane>
                      <children>
-                        <GridPane fx:id="p4Shelf" hgap="8.0" layoutX="5.0" layoutY="18.0" stylesheets="@../CSS/GameBackground.css" vgap="5.0">
+                        <GridPane fx:id="p4Shelf" hgap="8.0" layoutX="5.0" layoutY="18.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="5.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="33.0" minWidth="33.0" prefWidth="33.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />
@@ -154,7 +154,7 @@
                   </GridPane>
                   <Pane>
                      <children>
-                        <GridPane fx:id="p2Shelf" hgap="8.0" layoutX="5.0" layoutY="-21.0" stylesheets="@../CSS/GameBackground.css" vgap="5.0">
+                        <GridPane fx:id="p2Shelf" hgap="8.0" layoutX="5.0" layoutY="-21.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="5.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="33.0" minWidth="33.0" prefWidth="33.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />
@@ -196,7 +196,7 @@
                                 <Image url="@../Images/boards/livingroom.png" />
                             </image>
                         </ImageView>
-                        <GridPane fx:id="board" hgap="3.0" layoutY="27.0" stylesheets="@../CSS/GameBackground.css" vgap="3.0">
+                        <GridPane fx:id="board" hgap="3.0" layoutY="27.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="3.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
@@ -223,7 +223,7 @@
                                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="22.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="pickTiles" mnemonicParsing="false" onAction="#pickTiles" prefHeight="49.0" prefWidth="131.0" styleClass="ButtonPickTiles" stylesheets="@../CSS/GameBackground.css" text="pickTiles" GridPane.columnIndex="10" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                                <Button fx:id="pickTiles" mnemonicParsing="false" onAction="#pickTiles" prefHeight="49.0" prefWidth="131.0" styleClass="ButtonPickTiles" stylesheets="@../CSS/GameSceneStyle.css" text="pickTiles" GridPane.columnIndex="10" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                            <GridPane.margin>
                               <Insets right="20.0" />
                            </GridPane.margin></Button>
@@ -234,7 +234,7 @@
                         </GridPane>
                     </children>
                 </Pane>
-                <GridPane hgap="50.0" stylesheets="@../CSS/GameBackground.css" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <GridPane hgap="50.0" stylesheets="@../CSS/GameSceneStyle.css" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -279,9 +279,9 @@
                         <Insets />
                      </GridPane.margin>
                      <children>
-                              <ScrollPane fx:id="scrollChat" hbarPolicy="NEVER" styleClass="ScrollPane" stylesheets="@../CSS/GameBackground.css">
+                              <ScrollPane fx:id="scrollChat" hbarPolicy="NEVER" styleClass="ScrollPane" stylesheets="@../CSS/GameSceneStyle.css">
                                   <content>
-                                      <VBox fx:id="chat" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.9" prefHeight="333.0" prefWidth="456.0" styleClass="ScrollPane" stylesheets="@../CSS/GameBackground.css">
+                                      <VBox fx:id="chat" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.9" prefHeight="333.0" prefWidth="456.0" styleClass="ScrollPane" stylesheets="@../CSS/GameSceneStyle.css">
                                           <children>
                                               <Label prefHeight="17.0" prefWidth="330.0" styleClass="LabelScroll" text="C &lt;player's name&gt; &lt;message&gt; to send a private message" textFill="WHITE" />
                                               <Label prefHeight="17.0" prefWidth="349.0" styleClass="LabelScroll" text="&lt;message&gt; to write to all players" textFill="WHITE" />
@@ -297,7 +297,7 @@
                         <Insets />
                     </GridPane.margin>
                 </GridPane>
-                <GridPane alignment="BOTTOM_CENTER" stylesheets="@../CSS/GameBackground.css" GridPane.rowIndex="1">
+                <GridPane alignment="BOTTOM_CENTER" stylesheets="@../CSS/GameSceneStyle.css" GridPane.rowIndex="1">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="280.0" prefWidth="280.0" />
                         <ColumnConstraints hgrow="SOMETIMES" />
@@ -313,7 +313,7 @@
                     </padding>
                     <children>
                         <Label styleClass="Label" text="Your shelf: " GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
-                        <Label fx:id="p4Name" styleClass="Label" stylesheets="@../CSS/GameBackground.css" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
+                        <Label fx:id="p4Name" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
                         <ImageView fx:id="personal" fitHeight="242.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                             <GridPane.margin>
                                 <Insets bottom="40.0" />
@@ -356,7 +356,7 @@
                         <Label fx:id="OrderText" styleClass="Label" text="Choose order:" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
                     </children>
                 </GridPane>
-                <GridPane stylesheets="@../CSS/GameBackground.css" GridPane.columnIndex="1">
+                <GridPane stylesheets="@../CSS/GameSceneStyle.css" GridPane.columnIndex="1">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
                     </columnConstraints>
@@ -371,11 +371,11 @@
                      <GridPane.margin>
                         <Insets right="150.0" />
                      </GridPane.margin></Label>
-                        <Label fx:id="ingameEvents" styleClass="Label" stylesheets="@../CSS/GameBackground.css" text="Label" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+                        <Label fx:id="ingameEvents" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" text="Label" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets right="150.0" />
                      </GridPane.margin></Label>
-                        <Label fx:id="YourName" styleClass="Label" stylesheets="@../CSS/GameBackground.css" text="Label" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                        <Label fx:id="YourName" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" text="Label" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin></Label>
@@ -402,7 +402,7 @@
                   </GridPane>
                   <Pane>
                      <children>
-                        <GridPane fx:id="p3Shelf" hgap="8.0" layoutX="5.0" layoutY="18.0" stylesheets="@../CSS/GameBackground.css" vgap="5.0">
+                        <GridPane fx:id="p3Shelf" hgap="8.0" layoutX="5.0" layoutY="18.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="5.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="33.0" minWidth="33.0" prefWidth="33.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />

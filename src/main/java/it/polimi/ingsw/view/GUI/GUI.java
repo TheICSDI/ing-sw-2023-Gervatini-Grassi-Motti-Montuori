@@ -27,23 +27,32 @@ public class GUI implements View {
     public static String message;
     public static final Object NameLock = new Object();
     public static final Object Lock = new Object();
+    public ChooseConnectionController ccc;
     public nameSceneController nsc;
     public lobbySceneController lsc;
     public gameSceneController gsc;
     public endSceneController esc;
     private Stage primaryStage;
+    public String connectionChosen;
+    public static final Object ConnectionLock =  new Object();
+
+    private final GUI  currGui;
+
+    public GUI() {
+        this.currGui = this;
+    }
 
     @Override
-    public String showMain(){
-        ShowMainController controller = null;
-        try {
-            controller = loadFXML("main_menu.fxml", ShowMainController.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public String chooseConnection() {//TODO cambiare
+        synchronized (ConnectionLock) {
+            try{
+                ConnectionLock.wait();
+            }catch(InterruptedException e) {
+                throw  new RuntimeException(e);
+            }
         }
-        controller.init(this);
-        primaryStage.setScene(controller.getScene());
-        return null;
+        Platform.runLater(() -> startGUI());
+        return connectionChosen;
     }
 
     @Override
@@ -153,8 +162,11 @@ public class GUI implements View {
     public void displayMessage(String msg) {
         Platform.runLater(() -> {
             if(nPage==2) {
+                nsc.setText(msg);
+            }
+            else if(nPage==3) {
                 lsc.setText(msg);
-            }else if(nPage==3) {
+            }else if(nPage==4) {
                 gsc.setIngameEvents(msg);
             }
         });
@@ -207,7 +219,29 @@ public class GUI implements View {
         return loader.getController();
     }
 
-    public void startGUI(Stage primaryStage){
+    public void startGuiConnection(Stage primaryStage){
+        FXMLLoader loader=new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/ChooseConnectionScene.fxml"));
+        Parent root=null;
+
+        try{
+            root=loader.load();
+        }catch(Exception ignored){}
+
+        ccc=loader.getController();
+        ccc.setGui(currGui);
+        stage=primaryStage;
+        stage.setTitle("My Shelfie");
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
+        //stage.setFullScreen(true);
+        //stage.setMaximized(true);
+        stage.setResizable(false);
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    public void startGUI(){
+        System.out.println("dentro startGUI");
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
         Parent root=null;
@@ -215,11 +249,12 @@ public class GUI implements View {
             root=loader.load();
         }catch(Exception ignored){}
         nsc=loader.getController();
-        stage=primaryStage;
+        //stage=primaryStage;
         stage.setTitle("My Shelfie");
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
         //stage.setFullScreen(true);
         //stage.setMaximized(true);
+        nPage=2;
         stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
@@ -236,7 +271,7 @@ public class GUI implements View {
         lsc = loader.getController();
         lsc.setName(Name);
         stage.centerOnScreen();
-        nPage=2;
+        nPage=3;
         stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
@@ -256,7 +291,7 @@ public class GUI implements View {
         stage.setY(0);
         stage.setResizable(false);
         //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        nPage=3;
+        nPage=4;
         //stage.setFullScreenExitHint("");
         stage.setScene(new Scene(root));
         stage.show();
@@ -275,7 +310,7 @@ public class GUI implements View {
         stage.setX(0);
         stage.setY(0);
         stage.setResizable(false);
-        nPage=4;
+        nPage=5;
         stage.setFullScreenExitHint("");
         stage.setScene(new Scene(root));
         stage.show();
