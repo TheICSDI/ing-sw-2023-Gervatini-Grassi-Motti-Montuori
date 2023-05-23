@@ -36,7 +36,7 @@ public class GUI implements View {
     public String connectionChosen;
     public static final Object ConnectionLock =  new Object();
 
-    private final GUI  currGui;
+    private final GUI currGui;
 
     public GUI() {
         this.currGui = this;

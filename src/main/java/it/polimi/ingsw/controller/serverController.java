@@ -30,7 +30,7 @@ public class serverController {
     * @param message the received message to be elaborated
     */
    public void executeMessage(GeneralMessage message) throws RemoteException {
-      //constants to lighten the code
+      //Constants to lighten the code
       final int id = message.getMessage_id();
       final int gameId = message.getIdGame();
       final int idLobby = message.getIdLobby();
@@ -118,9 +118,9 @@ public class serverController {
                            throw new RuntimeException(e);
                         }
                      });
-                     gameStarted=true;
-                     break; // se il game inizia le liste all lobbies e all games vengono modificate e java non gestisce un foreach su una lista che viene modificata
-                  }else{
+                     gameStarted = true;
+                     break;
+                  } else {
                      sendMessage(new ReplyMessage("Not enough or too many players", Action.ERROR), player);
                   }
                }
@@ -140,26 +140,26 @@ public class serverController {
             System.out.println("Operating the pick of tiles");
             List<Position> pos = new ArrayList<>();
             ((PickTilesMessage)message).getPos(pos);
-            controller.pickTiles(player, action, pos, gameId, id);
+            controller.pickTiles(player, pos, gameId, id);
          }
 
          //Select the order of the selected tiles
          case SO -> {
             List<Integer> order = new ArrayList<>();
             ((SelectOrderMessage)message).getOrder(order);
-            controller.selectOrder(player, action, order, gameId, id);
+            controller.selectOrder(player, order, gameId, id);
          }
 
          //Select che column in which to put the tiles
          case SC -> {
             int numCol = ((SelectColumnMessage)message).getCol();
-            controller.selectColumn(player, action, numCol, gameId, id);
+            controller.selectColumn(player, numCol, gameId, id);
          }
 
          //Single chat with a specified player
          case C ->{
             String recipient = ((ChatMessage)message).getRecipient();
-            sendMessage(message,recipient);
+            sendMessage(message, recipient);
          }
 
          //Broadcast chat with the lobby or the game in which the player is
@@ -170,7 +170,7 @@ public class serverController {
                   if(l.lobbyId == idLobby){
                      //It sends the message to each player in lobby
                      for(Player p : l.Players){
-                        if(p.getNickname().equals(player)) {
+                        if(!p.getNickname().equals(player)) {
                            sendMessage(message, p.getNickname());
                         }
                      }
@@ -185,9 +185,6 @@ public class serverController {
                      sendMessage(message, p.getNickname());
                   }
                }
-            }else{
-               //Otherwise there is no one to send the message to
-               sendMessage(new ReplyMessage("No one to send to",Action.ERROR),player);
             }
          }
       }
@@ -199,12 +196,12 @@ public class serverController {
     * @return true only if the player is in a lobby, false otherwise.
     */
    private boolean isInALobby(Player p){
-         for (Lobby l: gameController.allLobbies) {
-            if(l.isPlayerInLobby(gameController.allPlayers.get(p.getNickname()))){
-               return true;
-            }
+      for (Lobby l: gameController.allLobbies) {
+         if(l.isPlayerInLobby(gameController.allPlayers.get(p.getNickname()))){
+            return true;
          }
-         return false;
+      }
+      return false;
    }
 
    /**
@@ -231,7 +228,7 @@ public class serverController {
       mex = SetNameMessage.decrypt(input);
       if(gameController.allPlayers.containsKey(mex.getUsername())){
           //Nickname already taken
-          reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);//TODO funziona ma a volte tira una serie di errori così potente che mi esplode il pc
+          reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);
       } else {
           //Nickname available
           reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
@@ -292,5 +289,4 @@ public class serverController {
          connections.get(nick).getReply().RMIsend(m.toString());
       }
    }
-
 }
