@@ -9,7 +9,7 @@ public class OtherPlayersMessage extends ReplyMessage{
 
     public OtherPlayersMessage(Player p) {
         super("", Action.SHOWOTHERS);
-        this.p=p;
+        this.p = p;
     }
 
 

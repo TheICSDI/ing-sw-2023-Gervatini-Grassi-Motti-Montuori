@@ -1,3 +1,5 @@
+/** It is used by the client to check the correctness of the input.
+ * @author Marco Gervatini, Andrea Grassi. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.InvalidKeyException;
@@ -9,21 +11,17 @@ import it.polimi.ingsw.network.messages.*;
 import org.json.simple.parser.ParseException;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class clientController{
-    //TODO: secondo me non serve idMex
-    private int idMex=0;//ogni messaggio ha un numero che dipende viene assegnato in ordine crescente dal client
     private String nickname;
-    private int idLobby=0;
-    private int idGame=0;
-    private List<Player> others = new ArrayList<>();
-    private boolean firstTurn=false;
+    private int idMex = 0;
+    private int idLobby = 0;
+    private int idGame = 0;
+    private Map<String,Player> others = new HashMap<>();
+    private boolean firstTurn = false;
     private PersonalCard simpleGoal;
-    public List<Integer> cc=new ArrayList<>();
+    public List<Integer> cc = new ArrayList<>();
 
     public clientController(String nickname){
         this.nickname = nickname;
@@ -32,131 +30,136 @@ public class clientController{
 
 
     /*controlla che la stringa che rappresenta l'azione scelta corrisponda a un comando esistente e chiamabile dal client
-    in quel momento verifica che il numero di parametri sia adeguato e procede a eseguire i comandi esterni alla partita
+    in quel momento verifica che il numero diListrsia adeguato e prnew ArrayList<>()e i comandi esterni alla partita
     e restituisce al client un message del tipo giusto per l'azione che verra' poi messo in json format e inviato al server
     */
 
     /**
-     * Checks if the command called by the client is accepted by the server, with the right number of parameters and
-     * formats the message to be ready to send.
-     * @param m message to check.
+     * Checks if the command called by the client has the right number of parameters and create the message to be
+     * ready to send.
+     * @param input message to check.
      * @param controller sender client's controller.
      * @return subclass of general message based on the action type.
      */
-    public GeneralMessage checkMessageShape(String m, clientController controller){
-        Action currAction;
-        m = m.trim();
-        //parsing dell'input string
-        String[] words = m.split(" "); //il delimitatore delle parole e' lo spazio
-        String action = words[0];
-        action = action.toUpperCase();
+    public GeneralMessage checkMessageShape(String input, clientController controller){
+        //Input parsing
+        input = input.trim();
+        //Words delimiter
+        String[] words = input.split(" ");
+        //First word is the action
+        Action currAction = Action.valueOf(words[0].toUpperCase());
         try{
-            //vediamo se il comando esiste prima di tutto
-            currAction = Action.valueOf(action);
-            //return new GeneralMessage(currAction,curr_params);
-
-            idMex++;//indice del messaggio, ogni player ha il suo perchè vengono contati da lato client
+            idMex++;
             switch (currAction){
-                case CREATELOBBY -> {//words deve contenere action, numero di giocatori partita
-                    if(words.length==2 && Integer.parseInt(words[1])>=2 && Integer.parseInt(words[1])<=4){ //un parametro int compreso tra 2 e 4 (limite giocatori)
+                case CREATELOBBY -> {
+                    //It contains action and a parameter between 2 and 4, that is the limit of players in a lobby
+                    if(words.length==2 && Integer.parseInt(words[1])>=2 && Integer.parseInt(words[1])<=4){
                         return new CreateLobbyMessage(idMex,nickname,Integer.parseInt(words[1]));
-                    }else{
-                        return new DefaultErrorMessage("Insert number of players for this lobby between 2 and 4");
+                    } else {
+                        return new DefaultErrorMessage("Insert number of players (between 2 and 4)");
                     }
                 }
                 case SHOWLOBBY -> {
-                    if(words.length==1){//words deve contenere action
+                    if(words.length == 1){
                         return new ShowLobbyMessage(idMex, nickname);
                     }
                 }
                 case JOINLOBBY -> {
-                    if(words.length==2){//words deve contenere action, numero di lobby
+                    //It contains action and number of lobby
+                    if(words.length==2){
                         return new JoinLobbyMessage(idMex, Integer.parseInt(words[1]), nickname);
                     }
                     else{
-                        return new DefaultErrorMessage("Insert a valid lobby number");
+                        return new DefaultErrorMessage("Insert a valid lobby number!");
                     }
                 }
-                case STARTGAME -> {//words deve contenere action
-                    return new StartGameMessage(idMex,controller.getIdLobby(),nickname);
+                case STARTGAME -> {
+                    return new StartGameMessage(idMex,controller.getIdLobby(), nickname);
                 }
-                case PT -> {//words deve contenere action e poi da 2 a 6 numeri che sono le coordinate delle tiles
-                    //scelte sul tabellone, es. picktiles 2 3 2 4 5 6
-                    if(controller.getIdGame()==0){
-                        return new DefaultErrorMessage("Not in game");
+                case PT -> {
+                    List<Position> pos = new ArrayList<>();
+                    //It contains action and between 2 and 6 parameters that are the positions of tiles
+                    if(controller.getIdGame() == 0){
+                        return new DefaultErrorMessage("You are not in a game!");
                     }
-                    List<Position> pos=new ArrayList<>();
-                    if (words.length<=7 && words.length%2==1 && words.length>=3) {//serve a fare le position
+                    if (words.length<=7 && words.length%2 == 1 && words.length>=3) {
                         for (int i = 1; i < words.length; i=i+2) {
                             pos.add(new Position(Integer.parseInt(words[i]),Integer.parseInt(words[i+1])));
                         }
                         if(!isStraightLineTiles(pos)){
-                            return new DefaultErrorMessage("Not Adjacent");
+                            return new DefaultErrorMessage("Tiles are not Adjacent!");
                         }
-                    }else{
-                        return new DefaultErrorMessage("Number of parameters is wrong");
+                    } else {
+                        return new DefaultErrorMessage("Number of parameters is wrong!");
                     }
-                    return new PickTilesMessage(idMex, nickname, pos,controller.getIdGame());
+                    return new PickTilesMessage(idMex, nickname, pos, controller.getIdGame());
                 }
-                case SO -> {//action, da 1 a 3 interi es. selectorder 2 1 3
+
+                case SO -> {
                     List<Integer> order =  new ArrayList<>();
-                    for (int i = 1; i < words.length; i++) {//riempie order
+                    //It contains action and between 2 and 3 parameters, that represent the order
+                    for (int i = 1; i < words.length; i++) {
                         order.add(Integer.parseInt(words[i]));
                     }
                     if(!acceptableOrder(order)){
-                        return new DefaultErrorMessage("Invalid format");
+                        return new DefaultErrorMessage("Invalid format!");
                     }
                     return new SelectOrderMessage(idMex, nickname, order,controller.getIdGame());
                 }
+
                 case SC -> {
                     if(controller.getIdGame()==0){
-                        return new DefaultErrorMessage("Not in game");
+                        return new DefaultErrorMessage("You are not in a game!");
                     }
                     int col;
-                    if(words.length == 2){//action, un numero
+                    if(words.length == 2){
                         col = Integer.parseInt(words[1]);
                     }
                     else{
-                        return new DefaultErrorMessage("Number of parameters is wrong");
+                        return new DefaultErrorMessage("Number of parameters is wrong!");
                     }
                     if(col<1 || col>5){
-                        return new DefaultErrorMessage("Column not valid");
+                        return new DefaultErrorMessage("Invalid column!");
                     }else{
-                        return new SelectColumnMessage(idMex, nickname,col ,controller.getIdGame());
+                        return new SelectColumnMessage(idMex, nickname, col, controller.getIdGame());
                     }
-
                 }
+
                 case SHOWPERSONAL -> {
                     if(controller.getIdGame()==0){
-                        return new DefaultErrorMessage("Not in game");
+                        return new DefaultErrorMessage("You are not in a game!");
                     }
                     if(idGame>0){
                         return new ShowPersonalCardMessage();
                     }else{
-                        return new DefaultErrorMessage("Not in game");
+                        return new DefaultErrorMessage("You are not in a game!");
                     }
                 }
+
                 case SHOWCOMMONS -> {
                     if(controller.getIdGame()==0){
-                        return new DefaultErrorMessage("Not in game");
+                        return new DefaultErrorMessage("You are not in a game!");
                     }
                     if(idGame>0){
                         return new ShowCommonCards();
-                    }else{
-                        return new DefaultErrorMessage("Not in game");
+                    } else {
+                        return new DefaultErrorMessage("You are not in a game!");
                     }
                 }
+
                 case SHOWOTHERS -> {
                     if(idGame>0){
-                        return new ReplyMessage("",Action.SHOWOTHERS);
-                    }else{
-                        return new DefaultErrorMessage("Not in game");
+                        return new ReplyMessage("", Action.SHOWOTHERS);
+                    } else {
+                        return new DefaultErrorMessage("You are not in a game!");
                     }
                 }
+
                 case C ->{
                     if(words.length > 2){
                         String phrase = "";
                         String recipient = words[1];
+                        //TODO: cosa succede se il player non esiste? possiamo scrivegli che è un problema?
                         for (int i = 2; i < words.length; i++) {
                             phrase = phrase.concat(words[i]);
                             phrase = phrase.concat(" ");
@@ -166,12 +169,13 @@ public class clientController{
                         } else if (idGame > 0) {
                             return new ChatMessage(nickname, phrase, recipient);
                         } else {
-                            return new DefaultErrorMessage("Not in a game nor in a lobby");
+                            return new DefaultErrorMessage("You are not in a game or lobby!");
                         }
-                    }else{
+                    } else {
                         return new DefaultErrorMessage("Blank message");
                     }
                 }
+
                 case CA ->{
                     if(words.length > 1){
                         String phrase = "";
@@ -184,23 +188,17 @@ public class clientController{
                         } else if (idGame > 0) {
                             return new BroadcastMessage(idGame, -1, nickname, phrase);
                         } else {
-                            return new DefaultErrorMessage("Not in a game nor in a lobby");
+                            return new DefaultErrorMessage("You are not in a game or lobby!");
                         }
-                    }else{
+                    } else {
                         return new DefaultErrorMessage("Blank message");
                     }
                 }
-
             }
-
-
-        }
-        catch(IllegalArgumentException e){
-            idMex--;//M:secondo me e' tagliabile tanto gli id vanno solo in ordine cresciente anche se ne perdiamo
-            // uno l'importante e' che non ce ne siano due ugali// A:boh mi sembra scema come cosa avere i messaggi con id: 1,2,7 perchè il giocatore non sa scrivere
+        } catch(IllegalArgumentException e){
+            idMex--;
             return new DefaultErrorMessage("Invalid command: Write /help for commands list");
         }
-
         return null;
     }
 
@@ -271,7 +269,7 @@ public class clientController{
     }
 
     //SETTER and GETTER methods
-    public List<Player> getOthers() {
+    public Map<String, Player> getOthers() {
         return others;
     }
     public PersonalCard getSimpleGoal(){return this.simpleGoal;}

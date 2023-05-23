@@ -89,8 +89,7 @@ public class gameSceneController implements Initializable {
     public GridPane board;
     @FXML
     public GridPane myShelf;
-    @FXML
-    private List<GridPane> othersShelf = new ArrayList<>();
+    private final List<GridPane> othersShelf = new ArrayList<>();
     @FXML
     public GridPane p2Shelf;
     @FXML
@@ -229,29 +228,32 @@ public class gameSceneController implements Initializable {
         }
     }
 
+
     @FXML
-    public void showOthers(List<Player> others){
-        if(this.firstOthers){
-            this.firstOthers = false;
-            //List<String> names = others.stream().map(Player::getNickname).toList();
-            for (Player s: others) {
-                System.out.println(s.getNickname());
+    //forse ho capito perché funziona solo con le mappe, allora "others" dovrebbe avere dei problemi nel riempimento
+    // ma solo dei player, motivo per cui con un lista non funziona, e la parte delle String lo salva
+    public void showOthers(Map<String, Player> others){
+        if(firstOthers){
+            firstOthers=false;
+            List<String> names= new ArrayList<>(others.keySet());//sperando gli metta in ordine
+            for (String s:
+                    names) {
+                System.out.println(s);
             }
-            this.p2Name.setText(others.get(0).getNickname() + "'s shelf:");
-            //this.othersShelf.add(p2Shelf);
-            if(others.size() > 1){
-                this.p3Name.setText(others.get(1).getNickname() + "'s shelf:");
-                this.p3ImageShelf.setVisible(true);
-                //this.othersShelf.add(p3Shelf);
+            p2Name.setText(names.get(0) + "'s shelf:");
+            if(names.size()>1){
+                p3Name.setText(names.get(1) + "'s shelf:");
+                p3ImageShelf.setVisible(true);
             }
-            if(others.size() > 2){
-                this.p4Name.setText(others.get(2).getNickname() + "'s shelf:");
-                this.p4ImageShelf.setVisible(true);
-                //this.othersShelf.add(p4Shelf);
+            if(names.size()>2){
+                p4Name.setText(names.get(2) + "'s shelf:");
+                p4ImageShelf.setVisible(true);
             }
         }
-        for (int k = 0; k < othersShelf.size(); k++) {
-            Tile[][] shelf = others.get(k).getShelf();
+        int k=0;
+        for (String s:
+                others.keySet()) {
+            Tile[][] shelf=others.get(s).getShelf();
             for (int i = 0; i < shelf.length; i++) {
                 for (int j = 0; j < shelf[0].length; j++) {
                     if(!shelf[i][j].getCategory().equals(type.EMPTY)) {
@@ -260,14 +262,14 @@ public class gameSceneController implements Initializable {
                         Tile.setFitWidth(35);
                         Image image = new Image(shelf[i][j].getImage());
                         Tile.setImage(image);
-                        this.othersShelf.get(k).setAlignment(Pos.CENTER);
-                        this.othersShelf.get(k).add(Tile, j, i);
+                        othersShelf.get(k).setAlignment(Pos.CENTER);
+                        othersShelf.get(k).add(Tile, j, i);
                     }
                 }
             }
+            k++;
         }
     }
-
 
     @FXML
     public void showPersonal(int id){

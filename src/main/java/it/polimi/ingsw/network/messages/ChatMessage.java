@@ -7,7 +7,7 @@ public class ChatMessage extends ReplyMessage{
     private final String recipient;
     public ChatMessage(String username, String phrase, String recipient){
         super("", Action.C);
-        this.username=username;
+        this.username = username;
         this.phrase = phrase;
         this.recipient = recipient;
     }

@@ -36,7 +36,7 @@ public class GUI implements View {
     public String connectionChosen;
     public static final Object ConnectionLock =  new Object();
 
-    private final GUI  currGui;
+    private final GUI currGui;
 
     public GUI() {
         this.currGui = this;
@@ -128,12 +128,12 @@ public class GUI implements View {
     }
 
     @Override
-    public void showOthers(List<Player> others) {
+    public void showOthers(Map<String,Player> others) {
 
     }
 
     @Override
-    public void updateOthers(List<Player> others){
+    public void updateOthers(Map<String,Player> others) {
         Platform.runLater(() ->gsc.showOthers(others));
     }
     @Override

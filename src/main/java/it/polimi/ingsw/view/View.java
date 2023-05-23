@@ -20,8 +20,8 @@ public interface View {
     void showPersonal(PersonalCard PC);
     void showChosenTiles(List<Tile> tiles,boolean toOrder);
     void showCommons(List<Integer> cc);
-    void showOthers(List<Player> others);
-    void updateOthers(List<Player> others);
+    void showOthers(Map<String,Player> others);
+    void updateOthers(Map<String,Player> others);
     void joinLobby(int lobby_id);
     void exitLobby(int lobby_id);
     void startGame(String message);

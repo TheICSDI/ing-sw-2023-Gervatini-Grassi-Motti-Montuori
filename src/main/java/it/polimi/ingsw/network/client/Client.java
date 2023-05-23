@@ -3,12 +3,15 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
+import it.polimi.ingsw.controller.gameController;
+import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
+import it.polimi.ingsw.network.server.connectionType;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.View;
@@ -139,8 +142,9 @@ public class Client extends Application {
             }
             case SHOWOTHERS -> {
                 reply = OtherPlayersMessage.decrypt(message);
+                String nick=((OtherPlayersMessage) reply).getP().getNickname();
                 Player p=((OtherPlayersMessage) reply).getP();
-                controller.getOthers().add(p);
+                controller.getOthers().put(nick,p);
                 virtualView.updateOthers(controller.getOthers());
             }
             case C -> {
@@ -241,25 +245,23 @@ public class Client extends Application {
         Client Client = new Client();
         //Client.connection("192.168.1.234", 2345);
         Client.connection("127.0.0.1", 23450);
-        Scanner input = new Scanner(System.in);
         String username;
         SetNameMessage nick;
-        //virtualView = new CLI();
+
         //Richiesta nickname unico
         System.out.println(in.readLine());
-        //Controllo unicità nome
         do {
             username = virtualView.askUsername();
             nick = new SetNameMessage(username,true);
             out.println(nick);
             try{
                 nick = SetNameMessage.decrypt(in.readLine());
-            }catch(Exception ignored){}
-
+            } catch(Exception ignored){}
             virtualView.printUsername(nick.getUsername(), nick.isAvailable());
         } while (!nick.isAvailable());
-        //Ogni player ha il suo clientController
         controller = new clientController(nick.getUsername());
+        gameController.allPlayers.put(nick.getUsername(), new Player(nick.getUsername()));
+        serverController.connections.put(nick.getUsername(), new connectionType(true, out, null));
 
         //Connection starts with a pool of thread
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -270,9 +272,6 @@ public class Client extends Application {
                 throw new RuntimeException(e);
             }
         });
-        //
-        //
-        //
         // virtualView.displayMessage("Write /help for command list.");
 
         //TODO: condizione valida sse il client è connesso, da rivedere

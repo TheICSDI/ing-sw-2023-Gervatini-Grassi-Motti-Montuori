@@ -190,15 +190,15 @@ public class CLI implements View{
     }
 
     @Override
-    public void showOthers(List<Player> others){
-        for (Player nick : others) {
-            System.out.println("  " + nick.getNickname() + "'s shelf");
-            showShelf(nick.getShelf());
+    public void showOthers(Map<String,Player> others){
+        for (String nick:others.keySet()) {
+            System.out.println("  " + nick + "'s shelf");
+            showShelf(others.get(nick).getShelf());
         }
     }
 
     @Override
-    public void updateOthers(List<Player> others){
+    public void updateOthers(Map<String,Player> others){
 
     }
 
