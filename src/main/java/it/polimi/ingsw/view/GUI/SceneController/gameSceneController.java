@@ -25,8 +25,11 @@ import javafx.scene.paint.Paint;
 
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 //TODO SCHERMATA DI ENDGAME, PUNTEGGI SULLE COMMON
+//TODO I TOKEN
 public class gameSceneController implements Initializable {
     @FXML
     public Label YourName;
@@ -37,9 +40,17 @@ public class gameSceneController implements Initializable {
     @FXML
     public Label p4Name;
     @FXML
+    public ImageView p3ImageShelf;
+    @FXML
     public ImageView p4ImageShelf;
     @FXML
-    public ImageView p3ImageShelf;
+    public ImageView myShelfFirst;
+    @FXML
+    public ImageView p2First;
+    @FXML
+    public ImageView p3First;
+    @FXML
+    public ImageView p4First;
     @FXML
     public Label ingameEvents;
     @FXML
@@ -79,20 +90,21 @@ public class gameSceneController implements Initializable {
     @FXML
     public GridPane myShelf;
     @FXML
-    private List<GridPane> othersShelf=new ArrayList<>();
+    private List<GridPane> othersShelf = new ArrayList<>();
     @FXML
     public GridPane p2Shelf;
     @FXML
     public GridPane p3Shelf;
     @FXML
     public GridPane p4Shelf;
+    private GUI gui;
 
     /** It initialises the version of the local board to not_accessible type. */
     // Non ho capito quando lo chiama però se non lo metto non funziona :P
     public gameSceneController(){
         for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
-                localBoard[i][j] = new Tile("NOT_ACCESSIBLE");
+                this.localBoard[i][j] = new Tile("NOT_ACCESSIBLE");
             }
         }
     }
@@ -100,16 +112,16 @@ public class gameSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         YourName.setText(GUI.Name);
-        othersShelf.add(p2Shelf);
-        othersShelf.add(p3Shelf);
-        othersShelf.add(p4Shelf);
-        firstOthers=true;
-        Chat.setOnKeyPressed(event -> {
+        this.othersShelf.add(p2Shelf);
+        this.othersShelf.add(p3Shelf);
+        this.othersShelf.add(p4Shelf);
+        this.firstOthers=true;
+        this.Chat.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 sendChatMessage();
             }
         });
-        scrollChat.setMaxHeight(Double.MAX_VALUE);
+        this.scrollChat.setMaxHeight(Double.MAX_VALUE);
     }
 
 
@@ -158,20 +170,20 @@ public class gameSceneController implements Initializable {
                         pane.setOnMouseClicked(event -> {
                             boolean alreadyChosen=false;
                             for (Position p:
-                                    Chosen) {
+                                    this.Chosen) {
                                 if(p.getY()==finalI && p.getX()==finalJ)
                                 {
                                     finalPane.setStyle("");
-                                    Chosen.remove(p);
+                                    this.Chosen.remove(p);
                                     alreadyChosen=true;
                                     break;
                                 }
                             }
                             if(!alreadyChosen){
                                 finalPane.setStyle("-fx-background-color: #ff0000;");
-                                if(Chosen.size()==3) {
+                                if(this.Chosen.size()==3) {
                                     Node node = this.board.getChildren().stream()
-                                            .filter(child -> GridPane.getColumnIndex(child) == Chosen.get(0).getY() && GridPane.getRowIndex(child) == Chosen.get(0).getX())
+                                            .filter(child -> GridPane.getColumnIndex(child) == this.Chosen.get(0).getY() && GridPane.getRowIndex(child) == this.Chosen.get(0).getX())
                                             .findFirst()
                                             .orElse(null);
                                     HBox toDes = null;
@@ -179,9 +191,9 @@ public class gameSceneController implements Initializable {
                                         toDes = (HBox) node;
                                     }
                                     toDes.setStyle("");
-                                    Chosen.remove(0);
+                                    this.Chosen.remove(0);
                                 }
-                                Chosen.add(new Position(finalJ, finalI));
+                                this.Chosen.add(new Position(finalJ, finalI));
                             }
                         });
                         this.board.add(pane, i, j);
@@ -196,11 +208,11 @@ public class gameSceneController implements Initializable {
     @FXML
     public void showShelf(Tile[][] shelf) {
         //reset variables for picked tiles
-        ChosenText.setVisible(false);
-        OrderText.setVisible(false);
-        chosenTiles.getChildren().clear();
-        orderedTiles.getChildren().clear();
-        toShow = true;
+        this.ChosenText.setVisible(false);
+        this.OrderText.setVisible(false);
+        this.chosenTiles.getChildren().clear();
+        this.orderedTiles.getChildren().clear();
+        this.toShow = true;
 
         for (int i = 0; i < shelf.length; i++) {
             for (int j = 0; j < shelf[0].length; j++) {
@@ -218,28 +230,28 @@ public class gameSceneController implements Initializable {
     }
 
     @FXML
-    public void showOthers(Map<String, Player> others){
-        if(firstOthers){
-            firstOthers=false;
-            List<String> names= new ArrayList<>(others.keySet());//sperando gli metta in ordine
-            for (String s:
-                 names) {
-                System.out.println(s);
+    public void showOthers(List<Player> others){
+        if(this.firstOthers){
+            this.firstOthers = false;
+            //List<String> names = others.stream().map(Player::getNickname).toList();
+            for (Player s: others) {
+                System.out.println(s.getNickname());
             }
-            p2Name.setText(names.get(0) + "'s shelf:");
-            if(names.size()>1){
-                p3Name.setText(names.get(1) + "'s shelf:");
-                p3ImageShelf.setVisible(true);
+            this.p2Name.setText(others.get(0).getNickname() + "'s shelf:");
+            //this.othersShelf.add(p2Shelf);
+            if(others.size() > 1){
+                this.p3Name.setText(others.get(1).getNickname() + "'s shelf:");
+                this.p3ImageShelf.setVisible(true);
+                //this.othersShelf.add(p3Shelf);
             }
-            if(names.size()>2){
-                p4Name.setText(names.get(2) + "'s shelf:");
-                p4ImageShelf.setVisible(true);
+            if(others.size() > 2){
+                this.p4Name.setText(others.get(2).getNickname() + "'s shelf:");
+                this.p4ImageShelf.setVisible(true);
+                //this.othersShelf.add(p4Shelf);
             }
         }
-        int k=0;
-        for (String s:
-             others.keySet()) {
-            Tile[][] shelf=others.get(s).getShelf();
+        for (int k = 0; k < othersShelf.size(); k++) {
+            Tile[][] shelf = others.get(k).getShelf();
             for (int i = 0; i < shelf.length; i++) {
                 for (int j = 0; j < shelf[0].length; j++) {
                     if(!shelf[i][j].getCategory().equals(type.EMPTY)) {
@@ -248,14 +260,14 @@ public class gameSceneController implements Initializable {
                         Tile.setFitWidth(35);
                         Image image = new Image(shelf[i][j].getImage());
                         Tile.setImage(image);
-                        othersShelf.get(k).setAlignment(Pos.CENTER);
-                        othersShelf.get(k).add(Tile, j, i);
+                        this.othersShelf.get(k).setAlignment(Pos.CENTER);
+                        this.othersShelf.get(k).add(Tile, j, i);
                     }
                 }
             }
-            k++;
         }
     }
+
 
     @FXML
     public void showPersonal(int id){
@@ -313,7 +325,7 @@ public class gameSceneController implements Initializable {
     public void pickTiles(ActionEvent actionEvent) {
         StringBuilder pt= new StringBuilder("pt");
         for (Position p:
-                Chosen) {
+                this.Chosen) {
             pt.append(" ").append(p.getY()).append(" ").append(p.getX());
         }
         System.out.println(pt);
@@ -322,7 +334,7 @@ public class gameSceneController implements Initializable {
             GUI.Lock.notifyAll();
         }
         for (Position p:
-                Chosen) {
+                this.Chosen) {
             Node node = this.board.getChildren().stream()
                     .filter(child -> GridPane.getColumnIndex(child) == p.getY() && GridPane.getRowIndex(child) == p.getX())
                     .findFirst()
@@ -333,32 +345,32 @@ public class gameSceneController implements Initializable {
             }
             toDes.setStyle("");
         }
-        Chosen=new ArrayList<>();
+        this.Chosen=new ArrayList<>();
     }
 
     @FXML
     public void showChosenTiles(List<Tile> tiles,boolean toOrder) {
-        if(toShow) {
+        if(this.toShow) {
             if(toOrder){
-                OrderText.setVisible(true);
-                OrderText.setText("Choose the order to insert them : ");
+                this.OrderText.setVisible(true);
+                this.OrderText.setText("Choose the order to insert them : ");
             }
-            ChosenText.setVisible(true);
-            pickedTiles = tiles.size();
-            for (int i = 0; i < pickedTiles; i++) {
+            this.ChosenText.setVisible(true);
+            this.pickedTiles = tiles.size();
+            for (int i = 0; i < this.pickedTiles; i++) {
                 Image image = new Image(tiles.get(i).getImage());
                 ImageView Tile = new ImageView(image);
                 Tile.setFitHeight(50);
                 Tile.setFitWidth(50);
-                chosenTiles.setAlignment(Pos.CENTER);
+                this.chosenTiles.setAlignment(Pos.CENTER);
                 if (toOrder) {
                     int finalI = i;
                     Tile.setOnMouseClicked(event -> {
                         Tile.setOnMouseClicked(null);
-                        orderedTiles.add(Tile, tilesOrdered, 0);
-                        newOrder.add(finalI + 1);
-                        tilesOrdered++;
-                        Node node = chosenTiles.getChildren().stream()
+                        this.orderedTiles.add(Tile, tilesOrdered, 0);
+                        this.newOrder.add(finalI + 1);
+                        this.tilesOrdered++;
+                        Node node = this.chosenTiles.getChildren().stream()
                                 .filter(child -> GridPane.getColumnIndex(child) ==  finalI)
                                 .findFirst()
                                 .orElse(null);
@@ -366,22 +378,22 @@ public class gameSceneController implements Initializable {
                         if (node instanceof ImageView) {
                             toCancel = (ImageView) node;
                         }
-                        chosenTiles.getChildren().remove(toCancel);
-                        if (tilesOrdered == pickedTiles) {
+                        this.chosenTiles.getChildren().remove(toCancel);
+                        if (this.tilesOrdered == this.pickedTiles) {
                             StringBuilder so = new StringBuilder("so");
                             for (int o :
-                                    newOrder) {
+                                    this.newOrder) {
                                 so.append(" ").append(o);
                             }
                             System.out.println(so);
-                            synchronized (GUI.Lock) {
-                                GUI.message = String.valueOf(so);
-                                GUI.Lock.notifyAll();
+                            synchronized (this.gui.Lock) {
+                                this.gui.message = String.valueOf(so);
+                                this.gui.Lock.notifyAll();
                             }
-                            tilesOrdered=0;
-                            newOrder.clear();
-                            ChosenText.setVisible(false);
-                            OrderText.setText("Your ordered Tiles: ");
+                            this.tilesOrdered=0;
+                            this.newOrder.clear();
+                            this.ChosenText.setVisible(false);
+                            this.OrderText.setText("Your ordered Tiles: ");
                         }
                     });
                 }
@@ -392,35 +404,35 @@ public class gameSceneController implements Initializable {
     }
 
     public void choose1(MouseEvent mouseEvent) {
-        synchronized (GUI.Lock){
-            GUI.message= "sc 1";
-            GUI.Lock.notifyAll();
+        synchronized (this.gui.Lock){
+            this.gui.message= "sc 1";
+            this.gui.Lock.notifyAll();
         }
     }
 
     public void choose2(MouseEvent mouseEvent) {
-        synchronized (GUI.Lock){
-            GUI.message= "sc 2";
-            GUI.Lock.notifyAll();
+        synchronized (this.gui.Lock){
+            this.gui.message= "sc 2";
+            this.gui.Lock.notifyAll();
         }
     }
     public void choose3(MouseEvent mouseEvent) {
-        synchronized (GUI.Lock){
-            GUI.message= "sc 3";
-            GUI.Lock.notifyAll();
+        synchronized (this.gui.Lock){
+            this.gui.message= "sc 3";
+            this.gui.Lock.notifyAll();
         }
     }
 
     public void choose4(MouseEvent mouseEvent) {
-        synchronized (GUI.Lock){
-            GUI.message= "sc 4";
-            GUI.Lock.notifyAll();
+        synchronized (this.gui.Lock){
+            this.gui.message= "sc 4";
+            this.gui.Lock.notifyAll();
         }
     }
     public void choose5(MouseEvent mouseEvent) {
-        synchronized (GUI.Lock){
-            GUI.message= "sc 5";
-            GUI.Lock.notifyAll();
+        synchronized (this.gui.Lock){
+            this.gui.message= "sc 5";
+            this.gui.Lock.notifyAll();
         }
     }
 
@@ -428,29 +440,33 @@ public class gameSceneController implements Initializable {
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
         messageLabel.setTextFill(Paint.valueOf("#ffffff"));
-        chat.getChildren().add(0,messageLabel);
+        this.chat.getChildren().add(0,messageLabel);
     }
 
     public void Turn(String msg){
-        turn.setText(msg);
+        this.turn.setText(msg);
     }
 
     public void setIngameEvents(String msg){
-        ingameEvents.setText(msg);
+        this.ingameEvents.setText(msg);
     }
 
     public void sendChatMessage(){
 
-        String message= Chat.getText();
-        Chat.setText("");
+        String message= this.Chat.getText();
+        this.Chat.setText("");
         if(!Objects.equals(message, "")) {
             if (message.charAt(0) != 'c') {
                 message = "ca " + message;
             }
-            synchronized (GUI.Lock) {
-                GUI.message = message;
-                GUI.Lock.notifyAll();
+            synchronized (this.gui.Lock) {
+                this.gui.message = message;
+                this.gui.Lock.notifyAll();
             }
         }
+    }
+
+    public void setGui(GUI gui) {
+        this.gui = gui;
     }
 }

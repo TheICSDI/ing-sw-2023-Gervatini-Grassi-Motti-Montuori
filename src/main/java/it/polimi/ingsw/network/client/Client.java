@@ -139,9 +139,8 @@ public class Client extends Application {
             }
             case SHOWOTHERS -> {
                 reply = OtherPlayersMessage.decrypt(message);
-                String nick=((OtherPlayersMessage) reply).getP().getNickname();
                 Player p=((OtherPlayersMessage) reply).getP();
-                controller.getOthers().put(nick,p);
+                controller.getOthers().add(p);
                 virtualView.updateOthers(controller.getOthers());
             }
             case C -> {

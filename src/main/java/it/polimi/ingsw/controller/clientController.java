@@ -20,7 +20,7 @@ public class clientController{
     private String nickname;
     private int idLobby=0;
     private int idGame=0;
-    private Map<String,Player> others = new HashMap<>();
+    private List<Player> others = new ArrayList<>();
     private boolean firstTurn=false;
     private PersonalCard simpleGoal;
     public List<Integer> cc=new ArrayList<>();
@@ -271,7 +271,7 @@ public class clientController{
     }
 
     //SETTER and GETTER methods
-    public Map<String,Player> getOthers() {
+    public List<Player> getOthers() {
         return others;
     }
     public PersonalCard getSimpleGoal(){return this.simpleGoal;}

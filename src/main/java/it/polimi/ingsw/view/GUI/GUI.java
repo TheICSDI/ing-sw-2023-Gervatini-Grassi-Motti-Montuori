@@ -128,12 +128,12 @@ public class GUI implements View {
     }
 
     @Override
-    public void showOthers(Map<String, Player> others) {
+    public void showOthers(List<Player> others) {
 
     }
 
     @Override
-    public void updateOthers(Map<String,Player> others){
+    public void updateOthers(List<Player> others){
         Platform.runLater(() ->gsc.showOthers(others));
     }
     @Override
@@ -241,7 +241,6 @@ public class GUI implements View {
     }
 
     public void startGUI(){
-        System.out.println("dentro startGUI");
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
         Parent root=null;
@@ -286,10 +285,11 @@ public class GUI implements View {
         } catch (Exception ignored) {
         }
         gsc = loader.getController();
+        gsc.setGui(currGui);
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
-        stage.setResizable(false);
+        stage.setResizable(true);
         //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=4;
         //stage.setFullScreenExitHint("");
@@ -315,5 +315,4 @@ public class GUI implements View {
         stage.setScene(new Scene(root));
         stage.show();
     }
-
 }

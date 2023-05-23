@@ -5,7 +5,7 @@
 <?import javafx.scene.text.*?>
 
 
-<GridPane  fx:controller="it.polimi.ingsw.view.GUI.JFXStartController"
+<GridPane
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10"
           styleClass="root">
     <padding><Insets top="25" right="25" bottom="10" left="25" /></padding>
@@ -25,8 +25,7 @@
 
     <HBox spacing="10" alignment="bottom_right"
           GridPane.columnIndex="1" GridPane.rowIndex="4">
-        <Button text="Button"
-                onAction="#handleTestButton"/>
+        <Button text="Button"/>
     </HBox>
 
     <Text fx:id="actiontarget"

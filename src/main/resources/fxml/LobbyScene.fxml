@@ -41,11 +41,12 @@
          <right>
             <FlowPane alignment="TOP_RIGHT" prefHeight="365.0" prefWidth="143.0" vgap="50.0">
                <children>
-                  <VBox prefHeight="310.0" prefWidth="144.0" spacing="20.0">
+                  <VBox prefHeight="313.0" prefWidth="144.0" spacing="20.0">
                      <children>
+                        <Label text="Create Lobby:" textFill="WHITE" />
                         <HBox alignment="CENTER" prefHeight="60.0" prefWidth="86.0" spacing="5.0">
                            <VBox.margin>
-                              <Insets left="5.0" />
+                              <Insets bottom="17.0" left="5.0" top="-19.0" />
                            </VBox.margin>
                            <children>
                               <Group id="Prova" nodeOrientation="LEFT_TO_RIGHT">
@@ -55,29 +56,29 @@
                                           <ToggleGroup fx:id="Prova" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="limit3" layoutY="18.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="17.0" prefWidth="77.0" text="3 players" textFill="WHITE" toggleGroup="$Prova" />
+                                    <RadioButton fx:id="limit3" layoutY="18.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="17.0" prefWidth="81.0" text="3 players" textFill="WHITE" toggleGroup="$Prova" />
                                     <RadioButton fx:id="limit4" layoutY="33.0" mnemonicParsing="false" onAction="#setLimit" prefHeight="23.0" prefWidth="82.0" text="4 players" textFill="WHITE" toggleGroup="$Prova" />
                                  </children>
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                               </Group>
-                              <Button fx:id="CreateLobby" alignment="CENTER" mnemonicParsing="false" onAction="#createLobby" prefHeight="27.0" prefWidth="59.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Create">
+                              <Button fx:id="CreateLobby" alignment="CENTER" mnemonicParsing="false" onAction="#createLobby" prefHeight="27.0" prefWidth="50.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="+">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                               </Button>
                            </children>
                         </HBox>
-                        <VBox alignment="CENTER" prefHeight="141.0" prefWidth="150.0" spacing="10.0">
+                        <VBox alignment="CENTER" prefHeight="106.0" prefWidth="63.0" spacing="10.0">
                            <children>
-                              <Button fx:id="Join" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#Join" prefHeight="27.0" prefWidth="59.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Join">
+                              <Button fx:id="Join" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#Join" prefHeight="28.0" prefWidth="68.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Join">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="Refresh" mnemonicParsing="false" onAction="#showLobbies" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Refresh" />
-                              <Button fx:id="Start" mnemonicParsing="false" onAction="#StartGame" prefHeight="27.0" prefWidth="59.0" stylesheets="@../CSS/button.css" text="Start">
+                              <Button fx:id="Refresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showLobbies" prefHeight="28.0" prefWidth="68.0" styleClass="custom-button" stylesheets="@../CSS/button.css" text="Refresh" />
+                              <Button fx:id="Start" mnemonicParsing="false" onAction="#StartGame" prefHeight="28.0" prefWidth="68.0" stylesheets="@../CSS/button.css" text="Start">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
@@ -90,6 +91,9 @@
                            <VBox.margin>
                               <Insets left="20.0" top="20.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets right="17.0" />
+                           </padding>
                         </VBox>
                         <Label fx:id="text" alignment="CENTER_RIGHT" prefHeight="109.0" prefWidth="154.0" textFill="WHITE" wrapText="true">
                            <VBox.margin>
