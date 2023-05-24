@@ -10,6 +10,7 @@ import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.messages.*;
 import org.json.simple.parser.ParseException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class clientController{
     private int idMex = 0;
     private int idLobby = 0;
     private int idGame = 0;
-    private Map<String,Player> others = new HashMap<>();
+    private final Map<String, Player> others = new HashMap<>();
     private boolean firstTurn = false;
     private PersonalCard simpleGoal;
     public List<Integer> cc = new ArrayList<>();
@@ -28,15 +29,9 @@ public class clientController{
     }
     public clientController(){}
 
-
-    /*controlla che la stringa che rappresenta l'azione scelta corrisponda a un comando esistente e chiamabile dal client
-    in quel momento verifica che il numero diListrsia adeguato e prnew ArrayList<>()e i comandi esterni alla partita
-    e restituisce al client un message del tipo giusto per l'azione che verra' poi messo in json format e inviato al server
-    */
-
     /**
-     * Checks if the command called by the client has the right number of parameters and create the message to be
-     * ready to send.
+     * Checks if the command called by the client has the right number of parameters and create the message in the
+     * JSON format to be sent to the server.
      * @param input message to check.
      * @param controller sender client's controller.
      * @return subclass of general message based on the action type.
@@ -47,8 +42,10 @@ public class clientController{
         //Words delimiter
         String[] words = input.split(" ");
         //First word is the action
-        Action currAction = Action.valueOf(words[0].toUpperCase());
+        Action currAction;
+        String a = words[0];
         try{
+            currAction = Action.valueOf(a.toUpperCase());
             idMex++;
             switch (currAction){
                 case CREATELOBBY -> {
@@ -129,7 +126,7 @@ public class clientController{
                     if(controller.getIdGame()==0){
                         return new DefaultErrorMessage("You are not in a game!");
                     }
-                    if(idGame>0){
+                    if(idGame > 0){
                         return new ShowPersonalCardMessage();
                     }else{
                         return new DefaultErrorMessage("You are not in a game!");
@@ -140,7 +137,7 @@ public class clientController{
                     if(controller.getIdGame()==0){
                         return new DefaultErrorMessage("You are not in a game!");
                     }
-                    if(idGame>0){
+                    if(idGame > 0){
                         return new ShowCommonCards();
                     } else {
                         return new DefaultErrorMessage("You are not in a game!");
@@ -148,18 +145,23 @@ public class clientController{
                 }
 
                 case SHOWOTHERS -> {
-                    if(idGame>0){
+                    if(idGame > 0){
                         return new ReplyMessage("", Action.SHOWOTHERS);
                     } else {
                         return new DefaultErrorMessage("You are not in a game!");
                     }
                 }
 
-                case C ->{
+                case C -> {
                     if(words.length > 2){
                         String phrase = "";
                         String recipient = words[1];
-                        //TODO: cosa succede se il player non esiste? possiamo scrivegli che è un problema?
+                        if(recipient.equals(this.nickname)){
+                            return new DefaultErrorMessage("You can't send a message to yourself!");
+                        } else if (!gameController.allPlayers.containsKey(recipient)){
+                            return new DefaultErrorMessage("The player does not exist!");
+                        }
+                        //TODO: NON FUNZIONA PERCHè LA MAPPA DI PLAYER NON è RIEMPITA CORRETTAMENTE, è VUOTA
                         for (int i = 2; i < words.length; i++) {
                             phrase = phrase.concat(words[i]);
                             phrase = phrase.concat(" ");
@@ -176,7 +178,7 @@ public class clientController{
                     }
                 }
 
-                case CA ->{
+                case CA -> {
                     if(words.length > 1){
                         String phrase = "";
                         for (int i = 1; i < words.length; i++) {
@@ -202,6 +204,9 @@ public class clientController{
         return null;
     }
 
+    /** It checks if the given order is correct.
+     * @param order the list of Integer that represent an order.
+     * @return true only if the order is acceptable, false otherwise. */
     public boolean acceptableOrder(List<Integer> order) {
         if (order.size() > 3 || order.size()==0) {
             return false;
@@ -216,43 +221,51 @@ public class clientController{
         }
     }
 
+    /** It checks if the chosen positions are in a straight line.
+     * @param tiles the list of chosen positions.
+     * @return true only if the tiles are in a straight line, false otherwise.*/
     public boolean isStraightLineTiles(List<Position> tiles){
         if(tiles.size() == 1){
             return true;
-        }
-        else if(tiles.size() ==2){
-            return isAdjacentOnX(tiles.get(0),tiles.get(1)) || isAdjacentOnY(tiles.get(0),tiles.get(1));
-        }
-        else{
-            if(isAdjacentOnX(tiles.get(0),tiles.get(1)) && isAdjacentOnX(tiles.get(1),tiles.get(2))){
+        } else if(tiles.size() == 2){
+            return isAdjacentOnX(tiles.get(0), tiles.get(1)) || isAdjacentOnY(tiles.get(0), tiles.get(1));
+        } else {
+            if(isAdjacentOnX(tiles.get(0), tiles.get(1)) && isAdjacentOnX(tiles.get(1), tiles.get(2))){
                 return true;
-            } else if (isAdjacentOnX(tiles.get(0),tiles.get(2)) && isAdjacentOnX(tiles.get(1),tiles.get(2))) {
+            } else if (isAdjacentOnX(tiles.get(0), tiles.get(2)) && isAdjacentOnX(tiles.get(1), tiles.get(2))) {
                 return true;
-            } else if (isAdjacentOnX(tiles.get(0),tiles.get(2)) && isAdjacentOnX(tiles.get(1),tiles.get(0))){
+            } else if (isAdjacentOnX(tiles.get(0), tiles.get(2)) && isAdjacentOnX(tiles.get(1), tiles.get(0))){
                 return true;
-            } else if(isAdjacentOnY(tiles.get(0),tiles.get(1)) && isAdjacentOnY(tiles.get(1),tiles.get(2))){
+            } else if (isAdjacentOnY(tiles.get(0), tiles.get(1)) && isAdjacentOnY(tiles.get(1), tiles.get(2))){
                 return true;
-            } else if (isAdjacentOnY(tiles.get(0),tiles.get(2)) && isAdjacentOnY(tiles.get(1),tiles.get(2))) {
+            } else if (isAdjacentOnY(tiles.get(0), tiles.get(2)) && isAdjacentOnY(tiles.get(1), tiles.get(2))) {
                 return true;
             } else return isAdjacentOnY(tiles.get(0), tiles.get(2)) && isAdjacentOnY(tiles.get(1), tiles.get(0));
         }
     }
 
     /**
-     * Checks if two tiles are adjacent 0 1 2
-     * @param a first tile
-     * @param b second tile
-     * @return true if they are
+     * It checks if two tiles are adjacent horizontally.
+     * @param a position of the first tile.
+     * @param b position of the second tile.
+     * @return true only if the two tiles are adjacent horizontally, false otherwise.
      */
-    //Are three tiles in a line
-    public boolean isAdjacentOnX(Position a ,Position b){
+    public boolean isAdjacentOnX(Position a, Position b){
         return a.getX() == b.getX() && ((a.getY() == b.getY() - 1) || (a.getY() == b.getY() + 1));
     }
-    public boolean isAdjacentOnY(Position a ,Position b){
+
+    /**
+     * It checks if two tiles are adjacent vertically.
+     * @param a position of the first tile.
+     * @param b position of the second tile.
+     * @return true only if the two tiles are adjacent vertically, false otherwise.
+     */
+    public boolean isAdjacentOnY(Position a, Position b){
         return a.getY() == b.getY() && ((a.getX() == b.getX() - 1) || (a.getX() == b.getX() + 1));
     }
 
-    /** It elaborates the nickname from a client connected via RMI.*/
+    /** It elaborates the nickname from a client connected via RMI.
+     * @param input the received message. */
     public void getName(String input) throws RemoteException {
         if(!SetNameMessage.decrypt(input).isAvailable()){
             Client.getVirtualView().printUsername(SetNameMessage.decrypt(input).getUsername(),SetNameMessage.decrypt(input).isAvailable());
@@ -263,9 +276,10 @@ public class clientController{
         }
     }
 
-    /** It elaborates a message from a client connected via RMI. */
-    public void getMessage(String m) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
-        Client.elaborate(m);
+    /** It elaborates a message from a client connected via RMI.
+     * @param message the received message.*/
+    public void getMessage(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
+        Client.elaborate(message);
     }
 
     //SETTER and GETTER methods

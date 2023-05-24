@@ -1,4 +1,4 @@
-/** Remote interface. It has to be implemented by the RMI server.
+/** Remote interface. It has to be implemented by the RMI sever and client.
  * @author Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.network.server;
 

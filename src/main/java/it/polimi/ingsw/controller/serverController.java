@@ -10,7 +10,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIconnection;
-import it.polimi.ingsw.network.server.connectionType;
 import org.json.simple.parser.ParseException;
 import java.rmi.RemoteException;
 import java.util.*;
@@ -19,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class serverController {
+   /**Map that contains all the connections, the key is the nickname of the client*/
    public static Map<String, connectionType>  connections = new HashMap<>();
    public static gameController controller = new gameController();
 
@@ -45,11 +45,11 @@ public class serverController {
             if (isInAGame(gameController.allPlayers.get(player))){
                sendMessage(new ReplyMessage("Already in a game!", Action.ERROR), player);
             } else if(isInALobby(gameController.allPlayers.get(player))){
-               sendMessage(new ReplyMessage("Already in a lobby!",Action.ERROR), player);
+               sendMessage(new ReplyMessage("Already in a lobby!", Action.ERROR), player);
             } else {
                //Otherwise it creates the lobby
                Player pl = gameController.allPlayers.get(player);
-               int limit = message.getLimit();//lobby has a set amount of players needed to start
+               int limit = message.getLimit();
                Lobby NewLobby = new Lobby(pl, limit);
                gameController.allLobbies.add(NewLobby);
                sendMessage(new CreateLobbyReplyMessage("Lobby created with id " + NewLobby.lobbyId, NewLobby.lobbyId, limit), player);
@@ -108,8 +108,7 @@ public class serverController {
                      gameController.allGames.put(g.id,g);
                      gameController.allLobbies.remove(l);
                      for (Player p: l.Players) {
-                        sendMessage(new StartGameReplyMessage(player + " started the game!" ,
-                                g.id), p.getNickname());
+                        sendMessage(new StartGameReplyMessage(player + " started the game!" , g.id), p.getNickname());
                      }
                      executorsService.submit(() ->{
                         try{
@@ -157,7 +156,7 @@ public class serverController {
          }
 
          //Single chat with a specified player
-         case C ->{
+         case C -> {
             String recipient = ((ChatMessage)message).getRecipient();
             sendMessage(message, recipient);
          }
@@ -233,9 +232,9 @@ public class serverController {
           //Nickname available
           reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
           gameController.allPlayers.put(mex.getUsername(), new Player(mex.getUsername()));
-          connections.put(mex.getUsername(), new connectionType(false,null,reply));
+          connections.put(mex.getUsername(), new connectionType(false,null, reply));
           ExecutorService executor = Executors.newSingleThreadExecutor();
-          executor.submit(() ->{
+          executor.submit(() -> {
                 int x=-1;
                 while(x<connections.get(mex.getUsername()).getPing()) {
                    x=connections.get(mex.getUsername()).getPing();
@@ -249,11 +248,11 @@ public class serverController {
                 System.out.println(mex.getUsername() + " disconnected");
                 gameController.allPlayers.get(mex.getUsername()).setConnected(false);
           });
-
       }
    }
 
-   /** It gets a message from the server, and it calls the method execute. */
+   /** It gets a message from the server, and it calls the method execute.
+    * @param input message from the server.*/
    public void getMessage(String input) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex = null;
       switch (GeneralMessage.identify(input)){
@@ -280,7 +279,7 @@ public class serverController {
 
    /** It sends a message to a designated client.
     * @param m the message to be sent.
-    * @param nick the client. */
+    * @param nick the client's nickname. */
    public static void sendMessage(GeneralMessage m, String nick) throws RemoteException {
       if(connections.get(nick).isSocket()){
          System.out.println("Sending message "+ m.getAction() + " to " + nick);

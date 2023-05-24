@@ -11,24 +11,23 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection {
-    serverController s;
-    public RMIserverImpl(serverController s) throws RemoteException {
+    serverController SC;
+    public RMIserverImpl(serverController SC) throws RemoteException {
         super();
-        this.s=s;
+        this.SC = SC;
     }
 
     @Override
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
         try {
-            System.out.println("Got name " + m);
-            s.getName(m, reply);
+            SC.getName(m, reply);
         }catch(InvalidActionException | InvalidKeyException | ParseException ignored){}
     }
 
     @Override
     public void RMIsend(String m) throws RemoteException {
         try {
-            s.getMessage(m);
+            SC.getMessage(m);
         } catch (ParseException | InvalidKeyException | InvalidActionException e) {
             throw new RuntimeException(e);
         }

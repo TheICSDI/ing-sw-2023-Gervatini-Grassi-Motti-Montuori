@@ -3,6 +3,7 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.serverController;
+import it.polimi.ingsw.network.client.ClientHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,7 +22,7 @@ public class Server {
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         while(true){
-            new clientHandler(serverSocket.accept(), SC).start();
+            new ClientHandler(serverSocket.accept(), SC).start();
         }
     }
 
@@ -48,7 +49,6 @@ public class Server {
                 Registry registry = LocateRegistry.createRegistry(23451);
                 RMIserverImpl s = new RMIserverImpl(SC);
                 Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", s);
-
             } catch (Exception e) {
                 System.err.println("Server exception");
                 e.printStackTrace();
@@ -59,7 +59,6 @@ public class Server {
     public static void startSocket() throws IOException {
         Server server = new Server();
         server.start(23450);
-        System.out.println("Socket server is ready!"); //Sarebbe carino che funzionasse :D
     }
 }
 

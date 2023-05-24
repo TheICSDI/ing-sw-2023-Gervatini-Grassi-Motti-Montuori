@@ -3,15 +3,11 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.controller.gameController;
-import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.network.server.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
-import it.polimi.ingsw.network.server.connectionType;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.View;
@@ -32,7 +28,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -79,7 +74,8 @@ public class Client extends Application {
     }
 
     /** It elaborates the given message and creates the equivalent message type based on the action.
-     * It interacts with the instance of clientController and with the virtualView. */
+     * It interacts with the instance of clientController and with the virtualView.
+     * @param message to be elaborated. */
     public static void elaborate(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
         ReplyMessage reply;
         Action replyAction = ReplyMessage.identify(message);
@@ -174,7 +170,7 @@ public class Client extends Application {
     }
 
     /**
-     * Function that checks if the message has the right format and sends them to server.
+     * It checks if the message has the right format and sends it to server.
      * @param message to be sent.
      * @param socket true if socket connection, false if RMI connection.
      */
@@ -209,30 +205,27 @@ public class Client extends Application {
         }
     }
 
-    /** It starts the connection based on the client's decision. */
+    /** It starts the game based on the arguments (regarding the type of view, CLI or GUI) and
+     * on client's decision regarding the type of connection. */
     public static void main(String[] args) throws IOException {
-        boolean iscli = false;
-        Scanner input = new Scanner(System.in);
-        String connectionType = null;
-        String viewType = null;
+        boolean isCli = false;
         virtualView = null;
         for (String arg : args) {
             if (arg.equals("--cli") || arg.equals("-c")) {
-                iscli = true;
+                isCli = true;
                 break;
             }
         }
-        if(iscli){
+        if(isCli){
             virtualView = new CLI();
-        }
-        else{
+        } else{
             virtualView = new GUI();
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(()-> {
                 launch(args);
             });
         }
-        connectionType = virtualView.chooseConnection();
+        String connectionType = virtualView.chooseConnection();
         if (connectionType.equals("1")) {
             socket();
         } else {
@@ -248,7 +241,7 @@ public class Client extends Application {
         String username;
         SetNameMessage nick;
 
-        //Richiesta nickname unico
+        //Request unique nickname for the client
         System.out.println(in.readLine());
         do {
             username = virtualView.askUsername();
@@ -259,9 +252,8 @@ public class Client extends Application {
             } catch(Exception ignored){}
             virtualView.printUsername(nick.getUsername(), nick.isAvailable());
         } while (!nick.isAvailable());
+        //If the nickname is available the clientController is created
         controller = new clientController(nick.getUsername());
-        gameController.allPlayers.put(nick.getUsername(), new Player(nick.getUsername()));
-        serverController.connections.put(nick.getUsername(), new connectionType(true, out, null));
 
         //Connection starts with a pool of thread
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -272,7 +264,7 @@ public class Client extends Application {
                 throw new RuntimeException(e);
             }
         });
-        // virtualView.displayMessage("Write /help for command list.");
+        virtualView.displayMessage("Write /help for command list.");
 
         //TODO: condizione valida sse il client è connesso, da rivedere
         while(true) {
@@ -283,12 +275,11 @@ public class Client extends Application {
 
     /** It starts the RMI connection with the server. */
     public static void RMI(){
-
         controller = new clientController();
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
-            RMIclient = new RMIclientImpl(controller); //per ricevere risposta
+            RMIclient = new RMIclientImpl(controller);
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
 
@@ -309,7 +300,7 @@ public class Client extends Application {
                     throw new RuntimeException(e);
                 }
             });
-            //While the client is connected it send the messages to the server
+            //While the client is connected it sends the messages to the server
             while(connected){
                 sendMessage(virtualView.getInput(), false);
             }
@@ -335,7 +326,6 @@ public class Client extends Application {
     public static void setName() throws RemoteException {
         String input;
         SetNameMessage nick;
-        Scanner in = new Scanner(System.in);
         input = virtualView.askUsername();
         nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);

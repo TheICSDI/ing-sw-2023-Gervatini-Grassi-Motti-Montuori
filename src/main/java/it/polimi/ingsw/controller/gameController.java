@@ -13,13 +13,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class gameController {
-    //It contains all connected players
+    /**Map that contains all connected players, the nickname is the key. */
     public static Map<String, Player> allPlayers = new HashMap<>();
-    //It contains all started games
+    /**Map that contains all started games, the id is the key*/
     public static Map<Integer, Game> allGames = new HashMap<>();
-    //It contains all the lobbies
+    /**List that contains all the created lobbies.*/
     public static List<Lobby> allLobbies = new ArrayList<>();
-    //It contains all pending command
+    /**List that contains all pending commands.*/
     public static List<command> queue = new ArrayList<>();
     private final Object queueLock = new Object();
 
@@ -97,10 +97,10 @@ public class gameController {
     public void pickTiles(String player, List<Position> pos, int gameId, int numMess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
-        command pending = new command(g,p, Action.PT,numMess);
+        command pending = new command(g, p, Action.PT,numMess);
         pending.setPos(pos);
         synchronized (queueLock) {
-            System.out.println("Adding pick to the request");
+            System.out.println("Adding picked tiles");
             queue.add(pending);
             queueLock.notifyAll();
         }

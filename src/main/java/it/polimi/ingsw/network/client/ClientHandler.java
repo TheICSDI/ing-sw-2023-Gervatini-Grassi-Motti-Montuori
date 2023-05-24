@@ -1,5 +1,6 @@
-/** It manages multiple client connections via socket. */
-package it.polimi.ingsw.network.server;
+/** It manages multiple client connections via socket.
+ * @author Caterina Motti*/
+package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
@@ -7,6 +8,7 @@ import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.messages.SetNameMessage;
+import it.polimi.ingsw.controller.connectionType;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -15,14 +17,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class clientHandler extends Thread{
+public class ClientHandler extends Thread{
     private final Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-    private serverController SC;
+    private final serverController SC;
 
-    /** Constructor that specify the client for the entire class. */
-    public clientHandler(Socket socket, serverController controller){
+    /** Constructor that specify the client for the entire class.
+     * @param socket the client's socket.
+     * @param controller the server's controller. */
+    public ClientHandler(Socket socket, serverController controller){
         this.clientSocket = socket;
         this.SC = controller;
     }
@@ -35,7 +39,6 @@ public class clientHandler extends Thread{
             //Creates the socket between client and sever via input/output
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            //clientSocket.setKeepAlive(true);
 
             //Firstly it ask for a nickname until the given one is available
             //In this way each client is represented by a unique nickname
@@ -46,9 +49,8 @@ public class clientHandler extends Thread{
                 nickname = SetNameMessage.decrypt(in.readLine());
             }
 
-            //If the nickname is not already taken, it is added to the static hashmap allPlayers, and the
-            //associated player object is created
-            gameController.allPlayers.put(nickname.getUsername(),new Player(nickname.getUsername()));
+            //If the nickname is not already taken, it is added to the static hashmap allPlayers and connections
+            gameController.allPlayers.put(nickname.getUsername(), new Player(nickname.getUsername()));
             out.println(new SetNameMessage(nickname.getUsername(),true ));
             serverController.connections.put(nickname.getUsername(), new connectionType(true, out, null));
 
