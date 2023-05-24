@@ -55,7 +55,6 @@ public class Player implements Serializable {
      * Orders the selected tiles as order passed as a parameter.
      * The order is represented by a list in which each element refers to the desired position for the ordered tiles.
      * Example: selected("frames", "cats", "books"), order(3, 2, 1) -> ordered("books", "cats", "frames").
-     *
      * @param selected list of selected tiles to order.
      * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
      * @return orderedTiles list of selected tiles in order.
@@ -86,16 +85,15 @@ public class Player implements Serializable {
      * @throws InvalidColumnException if the parameter col is out of bound.
      * @return true only if the shelf has enough space for the given tiles, false otherwise.
      */
-    private boolean checkColumn(int numTiles, int col) throws InvalidColumnException, RemoteException {
+    private boolean checkColumn(int numTiles, int col) throws RemoteException {
         for(int j = 0; j < numRows; j++){
             //Check how many empty spaces there are in the selected column
             if(this.Shelf[j][col].getCategory().equals(type.EMPTY)) {
                 //For each empty space it decreases numTiles
                 numTiles --;
-                //If numTiles < 0 then there is no enough space
-                if(numTiles == 0) return true;
-            }else{
-                serverController.sendMessage(new ReplyMessage("This column is full!",Action.INGAMEEVENT), nickname);
+                if(numTiles <= 0) return true;
+            } else {
+                //serverController.sendMessage(new ReplyMessage("This column is full!", Action.INGAMEEVENT), nickname);
                 return false;
             }
         }
@@ -104,13 +102,14 @@ public class Player implements Serializable {
 
     /** Inserts the selected tiles in a single column of the shelf.
      * The tiles are already ordered, from the bottom to the top: the first tile (index 0) goes in the first empty spot.
-     *
      * @param toInsert a list of tiles, ordered, to be put in Shelf.
      * @param col chosen column.
      * @throws InvalidColumnException if the selected column has no enough space.
      */
     public void insertInShelf(List<Tile> toInsert, int col) throws InvalidColumnException, RemoteException {
-        if(!checkColumn(toInsert.size(), col)){
+        if(col < 0 || col >= this.getNumCols()){
+            throw new InvalidColumnException("Selected column is out of bound!");
+        } else if(!checkColumn(toInsert.size(), col)){
             throw new InvalidColumnException("Selected column has no enough space!");
         } else {
             //For each tile in toInsert
@@ -129,7 +128,6 @@ public class Player implements Serializable {
     /**
      * Return a list of tiles chosen by the player to be taken from the board.
      * It checks if the position are available to be taken, and after taking the tiles it removes them from the board.
-     *
      * @param chosen a set of position that the player has chosen.
      * @param b board from which the player can take the tiles.
      */
@@ -152,24 +150,26 @@ public class Player implements Serializable {
          }
      }
 
-     public int maxSpaceInShelf(){
-        int maxSpace=0;
-        boolean firstFullRow=true;
-         for (int i = 0; i < 3; i++) {
-             for (int j = 0; j < numCols; j++) {
-                 if (Shelf[i][j].getCategory().equals(type.EMPTY)) {
-                     firstFullRow = false;
-                     break;
-                 }
-             }
-             if(!firstFullRow){
-                 maxSpace++;
-                 if(maxSpace==3) return maxSpace;
-             }
-             firstFullRow=true;
-         }
+    /** It calculates the maximum empty space in the shelf.
+     * @return the maximum free space. */
+    public int maxSpaceInShelf(){
+       int maxSpace = 0;
+       boolean firstFullRow = true;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < numCols; j++) {
+                if (Shelf[i][j].getCategory().equals(type.EMPTY)) {
+                    firstFullRow = false;
+                    break;
+                }
+            }
+            if(!firstFullRow){
+                maxSpace++;
+                if(maxSpace == 3) return maxSpace;
+            }
+            firstFullRow = true;
+        }
         return maxSpace;
-     }
+    }
 
     /** Gets the shelf of the player. */
     public Tile[][] getShelf() {

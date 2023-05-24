@@ -6,9 +6,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import org.json.simple.JSONArray;
@@ -102,13 +99,13 @@ class PlayerTest {
     void InsertInShelf() throws InvalidColumnException, RemoteException {
         List<Tile> toInsert = new ArrayList<>();
         Player p = new Player("Sof");
-        int col = 3;
+        int col = 2;
 
         //Empty toInsert: it inserts anything in the shelf
         p.insertInShelf(toInsert, col);
         for (int i = 0; i < p.getNumRows(); i++) {
             for (int j = 0; j < p.getNumCols(); j++) {
-                assertEquals(type.EMPTY, s[i][j].getCategory());
+                assertEquals(type.EMPTY, p.getShelf()[i][j].getCategory());
             }
         }
 
@@ -122,15 +119,15 @@ class PlayerTest {
             for (int j = 0; j < p.getNumCols(); j++) {
                 if(j != col){
                     //All other tiles are unchanged
-                    assertEquals(type.EMPTY, s[i][j].getCategory());
+                    assertEquals(type.EMPTY, p.getShelf()[i][j].getCategory());
                 } else {
                     if(i <= p.getNumRows() - toInsert.size() - 1){
                         //All other tiles are unchanged
-                        assertEquals(type.EMPTY, s[i][j].getCategory());
+                        assertEquals(type.EMPTY, p.getShelf()[i][j].getCategory());
                     } else {
-                        assertNotEquals(type.EMPTY, s[i][j].getCategory());
+                        assertNotEquals(type.EMPTY, p.getShelf()[i][j].getCategory());
                         //The tiles are inserted so that t1 is at the "bottom" and t3 is at the "top"
-                        assertEquals(toInsert.get(p.getNumRows() - 1 - i).getCategory(), s[i][j].getCategory());
+                        assertEquals(toInsert.get(p.getNumRows() - 1 - i).getCategory(), p.getShelf()[i][j].getCategory());
                     }
                 }
             }
@@ -210,16 +207,29 @@ class PlayerTest {
 
     @Test
     public void testMaxSpaceInShelf() {
-        Tile[][] Shelf;
-        Shelf= new Tile[][]{new Tile[]{new Tile("Empty"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("EMPTY")},
-                new Tile[]{new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("EMPTY")},
-                new Tile[]{new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS")},
-                new Tile[]{new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS")},
-                new Tile[]{new Tile("FRAMES"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS")},
-                new Tile[]{new Tile("TROPHIES"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS"), new Tile("CATS")}};
-        Player p=new Player("MarcoGervatarco");
-        p.setShelf(Shelf);
-        int x=p.maxSpaceInShelf();
-        assertEquals(2,x);
+        //Player with an empty shelf
+        Player p = new Player("Lola");
+        int max = p.maxSpaceInShelf();
+        assertEquals(3, max);
+
+        //Player with a full shelf
+        p = Parser();
+        max = p.maxSpaceInShelf();
+        assertEquals(0, max);
+
+        //Remove a single tile from the shelf
+        p.getShelf()[0][1] = new Tile("empty");
+        max = p.maxSpaceInShelf();
+        assertEquals(1, max);
+
+        //Remove another tile from the shelf
+        p.getShelf()[1][1] = new Tile("empty");
+        max = p.maxSpaceInShelf();
+        assertEquals(2, max);
+
+        //Remove another tile from the shelf
+        p.getShelf()[2][1] = new Tile("empty");
+        max = p.maxSpaceInShelf();
+        assertEquals(3, max);
     }
 }

@@ -22,9 +22,9 @@ class CommonCardTest {
     CCStrategy n2 = new CC_02();
     CCStrategy n6 = new CC_06();
     CCStrategy n11 = new CC_11();
-    CommonCard c1 = new CommonCard(n2, true);
-    CommonCard c2 = new CommonCard(n6, false);
-    CommonCard c3 = new CommonCard(n11, false);
+    CommonCard c1 = new CommonCard(n2, true, 2);
+    CommonCard c2 = new CommonCard(n6, false, 2);
+    CommonCard c3 = new CommonCard(n11, false, 2);
     Player p1 = new Player("CLR");
 
     /** Parser for shelf_test.json. It returns a player with a full shelf. */
@@ -76,7 +76,7 @@ class CommonCardTest {
         p1 = Parser();
         c1.givePoints(p1);
         c2.givePoints(p1);
-        assertEquals(8, p1.getScoreToken1());
-        assertEquals(8, p1.getScoreToken2());
+        assertEquals(4, p1.getScoreToken1());
+        assertEquals(4, p1.getScoreToken2());
     }
 }

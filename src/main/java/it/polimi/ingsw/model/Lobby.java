@@ -22,11 +22,10 @@ public class Lobby {
         //The static attribute make the id unique
         count++;
         this.lobbyId = count;
-        this.limit=limit;
+        this.limit = limit;
     }
 
     /** Adds a player "joiner" to the lobby, only if the total number of player is less than four.
-     *
      * @throws InputMismatchException if the lobby is full or if the player is already in the lobby. */
     public void Join(Player Joiner){
         if(isLobbyFull()) throw new InputMismatchException("The lobby " + lobbyId + " is full!");
@@ -36,21 +35,11 @@ public class Lobby {
     }
 
     /** Remove a player "leaver" from the lobby.
-     *
      * @throws InputMismatchException if the player passed by parameter is not in the lobby. */
     public void Leave(Player Leaver){
         if(!Players.contains(Leaver)) {
             throw new InputMismatchException("The player " + Leaver.getNickname() + " is not in the lobby!");
         } else Players.remove(Leaver);
-    }
-
-    /** Graphically shows the partecipant of the lobby*/
-    public void Show(){
-        System.out.print("Lobby" + this.lobbyId + ": ");
-        for (Player p: Players) {
-            System.out.print(p.getNickname());
-        }
-        System.out.println("");
     }
 
     /** Return true only if there is more available space in the lobby.
@@ -60,13 +49,12 @@ public class Lobby {
     }
 
     /**
-     * Checks if a certain player is in this lobby
+     * Checks if a certain player is in this lobby.
      * @param p player to check
-     * @return true if he is
+     * @return true only if the given player is in the lobby, false otherwise.
      */
     public boolean isPlayerInLobby(Player p){
-        for (Player player:
-             this.Players) {
+        for (Player player: this.Players) {
             if(p.getNickname().equals(player.getNickname())){
                 return true;
             }

@@ -12,13 +12,12 @@ import java.util.InputMismatchException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyTest {
-    //TODO: da riguardare
     Player p1 = new Player("CLR");
     Player p2 = new Player("Jhonny");
     Player p3 = new Player("Mayhem");
     Player p4 = new Player("Fozy");
     Player p5 = new Player("AndreDeGrass");
-    Lobby l1 = new Lobby(p1,2);
+    Lobby l1 = new Lobby(p1,4);
     Lobby l2 = new Lobby(p2,2);
 
     @Test
@@ -82,5 +81,24 @@ class LobbyTest {
             l1.Leave(p5);
         });
         assertEquals("The player " + p5.getNickname() + " is not in the lobby!", ex2.getMessage());
+    }
+
+    @Test
+    void isPlayerInLobby(){
+        //The lobby contains only p1
+        assertTrue(l1.isPlayerInLobby(p1));
+        assertFalse(l1.isPlayerInLobby(p2));
+        assertFalse(l1.isPlayerInLobby(p3));
+        assertFalse(l1.isPlayerInLobby(p4));
+        assertFalse(l1.isPlayerInLobby(p5));
+
+        //Two players join the lobby
+        l1.Join(p2);
+        l1.Join(p3);
+        assertTrue(l1.isPlayerInLobby(p1));
+        assertTrue(l1.isPlayerInLobby(p2));
+        assertTrue(l1.isPlayerInLobby(p3));
+        assertFalse(l1.isPlayerInLobby(p4));
+        assertFalse(l1.isPlayerInLobby(p5));
     }
 }

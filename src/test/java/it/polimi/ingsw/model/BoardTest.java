@@ -23,8 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardTest {
 
     /** Parser for board_test.json. It returns a board with tiles shaped like a chessboard.
-     * In this way every tile has all four sides empty.
-     */
+     * In this way every tile has all four sides empty. */
     private Board Parser(){
         Board b = new Board(4);
         JSONParser parser = new JSONParser();

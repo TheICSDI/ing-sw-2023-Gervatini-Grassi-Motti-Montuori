@@ -31,8 +31,10 @@ public class Game {
      * It initializes the board for the first time.
      * It picks the first player and give randomically each player a personal goal card.
      * It randomically choose two common goal cards.
+     * @param players list of players participating in the game.
+     * @param controller instance of gameController that interacts with the server.
      */
-    public Game(List<Player> players,gameController controller){
+    public Game(List<Player> players, gameController controller){
         this.controller = controller;
         //Each game is represented by a unique id that can't be changed
         count++;
@@ -70,7 +72,6 @@ public class Game {
     /**
      * Manages all the game logic from start to end.
      * It calculates the total points of each player at the end of every turn.
-     *
      * @see Player,Board,CommonCard,PersonalCard
      */
     public void startGame() throws RemoteException, InterruptedException {
