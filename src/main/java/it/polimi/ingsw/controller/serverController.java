@@ -256,11 +256,11 @@ public class serverController {
    public void getMessage(String input) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex = null;
       switch (GeneralMessage.identify(input)){
-         case CREATELOBBY -> mex = new CreateLobbyMessage(input);
-         case SHOWLOBBY -> mex = new ShowLobbyMessage(input);
-         case JOINLOBBY -> mex = new JoinLobbyMessage(input);
-         case STARTGAME -> mex = new StartGameMessage(input);
-         case PT -> mex = new PickTilesMessage(input);
+         case CREATELOBBY -> mex = CreateLobbyMessage.decrypt(input);
+         case SHOWLOBBY -> mex = ShowLobbyMessage.decrypt(input);
+         case JOINLOBBY -> mex = JoinLobbyMessage.decrypt(input);
+         case STARTGAME -> mex = StartGameMessage.decrypt(input);
+         case PT -> mex = PickTilesMessage.decrypt(input);
          case SO -> mex = new SelectOrderMessage(input);
          case SC -> mex = new SelectColumnMessage(input);
          case C -> mex = ChatMessage.decrypt(input);

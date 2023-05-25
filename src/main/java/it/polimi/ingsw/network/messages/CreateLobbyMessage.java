@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
 import org.json.simple.JSONObject;
@@ -20,37 +21,25 @@ public class CreateLobbyMessage extends GeneralMessage{
     public CreateLobbyMessage(int message_id, String username,int limit) {
         super(message_id, Action.CREATELOBBY, -1, username);
         this.limit=limit;
-        //lobby_id == -1 when the player isn't in any lobby
     }
 
     /**
-     * Constructor that parses a JSON-formatted string and initializes the message.
+     * Parses a JSON-formatted string to set the message.
      * @param msg a JSON-formatted string
+     * @return a fully initialized CreateLobbyMessage Object
      */
-    public CreateLobbyMessage(String msg) throws ParseException, InvalidActionException, InvalidKeyException {
-        super(msg);
-        JSONParser parser = new JSONParser();
-        JSONObject msg_obj = (JSONObject) parser.parse(msg);
-
-        // Validates that the 'action' key in the JSON object matches the expected action for this message type.
-        if(!msg_obj.get("action").toString().equals(Action.CREATELOBBY.toString()))
-        {
-            throw new InvalidActionException("Invalid CreateLobbyMessage encoding");
-        }
-        this.limit = Integer.parseInt(msg_obj.get("limit").toString());
+    public static CreateLobbyMessage decrypt(String msg){
+        return new Gson().fromJson(msg, CreateLobbyMessage.class);
     }
 
     /**
      * Overrides the toString method to provide a custom string representation.
      */
     @Override
-    public String toString()
-    {
-        return super.startMessage() +
-                "\"limit\": \""+ limit + "\""+
-                "}";
-        //return  new Gson().toJson(this);
+    public String toString(){
+        return new Gson().toJson(this);
     }
+
 
     @Override
     public int getLimit() {
