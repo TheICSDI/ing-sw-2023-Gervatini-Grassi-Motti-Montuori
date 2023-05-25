@@ -25,6 +25,8 @@ public interface View {
     void joinLobby(int lobby_id);
     void exitLobby(int lobby_id);
     void startGame(String message);
+    void showPoints(String message);
+    void winner(String message);
     void endGame(); // da controllare input
     void displayError(String msg);
     void displayMessage(String msg);

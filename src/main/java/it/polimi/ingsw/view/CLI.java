@@ -217,10 +217,19 @@ public class CLI implements View{
         System.out.println(message);
     }
 
+    @Override
+    public void showPoints(String message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void winner(String message) {
+        System.out.println(message);
+    }
 
     @Override
     public void endGame() {
-
+        System.out.println("GAME ENDED\nRESULTS: \n");
     }
 
     @Override

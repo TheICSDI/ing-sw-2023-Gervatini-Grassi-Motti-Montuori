@@ -175,6 +175,7 @@ public class Game {
 
                     //At each turn the common card goals are calculated
                     if(CommonCards.get(0).control(p)){
+                        //ToDo LA condizione rimane vera ogni turno e continua ad assegnarli punti, da fixare obv
                         for (Player pcc : players) {
                             serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
                                     "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
@@ -210,14 +211,15 @@ public class Game {
             p.calculateCCPoints();
         }
         for (Player p : players) {
+            serverController.sendMessage(new ReplyMessage("",Action.ENDGAME), p.getNickname());
             serverController.sendMessage(new ReplyMessage("Players' total points: ", Action.INGAMEEVENT), p.getNickname());
             for (Player pp: players) {
-                serverController.sendMessage(new ReplyMessage(pp.getNickname() + ": " + pp.getTotalPoints(), Action.INGAMEEVENT), p.getNickname());
+                serverController.sendMessage(new ReplyMessage(pp.getNickname() + ": " + pp.getTotalPoints(), Action.POINTS), p.getNickname());
             }
         }
         for (Player p : players) {
-            serverController.sendMessage(new ReplyMessage("The winner is " + calculateWinner().getNickname(), Action.INGAMEEVENT), p.getNickname());
-            serverController.sendMessage(new ReplyMessage("", Action.ENDGAME), p.getNickname());
+            serverController.sendMessage(new ReplyMessage("The winner is " + calculateWinner().getNickname(), Action.WINNER), p.getNickname());
+            //serverController.sendMessage(new ReplyMessage("", Action.ENDGAME), p.getNickname());
             gameController.allGames.remove(id);
         }
     }

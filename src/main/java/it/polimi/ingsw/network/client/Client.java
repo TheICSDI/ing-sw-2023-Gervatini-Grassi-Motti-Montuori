@@ -151,6 +151,14 @@ public class Client extends Application {
                 reply=BroadcastMessage.decrypt(message);
                 virtualView.showChat(reply.getUsername() + " to all: " + ((BroadcastMessage)reply).getPhrase());
             }
+            case POINTS -> {
+                reply = ReplyMessage.decrypt(message);
+                virtualView.showPoints(reply.getMessage());
+            }
+            case WINNER -> {
+                reply = ReplyMessage.decrypt(message);
+                virtualView.winner(reply.getMessage());
+            }
             case ENDGAME -> {
                 controller.setIdGame(0);
                 virtualView.endGame();
