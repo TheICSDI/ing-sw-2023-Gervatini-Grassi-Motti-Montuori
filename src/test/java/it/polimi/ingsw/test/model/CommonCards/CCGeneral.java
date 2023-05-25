@@ -1,7 +1,7 @@
 /** Parser for JSON files. Used to test common goal cards.
  * @author Andrea Grassi, Giulio Montuori.
  */
-package it.polimi.ingsw.model.CommonCards;
+package it.polimi.ingsw.test.model.CommonCards;
 
 import it.polimi.ingsw.model.Cards.CCStrategy;
 import it.polimi.ingsw.model.Player;
@@ -27,7 +27,7 @@ public class CCGeneral {
      * @param JSONName name of the file to read the shelves from.
      */
     public static void check(CCStrategy CCard, String JSONName){
-        Player p = new Player("test");
+        Player p = new Player("it/polimi/ingsw/test");
         int nRow = p.getNumRows();
         int nCol = p.getNumCols();
         Tile[][] shelf = new Tile[nRow][nCol];

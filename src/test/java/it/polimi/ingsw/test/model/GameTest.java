@@ -1,8 +1,10 @@
 /** Tests for class Game.java.
  * @author Caterina Motti.
  */
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.test.model;
 
+import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

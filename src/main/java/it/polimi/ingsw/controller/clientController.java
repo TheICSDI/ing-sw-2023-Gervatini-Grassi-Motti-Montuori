@@ -33,10 +33,9 @@ public class clientController{
      * Checks if the command called by the client has the right number of parameters and create the message in the
      * JSON format to be sent to the server.
      * @param input message to check.
-     * @param controller sender client's controller.
      * @return subclass of general message based on the action type.
      */
-    public GeneralMessage checkMessageShape(String input, clientController controller){
+    public GeneralMessage checkMessageShape(String input){
         //Input parsing
         input = input.trim();
         //Words delimiter
@@ -51,7 +50,7 @@ public class clientController{
                 case CREATELOBBY -> {
                     //It contains action and a parameter between 2 and 4, that is the limit of players in a lobby
                     if(words.length==2 && Integer.parseInt(words[1])>=2 && Integer.parseInt(words[1])<=4){
-                        return new CreateLobbyMessage(idMex,nickname,Integer.parseInt(words[1]));
+                        return new CreateLobbyMessage(idMex, nickname, Integer.parseInt(words[1]));
                     } else {
                         return new DefaultErrorMessage("Insert number of players (between 2 and 4)");
                     }
@@ -63,7 +62,7 @@ public class clientController{
                 }
                 case JOINLOBBY -> {
                     //It contains action and number of lobby
-                    if(words.length==2){
+                    if(words.length == 2){
                         return new JoinLobbyMessage(idMex, Integer.parseInt(words[1]), nickname);
                     }
                     else{
@@ -71,12 +70,12 @@ public class clientController{
                     }
                 }
                 case STARTGAME -> {
-                    return new StartGameMessage(idMex,controller.getIdLobby(), nickname);
+                    return new StartGameMessage(idMex, idLobby, nickname);
                 }
                 case PT -> {
                     List<Position> pos = new ArrayList<>();
                     //It contains action and between 2 and 6 parameters that are the positions of tiles
-                    if(controller.getIdGame() == 0){
+                    if(idGame == 0){
                         return new DefaultErrorMessage("You are not in a game!");
                     }
                     if (words.length<=7 && words.length%2 == 1 && words.length>=3) {
@@ -89,10 +88,13 @@ public class clientController{
                     } else {
                         return new DefaultErrorMessage("Number of parameters is wrong!");
                     }
-                    return new PickTilesMessage(idMex, nickname, pos, controller.getIdGame());
+                    return new PickTilesMessage(idMex, nickname, pos, idGame);
                 }
 
                 case SO -> {
+                    if(idGame == 0){
+                        return new DefaultErrorMessage("You are not in a game!");
+                    }
                     List<Integer> order =  new ArrayList<>();
                     //It contains action and between 2 and 3 parameters, that represent the order
                     for (int i = 1; i < words.length; i++) {
@@ -101,11 +103,11 @@ public class clientController{
                     if(!acceptableOrder(order)){
                         return new DefaultErrorMessage("Invalid format!");
                     }
-                    return new SelectOrderMessage(idMex, nickname, order,controller.getIdGame());
+                    return new SelectOrderMessage(idMex, nickname, order, idGame);
                 }
 
                 case SC -> {
-                    if(controller.getIdGame()==0){
+                    if(idGame == 0){
                         return new DefaultErrorMessage("You are not in a game!");
                     }
                     int col;
@@ -118,25 +120,19 @@ public class clientController{
                     if(col<1 || col>5){
                         return new DefaultErrorMessage("Invalid column!");
                     }else{
-                        return new SelectColumnMessage(idMex, nickname, col, controller.getIdGame());
+                        return new SelectColumnMessage(idMex, nickname, col, idGame);
                     }
                 }
 
                 case SHOWPERSONAL -> {
-                    if(controller.getIdGame()==0){
-                        return new DefaultErrorMessage("You are not in a game!");
-                    }
                     if(idGame > 0){
                         return new ShowPersonalCardMessage();
-                    }else{
+                    } else {
                         return new DefaultErrorMessage("You are not in a game!");
                     }
                 }
 
                 case SHOWCOMMONS -> {
-                    if(controller.getIdGame()==0){
-                        return new DefaultErrorMessage("You are not in a game!");
-                    }
                     if(idGame > 0){
                         return new ShowCommonCards();
                     } else {
@@ -163,9 +159,7 @@ public class clientController{
                             phrase = phrase.concat(words[i]);
                             phrase = phrase.concat(" ");
                         }
-                        if (idLobby > 0) {
-                            return new ChatMessage(nickname, phrase, recipient);
-                        } else if (idGame > 0) {
+                        if (idLobby > 0 || idGame > 0) {
                             return new ChatMessage(nickname, phrase, recipient);
                         } else {
                             return new DefaultErrorMessage("You are not in a game or lobby!");
@@ -182,10 +176,8 @@ public class clientController{
                             phrase = phrase.concat(words[i]);
                             phrase = phrase.concat(" ");
                         }
-                        if (idLobby > 0) {
+                        if (idLobby > 0 || idGame > 0) {
                             return new BroadcastMessage(-1, idLobby, nickname, phrase);
-                        } else if (idGame > 0) {
-                            return new BroadcastMessage(idGame, -1, nickname, phrase);
                         } else {
                             return new DefaultErrorMessage("You are not in a game or lobby!");
                         }
@@ -205,14 +197,14 @@ public class clientController{
      * @param order the list of Integer that represent an order.
      * @return true only if the order is acceptable, false otherwise. */
     public boolean acceptableOrder(List<Integer> order) {
-        if (order.size() > 3 || order.size()==0) {
+        if (order.size() > 3 || order.size() == 0) {
             return false;
         } else {
             if (!order.contains(1)) {
                 return false;
             } else if (order.size() > 1 && !order.contains(2)) {
                 return false;
-            } else{
+            } else {
                 return order.size() <= 2 || order.contains(3);
             }
         }
@@ -222,9 +214,11 @@ public class clientController{
      * @param tiles the list of chosen positions.
      * @return true only if the tiles are in a straight line, false otherwise.*/
     public boolean isStraightLineTiles(List<Position> tiles){
-        if(tiles.size() == 1){
+        if(tiles.size() == 0) {
+            return false;
+        } else if (tiles.size() == 1) {
             return true;
-        } else if(tiles.size() == 2){
+        } else if(tiles.size() == 2) {
             return isAdjacentOnX(tiles.get(0), tiles.get(1)) || isAdjacentOnY(tiles.get(0), tiles.get(1));
         } else {
             if(isAdjacentOnX(tiles.get(0), tiles.get(1)) && isAdjacentOnX(tiles.get(1), tiles.get(2))){
@@ -293,17 +287,13 @@ public class clientController{
     public void setFirstTurn(boolean firstTurn) {
         this.firstTurn = firstTurn;
     }
-    public int getIdLobby() {
-        return idLobby;
-    }
     public void setIdLobby(int idLobby) {
         this.idLobby = idLobby;
-    }
-    public int getIdGame() {
-        return idGame;
     }
     public void setIdGame(int idGame) {
         this.idGame = idGame;
     }
-    public String getNickname(){return this.nickname;}
+    public String getNickname(){
+        return this.nickname;
+    }
 }

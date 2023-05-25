@@ -1,4 +1,4 @@
-package test;
+package it.polimi.ingsw.test;
 
 import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;

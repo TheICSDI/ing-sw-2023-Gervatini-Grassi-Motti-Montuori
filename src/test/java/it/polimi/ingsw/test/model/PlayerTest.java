@@ -1,11 +1,14 @@
 /** Tests for class Player.java.
  * @author Caterina Motti.
  */
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
+import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import org.json.simple.JSONArray;
@@ -149,7 +152,7 @@ class PlayerTest {
         b.fillBoard();
 
         //Add some available position
-        Set<Position> chosen = new HashSet<>();
+        List<Position> chosen = new ArrayList<>();
         Position pos1 = new Position(0,4);
         Position pos2 = new Position(0, 5);
         chosen.add(pos1);

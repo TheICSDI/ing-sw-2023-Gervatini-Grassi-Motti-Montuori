@@ -1,7 +1,7 @@
 /** Tests for class Board.java.
  * @author Caterina Motti.
  */
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Board;
@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
@@ -109,7 +110,7 @@ class BoardTest {
         Board b = new Board(4);
         b.fillBoard();
 
-        Set<Position> remove = new HashSet<>();
+        ArrayList<Position> remove = new ArrayList<>();
         //Remove set passed by parameter is empty: it is not removing anything
         b.RemoveTiles(remove);
         for (int i = 0; i < b.getNumCols(); i++) {

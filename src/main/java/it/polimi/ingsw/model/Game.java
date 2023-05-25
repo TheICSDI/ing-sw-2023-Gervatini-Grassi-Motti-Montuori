@@ -108,7 +108,7 @@ public class Game {
                     //The player can pick some tiles from the board and insert it inside its shel//
                     List<Tile>  toInsert = new ArrayList<>();
                     while(toInsert.isEmpty()) {
-                        Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
+                        List<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
                         try{
                             toInsert = p.pickTiles(chosen, board,p);
                         } catch (InvalidPositionException e) {
@@ -147,10 +147,10 @@ public class Game {
                         }
                         serverController.sendMessage(new ChosenTilesMessage(toInsert,false), p.getNickname());
                     }
-                    serverController.sendMessage(new ReplyMessage("Choose column: ",Action.INGAMEEVENT), p.getNickname());
+                    serverController.sendMessage(new ReplyMessage("Choose column: ", Action.INGAMEEVENT), p.getNickname());
                     int col = -1;
                     while(col == -1) {
-                        col= controller.chooseColumn(p.getNickname(),id);
+                        col = controller.chooseColumn(p.getNickname(), id);
                         try {
                             p.insertInShelf(toInsert, (col-1));
                         } catch (InvalidColumnException e) {

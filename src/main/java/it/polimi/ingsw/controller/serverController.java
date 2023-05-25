@@ -160,8 +160,8 @@ public class serverController {
             String recipient = ((ChatMessage)message).getRecipient();
             if(gameController.allPlayers.containsKey(recipient)) {
                sendMessage(message, recipient);
-            }else{
-               sendMessage(new ReplyMessage("Player not found",Action.ERROR),player);
+            } else {
+               sendMessage(new ReplyMessage("Player does not exist!", Action.ERROR), player);
             }
          }
 

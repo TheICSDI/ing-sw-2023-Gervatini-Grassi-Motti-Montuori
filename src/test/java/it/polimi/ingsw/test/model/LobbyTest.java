@@ -1,7 +1,7 @@
 /** Tests for class Lobby.java.
  * @author Caterina Motti.
  */
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;

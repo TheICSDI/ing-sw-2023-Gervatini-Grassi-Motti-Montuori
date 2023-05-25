@@ -188,17 +188,15 @@ public class Client extends Application {
         } else {
             GeneralMessage clientMessage;
             //Check the format
-            clientMessage = controller.checkMessageShape(message, controller);
+            clientMessage = controller.checkMessageShape(message);
             Action curr_action = clientMessage.getAction();
             String toSend = clientMessage.toString();
             //If the format is wrong the function checkMessageShape return an error message
             if (curr_action.equals(Action.ERROR)) {
                 virtualView.displayMessage(toSend);
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
-                virtualView.displayMessage("\n  Your personal goal");
                 virtualView.showPersonal(controller.getSimpleGoal());
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
-                virtualView.displayMessage("Common goals: ");
                 virtualView.showCommons(controller.cc);
             } else if(curr_action.equals(Action.SHOWOTHERS)){
                 virtualView.showOthers(controller.getOthers());
