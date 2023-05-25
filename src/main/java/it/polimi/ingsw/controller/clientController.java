@@ -154,14 +154,11 @@ public class clientController{
 
                 case C -> {
                     if(words.length > 2){
-                        String phrase = "";
                         String recipient = words[1];
                         if(recipient.equals(this.nickname)){
                             return new DefaultErrorMessage("You can't send a message to yourself!");
-                        } else if (!gameController.allPlayers.containsKey(recipient)){
-                            return new DefaultErrorMessage("The player does not exist!");
                         }
-                        //TODO: NON FUNZIONA PERCHè LA MAPPA DI PLAYER NON è RIEMPITA CORRETTAMENTE, è VUOTA
+                        String phrase = "";
                         for (int i = 2; i < words.length; i++) {
                             phrase = phrase.concat(words[i]);
                             phrase = phrase.concat(" ");
