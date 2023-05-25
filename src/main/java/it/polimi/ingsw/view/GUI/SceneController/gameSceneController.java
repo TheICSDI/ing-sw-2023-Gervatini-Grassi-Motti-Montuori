@@ -10,10 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -57,12 +54,15 @@ public class gameSceneController implements Initializable {
     public Label turn;
     @FXML
     public TextField Chat;
+    @FXML
+    public MenuButton SendTo;
+    private String recipient= "ca ";
     private boolean firstOthers;
     private final int dim = 9;
     private int pickedTiles;
     private int tilesOrdered;
     private boolean toShow=true;
-    private List<Integer> newOrder = new ArrayList<>();
+    private final List<Integer> newOrder = new ArrayList<>();
     @FXML
     public Button pickTiles;
     @FXML
@@ -249,6 +249,14 @@ public class gameSceneController implements Initializable {
                 p4Name.setText(names.get(2) + "'s shelf:");
                 p4ImageShelf.setVisible(true);
             }
+            for (String n: names) {
+                MenuItem player=new MenuItem(n);
+                player.setOnAction(event->{
+                    recipient="c " + n + " ";
+                    SendTo.setText(n);
+                });
+                SendTo.getItems().add(player);
+            }
         }
         int k=0;
         for (String s:
@@ -269,6 +277,12 @@ public class gameSceneController implements Initializable {
             }
             k++;
         }
+    }
+
+    @FXML
+    public void sendAll(){
+        recipient="ca ";
+        SendTo.setText("All");
     }
 
     @FXML
@@ -446,7 +460,7 @@ public class gameSceneController implements Initializable {
     }
 
     public void Turn(String msg){
-        this.turn.setText(msg);
+        turn.setText(msg);
     }
 
     public void setIngameEvents(String msg){
@@ -456,11 +470,11 @@ public class gameSceneController implements Initializable {
     public void sendChatMessage(){
 
         String message= this.Chat.getText();
+        newMessage("You -> " + SendTo.getText() + ": " + message);
         this.Chat.setText("");
         if(!Objects.equals(message, "")) {
-            if (message.charAt(0) != 'c') {
-                message = "ca " + message;
-            }
+            message= recipient + message;
+            System.out.println(message);
             synchronized (this.gui.Lock) {
                 this.gui.message = message;
                 this.gui.Lock.notifyAll();

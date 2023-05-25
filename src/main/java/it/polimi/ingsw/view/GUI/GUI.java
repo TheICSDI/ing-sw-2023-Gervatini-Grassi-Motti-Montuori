@@ -26,7 +26,7 @@ public class GUI implements View {
     public static String Name="";
     public static String message;
     public static final Object NameLock = new Object();
-    public static final Object Lock = new Object();
+    public static final Object Lock = new Object(); //TODO importare l'oggetto currGUI in ogni controller così da togliere static
     public ChooseConnectionController ccc;
     public nameSceneController nsc;
     public lobbySceneController lsc;
@@ -147,6 +147,16 @@ public class GUI implements View {
     }
 
     @Override
+    public void showPoints(String message) {
+        Platform.runLater(() -> esc.showPoints(message));
+    }
+
+    @Override
+    public void winner(String message) {
+        Platform.runLater(() -> esc.setWinner(message));
+    }
+
+    @Override
     public void endGame() {
         Platform.runLater(()->openEndScene());
     }
@@ -259,7 +269,7 @@ public class GUI implements View {
         stage.show();
     }
 
-    private void openLobbyScene(){
+    public void openLobbyScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
         loader.setLocation(getClass().getResource("/fxml/LobbyScene.fxml"));
@@ -289,7 +299,7 @@ public class GUI implements View {
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
-        stage.setResizable(true);
+        stage.setResizable(false);
         //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=4;
         //stage.setFullScreenExitHint("");
@@ -300,12 +310,13 @@ public class GUI implements View {
     private void openEndScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
-        loader.setLocation(getClass().getResource("/fxml/test_2.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/EndScene.fxml"));
         try {
             root = loader.load();
         } catch (Exception ignored) {
         }
         esc = loader.getController();
+        esc.setGui(currGui);
         //stage.setFullScreen(true);
         stage.setX(0);
         stage.setY(0);

@@ -8,6 +8,8 @@ public enum Action {
     JOINLOBBY,
     EXITLOBBY,
     STARTGAME,
+    POINTS,
+    WINNER,
     ENDGAME,
     PT,
     SO,

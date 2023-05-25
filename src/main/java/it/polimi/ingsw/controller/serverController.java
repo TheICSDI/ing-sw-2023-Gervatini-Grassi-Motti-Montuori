@@ -158,7 +158,11 @@ public class serverController {
          //Single chat with a specified player
          case C -> {
             String recipient = ((ChatMessage)message).getRecipient();
-            sendMessage(message, recipient);
+            if(gameController.allPlayers.containsKey(recipient)) {
+               sendMessage(message, recipient);
+            }else{
+               sendMessage(new ReplyMessage("Player not found",Action.ERROR),player);
+            }
          }
 
          //Broadcast chat with the lobby or the game in which the player is

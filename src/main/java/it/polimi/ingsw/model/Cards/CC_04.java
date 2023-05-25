@@ -19,7 +19,7 @@ public class CC_04 implements CCStrategy {
      * @param p a player.
      * @return true only if the common goal card is completed.
      */
-    public boolean isCompleted(Player p)
+    public boolean isCompleted(Player p) //TODO DA FIXARE
     {
         Tile[][] current_shelf = p.getShelf();
         int num_row = current_shelf.length;
