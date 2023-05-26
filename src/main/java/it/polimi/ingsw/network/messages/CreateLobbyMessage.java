@@ -25,6 +25,17 @@ public class CreateLobbyMessage extends GeneralMessage{
     }
 
     /**
+     * Class constructor and set all the needed attributes
+     * @param msg the message to display
+     * @param lobby_id the uid of the lobby
+     * @param limit the max number of player for that specific lobby
+     */
+    public CreateLobbyMessage(String msg, int lobby_id, int limit) {
+        super(msg, Action.CREATELOBBY, lobby_id, -1);
+        this.limit = limit;
+    }
+
+    /**
      * Parses a JSON-formatted string to set the message.
      * @param msg a JSON-formatted string
      * @return a fully initialized CreateLobbyMessage Object
@@ -41,7 +52,10 @@ public class CreateLobbyMessage extends GeneralMessage{
         return new Gson().toJson(this);
     }
 
-
+    /**
+     * Gettero of limit
+     * @return this.limit
+     */
     public int getLimit() {
         return limit;
     }

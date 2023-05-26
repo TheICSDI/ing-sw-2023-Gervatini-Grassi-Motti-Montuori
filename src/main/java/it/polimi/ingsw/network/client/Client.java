@@ -81,22 +81,22 @@ public class Client extends Application {
         Action replyAction = GeneralMessage.identify(message);
         switch (replyAction) {
             case CREATELOBBY -> {
-                reply = CreateLobbyReplyMessage.decrypt(message);
+                reply = CreateLobbyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
                 virtualView.displayMessage(reply.getMessage());
             }
             case JOINLOBBY -> {
-                reply = JoinLobbyReplyMessage.decrypt(message);
+                reply = JoinLobbyMessage.decrypt(message);
                 controller.setIdLobby(reply.getIdLobby());
                 virtualView.displayMessage(reply.getMessage());
             }
             case SHOWLOBBY -> {
-                reply = ShowLobbyReplyMessage.decrypt(message);
-                virtualView.showLobby(((ShowLobbyReplyMessage)reply).getLobbies());
+                reply = ShowLobbyMessage.decrypt(message);
+                virtualView.showLobby(((ShowLobbyMessage)reply).getLobbies());
             }
             case STARTGAME -> {
                 controller.setIdLobby(0);
-                reply = StartGameReplyMessage.decrypt(message);
+                reply = StartGameMessage.decrypt(message);
                 controller.setIdGame(reply.getGameId());
                 controller.setFirstTurn(true);
                 virtualView.startGame(reply.getMessage());
@@ -126,14 +126,14 @@ public class Client extends Application {
                 reply = ChosenTilesMessage.decrypt(message);
                 List<Tile> tile = new ArrayList<>();
                 reply.getTiles(tile);
-                virtualView.showChosenTiles(tile,((ChosenTilesMessage) reply).isToOrder());
+                virtualView.showChosenTiles(tile,((ChosenTilesMessage) reply).getToOrder());
             }
             case SHOWPERSONAL -> {
-                reply = ShowPersonalCardReplyMessage.decrypt(message);
-                controller.setSimpleGoal(Integer.parseInt(((ShowPersonalCardReplyMessage) reply).getPersonalId()));
+                reply = ShowPersonalCardMessage.decrypt(message);
+                controller.setSimpleGoal(Integer.parseInt(((ShowPersonalCardMessage) reply).getPersonalId()));
             }
             case SHOWCOMMONS -> {
-                reply = SendCommonCards.decrypt(message);
+                reply = ShowCommonCards.decrypt(message);
                 reply.getCC(controller.cc);
             }
             case SHOWOTHERS -> {
@@ -188,17 +188,15 @@ public class Client extends Application {
         } else {
             GeneralMessage clientMessage;
             //Check the format
-            clientMessage = controller.checkMessageShape(message, controller);
+            clientMessage = controller.checkMessageShape(message);
             Action curr_action = clientMessage.getAction();
             String toSend = clientMessage.toString();
             //If the format is wrong the function checkMessageShape return an error message
             if (curr_action.equals(Action.ERROR)) {
                 virtualView.displayMessage(toSend);
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
-                virtualView.displayMessage("\n  Your personal goal");
                 virtualView.showPersonal(controller.getSimpleGoal());
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
-                virtualView.displayMessage("Common goals: ");
                 virtualView.showCommons(controller.cc);
             } else if(curr_action.equals(Action.SHOWOTHERS)){
                 virtualView.showOthers(controller.getOthers());

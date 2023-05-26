@@ -169,7 +169,7 @@ public class Board {
      *
      * @param ToRemove a set of positions.
      */
-    public void RemoveTiles(Set<Position> ToRemove) throws InvalidPositionException {
+    public void RemoveTiles(List<Position> ToRemove) throws InvalidPositionException {
         for (Position p: ToRemove) {
             if(board[p.getX()][p.getY()].getCategory().equals(type.NOT_ACCESSIBLE)){
                 throw new InvalidPositionException("This position is not accessible in the board!");

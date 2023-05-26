@@ -23,6 +23,16 @@ public class StartGameMessage extends GeneralMessage {
     }
 
     /**
+     * Constructor that initializes a message with the provided parameters.
+     * @param msg the message to display
+     * @param idGame uid of the game
+     */
+    public StartGameMessage(String msg,int idGame){
+        super(msg, Action.STARTGAME, -1, idGame);
+        this.gameStart = true;
+    }
+    
+    /**
      * Parses a JSON-formatted string to set the message.
      * @param msg a JSON-formatted string
      * @return a fully initialized StartGameMessage Object

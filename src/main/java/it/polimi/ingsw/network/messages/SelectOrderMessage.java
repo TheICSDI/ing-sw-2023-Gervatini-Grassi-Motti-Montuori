@@ -42,6 +42,9 @@ public class SelectOrderMessage extends GeneralMessage{
         return new Gson().toJson(this);
     }
 
+    /**
+     * Getter of order
+     */
     public void getOrder(List<Integer> order) {
         order.addAll(this.order);
     }

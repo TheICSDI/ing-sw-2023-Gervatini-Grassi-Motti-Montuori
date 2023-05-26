@@ -81,8 +81,8 @@ public class Game {
 
         for (Player p: players) {
             String personalId=String.valueOf(p.getPersonalCard().getId());
-            serverController.sendMessage(new ShowPersonalCardReplyMessage(personalId, Action.SHOWPERSONAL), p.getNickname());
-            serverController.sendMessage(new SendCommonCards(ccId), p.getNickname());
+            serverController.sendMessage(new ShowPersonalCardMessage(personalId), p.getNickname());
+            serverController.sendMessage(new ShowCommonCards(ccId), p.getNickname());
             for (Player other: players) {
                 if(!other.getNickname().equals(p.getNickname())){
                     serverController.sendMessage(new OtherPlayersMessage(other),p.getNickname());
@@ -108,7 +108,7 @@ public class Game {
                     //The player can pick some tiles from the board and insert it inside its shel//
                     List<Tile>  toInsert = new ArrayList<>();
                     while(toInsert.isEmpty()) {
-                        Set<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
+                        List<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
                         try{
                             toInsert = p.pickTiles(chosen, board,p);
                         } catch (InvalidPositionException e) {
@@ -150,7 +150,7 @@ public class Game {
                     serverController.sendMessage(new SimpleReply("Choose column: ",Action.INGAMEEVENT), p.getNickname());
                     int col = -1;
                     while(col == -1) {
-                        col= controller.chooseColumn(p.getNickname(),id);
+                        col = controller.chooseColumn(p.getNickname(), id);
                         try {
                             p.insertInShelf(toInsert, (col-1));
                         } catch (InvalidColumnException e) {

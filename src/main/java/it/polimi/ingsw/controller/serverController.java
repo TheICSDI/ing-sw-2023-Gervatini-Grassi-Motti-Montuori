@@ -52,7 +52,7 @@ public class serverController {
                int limit = ((CreateLobbyMessage) message).getLimit();
                Lobby NewLobby = new Lobby(pl, limit);
                gameController.allLobbies.add(NewLobby);
-               sendMessage(new CreateLobbyReplyMessage("Lobby created with id " + NewLobby.lobbyId, NewLobby.lobbyId, limit), player);
+               sendMessage(new CreateLobbyMessage("Lobby created with id " + NewLobby.lobbyId, NewLobby.lobbyId, limit), player);
             }
          }
 
@@ -62,7 +62,7 @@ public class serverController {
             if(isInAGame(gameController.allPlayers.get(player))) {
                sendMessage(new SimpleReply("Invalid command", Action.ERROR), player);
             } else {
-               sendMessage(new ShowLobbyReplyMessage("Show", gameController.allLobbies), player);
+               sendMessage(new ShowLobbyMessage("Show", gameController.allLobbies), player);
             }
          }
 
@@ -81,7 +81,7 @@ public class serverController {
                      found = true;
                      try{
                         l.Join(gameController.allPlayers.get(player));
-                        sendMessage(new JoinLobbyReplyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
+                        sendMessage(new JoinLobbyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
                      }catch(InputMismatchException x){
                         sendMessage(new SimpleReply("The selected lobby is full!", Action.ERROR), player);
                      }
@@ -108,7 +108,7 @@ public class serverController {
                      gameController.allGames.put(g.id,g);
                      gameController.allLobbies.remove(l);
                      for (Player p: l.Players) {
-                        sendMessage(new StartGameReplyMessage(player + " started the game!" , g.id), p.getNickname());
+                        sendMessage(new StartGameMessage(player + " started the game!" , g.id), p.getNickname());
                      }
                      executorsService.submit(() ->{
                         try{
@@ -160,8 +160,8 @@ public class serverController {
             String recipient = ((ChatMessage)message).getRecipient();
             if(gameController.allPlayers.containsKey(recipient)) {
                sendMessage(message, recipient);
-            }else{
-               sendMessage(new SimpleReply("Player not found",Action.ERROR),player);
+            } else {
+               sendMessage(new SimpleReply("Player does not exist!", Action.ERROR), player);
             }
          }
 

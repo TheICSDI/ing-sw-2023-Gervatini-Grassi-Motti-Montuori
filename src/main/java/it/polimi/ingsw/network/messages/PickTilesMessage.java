@@ -43,6 +43,10 @@ public class PickTilesMessage extends GeneralMessage{
         return new Gson().toJson(this);
     }
 
+    /**
+     * Getter of pos
+     * @param pos this.pos
+     */
     public void getPos(List<Position> pos) {
         pos.addAll(this.pos);
     }

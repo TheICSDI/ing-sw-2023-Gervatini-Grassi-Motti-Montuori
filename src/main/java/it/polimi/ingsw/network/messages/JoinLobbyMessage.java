@@ -20,6 +20,15 @@ public class JoinLobbyMessage extends GeneralMessage{
     }
 
     /**
+     * Class constructor and set all needed attributes
+     * @param msg the message to display
+     * @param idLobby the uid of the lobby
+     */
+    public JoinLobbyMessage(String msg,int idLobby) {
+        super(msg, Action.JOINLOBBY, idLobby, -1 );
+    }
+
+    /**
      * Parses a JSON-formatted string to set the message.
      * @param msg a JSON-formatted string
      * @return a fully initialized JoinLobbyMessage Object

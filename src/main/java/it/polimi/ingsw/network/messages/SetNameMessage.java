@@ -9,10 +9,6 @@ import com.google.gson.Gson;
 public class SetNameMessage extends GeneralMessage{
     private boolean Available;
 
-    public boolean isAvailable() {
-        return Available;
-    }
-
     /**
      * Constructor that initializes a message with the provided parameters.
      *
@@ -41,4 +37,11 @@ public class SetNameMessage extends GeneralMessage{
         return new Gson().toJson(this);
     }
 
+    /**
+     * Getter of Available
+     * @return
+     */
+    public boolean isAvailable() {
+        return this.Available;
+    }
 }

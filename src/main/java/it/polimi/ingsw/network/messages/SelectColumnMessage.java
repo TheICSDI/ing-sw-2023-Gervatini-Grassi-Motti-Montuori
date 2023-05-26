@@ -38,6 +38,10 @@ public class SelectColumnMessage extends GeneralMessage {
         return new Gson().toJson(this);
     }
 
+    /**
+     * Getter of col
+     * @return this.col
+     */
     public int getCol() {
         return col;
     }

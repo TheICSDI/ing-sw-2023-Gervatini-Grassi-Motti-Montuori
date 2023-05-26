@@ -3,11 +3,19 @@ package it.polimi.ingsw.network.messages;
 import com.google.gson.Gson;
 
 /**
- * This class represents a message for setting a username for the game.
- * It extends the GeneralMessage class to include specific behavior for setting a username for the game.
+ * This class represents a message for outgoing chat massages to all player of the party.
+ * It extends the GeneralMessage class to include specific behavior.
  */
 public class BroadcastMessage extends GeneralMessage{
     private final String phrase;
+
+    /**
+     * Class Constructor and set all the needed attributes
+     * @param idGame the uid of a specific game
+     * @param lobbyId the uid of a specific lobby
+     * @param username the uid of a specific player
+     * @param phrase the chat message sent by the player
+     */
     public BroadcastMessage(int idGame, int lobbyId, String username, String phrase){
         super("", Action.CA, lobbyId, idGame);
         this.gameId = idGame;
@@ -35,6 +43,10 @@ public class BroadcastMessage extends GeneralMessage{
         return  new Gson().toJson(this);
     }
 
+    /**
+     * Getter for phrase
+     * @return this.pharse
+     */
     public String getPhrase() {
         return this.phrase;
     }

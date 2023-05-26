@@ -38,8 +38,7 @@ public class gameController {
      * @param gameId id of the game in which the player is playing.
      * @return list of chosen tiles. */
     public List<Integer> chooseOrder(String player, int gameId) {
-        Optional<command> order;
-        order = findTheRequest(player, gameId, Action.SO);
+        Optional<command> order = findTheRequest(player, gameId, Action.SO);
         return order.get().getOrder();
     }
 
@@ -47,10 +46,9 @@ public class gameController {
      * @param player nickname of the player that is choosing the tiles.
      * @param gameId id of the game in which the player is playing.
      * @return list of positions.*/
-    public Set<Position> chooseTiles(String player , int gameId) {
-        Optional<command> order;
-        order = findTheRequest(player,gameId,Action.PT);
-        return new HashSet<>(order.get().getPos());
+    public List<Position> chooseTiles(String player , int gameId) {
+        Optional<command> order = findTheRequest(player,gameId,Action.PT);
+        return order.get().getPos();
     }
 
     /** It finds the request of the given player in the queue of commands.
@@ -97,7 +95,7 @@ public class gameController {
     public void pickTiles(String player, List<Position> pos, int gameId, int numMess){
         Player p = allPlayers.get(player);
         Game g = allGames.get(gameId);
-        command pending = new command(g, p, Action.PT,numMess);
+        command pending = new command(g, p, Action.PT, numMess);
         pending.setPos(pos);
         synchronized (queueLock) {
             System.out.println("Adding picked tiles");

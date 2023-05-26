@@ -14,8 +14,6 @@ import java.util.List;
  * This abstract class represents a general message in a client-server communication.
  * It implements the Serializable interface to allow for object serialization.
  */
-
-//ToDo REFRACTOR DI TUTTI I MESSAGGI, UNIFORMAZIONE DEL GSON E PULIZIA GENERALE DEL CODICE
 public abstract class GeneralMessage implements Serializable {
 
     private int message_id;
@@ -33,11 +31,12 @@ public abstract class GeneralMessage implements Serializable {
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param message_id the unique identification of the message (probabilmente da rimuovere)
-     * @param action the unique identification of the message
+     * @param message_id the unique identification of the message
+     * @param action the type of message
      * @param username the unique identification of the user
+     * @param lobby_id the unique identification of the lobby
      */
-    //the old general message
+    //The old general message
     public GeneralMessage(int message_id, Action action, int lobby_id, String username)
     {
         this.message_id = message_id;
@@ -45,7 +44,14 @@ public abstract class GeneralMessage implements Serializable {
         this.lobbyId = lobby_id;
         this.username = username;
     }
-    //first type of old ReplyMessage
+    /**
+     * Constructor that initializes a message with the provided parameters.
+     * @param msg the message to display
+     * @param action the type of the message
+     * @param lobby_id the unique identification of the lobby
+     * @param game_id the unique identification of the game
+     */
+    //The old ReplyMessage
     public GeneralMessage(String msg, Action action, int lobby_id, int game_id){
         this.message = msg;
         this.action = action;
@@ -67,38 +73,72 @@ public abstract class GeneralMessage implements Serializable {
         return Action.valueOf(msg_obj.get("action").toString());
     }
 
+    /**
+     * Getter for message_id
+     * @return this.message_id
+     */
     public int getMessage_id() {
-        return message_id;
+        return this.message_id;
     }
 
+    /**
+     * Getter for action
+     * @return this.action
+     */
     public Action getAction() {
-        return action;
+        return this.action;
     }
 
+    /**
+     * Getter for lobbyId
+     * @return this.lobbyId
+     */
     public int getIdLobby() {
-        return lobbyId;
+        return this.lobbyId;
     }
 
+    /**
+     * Getter for username
+     * @return this.username
+     */
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
+    /**
+     * Getter for gameId
+     * @return this.gameId
+     */
     public int getGameId() {
         return gameId;//Da sistemare
     }
 
+    /**
+     * Getter for message
+     * @return this.message
+     */
     public String getMessage(){
         return this.message;
     }
 
+    /**
+     * Getter for simpleBoard
+     * @return this.simpleBoard
+     */
     public Tile[][] getSimpleBoard() {
         return this.simpleBoard;
     }
 
+     /**
+     * Getter for tiles
+     */
     public void getTiles(List<Tile> tiles) {
         tiles.addAll(this.tiles);
     }
 
+    /**
+     * Getter for cc
+     */
     public void getCC(List<Integer> cc){
         cc.addAll(this.cc);
     }
