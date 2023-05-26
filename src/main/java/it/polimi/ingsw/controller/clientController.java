@@ -146,7 +146,7 @@ public class clientController{
 
                 case SHOWOTHERS -> {
                     if(idGame > 0){
-                        return new ReplyMessage("", Action.SHOWOTHERS);
+                        return new SimpleReply("", Action.SHOWOTHERS);
                     } else {
                         return new DefaultErrorMessage("You are not in a game!");
                     }

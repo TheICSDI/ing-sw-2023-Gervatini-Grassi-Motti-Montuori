@@ -2,11 +2,11 @@ package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
 
-public class ChatMessage extends ReplyMessage{
+public class ChatMessage extends GeneralMessage{
     private final String phrase;
     private final String recipient;
     public ChatMessage(String username, String phrase, String recipient){
-        super("", Action.C);
+        super("", Action.C, -1,-1 );
         this.username = username;
         this.phrase = phrase;
         this.recipient = recipient;

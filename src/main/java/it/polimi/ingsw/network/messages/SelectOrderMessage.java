@@ -1,11 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,56 +22,24 @@ public class SelectOrderMessage extends GeneralMessage{
     public SelectOrderMessage(int message_id, String username, List<Integer> order,int idGame) {
         super(message_id, Action.SO,-1, username);
         this.order = order;
-        this.idGame = idGame;
+        this.gameId = idGame;
     }
 
     /**
-     * Constructor that parses a JSON-formatted string and initializes the message.
+     * Parses a JSON-formatted string to set the message.
      * @param msg a JSON-formatted string
+     * @return a fully initialized SelectOrderMessage Object
      */
-    public SelectOrderMessage(String msg) throws ParseException, InvalidActionException, InvalidKeyException {
-        super(msg);
-        JSONParser parser = new JSONParser();
-        JSONObject msg_obj = (JSONObject) parser.parse(msg);
-
-        // Validates that the 'action' key in the JSON object matches the expected action for this message type.
-        if(!msg_obj.get("action").toString().equals(Action.SO.toString()))
-        {
-            throw new InvalidActionException("Invalid SelectOrderMessage encoding");
-        }
-
-        // Parsing the JSONARRAY into the Arraylist this.order
-        Integer tmp;
-        JSONArray order = (JSONArray) msg_obj.get("order");
-        for (Object item : order) {
-
-            tmp = Integer.parseInt(item.toString());
-            this.order.add(tmp);
-        }
-        this.idGame = Integer.parseInt(msg_obj.get("idGame").toString());
-
+    public static SelectOrderMessage decrypt(String msg){
+        return new Gson().fromJson(msg, SelectOrderMessage.class);
     }
 
     /**
      * Overrides the toString method to provide a custom string representation.
      */
     @Override
-    public String toString()
-    {
-        StringBuilder order_string = new StringBuilder("\"order\":[");
-
-        for(Integer item : order)
-        {
-            order_string.append(item.intValue()).append(",");
-        }
-
-        int i_last = order_string.length() - 1;
-        order_string.replace(i_last, i_last + 1, "],");
-
-        return super.startMessage() + "," +
-                order_string +
-                "\"idGame\":\"" + this.getIdGame() + "\"" +
-                "}";
+    public String toString(){
+        return new Gson().toJson(this);
     }
 
     public void getOrder(List<Integer> order) {

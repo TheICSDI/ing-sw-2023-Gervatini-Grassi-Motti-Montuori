@@ -81,7 +81,7 @@ public class Game {
 
         for (Player p: players) {
             String personalId=String.valueOf(p.getPersonalCard().getId());
-            serverController.sendMessage(new ReplyMessage(personalId,Action.SHOWPERSONAL), p.getNickname());
+            serverController.sendMessage(new ShowPersonalCardReplyMessage(personalId, Action.SHOWPERSONAL), p.getNickname());
             serverController.sendMessage(new SendCommonCards(ccId), p.getNickname());
             for (Player other: players) {
                 if(!other.getNickname().equals(p.getNickname())){
@@ -95,15 +95,15 @@ public class Game {
                 if(p.isConnected()){
                     for (Player p1: players) {
                         if(p1.getNickname().equals(p.getNickname())){
-                            serverController.sendMessage(new ReplyMessage("It's your turn!",Action.TURN), p1.getNickname());
+                            serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), p1.getNickname());
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
                         }else{
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
-                            serverController.sendMessage(new ReplyMessage("It's " + p.getNickname() + "'s turn!",Action.TURN), p1.getNickname());
+                            serverController.sendMessage(new SimpleReply("It's " + p.getNickname() + "'s turn!",Action.TURN), p1.getNickname());
                         }
                     }
                     serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
-                    serverController.sendMessage(new ReplyMessage("Select tile you want to pick: ",Action.INGAMEEVENT), p.getNickname());
+                    serverController.sendMessage(new SimpleReply("Select tile you want to pick: ",Action.INGAMEEVENT), p.getNickname());
 
                     //The player can pick some tiles from the board and insert it inside its shel//
                     List<Tile>  toInsert = new ArrayList<>();
@@ -133,7 +133,7 @@ public class Game {
                     }
                     serverController.sendMessage(new ChosenTilesMessage(toInsert,!allTheSame), p.getNickname());
                     if(!allTheSame){
-                        serverController.sendMessage(new ReplyMessage("Choose the order you want to insert them in : ",Action.INGAMEEVENT), p.getNickname());
+                        serverController.sendMessage(new SimpleReply("Choose the order you want to insert them in : ",Action.INGAMEEVENT), p.getNickname());
                         List<Integer> order = new ArrayList<>();
                         while(order.isEmpty()){
                             order = controller.chooseOrder(p.getNickname(), id);
@@ -147,7 +147,7 @@ public class Game {
                         }
                         serverController.sendMessage(new ChosenTilesMessage(toInsert,false), p.getNickname());
                     }
-                    serverController.sendMessage(new ReplyMessage("Choose column: ",Action.INGAMEEVENT), p.getNickname());
+                    serverController.sendMessage(new SimpleReply("Choose column: ",Action.INGAMEEVENT), p.getNickname());
                     int col = -1;
                     while(col == -1) {
                         col= controller.chooseColumn(p.getNickname(),id);
@@ -157,7 +157,7 @@ public class Game {
                             col = -1;//serve per il while
                         }
                     }
-                    serverController.sendMessage(new ReplyMessage("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
+                    serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
                     serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
 
                     for (Player other: players) {
@@ -169,7 +169,7 @@ public class Game {
                     if(board.isBoardEmpty()){
                         board.fillBoard();
                         for (Player pb : players) {
-                            serverController.sendMessage(new ReplyMessage("Board has been refilled!",Action.INGAMEEVENT), pb.getNickname());
+                            serverController.sendMessage(new SimpleReply("Board has been refilled!",Action.INGAMEEVENT), pb.getNickname());
                         }
                     }
 
@@ -177,15 +177,15 @@ public class Game {
                     if(CommonCards.get(0).control(p)){
                         //ToDo LA condizione rimane vera ogni turno e continua ad assegnarli punti, da fixare obv
                         for (Player pcc : players) {
-                            serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
-                                    "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
+                            serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
+                                    "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2), Action.INGAMEEVENT), pcc.getNickname());
                         }
                         CommonCards.get(0).givePoints(p);
                     }
                     if(CommonCards.get(1).control(p)){
                         for (Player pcc : players) {
-                            serverController.sendMessage(new ReplyMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
-                                    "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),Action.INGAMEEVENT), pcc.getNickname());
+                            serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
+                                    "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2), Action.INGAMEEVENT), pcc.getNickname());
                         }
                         CommonCards.get(1).givePoints(p);
                     }
@@ -194,8 +194,8 @@ public class Game {
                     //it assigns the end token and add 1 point
                     if (!check && p.isShelfFull()) {
                         for (Player pe : players) {
-                            serverController.sendMessage(new ReplyMessage(p.getNickname() + " filled his shelf first " +
-                                    "and gained a point! This is the last turn.",Action.INGAMEEVENT), pe.getNickname());
+                            serverController.sendMessage(new SimpleReply(p.getNickname() + " filled his shelf first " +
+                                    "and gained a point! This is the last turn.", Action.INGAMEEVENT), pe.getNickname());
                         }
                         p.setEndToken(true);
                         p.addPoints(1);
@@ -211,14 +211,14 @@ public class Game {
             p.calculateCCPoints();
         }
         for (Player p : players) {
-            serverController.sendMessage(new ReplyMessage("",Action.ENDGAME), p.getNickname());
-            serverController.sendMessage(new ReplyMessage("Players' total points: ", Action.INGAMEEVENT), p.getNickname());
+            serverController.sendMessage(new SimpleReply("", Action.ENDGAME), p.getNickname());
+            serverController.sendMessage(new SimpleReply("Players' total points: ", Action.INGAMEEVENT), p.getNickname());
             for (Player pp: players) {
-                serverController.sendMessage(new ReplyMessage(pp.getNickname() + ": " + pp.getTotalPoints(), Action.POINTS), p.getNickname());
+                serverController.sendMessage(new SimpleReply(pp.getNickname() + ": " + pp.getTotalPoints(), Action.POINTS), p.getNickname());
             }
         }
         for (Player p : players) {
-            serverController.sendMessage(new ReplyMessage("The winner is " + calculateWinner().getNickname(), Action.WINNER), p.getNickname());
+            serverController.sendMessage(new SimpleReply("The winner is " + calculateWinner().getNickname(), Action.WINNER), p.getNickname());
             //serverController.sendMessage(new ReplyMessage("", Action.ENDGAME), p.getNickname());
             gameController.allGames.remove(id);
         }

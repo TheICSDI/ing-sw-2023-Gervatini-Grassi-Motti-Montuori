@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
-import it.polimi.ingsw.network.messages.ReplyMessage;
+import it.polimi.ingsw.network.messages.SimpleReply;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -62,11 +62,11 @@ public class Player implements Serializable {
     public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws InputMismatchException, RemoteException {
         List<Tile> orderedTiles = new ArrayList<>();
         if (selected.size() > order.size()) {
-            serverController.sendMessage(new ReplyMessage("The selected order is wrong, you have selected more tiles!",Action.INGAMEEVENT), nickname);
+            serverController.sendMessage(new SimpleReply("The selected order is wrong, you have selected more tiles!",Action.INGAMEEVENT), nickname);
             throw new InputMismatchException("");
 
         } else if (selected.size() < order.size()){
-            serverController.sendMessage(new ReplyMessage("The selected order is wrong, you have selected less tiles!",Action.INGAMEEVENT), nickname);
+            serverController.sendMessage(new SimpleReply("The selected order is wrong, you have selected less tiles!",Action.INGAMEEVENT), nickname);
             throw new InputMismatchException("");
         } else {
             for (int i = 0; i < selected.size(); i++) {
@@ -134,12 +134,12 @@ public class Player implements Serializable {
     public List<Tile> pickTiles(Set<Position> chosen, Board b,Player player) throws InvalidPositionException, RemoteException {
         List<Tile> choice = new ArrayList<>();
         if(maxSpaceInShelf() < chosen.size()){
-            serverController.sendMessage(new ReplyMessage("Not enough space in the shelf", Action.INGAMEEVENT), player.getNickname());
+            serverController.sendMessage(new SimpleReply("Not enough space in the shelf", Action.INGAMEEVENT), player.getNickname());
             return choice;
         }
          //Position chosen by the player
          if (!b.AvailableTiles().containsAll(chosen)) {
-             serverController.sendMessage(new ReplyMessage("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), player.getNickname());
+             serverController.sendMessage(new SimpleReply("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), player.getNickname());
              return choice;
          }else {
              for (Position p : chosen) {

@@ -299,7 +299,7 @@ public class GUI implements View {
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
-        stage.setResizable(false);
+        stage.setResizable(true);
         //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=4;
         //stage.setFullScreenExitHint("");

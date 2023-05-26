@@ -1,13 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Position;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +23,7 @@ public class PickTilesMessage extends GeneralMessage{
     public PickTilesMessage(int message_id, String username, List<Position> pos,int idGame) {
         super(message_id, Action.PT, -1, username);
         this.pos = pos;
-        this.idGame = idGame;
+        this.gameId = idGame;
     }
 
     /**

@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
  */
 public class CreateLobbyMessage extends GeneralMessage{
 
+    private int limit;
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message
@@ -20,7 +21,7 @@ public class CreateLobbyMessage extends GeneralMessage{
      */
     public CreateLobbyMessage(int message_id, String username,int limit) {
         super(message_id, Action.CREATELOBBY, -1, username);
-        this.limit=limit;
+        this.limit = limit;
     }
 
     /**
@@ -41,7 +42,6 @@ public class CreateLobbyMessage extends GeneralMessage{
     }
 
 
-    @Override
     public int getLimit() {
         return limit;
     }

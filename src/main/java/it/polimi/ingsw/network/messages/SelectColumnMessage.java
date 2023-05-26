@@ -1,10 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
 
 /**
  * This class represents a message for selecting a column in game.
@@ -22,42 +18,26 @@ public class SelectColumnMessage extends GeneralMessage {
     public SelectColumnMessage(int message_id, String username, int col,int idGame) {
         super(message_id, Action.SC, -1, username);
         this.col = col;
-        this.idGame=idGame;
+        this.gameId =idGame;
     }
 
     /**
-     * Constructor that parses a JSON-formatted string and initializes the message.
+     * Parses a JSON-formatted string to set the message.
      * @param msg a JSON-formatted string
+     * @return a fully initialized SelectColumnMessage Object
      */
-    public SelectColumnMessage(String msg) throws ParseException, InvalidActionException, InvalidKeyException {
-        super(msg);
-        JSONParser parser = new JSONParser();
-        JSONObject msg_obj = (JSONObject) parser.parse(msg);
-
-        // Validates that the 'action' key in the JSON object matches the expected action for this message type.
-        if(!msg_obj.get("action").toString().equals(Action.SC.toString()))
-        {
-            throw new InvalidActionException("Invalid SelectColumnMessage encoding");
-        }
-        if(!msg_obj.containsKey("column")){
-            throw new InvalidKeyException("Missing key: column");
-        }
-
-        this.col = Integer.parseInt(msg_obj.get("column").toString());
-        this.idGame = Integer.parseInt(msg_obj.get("idGame").toString());
+    public static SelectColumnMessage decrypt(String msg){
+        return new Gson().fromJson(msg, SelectColumnMessage.class);
     }
 
     /**
      * Overrides the toString method to provide a custom string representation.
      */
     @Override
-    public String toString()
-    {
-        return super.startMessage() + "," +
-                "\"column\":" + this.col +
-                "\"idGame\":\"" + this.getIdGame() + "\""+
-                "}";
+    public String toString(){
+        return new Gson().toJson(this);
     }
+
     public int getCol() {
         return col;
     }

@@ -8,53 +8,23 @@ import it.polimi.ingsw.model.Tile.type;
  * This class represents a message for warning the update of the board.
  * It extends the GeneralMessage class to include specific behavior.
  */
-public class UpdateBoardMessage extends ReplyMessage {
+public class UpdateBoardMessage extends GeneralMessage{
 
-
-    /**
-     * Constructor that initializes a message with the provided parameters.
-     *
-     */
     public UpdateBoardMessage(Action action, Tile[][] simpleShelf) {
-        super("", action);
+        super("", action, -1, -1);
         this.simpleBoard = simpleShelf;
     }
 
-    /**
-     * Constructor that parses a JSON-formatted string and initializes the message.
-     * @param msg a JSON-formatted string
-     */
-    /*
-    public UpdateBoardMessage(String msg) throws ParseException, InvalidActionException, InvalidKeyException {
-        super(msg);
-        JSONParser parser = new JSONParser();
-        JSONObject msg_obj = (JSONObject) parser.parse(msg);
-
-        // Validates that the 'action' key in the JSON object matches the expected action for this message type.
-        if(!msg_obj.get("action").toString().equals(Action.UPDATEBOARD.toString()))
-        {
-            throw new InvalidActionException("Invalid UpdateBoardMessage encoding");
-        }
-        if(!msg_obj.containsKey("simpleShelf"))
-        {
-            throw new InvalidKeyException("Missing key: simpleShelf");
-        }
-        //
+    public static UpdateBoardMessage decrypt(String json){
+        return new Gson().fromJson(json,UpdateBoardMessage.class);
     }
-
-     */
 
     /**
      * Overrides the toString method to provide a custom string representation.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return new Gson().toJson(this);
-    }
-
-    public static UpdateBoardMessage decrypt(String json){
-        return new Gson().fromJson(json,UpdateBoardMessage.class);
     }
 
 }

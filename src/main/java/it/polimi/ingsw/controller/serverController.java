@@ -32,7 +32,7 @@ public class serverController {
    public void executeMessage(GeneralMessage message) throws RemoteException {
       //Constants to lighten the code
       final int id = message.getMessage_id();
-      final int gameId = message.getIdGame();
+      final int gameId = message.getGameId();
       final int idLobby = message.getIdLobby();
       final Action action = message.getAction();
       final String player = message.getUsername();
@@ -43,13 +43,13 @@ public class serverController {
          case CREATELOBBY -> {
             //It checks if the player is already in a game or in a lobby
             if (isInAGame(gameController.allPlayers.get(player))){
-               sendMessage(new ReplyMessage("Already in a game!", Action.ERROR), player);
+               sendMessage(new SimpleReply("Already in a game!", Action.ERROR), player);
             } else if(isInALobby(gameController.allPlayers.get(player))){
-               sendMessage(new ReplyMessage("Already in a lobby!", Action.ERROR), player);
+               sendMessage(new SimpleReply("Already in a lobby!", Action.ERROR), player);
             } else {
                //Otherwise it creates the lobby
                Player pl = gameController.allPlayers.get(player);
-               int limit = message.getLimit();
+               int limit = ((CreateLobbyMessage) message).getLimit();
                Lobby NewLobby = new Lobby(pl, limit);
                gameController.allLobbies.add(NewLobby);
                sendMessage(new CreateLobbyReplyMessage("Lobby created with id " + NewLobby.lobbyId, NewLobby.lobbyId, limit), player);
@@ -60,7 +60,7 @@ public class serverController {
          case SHOWLOBBY -> {
             //If the player is already in a game the command cannot be executed
             if(isInAGame(gameController.allPlayers.get(player))) {
-               sendMessage(new ReplyMessage("Invalid command", Action.ERROR), player);
+               sendMessage(new SimpleReply("Invalid command", Action.ERROR), player);
             } else {
                sendMessage(new ShowLobbyReplyMessage("Show", gameController.allLobbies), player);
             }
@@ -71,9 +71,9 @@ public class serverController {
             boolean found = false;
             //It checks if the player is already in a game or in a lobby
             if(isInAGame(gameController.allPlayers.get(player))) {
-               sendMessage(new ReplyMessage("Already in a game!", Action.ERROR), player);
+               sendMessage(new SimpleReply("Already in a game!", Action.ERROR), player);
             }else if(isInALobby(gameController.allPlayers.get(player))){
-               sendMessage(new ReplyMessage("Already in a lobby!", Action.ERROR), player);
+               sendMessage(new SimpleReply("Already in a lobby!", Action.ERROR), player);
             }else{
                //Otherwise, it found the chosen lobby by the given id, and it added the player
                for (Lobby l: gameController.allLobbies) {
@@ -83,13 +83,13 @@ public class serverController {
                         l.Join(gameController.allPlayers.get(player));
                         sendMessage(new JoinLobbyReplyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
                      }catch(InputMismatchException x){
-                        sendMessage(new ReplyMessage("The selected lobby is full!", Action.ERROR), player);
+                        sendMessage(new SimpleReply("The selected lobby is full!", Action.ERROR), player);
                      }
                   }
                }
                //If the lobby is not found it is reported to the client
                if(!found){
-                  sendMessage(new ReplyMessage("The selected lobby does not exist!", Action.ERROR), player);
+                  sendMessage(new SimpleReply("The selected lobby does not exist!", Action.ERROR), player);
                }
             }
          }
@@ -120,16 +120,16 @@ public class serverController {
                      gameStarted = true;
                      break;
                   } else {
-                     sendMessage(new ReplyMessage("Not enough or too many players", Action.ERROR), player);
+                     sendMessage(new SimpleReply("Not enough or too many players", Action.ERROR), player);
                   }
                }
             }
             //Otherwise it checks if the player is already in a game or is not in a lobby
             if(!gameStarted) {
                if (isInAGame(gameController.allPlayers.get(player))) {
-                  sendMessage(new ReplyMessage("Already in game!", Action.ERROR), player);
+                  sendMessage(new SimpleReply("Already in game!", Action.ERROR), player);
                } else if (notInLobby){
-                  sendMessage(new ReplyMessage("Not in a Lobby!", Action.ERROR), player);
+                  sendMessage(new SimpleReply("Not in a Lobby!", Action.ERROR), player);
                }
             }
          }
@@ -161,7 +161,7 @@ public class serverController {
             if(gameController.allPlayers.containsKey(recipient)) {
                sendMessage(message, recipient);
             }else{
-               sendMessage(new ReplyMessage("Player not found",Action.ERROR),player);
+               sendMessage(new SimpleReply("Player not found",Action.ERROR),player);
             }
          }
 
@@ -265,8 +265,8 @@ public class serverController {
          case JOINLOBBY -> mex = JoinLobbyMessage.decrypt(input);
          case STARTGAME -> mex = StartGameMessage.decrypt(input);
          case PT -> mex = PickTilesMessage.decrypt(input);
-         case SO -> mex = new SelectOrderMessage(input);
-         case SC -> mex = new SelectColumnMessage(input);
+         case SO -> mex = SelectOrderMessage.decrypt(input);
+         case SC -> mex = SelectColumnMessage.decrypt(input);
          case C -> mex = ChatMessage.decrypt(input);
          case CA -> mex = BroadcastMessage.decrypt(input);
          case PING -> {

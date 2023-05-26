@@ -77,8 +77,8 @@ public class Client extends Application {
      * It interacts with the instance of clientController and with the virtualView.
      * @param message to be elaborated. */
     public static void elaborate(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
-        ReplyMessage reply;
-        Action replyAction = ReplyMessage.identify(message);
+        GeneralMessage reply;
+        Action replyAction = GeneralMessage.identify(message);
         switch (replyAction) {
             case CREATELOBBY -> {
                 reply = CreateLobbyReplyMessage.decrypt(message);
@@ -97,7 +97,7 @@ public class Client extends Application {
             case STARTGAME -> {
                 controller.setIdLobby(0);
                 reply = StartGameReplyMessage.decrypt(message);
-                controller.setIdGame(reply.getIdGame());
+                controller.setIdGame(reply.getGameId());
                 controller.setFirstTurn(true);
                 virtualView.startGame(reply.getMessage());
             }
@@ -115,11 +115,11 @@ public class Client extends Application {
                 virtualView.showShelf(reply.getSimpleBoard());
             }
             case INGAMEEVENT -> {
-                reply = ReplyMessage.decrypt(message);
+                reply = SimpleReply.decrypt(message);
                 virtualView.displayMessage(reply.getMessage());
             }
             case TURN -> {
-                reply = ReplyMessage.decrypt(message);
+                reply = SimpleReply.decrypt(message);
                 virtualView.playersTurn(reply.getMessage());
             }
             case CHOSENTILES ->{
@@ -129,8 +129,8 @@ public class Client extends Application {
                 virtualView.showChosenTiles(tile,((ChosenTilesMessage) reply).isToOrder());
             }
             case SHOWPERSONAL -> {
-                reply = UpdateBoardMessage.decrypt(message);
-                controller.setSimpleGoal(Integer.parseInt(reply.getMessage()));
+                reply = ShowPersonalCardReplyMessage.decrypt(message);
+                controller.setSimpleGoal(Integer.parseInt(((ShowPersonalCardReplyMessage) reply).getPersonalId()));
             }
             case SHOWCOMMONS -> {
                 reply = SendCommonCards.decrypt(message);
@@ -152,11 +152,11 @@ public class Client extends Application {
                 virtualView.showChat(reply.getUsername() + " to all: " + ((BroadcastMessage)reply).getPhrase());
             }
             case POINTS -> {
-                reply = ReplyMessage.decrypt(message);
+                reply = SimpleReply.decrypt(message);
                 virtualView.showPoints(reply.getMessage());
             }
             case WINNER -> {
-                reply = ReplyMessage.decrypt(message);
+                reply = SimpleReply.decrypt(message);
                 virtualView.winner(reply.getMessage());
             }
             case ENDGAME -> {
@@ -170,10 +170,10 @@ public class Client extends Application {
                 stub.RMIsend(new PingMessage(controller.getNickname()).toString());
             }
             case ERROR -> {
-                reply = ReplyMessage.decrypt(message);
+                reply = SimpleReply.decrypt(message);
                 virtualView.displayError(reply.getMessage());
             }
-            default -> reply = ReplyMessage.decrypt(message);
+            default -> reply = SimpleReply.decrypt(message);
         }
     }
 
