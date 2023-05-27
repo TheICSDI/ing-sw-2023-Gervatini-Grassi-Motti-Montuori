@@ -47,4 +47,5 @@ public class CommonCard{
     public int getPoints() {
         return points;
     }
+
 }

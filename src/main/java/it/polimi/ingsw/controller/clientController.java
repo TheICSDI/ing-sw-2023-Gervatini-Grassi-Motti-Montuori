@@ -133,7 +133,7 @@ public class clientController{
 
                 case SHOWCOMMONS -> {
                     if(idGame > 0){
-                        return new ShowCommonCards(null);
+                        return new ShowCommonCards(gameController.allGames.get(idGame).getCCid());
                     } else {
                         return new DefaultErrorMessage("You are not in a game!");
                     }

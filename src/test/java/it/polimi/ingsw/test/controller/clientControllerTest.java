@@ -1,5 +1,10 @@
-package it.polimi.ingsw.controller;
+/** Tests for class clientController.java.
+ * @author Caterina Motti.
+ */
+package it.polimi.ingsw.test.controller;
 
+import it.polimi.ingsw.controller.clientController;
+import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
@@ -7,13 +12,9 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.network.messages.CreateLobbyMessage;
 import it.polimi.ingsw.network.messages.GeneralMessage;
-import it.polimi.ingsw.network.messages.PickTilesMessage;
-import javafx.geometry.Pos;
 import org.junit.jupiter.api.Test;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,6 +64,7 @@ class clientControllerTest {
         rsp = CC1.checkMessageShape(mex);
         assertEquals(Action.STARTGAME, rsp.getAction());
         Game g = new Game(l.Players, new gameController());
+        gameController.allGames.put(g.id, g);
         CC1.setIdGame(g.id);
         CC2.setIdGame(g.id);
 

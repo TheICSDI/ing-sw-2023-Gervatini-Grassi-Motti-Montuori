@@ -1,3 +1,6 @@
+/** Tests for class gameController.java.
+ * @author Caterina Motti.
+ */
 package it.polimi.ingsw.test.controller;
 
 import it.polimi.ingsw.controller.gameController;

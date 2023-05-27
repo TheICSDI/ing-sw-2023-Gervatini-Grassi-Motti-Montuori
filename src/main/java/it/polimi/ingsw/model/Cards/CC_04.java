@@ -49,7 +49,7 @@ public class CC_04 implements CCStrategy {
                                         || (i < num_row - 2 && current_tile.equals(current_shelf[i + 2][j + 1].getCategory()))   // Tile down-down-right
                                         || (i < num_row - 2 && current_tile.equals(current_shelf[i + 2][j].getCategory()))       // Tile down-down
                                         || (j > 0 && current_tile.equals(current_shelf[i + 1][j - 1].getCategory()))             // Tile down-left
-                                        || (j > 0 && current_tile.equals(current_shelf[i][j - 1].getCategory()))))                // Tile left
+                                        || (j > 0 && current_tile.equals(current_shelf[i][j - 1].getCategory()))))               // Tile left
                         {
                             count++;
                             if (count == 2) {

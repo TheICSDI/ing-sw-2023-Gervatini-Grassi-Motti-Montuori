@@ -64,13 +64,12 @@ public class Player implements Serializable {
         if (selected.size() > order.size()) {
             serverController.sendMessage(new SimpleReply("The selected order is wrong, you have selected more tiles!",Action.INGAMEEVENT), nickname);
             throw new InputMismatchException("");
-
         } else if (selected.size() < order.size()){
             serverController.sendMessage(new SimpleReply("The selected order is wrong, you have selected less tiles!",Action.INGAMEEVENT), nickname);
             throw new InputMismatchException("");
         } else {
             for (int i = 0; i < selected.size(); i++) {
-                int x=order.get(i);
+                int x = order.get(i);
                 x--;
                 orderedTiles.add(selected.get(x));
             }
@@ -82,19 +81,15 @@ public class Player implements Serializable {
      * Check if the chosen column has enough space for the given tiles.
      * @param numTiles number of tiles to be inserted.
      * @param col chosen column from the player. It goes from 0 to 5.
-     * @throws InvalidColumnException if the parameter col is out of bound.
      * @return true only if the shelf has enough space for the given tiles, false otherwise.
      */
-    private boolean checkColumn(int numTiles, int col) throws RemoteException {
+    private boolean checkColumn(int numTiles, int col) {
         for(int j = 0; j < numRows; j++){
             //Check how many empty spaces there are in the selected column
             if(this.Shelf[j][col].getCategory().equals(type.EMPTY)) {
                 //For each empty space it decreases numTiles
                 numTiles --;
                 if(numTiles <= 0) return true;
-            } else {
-                //serverController.sendMessage(new ReplyMessage("This column is full!", Action.INGAMEEVENT), nickname);
-                return false;
             }
         }
         return false;
@@ -137,17 +132,17 @@ public class Player implements Serializable {
             serverController.sendMessage(new SimpleReply("Not enough space in the shelf", Action.INGAMEEVENT), player.getNickname());
             return choice;
         }
-         //Position chosen by the player
-         if (!b.AvailableTiles().containsAll(chosen)) {
-             serverController.sendMessage(new SimpleReply("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), player.getNickname());
-             return choice;
-         }else {
-             for (Position p : chosen) {
-                 choice.add(b.board[p.getX()][p.getY()]);
-             }
-         b.RemoveTiles(chosen);
-         return choice;
-         }
+        //Position chosen by the player
+        if (!b.AvailableTiles().containsAll(chosen)) {
+            serverController.sendMessage(new SimpleReply("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), player.getNickname());
+            return choice;
+        } else {
+            for (Position p : chosen) {
+                choice.add(b.board[p.getX()][p.getY()]);
+            }
+            b.RemoveTiles(chosen);
+            return choice;
+        }
      }
 
     /** It calculates the maximum empty space in the shelf.
@@ -193,7 +188,6 @@ public class Player implements Serializable {
 
     /**
      * Update the total points of the player.
-     *
      * @param toSum points to be summed to the total of the player
      */
     public void addPoints(int toSum){
@@ -203,6 +197,11 @@ public class Player implements Serializable {
     /** Gets the total points of the player */
     public int getTotalPoints() {
         return totalPoints;
+    }
+
+    /** Sets the total points of the player */
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
     }
 
     /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf. */
@@ -240,12 +239,13 @@ public class Player implements Serializable {
         this.totalPoints += this.scoreToken1 + this.scoreToken2;
     }
 
-    /** Counts the points given by the personal card. */
-    public void personalPoint(){
-        int matches=0;
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                if (!(this.Shelf[i][j].getCategory().equals(type.EMPTY))&&(this.Shelf[i][j].getCategory().equals(this.getPersonalCard().getCard()[i][j].getCategory()))){
+    /** Calculates the points given by the personal card. */
+    public void calculatePCPoint(){
+        int matches = 0;
+        for (int i = 0; i < this.numRows; i++) {
+            for (int j = 0; j < this.numCols; j++) {
+                if (!(this.Shelf[i][j].getCategory().equals(type.EMPTY)) &&
+                        (this.Shelf[i][j].getCategory().equals(this.getPersonalCard().getCard()[i][j].getCategory()))){
                     matches++;
                 }
             }
@@ -372,4 +372,5 @@ public class Player implements Serializable {
     public void setConnected(boolean connected) {
         this.connected = connected;
     }
+
 }

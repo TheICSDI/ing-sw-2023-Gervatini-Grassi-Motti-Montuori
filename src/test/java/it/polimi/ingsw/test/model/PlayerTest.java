@@ -7,6 +7,7 @@ import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
@@ -150,6 +151,7 @@ class PlayerTest {
     void pickTiles() throws InvalidPositionException, RemoteException {
         Board b = new Board(4);
         b.fillBoard();
+        Player p = new Player("Mario");
 
         //Add some available position
         List<Position> chosen = new ArrayList<>();
@@ -157,7 +159,6 @@ class PlayerTest {
         Position pos2 = new Position(0, 5);
         chosen.add(pos1);
         chosen.add(pos2);
-        Player p = new Player("Mario");
 
         List<Tile> expectedTiles = new ArrayList<>();
         expectedTiles.add(b.getTile(pos1));
@@ -172,7 +173,7 @@ class PlayerTest {
         Position pos3 = new Position(0,0);
         chosen.add(pos3);
         Throwable ex = assertThrows(NullPointerException.class, () ->
-                p1.pickTiles(chosen, b,p));
+                p1.pickTiles(chosen, b, p));
     }
 
     @Test
@@ -234,5 +235,43 @@ class PlayerTest {
         p.getShelf()[2][1] = new Tile("empty");
         max = p.maxSpaceInShelf();
         assertEquals(3, max);
+    }
+
+    @Test
+    public void calculatePoints() {
+        //Empty shelf
+        Player p = new Player("Mario");
+        p.setPersonalCard(new PersonalCard(0));
+        p.calculatePCPoint();
+        assertEquals(0, p.getTotalPoints());
+
+        p.getShelf()[5][2] = new Tile("trophies");
+        p.calculatePCPoint();
+        assertEquals(1, p.getTotalPoints());
+
+        p.setTotalPoints(0);
+        p.getShelf()[3][1] = new Tile("games");
+        p.calculatePCPoint();
+        assertEquals(2, p.getTotalPoints());
+
+        p.setTotalPoints(0);
+        p.getShelf()[2][3] = new Tile("books");
+        p.calculatePCPoint();
+        assertEquals(4, p.getTotalPoints());
+
+        p.setTotalPoints(0);
+        p.getShelf()[1][4] = new Tile("cats");
+        p.calculatePCPoint();
+        assertEquals(6, p.getTotalPoints());
+
+        p.setTotalPoints(0);
+        p.getShelf()[0][2] = new Tile("frames");
+        p.calculatePCPoint();
+        assertEquals(9, p.getTotalPoints());
+
+        p.setTotalPoints(0);
+        p.getShelf()[0][0] = new Tile("plants");
+        p.calculatePCPoint();
+        assertEquals(12, p.getTotalPoints());
     }
 }
