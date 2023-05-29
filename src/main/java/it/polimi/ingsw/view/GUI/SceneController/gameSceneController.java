@@ -398,7 +398,11 @@ public class gameSceneController implements Initializable {
                 p4Token.add(pointsWon,0,0);
             }
             c1Index--;
-            common1points.setImage(CommonPoints.get(c1Index));
+            if(c1Index>=0){
+                common1points.setImage(CommonPoints.get(c1Index));
+            }else{
+                common1points.setImage(null);
+            }
         }else{
             ImageView pointsWon=new ImageView(CommonPoints.get(c2Index));
             if(whoCompleted.equals(players.get(0))){
@@ -411,7 +415,12 @@ public class gameSceneController implements Initializable {
                 p4Token.add(pointsWon,1,0);
             }
             c2Index--;
-            common2points.setImage(CommonPoints.get(c2Index));
+            if(c2Index>=0){
+                common2points.setImage(CommonPoints.get(c2Index));
+            }else{
+                common2points.setImage(null);
+            }
+
         }
 
     }
