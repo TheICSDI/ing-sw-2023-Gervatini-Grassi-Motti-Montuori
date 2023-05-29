@@ -128,6 +128,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void commonCompleted(String msg, boolean first, String whoCompleted) {
+        Platform.runLater(()->gsc.commonCompleted(msg,first,whoCompleted));
+    }
+
+    @Override
     public void showOthers(Map<String,Player> others) {
 
     }
@@ -162,6 +167,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void endGameToken(String player) {
+        Platform.runLater(()->gsc.endGameToken(player));
+    }
+
+    @Override
     public void displayError(String msg) {
         Platform.runLater(() -> {
             lsc.setText(msg);
@@ -183,8 +193,8 @@ public class GUI implements View {
     }
 
     @Override
-    public void playersTurn(String msg){
-        Platform.runLater(()->gsc.Turn(msg));
+    public void playersTurn(String msg,boolean firstTurn){
+        Platform.runLater(()->gsc.Turn(msg,firstTurn));
     }
     @Override
     public void showChat(String msg) {

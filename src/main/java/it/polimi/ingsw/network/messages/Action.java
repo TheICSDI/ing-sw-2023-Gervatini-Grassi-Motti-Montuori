@@ -11,6 +11,7 @@ public enum Action {
     POINTS,
     WINNER,
     ENDGAME,
+    ENDGAMETOKEN,
     PT,
     SO,
     SC,
@@ -25,6 +26,7 @@ public enum Action {
     C,
     CA,
     SHOWCOMMONS,
+    COMMONCOMPLETED,
     SHOWOTHERS,
     PING,
     ERROR;

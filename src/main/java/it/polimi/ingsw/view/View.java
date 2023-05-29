@@ -20,6 +20,9 @@ public interface View {
     void showPersonal(PersonalCard PC);
     void showChosenTiles(List<Tile> tiles,boolean toOrder);
     void showCommons(List<Integer> cc);
+
+    void commonCompleted(String msg, boolean first, String whoCompleted);
+
     void showOthers(Map<String,Player> others);
     void updateOthers(Map<String,Player> others);
     void joinLobby(int lobby_id);
@@ -28,9 +31,10 @@ public interface View {
     void showPoints(String message);
     void winner(String message);
     void endGame(); // da controllare input
+    void endGameToken(String player);
     void displayError(String msg);
     void displayMessage(String msg);
-    void playersTurn(String msg);
+    void playersTurn(String msg, boolean firstTurn);
     void showChat(String msg);
     void help();
     String getInput();

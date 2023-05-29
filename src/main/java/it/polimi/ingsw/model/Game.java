@@ -174,15 +174,19 @@ public class Game {
                     if(CommonCards.get(0).control(p) && p.getScoreToken1()==0){
                         //ToDo LA condizione rimane vera ogni turno e continua ad assegnarli punti, da fixare obv
                         for (Player pcc : players) {
-                            serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
-                                    "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2), Action.INGAMEEVENT), pcc.getNickname());
+                            serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
+                                    "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),true,p.getNickname()),pcc.getNickname());
+                            //serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
+                             //       "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2), Action.COMMONCOMPLETED), pcc.getNickname());
                         }
                         CommonCards.get(0).givePoints(p);
                     }
                     if(CommonCards.get(1).control(p) && p.getScoreToken2()==0){
                         for (Player pcc : players) {
-                            serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
-                                    "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2), Action.INGAMEEVENT), pcc.getNickname());
+                            serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
+                                    "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),false, p.getNickname()),pcc.getNickname());
+                            //serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
+                            //        "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2), Action.INGAMEEVENT), pcc.getNickname());
                         }
                         CommonCards.get(1).givePoints(p);
                     }
@@ -191,8 +195,7 @@ public class Game {
                     //it assigns the end token and add 1 point
                     if (!check && p.isShelfFull()) {
                         for (Player pe : players) {
-                            serverController.sendMessage(new SimpleReply(p.getNickname() + " filled his shelf first " +
-                                    "and gained a point! This is the last turn.", Action.INGAMEEVENT), pe.getNickname());
+                            serverController.sendMessage(new SimpleReply(p.getNickname() , Action.ENDGAMETOKEN), pe.getNickname());
                         }
                         p.setEndToken(true);
                         p.addPoints(1);

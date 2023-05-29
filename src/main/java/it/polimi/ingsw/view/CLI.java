@@ -168,6 +168,11 @@ public class CLI implements View{
         }
     }
 
+    @Override
+    public void commonCompleted(String msg,boolean first,String whoCompleted) {
+        System.out.println(msg);
+    }
+
     /*
     @Override
     public void createLobby(String lobbyName, int maxPlayers){
@@ -233,6 +238,12 @@ public class CLI implements View{
     }
 
     @Override
+    public void endGameToken(String player) {
+        System.out.println(player + " filled his shelf first " +
+                "and gained a point! This is the last turn.");
+    }
+
+    @Override
     public void displayError(String msg){
         out.println(msg);
     }
@@ -242,7 +253,7 @@ public class CLI implements View{
         out.println(msg);
     }
     @Override
-    public void playersTurn(String msg){
+    public void playersTurn(String msg,boolean firstTurn){
         System.out.println(msg);
     }
 

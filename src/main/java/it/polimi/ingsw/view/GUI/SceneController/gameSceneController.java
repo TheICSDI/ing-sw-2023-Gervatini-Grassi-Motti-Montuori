@@ -29,6 +29,17 @@ import java.util.stream.Collectors;
 //TODO I TOKEN
 public class gameSceneController implements Initializable {
     @FXML
+    public GridPane myShelfToken;
+    @FXML
+    public GridPane p4Token;
+    @FXML
+    public GridPane p2Token;
+    @FXML
+    public GridPane p3Token;
+    @FXML
+    public ImageView endGameToken;
+    private List<String> players=new ArrayList<>();
+    @FXML
     public Label YourName;
     @FXML
     public Label p2Name;
@@ -56,6 +67,8 @@ public class gameSceneController implements Initializable {
     public TextField Chat;
     @FXML
     public MenuButton SendTo;
+
+
     private String recipient= "ca ";
     private boolean firstOthers;
     private final int dim = 9;
@@ -70,7 +83,15 @@ public class gameSceneController implements Initializable {
     @FXML
     public ImageView common1;
     @FXML
+    public ImageView common1points;
+    private int c1Index;
+    @FXML
+    public ImageView common2points;
+    private int c2Index;
+    @FXML
     public ImageView common2;
+
+    private List<Image> CommonPoints=new ArrayList<>();
     @FXML
     public VBox chat;
     @FXML
@@ -111,9 +132,14 @@ public class gameSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         YourName.setText(GUI.Name);
+        players.add(GUI.Name);
+        myShelfToken.setAlignment(Pos.CENTER);
         this.othersShelf.add(p2Shelf);
+        p2Token.setAlignment(Pos.CENTER);
         this.othersShelf.add(p3Shelf);
+        p3Token.setAlignment(Pos.CENTER);
         this.othersShelf.add(p4Shelf);
+        p4Token.setAlignment(Pos.CENTER);
         this.firstOthers=true;
         this.Chat.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -121,6 +147,10 @@ public class gameSceneController implements Initializable {
             }
         });
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
+        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
     }
 
 
@@ -241,13 +271,28 @@ public class gameSceneController implements Initializable {
                 System.out.println(s);
             }
             p2Name.setText(names.get(0) + "'s shelf:");
-            if(names.size()>1){
+            players.add(names.get(0));
+            common1points.setImage(CommonPoints.get(1));
+            c1Index=1;
+            common2points.setImage(CommonPoints.get(1));
+            c2Index=1;
+            if(names.size()>1){ //3 giocatori
                 p3Name.setText(names.get(1) + "'s shelf:");
+                players.add(names.get(1));
                 p3ImageShelf.setVisible(true);
+                common1points.setImage(CommonPoints.get(2));//da fare con common2
+                c1Index=2;
+                common2points.setImage(CommonPoints.get(2));
+                c2Index=2;
             }
-            if(names.size()>2){
+            if(names.size()>2){//4 giocatori
                 p4Name.setText(names.get(2) + "'s shelf:");
+                players.add(names.get(2));
                 p4ImageShelf.setVisible(true);
+                common1points.setImage(CommonPoints.get(3));
+                c1Index=3;
+                common2points.setImage(CommonPoints.get(3));
+                c2Index=3;
             }
             for (String n: names) {
                 MenuItem player=new MenuItem(n);
@@ -335,6 +380,40 @@ public class gameSceneController implements Initializable {
                 this.common2.setImage(image2);
             }
         }
+    }
+
+    public void commonCompleted(String msg,boolean first,String whoCompleted){
+        newMessage(msg);//temporaneo
+        if(first){
+            ImageView pointsWon=new ImageView(CommonPoints.get(c1Index));
+            pointsWon.setFitWidth(45);
+            pointsWon.setFitHeight(45);
+            if(whoCompleted.equals(players.get(0))){
+                myShelfToken.add(pointsWon,0,0);
+            }else if(whoCompleted.equals(players.get(1))){
+                p2Token.add(pointsWon,0,0);
+            }else if(whoCompleted.equals(players.get(2))){
+                p3Token.add(pointsWon,0,0);
+            }else if(whoCompleted.equals(players.get(3))){
+                p4Token.add(pointsWon,0,0);
+            }
+            c1Index--;
+            common1points.setImage(CommonPoints.get(c1Index));
+        }else{
+            ImageView pointsWon=new ImageView(CommonPoints.get(c2Index));
+            if(whoCompleted.equals(players.get(0))){
+                myShelfToken.add(pointsWon,1,0);
+            }else if(whoCompleted.equals(players.get(1))){
+                p2Token.add(pointsWon,1,0);
+            }else if(whoCompleted.equals(players.get(2))){
+                p3Token.add(pointsWon,1,0);
+            }else if(whoCompleted.equals(players.get(3))){
+                p4Token.add(pointsWon,1,0);
+            }
+            c2Index--;
+            common2points.setImage(CommonPoints.get(c2Index));
+        }
+
     }
 
     @FXML
@@ -459,7 +538,22 @@ public class gameSceneController implements Initializable {
         this.chat.getChildren().add(0,messageLabel);
     }
 
-    public void Turn(String msg){
+    public void Turn(String msg,boolean firstTurn){
+        if(firstTurn){
+            ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
+            firstPlayerToken.setFitHeight(45);
+            firstPlayerToken.setFitWidth(45);
+
+            if(msg.equals("It's your turn!")){
+                myShelfToken.add(firstPlayerToken,0,1);
+            }else if(msg.equals("It's " + players.get(1) + "'s turn!")){
+                p2Token.add(firstPlayerToken,1,1);
+            }else if(msg.equals("It's " + players.get(2) + "'s turn!")){
+                p3Token.add(firstPlayerToken,1,1);
+            }else if(msg.equals("It's " + players.get(3) + "'s turn!")){
+                p4Token.add(firstPlayerToken,0,1);
+            }
+        }
         turn.setText(msg);
     }
 
@@ -484,5 +578,21 @@ public class gameSceneController implements Initializable {
 
     public void setGui(GUI gui) {
         this.gui = gui;
+    }
+
+    public void endGameToken(String player) {
+        endGameToken.setImage(null);
+        ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
+        endToken.setFitHeight(45);
+        endToken.setFitWidth(45);
+        if(player.equals(players.get(0))){
+            myShelfToken.add(endToken,1,1);
+        }else if(player.equals(players.get(1))){
+            p2Token.add(endToken,0,1);
+        }else if(player.equals(players.get(2))){
+            p3Token.add(endToken,0,1);
+        }else if(player.equals(players.get(3))){
+            p4Token.add(endToken,1,1);
+        }
     }
 }

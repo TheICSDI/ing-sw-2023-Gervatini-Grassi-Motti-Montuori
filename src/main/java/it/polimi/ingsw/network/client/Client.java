@@ -43,6 +43,7 @@ public class Client extends Application {
     private static int ping = 0;
     private static final int pingTime = 30;
     public static boolean connected = true;
+    private static boolean firstTurn;
 
 
     /*
@@ -100,6 +101,7 @@ public class Client extends Application {
                 controller.setIdGame(reply.getGameId());
                 controller.setFirstTurn(true);
                 virtualView.startGame(reply.getMessage());
+                firstTurn=true;
             }
             case UPDATEBOARD -> {
                 reply = UpdateBoardMessage.decrypt(message);
@@ -120,7 +122,8 @@ public class Client extends Application {
             }
             case TURN -> {
                 reply = SimpleReply.decrypt(message);
-                virtualView.playersTurn(reply.getMessage());
+                virtualView.playersTurn(reply.getMessage(),firstTurn);
+                firstTurn=false;
             }
             case CHOSENTILES ->{
                 reply = ChosenTilesMessage.decrypt(message);
@@ -135,6 +138,10 @@ public class Client extends Application {
             case SHOWCOMMONS -> {
                 reply = ShowCommonCards.decrypt(message);
                 reply.getCC(controller.cc);
+            }
+            case COMMONCOMPLETED -> {
+                reply = CommonCompletedMessage.decrypt(message);
+                virtualView.commonCompleted(reply.getMessage(),((CommonCompletedMessage) reply).getFirst(),((CommonCompletedMessage) reply).getWhoCompleted());
             }
             case SHOWOTHERS -> {
                 reply = OtherPlayersMessage.decrypt(message);
@@ -162,6 +169,10 @@ public class Client extends Application {
             case ENDGAME -> {
                 controller.setIdGame(0);
                 virtualView.endGame();
+            }
+            case ENDGAMETOKEN -> {
+                reply = SimpleReply.decrypt(message);
+                virtualView.endGameToken(reply.getMessage());
             }
             case PING -> {
                 //RMI

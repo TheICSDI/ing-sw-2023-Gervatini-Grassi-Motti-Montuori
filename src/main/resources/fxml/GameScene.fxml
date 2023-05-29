@@ -303,7 +303,7 @@
                                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="22.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="pickTiles" mnemonicParsing="false" onAction="#pickTiles" opacity="0.85" prefHeight="49.0" prefWidth="131.0" styleClass="ButtonPickTiles" stylesheets="@../CSS/GameSceneStyle.css" text="pickTiles" GridPane.columnIndex="10" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                                <Button fx:id="pickTiles" mnemonicParsing="false" onAction="#pickTiles" opacity="0.85" prefHeight="49.0" prefWidth="131.0" styleClass="ButtonPickTiles" stylesheets="@../CSS/GameSceneStyle.css" text="Pick Tiles" GridPane.columnIndex="10" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                                     <GridPane.margin>
                                         <Insets right="20.0" />
                                     </GridPane.margin></Button>
@@ -312,6 +312,11 @@
                                 <Insets left="22.0" />
                             </padding>
                         </GridPane>
+                  <ImageView fx:id="endGameToken" fitHeight="50.0" fitWidth="50.0" layoutX="404.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" rotate="9.0">
+                     <image>
+                        <Image url="@../Images/scoring%20tokens/end%20game.jpg" />
+                     </image>
+                  </ImageView>
                     </children>
                 </Pane>
                 <GridPane hgap="50.0" stylesheets="@../CSS/GameSceneStyle.css" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -328,6 +333,16 @@
                     <children>
                         <ImageView fx:id="common1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <ImageView fx:id="common2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <ImageView fx:id="common1points" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" rotate="-8.0">
+                     <GridPane.margin>
+                        <Insets bottom="7.0" left="177.0" />
+                     </GridPane.margin>
+                  </ImageView>
+                  <ImageView fx:id="common2points" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" rotate="-8.0" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="7.0" left="177.0" />
+                     </GridPane.margin>
+                  </ImageView>
                     </children>
                     <padding>
                         <Insets bottom="20.0" left="50.0" right="50.0" top="50.0" />
