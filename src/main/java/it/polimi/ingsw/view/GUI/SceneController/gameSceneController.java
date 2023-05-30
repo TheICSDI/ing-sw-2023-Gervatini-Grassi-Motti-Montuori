@@ -25,8 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-//TODO SCHERMATA DI ENDGAME, PUNTEGGI SULLE COMMON
-//TODO I TOKEN
+
 public class gameSceneController implements Initializable {
     @FXML
     public GridPane myShelfToken;

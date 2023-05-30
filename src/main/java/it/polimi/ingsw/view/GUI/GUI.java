@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-//TODO SCHERMATE: 1-GetName(done) 2-Lobbies(done) 3-Schermata picktiles/order/column(done) 4-fine gioco
 //TODO RENDERLO BELLO GRAFICAMENTE :D
 public class GUI implements View {
     private int nPage=1;
