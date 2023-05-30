@@ -359,17 +359,17 @@ public class gameSceneController implements Initializable {
         for (int id: cc) {
             String commonURL = null;
             switch (id){
-                case 1 -> commonURL= "/Images/common goal cards/1.jpg";
-                case 2 -> commonURL = "/Images/common goal cards/2.jpg";
+                case 1 -> commonURL= "/Images/common goal cards/4.jpg";
+                case 2 -> commonURL = "/Images/common goal cards/8.jpg";
                 case 3 -> commonURL = "/Images/common goal cards/3.jpg";
-                case 4 -> commonURL = "/Images/common goal cards/4.jpg";
+                case 4 -> commonURL = "/Images/common goal cards/1.jpg";
                 case 5 -> commonURL = "/Images/common goal cards/5.jpg";
-                case 6 -> commonURL = "/Images/common goal cards/6.jpg";
-                case 7 -> commonURL = "/Images/common goal cards/7.jpg";
-                case 8 -> commonURL = "/Images/common goal cards/8.jpg";
-                case 9 -> commonURL = "/Images/common goal cards/9.jpg";
-                case 10 -> commonURL = "/Images/common goal cards/10.jpg";
-                case 11 -> commonURL = "/Images/common goal cards/11.jpg";
+                case 6 -> commonURL = "/Images/common goal cards/9.jpg";
+                case 7 -> commonURL = "/Images/common goal cards/11.jpg";
+                case 8 -> commonURL = "/Images/common goal cards/7.jpg";
+                case 9 -> commonURL = "/Images/common goal cards/2.jpg";
+                case 10 -> commonURL = "/Images/common goal cards/6.jpg";
+                case 11 -> commonURL = "/Images/common goal cards/10.jpg";
                 case 12 -> commonURL = "/Images/common goal cards/12.jpg";
             }
             if(image1 == null){
@@ -405,6 +405,8 @@ public class gameSceneController implements Initializable {
             }
         }else{
             ImageView pointsWon=new ImageView(CommonPoints.get(c2Index));
+            pointsWon.setFitWidth(45);
+            pointsWon.setFitHeight(45);
             if(whoCompleted.equals(players.get(0))){
                 myShelfToken.add(pointsWon,1,0);
             }else if(whoCompleted.equals(players.get(1))){
@@ -447,7 +449,9 @@ public class gameSceneController implements Initializable {
             if (node instanceof HBox) {
                 toDes = (HBox) node;
             }
-            toDes.setStyle("");
+            if(toDes != null) {
+                toDes.setStyle("");
+            }
         }
         this.Chosen=new ArrayList<>();
     }
@@ -553,7 +557,7 @@ public class gameSceneController implements Initializable {
             firstPlayerToken.setFitHeight(45);
             firstPlayerToken.setFitWidth(45);
 
-            if(msg.equals("It's your turn!")){
+            if(msg.equals("It's your turn!")){ //todo possibile sostituire con la condizione is firstturn del player
                 myShelfToken.add(firstPlayerToken,0,1);
             }else if(msg.equals("It's " + players.get(1) + "'s turn!")){
                 p2Token.add(firstPlayerToken,1,1);

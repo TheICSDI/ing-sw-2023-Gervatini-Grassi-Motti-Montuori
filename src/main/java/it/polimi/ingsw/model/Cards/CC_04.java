@@ -40,7 +40,7 @@ public class CC_04 implements CCStrategy {
                             && current_tile.equals(current_shelf[i + 1][j].getCategory())        // Tile down
                             && current_tile.equals(current_shelf[i + 1][j + 1].getCategory()))   // Tile down-right
                     {
-                        // Check if there are no additional adjacent tiles of the same type
+                        // Check if there are no additional adjacent tiles of the same type//Todo sbagliato non serve questa cosa ma non puoi contare due volte lo stesso, serve una matrice booleana probs
                         if (!(
                                 (i > 0 && current_tile.equals(current_shelf[i - 1][j].getCategory()))                            // Tile up
                                         || (i > 0 && current_tile.equals(current_shelf[i - 1][j + 1].getCategory()))             // Tile up-right
