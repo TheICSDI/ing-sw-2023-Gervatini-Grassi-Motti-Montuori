@@ -3,7 +3,6 @@
  */
 package it.polimi.ingsw.test.model;
 
-import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
@@ -12,13 +11,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
@@ -49,7 +47,7 @@ class BoardTest {
         return b;
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void fillBoard() {
         Board b = new Board(4);
         for (int i = 0; i < b.getNumCols(); i++) {
@@ -69,7 +67,7 @@ class BoardTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void isBoardEmpty() {
         Board b = new Board(4);
         assertTrue(b.isBoardEmpty());
@@ -87,7 +85,7 @@ class BoardTest {
         assertTrue(b.isBoardEmpty());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void availableTiles() {
         Board b = new Board(4);
         //No available tiles: the board is empty
@@ -105,8 +103,8 @@ class BoardTest {
         assertFalse(b.AvailableTiles().isEmpty());
     }
 
-    @org.junit.jupiter.api.Test
-    void removeTiles() throws InvalidPositionException {
+    @Test
+    void removeTiles() {
         Board b = new Board(4);
         b.fillBoard();
 
@@ -129,14 +127,5 @@ class BoardTest {
         b.RemoveTiles(remove);
         assertEquals(b.getTile(p1).getCategory(), type.EMPTY);
         assertEquals(b.getTile(p2).getCategory(), type.EMPTY);
-
-        //Invalid position
-        b.fillBoard();
-        Position p3 = new Position(0, 0);
-        remove.add(p3);
-        Throwable ex = assertThrows(InvalidPositionException.class, () -> {
-            b.RemoveTiles(remove);
-        });
-        assertEquals("This position is not accessible in the board!", ex.getMessage());
     }
 }

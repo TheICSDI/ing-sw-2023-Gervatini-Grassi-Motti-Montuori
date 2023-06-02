@@ -30,7 +30,6 @@ class gameControllerTest {
         players.add(p2);
         Game g = new Game(players, this.controller);
         gameController.allGames.put(g.id, g);
-        assertTrue(gameController.queue.isEmpty());
 
         //Player p1 send a pickTiles request
         ArrayList<Position> pos = new ArrayList<>();

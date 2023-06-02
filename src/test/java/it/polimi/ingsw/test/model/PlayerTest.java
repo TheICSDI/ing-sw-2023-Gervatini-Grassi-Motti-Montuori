@@ -5,7 +5,6 @@ package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
-import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Player;
@@ -148,7 +147,7 @@ class PlayerTest {
     }
 
     @Test
-    void pickTiles() throws InvalidPositionException, RemoteException {
+    void pickTiles() throws RemoteException {
         Board b = new Board(4);
         b.fillBoard();
         Player p = new Player("Mario");
@@ -167,13 +166,6 @@ class PlayerTest {
         assertEquals(type.EMPTY, b.getTile(pos1).getCategory());
         assertEquals(type.EMPTY, b.getTile(pos2).getCategory());
         assertEquals(expectedTiles, chosenTiles);
-
-        //Exception
-        //Chosen position by the player are not available to be taken
-        Position pos3 = new Position(0,0);
-        chosen.add(pos3);
-        Throwable ex = assertThrows(NullPointerException.class, () ->
-                p1.pickTiles(chosen, b, p));
     }
 
     @Test

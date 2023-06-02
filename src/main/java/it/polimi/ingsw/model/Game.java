@@ -7,7 +7,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidColumnException;
-import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
@@ -51,6 +50,7 @@ public class Game {
         //Shuffle the list of players in order to randomically pick the first one
         Collections.shuffle(players);
         players.get(0).setFirstToken(true);
+
         //Shuffle the personal goal cards in order to randomically give them to the players
         Collections.shuffle(allPC);
         for(int i = 0; i < players.size(); i++){
@@ -60,7 +60,6 @@ public class Game {
         }
 
         //Shuffle the common goal cards to randomically draws two of them
-
         Collections.shuffle(allCC);
         CommonCards.add(new CommonCard(allCC.get(0),true , players.size()));
         CommonCards.add(new CommonCard(allCC.get(1),false , players.size()));
@@ -75,10 +74,9 @@ public class Game {
      * @see Player,Board,CommonCard,PersonalCard
      */
     public void startGame() throws RemoteException, InterruptedException {
-        //At the starting point no player has the endgame token
+        //At the start no player has the endgame token
         boolean endGame = false;
         boolean check = false;
-
         for (Player p: players) {
             String personalId = String.valueOf(p.getPersonalCard().getId());
             serverController.sendMessage(new ShowPersonalCardMessage(personalId), p.getNickname());
@@ -97,7 +95,7 @@ public class Game {
                         if(p1.getNickname().equals(p.getNickname())){
                             serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), p1.getNickname());
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
-                        }else{
+                        } else {
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
                             serverController.sendMessage(new SimpleReply("It's " + p.getNickname() + "'s turn!",Action.TURN), p1.getNickname());
                         }
@@ -105,57 +103,20 @@ public class Game {
                     serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
                     serverController.sendMessage(new SimpleReply("Select tile you want to pick: ", Action.INGAMEEVENT), p.getNickname());
 
-                    //The player can pick some tiles from the board and insert it inside its shel//
-                    List<Tile> toInsert = new ArrayList<>();
-                    while(toInsert.isEmpty()) {
-                        List<Position> chosen = controller.chooseTiles(p.getNickname(),id); //più che un ciclo infinito qua è meglio fare un listener o simili, più pulito
-                        try{
-                            toInsert = p.pickTiles(chosen, board, p);
-                        } catch (InvalidPositionException e) {
-                            //bisogna attivare un thread per comunicare che non ce la tiles
-                        }
-                    }
-                    serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
+                    //Handles the action "pick tiles"
+                    List<Tile> toInsert = pickTiles(p);
 
-
-                    //CONTROLLO SE SERVE CHIEDERE L'ORDINE, ALTRIMENTI SALTO IL PASSAGGIO
-                    boolean allTheSame = true;
-                    for (Tile t1: toInsert) {
-                        for (Tile t2: toInsert) {
-                            if ((!t1.equals(t2)) && (!t1.getCategory().equals(t2.getCategory()))) {
-                                allTheSame = false;
-                                break;
-                            }
-                        }
-                        if(!allTheSame) break;
-                    }
+                    //Handles the action "select order"
+                    boolean allTheSame = checkTiles(toInsert);
                     serverController.sendMessage(new ChosenTilesMessage(toInsert,!allTheSame), p.getNickname());
-                    if(!allTheSame){
-                        serverController.sendMessage(new SimpleReply("Choose the order you want to insert them: ", Action.INGAMEEVENT), p.getNickname());
-                        List<Integer> order = new ArrayList<>();
-                        while(order.isEmpty()){
-                            order = controller.chooseOrder(p.getNickname(), id);
-                            try{
-                                toInsert = p.orderTiles(toInsert, order);
-                            } catch (InputMismatchException e){
-                                order.clear();//serve per la condizione del while
-                            }
 
-                        }
-                        serverController.sendMessage(new ChosenTilesMessage(toInsert,false), p.getNickname());
+                    if(!allTheSame){
+                        toInsert = orderTiles(p, toInsert);
                     }
                     serverController.sendMessage(new SimpleReply("Choose column: ",Action.INGAMEEVENT), p.getNickname());
-                    int col = -1;
-                    while(col == -1) {
-                        col = controller.chooseColumn(p.getNickname(), id);
-                        try {
-                            p.insertInShelf(toInsert, (col-1));
-                        } catch (InvalidColumnException e) {
-                            col = -1;//serve per il while
-                        }
-                    }
-                    serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
-                    serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
+
+                    //Handles the action "select column"
+                    selectColumn(p, toInsert);
 
                     for (Player other: players) {
                         if(!other.getNickname().equals(p.getNickname())){
@@ -171,25 +132,7 @@ public class Game {
                     }
 
                     //At each turn the common card goals are calculated
-                    if(CommonCards.get(0).control(p) && p.getScoreToken1()==0){
-                        //ToDo LA condizione rimane vera ogni turno e continua ad assegnarli punti, da fixare obv
-                        for (Player pcc : players) {
-                            serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
-                                    "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2),true,p.getNickname()),pcc.getNickname());
-                            //serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the first common goal and gained " + CommonCards.get(0).getPoints() +
-                             //       "! Points for this goal are being reduced to " + (CommonCards.get(0).getPoints()-2), Action.COMMONCOMPLETED), pcc.getNickname());
-                        }
-                        CommonCards.get(0).givePoints(p);
-                    }
-                    if(CommonCards.get(1).control(p) && p.getScoreToken2()==0){
-                        for (Player pcc : players) {
-                            serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
-                                    "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2),false, p.getNickname()),pcc.getNickname());
-                            //serverController.sendMessage(new SimpleReply(p.getNickname() + " completed the second common goal and gained " + CommonCards.get(1).getPoints() +
-                            //        "! Points for this goal are being reduced to " + (CommonCards.get(1).getPoints()-2), Action.INGAMEEVENT), pcc.getNickname());
-                        }
-                        CommonCards.get(1).givePoints(p);
-                    }
+                    calculateCC(p);
 
                     //If the end game token has not been assigned and the current player has completed his shelf
                     //it assigns the end token and add 1 point
@@ -219,9 +162,72 @@ public class Game {
         }
         for (Player p : players) {
             serverController.sendMessage(new SimpleReply("The winner is " + calculateWinner().getNickname(), Action.WINNER), p.getNickname());
-            //serverController.sendMessage(new ReplyMessage("", Action.ENDGAME), p.getNickname());
             gameController.allGames.remove(id);
         }
+    }
+
+    /** Handles the action "pick tiles".
+     * @param p the current player.
+     * @return list of chosen tiles. */
+    public List<Tile> pickTiles(Player p) throws RemoteException {
+        List<Position> chosen = controller.chooseTiles(p.getNickname(), id);
+        boolean check = false;
+        while(!check){
+            if(board.AvailableTiles().containsAll(chosen)){
+                check = true;
+            } else {
+                serverController.sendMessage(new SimpleReply("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), p.getNickname());
+                chosen = controller.chooseTiles(p.getNickname(), id);
+            }
+        }
+        List<Tile> toInsert = p.pickTiles(chosen, board, p);
+        serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
+        return toInsert;
+    }
+
+    /** Checks if the tiles are all the same.
+     * @param chosen the tiles to be checked.
+     * @return true only if the tiles are all the same, false otherwise. */
+    public boolean checkTiles(List<Tile> chosen){
+        for (Tile t1: chosen) {
+            for (Tile t2: chosen) {
+                if ((!t1.equals(t2)) && (!t1.getCategory().equals(t2.getCategory()))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /** Handles the action "order tiles".
+     * @param p the current player.
+     * @return list of ordered tiles. */
+    public List<Tile> orderTiles(Player p, List<Tile> toInsert) throws RemoteException {
+        serverController.sendMessage(new SimpleReply("Choose the order you want to insert them: ", Action.INGAMEEVENT), p.getNickname());
+        List<Integer> order = new ArrayList<>();
+        while(order.isEmpty()){
+            order = controller.chooseOrder(p.getNickname(), id);
+            toInsert = p.orderTiles(toInsert, order);
+        }
+        serverController.sendMessage(new ChosenTilesMessage(toInsert,false), p.getNickname());
+        return toInsert;
+    }
+
+    /** Handles the action "select column".
+     * @param p the current player.
+     * @param toInsert list of tiles to be inserted*/
+    public void selectColumn(Player p, List<Tile> toInsert) throws RemoteException {
+        int col = -1;
+        while(col == -1) {
+            col = controller.chooseColumn(p.getNickname(), id);
+            try {
+                p.insertInShelf(toInsert, (col-1));
+            } catch (InvalidColumnException e) {
+                col = -1;//serve per il while
+            }
+        }
+        serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
+        serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
     }
 
     /** Returns the winner of the game.
@@ -247,6 +253,25 @@ public class Game {
         return winner;
     }
 
+    public void calculateCC(Player p) throws RemoteException {
+        if(CommonCards.get(0).control(p) && p.getScoreToken1()==0){
+            //ToDo LA condizione rimane vera ogni turno e continua ad assegnarli punti, da fixare obv
+            for (Player pcc : players) {
+                serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the first " +
+                        "common goal and gained " + CommonCards.get(0).getPoints() + "! Points for this goal are being " +
+                        "reduced to " + (CommonCards.get(0).getPoints()-2),true,p.getNickname()),pcc.getNickname());
+            }
+            CommonCards.get(0).givePoints(p);
+        }
+        if(CommonCards.get(1).control(p) && p.getScoreToken2()==0){
+            for (Player pcc : players) {
+                serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the second" +
+                        " common goal and gained " + CommonCards.get(1).getPoints() + "! Points for this goal are being " +
+                        "reduced to " + (CommonCards.get(1).getPoints()-2),false, p.getNickname()),pcc.getNickname());
+            }
+            CommonCards.get(1).givePoints(p);
+        }
+    }
 
     /**
      * Initializes all common and personal goal cards.
@@ -298,5 +323,9 @@ public class Game {
     public List<Integer> getCCid() {
         return ccId;
     }
-    
+
+    /** Gets the board of the game. */
+    public Board getBoard() {
+        return board;
+    }
 }

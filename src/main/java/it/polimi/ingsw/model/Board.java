@@ -5,7 +5,6 @@ package it.polimi.ingsw.model;
 import java.io.*;
 import java.util.*;
 
-import it.polimi.ingsw.exceptions.InvalidPositionException;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 
@@ -166,16 +165,11 @@ public class Board {
     }
 
     /** Remove tiles from the board indexed by the given positions.
-     *
      * @param ToRemove a set of positions.
      */
-    public void RemoveTiles(List<Position> ToRemove) throws InvalidPositionException {
+    public void RemoveTiles(List<Position> ToRemove) {
         for (Position p: ToRemove) {
-            if(board[p.getX()][p.getY()].getCategory().equals(type.NOT_ACCESSIBLE)){
-                throw new InvalidPositionException("This position is not accessible in the board!");
-            } else {
-                board[p.getX()][p.getY()] = new Tile("empty");
-            }
+            board[p.getX()][p.getY()] = new Tile("empty");
         }
     }
 

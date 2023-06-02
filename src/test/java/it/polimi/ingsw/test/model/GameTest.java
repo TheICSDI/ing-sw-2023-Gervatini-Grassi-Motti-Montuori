@@ -3,11 +3,24 @@
  */
 package it.polimi.ingsw.test.model;
 
+import it.polimi.ingsw.controller.connectionType;
+import it.polimi.ingsw.controller.gameController;
+import it.polimi.ingsw.controller.serverController;
+import it.polimi.ingsw.model.Cards.CommonCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.network.client.Client;
 import org.junit.jupiter.api.Test;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +31,8 @@ class GameTest {
     Player p3 = new Player("Mayhem");
     Player p4 = new Player("Fozy");
     List<Player> playerList = new ArrayList<>();
+    gameController GC = new gameController();
+    PrintWriter out = new PrintWriter(System.out, true);;
 
     @Test
     void Game(){
@@ -72,15 +87,99 @@ class GameTest {
     }
 
     @Test
-    void startGame() {
+    void startGame() throws RemoteException {
         playerList.add(p1);
         playerList.add(p2);
-        playerList.add(p3);
-        playerList.add(p4);
-        Game g = new Game(playerList,null);
+        p1.setConnected(true);
+        p2.setConnected(true);
+        connectionType type = new connectionType(true, out, null);
+        serverController.connections.put(p1.getNickname(), type);
+        serverController.connections.put(p2.getNickname(), type);
 
+        Game g = new Game(playerList, GC);
+        gameController.allGames.put(g.id, g);
+        gameController.allPlayers.put(p1.getNickname(), p1);
+        gameController.allPlayers.put(p2.getNickname(), p2);
 
+        //Select some position from the board
+        List<Position> pos = new ArrayList<>();
+        Position pos1 = new Position(3, 1);
+        Position pos2 = new Position(3, 2);
+        pos.add(pos1);
+        pos.add(pos2);
+        GC.pickTiles(p1.getNickname(), pos, g.id, 1);
+        GC.pickTiles(p2.getNickname(), pos, g.id, 4);
 
+        //Select an order for the picked tiles
+        List<Integer> order = new ArrayList<>();
+        order.add(1);
+        order.add(2);
+        GC.selectOrder(p1.getNickname(), order, g.id, 2);
+        GC.selectOrder(p2.getNickname(), order, g.id, 2);
+
+        //Select a column
+        int col = 2;
+        GC.selectColumn(p1.getNickname(), col, g.id, 3);
+        GC.selectColumn(p2.getNickname(), col, g.id, 5);
+
+        //Make the shelf of p1 full (except for two places) to make the game end
+        for (int i = 0; i < p1.getNumRows(); i++) {
+            for (int j = 0; j < p1.getNumCols(); j++) {
+                p1.getShelf()[i][j] = new Tile("games");
+            }
+        }
+        assertTrue(p1.isShelfFull());
+        p1.getShelf()[0][col-1] = new Tile("empty");
+        p1.getShelf()[1][col-1] = new Tile("empty");
+
+        //Make the board empty (except for two positions) to test the refill
+        for (int i = 0; i < g.getBoard().getNumRows(); i++) {
+            for (int j = 0; j < g.getBoard().getNumCols(); j++) {
+                if(!g.getBoard().board[i][j].getCategory().equals(it.polimi.ingsw.model.Tile.type.NOT_ACCESSIBLE)){
+                    g.getBoard().board[i][j] = new Tile("empty");
+                }
+            }
+        }
+        assertTrue(g.getBoard().isBoardEmpty());
+        g.getBoard().board[3][1] = new Tile("games");
+        g.getBoard().board[3][2] = new Tile("games");
+
+        try {
+            g.startGame();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void checkTiles(){
+        Tile t1 = new Tile("games");
+        Tile t2 = new Tile("games");
+        Tile t3 = new Tile("plants");
+        playerList.add(p1);
+        Game g = new Game(playerList, GC);
+
+        List<Tile> chosen = new ArrayList<>();
+        //Two tiles of the same type
+        chosen.add(t1);
+        chosen.add(t2);
+        assertTrue(g.checkTiles(chosen));
+
+        //Three tiles of the different types
+        chosen.add(t3);
+        assertFalse(g.checkTiles(chosen));
+    }
+
+    @Test
+    void calculateCC() throws RemoteException {
+        playerList.add(p1);
+        Game g = new Game(playerList, GC);
+
+        //the player has zero points
+        g.calculateCC(p1);
+        assertEquals(0, p1.getTotalPoints());
+        assertEquals(0, p1.getScoreToken1());
+        assertEquals(0, p1.getScoreToken2());
     }
 
     @Test
@@ -89,7 +188,7 @@ class GameTest {
         playerList.add(p2);
         playerList.add(p3);
         playerList.add(p4);
-        Game g = new Game(playerList,null);
+        Game g = new Game(playerList,GC);
 
         //Every player has totalPoints = 0, then the last player to play is the winner
         assertEquals(g.getPlayers().get(g.getPlayers().size() - 1), g.calculateWinner());
