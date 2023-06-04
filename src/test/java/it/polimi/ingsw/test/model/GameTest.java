@@ -6,21 +6,15 @@ package it.polimi.ingsw.test.model;
 import it.polimi.ingsw.controller.connectionType;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
-import it.polimi.ingsw.model.Cards.CommonCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.network.client.Client;
 import org.junit.jupiter.api.Test;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

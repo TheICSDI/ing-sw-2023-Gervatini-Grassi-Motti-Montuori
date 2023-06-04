@@ -26,6 +26,7 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
     public void RMIsend(String m) throws RemoteException {
         try {
             CC.getMessage(m);
+            //Client.elaborate(m);
         } catch (ParseException | InvalidKeyException | InterruptedException e) {
             throw new RuntimeException(e);
         }

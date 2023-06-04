@@ -266,6 +266,7 @@ public class clientController{
         }
     }
 
+    //TODO: da eliminare prob non serve
     /** It elaborates a message from a client connected via RMI.
      * @param message the received message.*/
     public void getMessage(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
