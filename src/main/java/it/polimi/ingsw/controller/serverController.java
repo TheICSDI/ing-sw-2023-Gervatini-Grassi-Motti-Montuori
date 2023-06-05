@@ -168,7 +168,7 @@ public class serverController {
          //Broadcast chat with the lobby or the game in which the player is
          case CA -> {
             //If the player is in a lobby
-            if(idLobby>0){
+            if(idLobby > 0){
                for(Lobby l: gameController.allLobbies){
                   if(l.lobbyId == idLobby){
                      //It sends the message to each player in lobby
@@ -180,7 +180,7 @@ public class serverController {
                      break;
                   }
                }
-            } else if(gameId>0){
+            } else if(gameId > 0){
                //If the player is in a game, it sends the message to each player
                Game g = gameController.allGames.get(gameId);
                for(Player p: g.getPlayers()){
