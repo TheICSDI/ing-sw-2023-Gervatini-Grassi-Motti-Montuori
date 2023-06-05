@@ -195,10 +195,22 @@ public class CLI implements View{
     }
 
     @Override
-    public void showOthers(Map<String,Player> others){
-        for (String nick:others.keySet()) {
+    public void showOthers(Map<String, Player> others){
+        for (String nick: others.keySet()) {
             System.out.println("  " + nick + "'s shelf");
-            showShelf(others.get(nick).getShelf());
+            for (int i = 0; i < others.get(nick).getShelf().length; i++){
+                out.print(RESET + "  ");
+                for (int j = -1; j < others.get(nick).getShelf()[0].length; j++) {
+                    if(j==-1) j++;
+                    out.print(others.get(nick).getShelf()[i][j].getColor() + " " + others.get(nick).getShelf()[i][j].getInitial() + " ");
+                    if(j < others.get(nick).getShelf()[0].length - 1){
+                        out.print(DARK_BROWN+" ");
+                    }
+                }
+                out.println(RESET);
+            }
+            out.println("\033[48;5;94m   1   2   3   4   5   " + RESET);
+            out.println();
         }
     }
 

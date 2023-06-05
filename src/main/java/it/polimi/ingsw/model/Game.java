@@ -207,7 +207,11 @@ public class Game {
         List<Integer> order = new ArrayList<>();
         while(order.isEmpty()){
             order = controller.chooseOrder(p.getNickname(), id);
-            toInsert = p.orderTiles(toInsert, order);
+            try{
+                toInsert = p.orderTiles(toInsert, order);
+            } catch (InputMismatchException e){
+                order.clear();
+            }
         }
         serverController.sendMessage(new ChosenTilesMessage(toInsert,false), p.getNickname());
         return toInsert;

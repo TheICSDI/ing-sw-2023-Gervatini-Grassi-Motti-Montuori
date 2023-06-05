@@ -15,6 +15,7 @@ import it.polimi.ingsw.network.messages.SimpleReply;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class Player implements Serializable {
@@ -56,12 +57,14 @@ public class Player implements Serializable {
      * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
      * @return orderedTiles list of selected tiles in order.
      */
-    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws RemoteException {
+    public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws RemoteException, InputMismatchException {
         List<Tile> orderedTiles = new ArrayList<>();
         if (selected.size() > order.size()) {
             serverController.sendMessage(new SimpleReply("The selected order is wrong, you have selected more tiles!", Action.INGAMEEVENT), nickname);
+            throw new InputMismatchException();
         } else if (selected.size() < order.size()){
             serverController.sendMessage(new SimpleReply("The selected order is wrong, you have selected less tiles!", Action.INGAMEEVENT), nickname);
+            throw new InputMismatchException();
         } else {
             for (int i = 0; i < selected.size(); i++) {
                 int x = order.get(i);

@@ -14,6 +14,7 @@ import it.polimi.ingsw.network.messages.CreateLobbyMessage;
 import it.polimi.ingsw.network.messages.GeneralMessage;
 import org.junit.jupiter.api.Test;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -189,14 +190,20 @@ class clientControllerTest {
         assertTrue(controller.acceptableOrder(order));
 
         //Case 3: wrong order
-        order.remove(1);
+        order.clear();
+        order.add(2);
+        order.add(3);
+        assertFalse(controller.acceptableOrder(order));
+
+        order.clear();
+        order.add(1);
+        order.add(3);
+        assertFalse(controller.acceptableOrder(order));
+
+        order.clear();
+        order.add(1);
+        order.add(2);
         order.add(4);
-        assertFalse(controller.acceptableOrder(order));
-
-        order.remove(0);
-        assertFalse(controller.acceptableOrder(order));
-
-        order.add(5);
         assertFalse(controller.acceptableOrder(order));
     }
 
@@ -214,6 +221,7 @@ class clientControllerTest {
         Position p4 = new Position(4, 1);
         Position p5 = new Position(5, 1);
         Position p6 = new Position(6, 1);
+        Position p7 = new Position(3, 6);
 
         //Case 1: one tile
         ptX.add(p1);
@@ -231,7 +239,28 @@ class clientControllerTest {
         assertTrue(controller.isStraightLineTiles(ptX));
         assertTrue(controller.isStraightLineTiles(ptY));
 
-        //Case 4: not adjacent
+        //Case 4:
+        ptX.clear();
+        ptX.add(p1);
+        ptX.add(p3);
+        ptX.add(p2);
+        assertTrue(controller.isStraightLineTiles(ptX));
+
+        //Case 5:
+        ptY.clear();
+        ptY.add(p1);
+        ptY.add(p4);
+        ptY.add(p5);
+        assertTrue(controller.isStraightLineTiles(ptY));
+
+        //Case 6:
+        ptX.clear();
+        ptX.add(p2);
+        ptX.add(p3);
+        ptX.add(p1);
+        assertTrue(controller.isStraightLineTiles(ptX));
+
+        //Case 7: not adjacent
         ptX.remove(2);
         ptX.add(p5);
         assertFalse(controller.isStraightLineTiles(ptX));
@@ -253,13 +282,5 @@ class clientControllerTest {
         assertFalse(controller.isAdjacentOnX(p1, p3));
         assertTrue(controller.isAdjacentOnY(p2, p4));
         assertFalse(controller.isAdjacentOnX(p2, p4));
-    }
-
-    @Test
-    void getName() {
-    }
-
-    @Test
-    void getMessage() {
     }
 }

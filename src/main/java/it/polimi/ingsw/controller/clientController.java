@@ -2,15 +2,11 @@
  * @author Marco Gervatini, Andrea Grassi. */
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
-import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.messages.*;
-import org.json.simple.parser.ParseException;
 
-import java.rmi.RemoteException;
 import java.util.*;
 
 public class clientController{
@@ -77,7 +73,7 @@ public class clientController{
                     if(idGame == 0){
                         return new DefaultErrorMessage("You are not in a game!");
                     }
-                    if (words.length<=7 && words.length%2 == 1 && words.length>=3) {
+                    if (words.length <= 7 && words.length%2 == 1 && words.length >= 3) {
                         for (int i = 1; i < words.length; i=i+2) {
                             pos.add(new Position(Integer.parseInt(words[i]),Integer.parseInt(words[i+1])));
                         }
@@ -112,8 +108,7 @@ public class clientController{
                     int col;
                     if(words.length == 2){
                         col = Integer.parseInt(words[1]);
-                    }
-                    else{
+                    } else{
                         return new DefaultErrorMessage("Number of parameters is wrong!");
                     }
                     if(col<1 || col>5){
@@ -203,8 +198,10 @@ public class clientController{
                 return false;
             } else if (order.size() > 1 && !order.contains(2)) {
                 return false;
+            } else if (order.size() > 2 && !order.contains(3)){
+                return false;
             } else {
-                return order.size() <= 2 || order.contains(3);
+                return true;
             }
         }
     }
@@ -254,25 +251,6 @@ public class clientController{
         return a.getY() == b.getY() && ((a.getX() == b.getX() - 1) || (a.getX() == b.getX() + 1));
     }
 
-    /** It elaborates the nickname from a client connected via RMI.
-     * @param input the received message. */
-    public void getName(String input) throws RemoteException {
-        if(!SetNameMessage.decrypt(input).isAvailable()){
-            Client.getVirtualView().printUsername(SetNameMessage.decrypt(input).getUsername(),SetNameMessage.decrypt(input).isAvailable());
-            Client.setName();
-        } else {
-            Client.getVirtualView().printUsername(SetNameMessage.decrypt(input).getUsername(),SetNameMessage.decrypt(input).isAvailable());
-            this.nickname = SetNameMessage.decrypt(input).getUsername();
-        }
-    }
-
-    //TODO: da eliminare prob non serve
-    /** It elaborates a message from a client connected via RMI.
-     * @param message the received message.*/
-    public void getMessage(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
-        Client.elaborate(message);
-    }
-
     //SETTER and GETTER methods
     public Map<String, Player> getOthers() {
         return others;
@@ -295,5 +273,8 @@ public class clientController{
     }
     public String getNickname(){
         return this.nickname;
+    }
+    public void setNickname(String nick){
+        this.nickname = nick;
     }
 }
