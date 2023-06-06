@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Tile.Tile;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

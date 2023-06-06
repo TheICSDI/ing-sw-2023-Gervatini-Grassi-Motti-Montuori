@@ -3,7 +3,6 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.network.messages.GeneralMessage;
 import it.polimi.ingsw.network.messages.ReconnectMessage;
