@@ -330,14 +330,14 @@ public class Client extends Application {
     }
 
     private static void ping() throws InterruptedException {
-        int x=-1;
-        while(x<ping) {
-            x=ping;
+        int x = -1;
+        while(x < ping) {
+            x = ping;
             //System.out.println("Ping n^" + ping);
             TimeUnit.SECONDS.sleep(pingTime);
         }
         System.out.println("Disconnected"); //TODO dovrebbe essere in view
-        connected=false;
+        connected = false;
     }
 
     public static void setName() throws RemoteException {

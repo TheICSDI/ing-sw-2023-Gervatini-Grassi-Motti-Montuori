@@ -41,6 +41,7 @@ public class CLI implements View{
         }
         return reply;
     }
+
     @Override
     public String askUsername(){
         Scanner input = new Scanner(System.in);

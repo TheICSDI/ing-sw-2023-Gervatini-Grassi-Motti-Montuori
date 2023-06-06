@@ -13,7 +13,7 @@ public interface View {
     String chooseConnection();
     String askUsername();
     void printUsername(String username, boolean isAvailable);
-    void createLobby(String lobbyName/*, int maxPlayers*/);
+    void createLobby(String lobbyName);
     void showLobby(List<Lobby> Lobbies);
     void showBoard(Tile[][] Board);
     void showShelf(Tile[][] Shelf);

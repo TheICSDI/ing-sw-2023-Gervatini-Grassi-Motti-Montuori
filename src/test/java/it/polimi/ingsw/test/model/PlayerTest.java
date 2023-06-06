@@ -97,7 +97,6 @@ class PlayerTest {
         });
     }
 
-    //TODO: da riguardare
     @Test
     void InsertInShelf() throws InvalidColumnException, RemoteException {
         List<Tile> toInsert = new ArrayList<>();

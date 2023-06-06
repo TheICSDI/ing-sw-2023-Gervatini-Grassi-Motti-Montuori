@@ -246,6 +246,7 @@ public class serverController {
    /** It gets a nickname from the server via RMI connection.
     * If the nickname is not already taken it is putted in the list of players (in gameController) and in the map of
     * connections (in this class). Otherwise, it replies with false. */
+   //TODO: spostare questa funzione in RMIclientImpl
    public void getName(String input, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex;
       mex = SetNameMessage.decrypt(input);
@@ -260,9 +261,8 @@ public class serverController {
           ExecutorService executor = Executors.newSingleThreadExecutor();
           executor.submit(() -> {
                 int x=-1;
-                while(x<connections.get(mex.getUsername()).getPing()) {
-                   x=connections.get(mex.getUsername()).getPing();
-                   //System.out.println("Ping n^" + connections.get(mex.getUsername()).getPing());
+                while(x < connections.get(mex.getUsername()).getPing()) {
+                   x = connections.get(mex.getUsername()).getPing();
                    try {
                       TimeUnit.SECONDS.sleep(30);
                    } catch (InterruptedException e) {

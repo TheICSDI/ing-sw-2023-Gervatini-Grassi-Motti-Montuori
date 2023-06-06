@@ -12,7 +12,6 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
-import javafx.geometry.Pos;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
