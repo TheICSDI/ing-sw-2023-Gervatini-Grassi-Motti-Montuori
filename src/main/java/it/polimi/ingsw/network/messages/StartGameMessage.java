@@ -1,11 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  * This class represents a message for starting a game.

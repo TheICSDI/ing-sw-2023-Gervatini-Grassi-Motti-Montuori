@@ -100,7 +100,7 @@ public class ClientHandler extends Thread{
             }else{
                 System.out.println("Client has disconnected!");
             }
-        } catch (ParseException | InvalidKeyException | InvalidActionException ignored ){
+        } catch (ParseException ignored ){
         } finally {
             try {
                 //If the client disconnect the socket connection is closed

@@ -6,7 +6,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
-import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.model.Cards.*;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
@@ -255,7 +254,7 @@ public class Game {
             col = controller.chooseColumn(p.getNickname(), id);
             try {
                 p.insertInShelf(toInsert, (col-1));
-            } catch (InvalidColumnException e) {
+            } catch (InputMismatchException e) {
                 col = -1;//serve per il while
             }
         }

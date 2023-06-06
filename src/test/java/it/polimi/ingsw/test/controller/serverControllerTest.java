@@ -6,13 +6,10 @@ package it.polimi.ingsw.test.controller;
 import it.polimi.ingsw.controller.connectionType;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.network.messages.*;
-import javafx.geometry.Pos;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
@@ -158,7 +155,7 @@ class serverControllerTest {
     }
 
     @Test
-    void getMessage() throws InvalidActionException, ParseException, InvalidKeyException, RemoteException {
+    void getMessage() throws ParseException, RemoteException {
         setPlayer();
         GeneralMessage mex;
 

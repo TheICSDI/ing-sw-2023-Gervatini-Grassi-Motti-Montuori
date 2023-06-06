@@ -26,7 +26,7 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
         Action action;
         try {
             action=GeneralMessage.identify(m);
-        } catch (ParseException | InvalidKeyException e) {
+        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
         if(action.equals(Action.SETNAME)){
@@ -48,8 +48,6 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
                 this.CC.setIdGame(ReconnectMessage.decrypt(m).getGameId());
             }
         }
-        //CC.getName(m);
-
     }
 
     @Override
@@ -57,7 +55,7 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
         try {
             //CC.getMessage(m);
             Client.elaborate(m);
-        } catch (ParseException | InvalidKeyException | InterruptedException e) {
+        } catch (ParseException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
