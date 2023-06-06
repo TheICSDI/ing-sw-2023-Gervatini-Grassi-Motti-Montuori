@@ -4,7 +4,6 @@
 package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.controller.gameController;
-import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Player;
@@ -98,7 +97,7 @@ class PlayerTest {
     }
 
     @Test
-    void InsertInShelf() throws InvalidColumnException, RemoteException {
+    void InsertInShelf() {
         List<Tile> toInsert = new ArrayList<>();
         Player p = new Player("Sof");
         int col = 2;
@@ -137,11 +136,11 @@ class PlayerTest {
 
         //Wrong column selected
         //case 1: column out of bound
-        Throwable ex1 = assertThrows(InvalidColumnException.class, () -> p1.insertInShelf(toInsert, 8));
+        Throwable ex1 = assertThrows(InputMismatchException.class, () -> p1.insertInShelf(toInsert, 8));
         assertEquals("Selected column is out of bound!", ex1.getMessage());
         //case 2: column is full
         p1 = Parser();
-        Throwable ex2 = assertThrows(InvalidColumnException.class, () -> p1.insertInShelf(toInsert, col));
+        Throwable ex2 = assertThrows(InputMismatchException.class, () -> p1.insertInShelf(toInsert, col));
         assertEquals("Selected column has no enough space!", ex2.getMessage());
     }
 

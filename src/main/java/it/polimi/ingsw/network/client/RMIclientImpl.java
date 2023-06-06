@@ -3,7 +3,6 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.network.messages.SetNameMessage;
 import it.polimi.ingsw.network.server.RMIconnection;
 import org.json.simple.parser.ParseException;
@@ -35,7 +34,7 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
         try {
             //CC.getMessage(m);
             Client.elaborate(m);
-        } catch (ParseException | InvalidKeyException | InterruptedException e) {
+        } catch (ParseException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

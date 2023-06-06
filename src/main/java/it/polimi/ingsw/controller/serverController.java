@@ -2,8 +2,6 @@
  * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
@@ -247,7 +245,7 @@ public class serverController {
     * If the nickname is not already taken it is putted in the list of players (in gameController) and in the map of
     * connections (in this class). Otherwise, it replies with false. */
    //TODO: spostare questa funzione in RMIclientImpl
-   public void getName(String input, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
+   public void getName(String input, RMIconnection reply) throws ParseException, RemoteException {
       GeneralMessage mex;
       mex = SetNameMessage.decrypt(input);
       if(gameController.allPlayers.containsKey(mex.getUsername())){
@@ -278,7 +276,7 @@ public class serverController {
    /** It gets a message from the server, and it calls the method execute.
     * @param input message from the server.
     * @return action of the created message only for test purposes. */
-   public Action getMessage(String input) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
+   public Action getMessage(String input) throws ParseException, RemoteException {
       GeneralMessage mex = null;
       switch (GeneralMessage.identify(input)){
          case CREATELOBBY -> mex = CreateLobbyMessage.decrypt(input);

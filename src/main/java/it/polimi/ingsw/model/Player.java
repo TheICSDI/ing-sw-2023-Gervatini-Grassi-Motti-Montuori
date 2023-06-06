@@ -5,7 +5,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.serverController;
-import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
@@ -97,13 +96,13 @@ public class Player implements Serializable {
      * The tiles are already ordered, from the bottom to the top: the first tile (index 0) goes in the first empty spot.
      * @param toInsert a list of tiles, ordered, to be put in Shelf.
      * @param col chosen column.
-     * @throws InvalidColumnException if the selected column has no enough space.
+     * @throws InputMismatchException if the selected column has no enough space.
      */
-    public void insertInShelf(List<Tile> toInsert, int col) throws InvalidColumnException {
+    public void insertInShelf(List<Tile> toInsert, int col) throws InputMismatchException {
         if(col < 0 || col >= this.getNumCols()){
-            throw new InvalidColumnException("Selected column is out of bound!");
+            throw new InputMismatchException("Selected column is out of bound!");
         } else if(!checkColumn(toInsert.size(), col)){
-            throw new InvalidColumnException("Selected column has no enough space!");
+            throw new InputMismatchException("Selected column has no enough space!");
         } else {
             //For each tile in toInsert
             for(Tile t : toInsert){

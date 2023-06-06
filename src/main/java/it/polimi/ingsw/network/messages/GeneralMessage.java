@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Tile.Tile;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,17 +16,15 @@ import java.util.List;
 public abstract class GeneralMessage implements Serializable {
 
     private int message_id;
-    private Action action;
+    private final Action action;
     protected int lobbyId;
     private String message;
     protected String username;
-    //private String msg;
     protected int gameId;
     List<Integer> cc = new ArrayList<>();
     Tile[][] simpleBoard;
     protected List<Tile> tiles;
     protected boolean gameStart = false;
-
 
     /**
      * Constructor that initializes a message with the provided parameters.
@@ -64,12 +61,9 @@ public abstract class GeneralMessage implements Serializable {
      * @param msg Message received
      * @return action of the msg
      */
-    public static Action identify(String msg) throws ParseException, InvalidKeyException {
+    public static Action identify(String msg) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject msg_obj = (JSONObject) parser.parse(msg);
-        if(!msg_obj.containsKey("action")) {
-            throw new InvalidKeyException("Missing key: action");
-        }
         return Action.valueOf(msg_obj.get("action").toString());
     }
 

@@ -1,19 +1,5 @@
 package it.polimi.ingsw.test;
 
-import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
-import it.polimi.ingsw.network.client.Client;
-import it.polimi.ingsw.network.messages.SetNameMessage;
-import it.polimi.ingsw.view.CLI;
-import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.*;
 /*
 class ClientTest {
 

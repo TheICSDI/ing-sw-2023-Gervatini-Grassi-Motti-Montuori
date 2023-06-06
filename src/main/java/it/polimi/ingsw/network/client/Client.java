@@ -3,7 +3,6 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
@@ -67,7 +66,7 @@ public class Client extends Application {
     }
 
     /** It listens to the messages received by via socket, and it calls the elaborate method. */
-    public static void listenSocket() throws IOException, ParseException, InvalidKeyException, InterruptedException {
+    public static void listenSocket() throws IOException, ParseException, InterruptedException {
         while(true) {
             String message = in.readLine();
             elaborate(message);
@@ -77,7 +76,7 @@ public class Client extends Application {
     /** It elaborates the given message and creates the equivalent message type based on the action.
      * It interacts with the instance of clientController and with the virtualView.
      * @param message to be elaborated. */
-    public static void elaborate(String message) throws ParseException, InvalidKeyException, RemoteException, InterruptedException {
+    public static void elaborate(String message) throws ParseException, RemoteException, InterruptedException {
         GeneralMessage reply;
         Action replyAction = GeneralMessage.identify(message);
         switch (replyAction) {
@@ -277,7 +276,7 @@ public class Client extends Application {
         executor.submit(()-> {
             try {
                 listenSocket();
-            } catch (IOException | ParseException | InvalidKeyException | InterruptedException e) {
+            } catch (IOException | ParseException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });

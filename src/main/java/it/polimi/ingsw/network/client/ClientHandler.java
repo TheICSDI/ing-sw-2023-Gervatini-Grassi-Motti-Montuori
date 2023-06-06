@@ -4,8 +4,6 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
-import it.polimi.ingsw.exceptions.InvalidActionException;
-import it.polimi.ingsw.exceptions.InvalidKeyException;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.messages.SetNameMessage;
 import it.polimi.ingsw.controller.connectionType;
@@ -70,7 +68,7 @@ public class ClientHandler extends Thread{
             }else{
                 System.out.println("Client has disconnected!");
             }
-        } catch (ParseException | InvalidKeyException | InvalidActionException ignored ){
+        } catch (ParseException ignored ){
         } finally {
             try {
                 //If the client disconnect the socket connection is closed

@@ -25,7 +25,7 @@ public class GUI implements View {
     public static String Name="";
     public static String message;
     public static final Object NameLock = new Object();
-    public static final Object Lock = new Object(); //TODO importare l'oggetto currGUI in ogni controller così da togliere static
+    public static final Object Lock = new Object(); //TODO: importare l'oggetto currGUI in ogni controller così da togliere static
     public ChooseConnectionController ccc;
     public nameSceneController nsc;
     public lobbySceneController lsc;
