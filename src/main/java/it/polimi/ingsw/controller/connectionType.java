@@ -7,9 +7,9 @@ import it.polimi.ingsw.network.server.RMIconnection;
 import java.io.PrintWriter;
 
 public class connectionType {
-     private final boolean socket;
-     private final PrintWriter out;
-     private final RMIconnection reply;
+     private boolean socket;
+     private PrintWriter out;
+     private RMIconnection reply;
      private int ping;
 
      /** It creates a connectionType by specify the type (socket or RMI) and the way to talk with the client.
@@ -21,6 +21,12 @@ public class connectionType {
         this.out = out;
         this.reply = reply;
         this.ping = 0;
+     }
+
+     public void changeConnection(boolean socket, PrintWriter out, RMIconnection reply){
+         this.socket=socket;
+         this.out=out;
+         this.reply=reply;
      }
 
     public boolean isSocket() {

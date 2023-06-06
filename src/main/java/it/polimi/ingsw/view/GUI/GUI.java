@@ -56,6 +56,7 @@ public class GUI implements View {
 
     @Override
     public String askUsername() {
+        Name="";
         synchronized (NameLock) {
             while (Name.equals("") || Name.charAt(0) == '\\') {
                 try {

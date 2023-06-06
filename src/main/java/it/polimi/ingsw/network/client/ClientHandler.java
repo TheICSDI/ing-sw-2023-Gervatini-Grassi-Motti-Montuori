@@ -6,7 +6,10 @@ import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.exceptions.InvalidActionException;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.messages.ReconnectMessage;
 import it.polimi.ingsw.network.messages.SetNameMessage;
 import it.polimi.ingsw.controller.connectionType;
 import org.json.simple.parser.ParseException;
@@ -44,15 +47,40 @@ public class ClientHandler extends Thread{
             //In this way each client is represented by a unique nickname
             out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             nickname = SetNameMessage.decrypt(in.readLine());
-            while(gameController.allPlayers.containsKey(nickname.getUsername())){
+            while(gameController.allPlayers.containsKey(nickname.getUsername()) && gameController.allPlayers.get(nickname.getUsername()).isConnected()){
                 out.println(new SetNameMessage("",false));
                 nickname = SetNameMessage.decrypt(in.readLine());
             }
+            if(gameController.allPlayers.containsKey(nickname.getUsername()) && !gameController.allPlayers.get(nickname.getUsername()).isConnected()){
+                //RICONNESSIONE TODO
+                gameController.allPlayers.get(nickname.getUsername()).setConnected(true);
+                serverController.connections.get(nickname.getUsername()).changeConnection(true,out,null);
+                int lobbyId=-1;
+                for (Lobby L:
+                     gameController.allLobbies) {
+                    if(L.isPlayerInLobby(gameController.allPlayers.get(nickname.getUsername()))){
+                        lobbyId=L.lobbyId;
+                    }
+                }
 
+                int gameId=-1;
+                for (int i:
+                     gameController.allGames.keySet()) {
+                    if(gameController.allGames.get(i).getPlayers().contains(gameController.allPlayers.get(nickname.getUsername()))){
+                        gameId=i;
+                    }
+                }
+                out.println(new ReconnectMessage(lobbyId,gameId,nickname.getUsername()));
+                if(gameId>0){
+                    gameController.allGames.get(gameId).reconnectPlayer(nickname.getUsername());
+                }
+            }else{
+                gameController.allPlayers.put(nickname.getUsername(), new Player(nickname.getUsername()));
+                out.println(new SetNameMessage(nickname.getUsername(),true ));
+                serverController.connections.put(nickname.getUsername(), new connectionType(true, out, null));
+            }
             //If the nickname is not already taken, it is added to the static hashmap allPlayers and connections
-            gameController.allPlayers.put(nickname.getUsername(), new Player(nickname.getUsername()));
-            out.println(new SetNameMessage(nickname.getUsername(),true ));
-            serverController.connections.put(nickname.getUsername(), new connectionType(true, out, null));
+
 
             //Loop that enable the reception of messages from the client
             String input;
@@ -66,6 +94,8 @@ public class ClientHandler extends Thread{
                 System.out.println(nickname.getUsername() + " has disconnected!");
                 if(gameController.allPlayers.containsKey(nickname.getUsername())){
                     gameController.allPlayers.get(nickname.getUsername()).setConnected(false);
+                    //TODO non funziona, not thread owner
+                    gameController.unlockQueue();
                 }
             }else{
                 System.out.println("Client has disconnected!");

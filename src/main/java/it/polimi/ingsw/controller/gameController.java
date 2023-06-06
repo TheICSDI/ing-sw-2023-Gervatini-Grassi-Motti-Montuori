@@ -21,7 +21,7 @@ public class gameController {
     public static List<Lobby> allLobbies = new ArrayList<>();
     /**List that contains all pending commands.*/
     public static List<command> queue = new ArrayList<>();
-    private final Object queueLock = new Object();
+    public final static Object queueLock = new Object();
 
     /** It returns the chosen number of column of the given player in the game.
      * @param player nickname of the player that is choosing the column.
@@ -136,5 +136,9 @@ public class gameController {
             queue.add(pending);
             queueLock.notifyAll();
         }
+    }
+
+    public static void unlockQueue(){
+        queueLock.notifyAll();
     }
 }

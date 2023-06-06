@@ -18,6 +18,7 @@ public class Game {
     private static int count = 0;
     public int id;
     private final List<Player> players;
+    private String pTurn="";
     private final Board board;
     private final List<CCStrategy> allCC = new ArrayList<>(); //TODO i punti delle common cambiano in base al n player
     private final List<CommonCard> CommonCards = new ArrayList<>();
@@ -68,6 +69,33 @@ public class Game {
     }
 
 
+    public void reconnectPlayer(String player) throws RemoteException {
+        serverController.sendMessage(new StartGameMessage("You reconnected!" ,this.id), player);
+        Player reconnected=null;
+        for (Player p:
+             players) {
+            if(p.getNickname().equals(player)){
+                reconnected=p;
+            }
+        }
+        String personalId = String.valueOf(reconnected.getPersonalCard().getId());
+        serverController.sendMessage(new ShowPersonalCardMessage(personalId), reconnected.getNickname());
+        serverController.sendMessage(new ShowCommonCards(ccId), reconnected.getNickname());
+        serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, reconnected.getShelf()), reconnected.getNickname());
+        for (Player other: players) {
+            if(!other.getNickname().equals(reconnected.getNickname())){
+                serverController.sendMessage(new OtherPlayersMessage(other),reconnected.getNickname());
+            }
+        }
+        if(pTurn.equals(reconnected.getNickname())){
+            serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), reconnected.getNickname());
+            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
+        } else {
+            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
+            serverController.sendMessage(new SimpleReply("It's " + pTurn + "'s turn!",Action.TURN), reconnected.getNickname());
+        }
+    }
+
     /**
      * Manages all the game logic from start to end.
      * It calculates the total points of each player at the end of every turn.
@@ -91,6 +119,7 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 if(p.isConnected()){
+                    pTurn=p.getNickname();
                     for (Player p1: players) {
                         if(p1.getNickname().equals(p.getNickname())){
                             serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), p1.getNickname());
@@ -172,7 +201,7 @@ public class Game {
     public List<Tile> pickTiles(Player p) throws RemoteException {
         List<Position> chosen = controller.chooseTiles(p.getNickname(), id);
         boolean check = false;
-        while(!check){
+        while(!check && p.isConnected()){
             if(board.AvailableTiles().containsAll(chosen)){
                 check = true;
             } else {
@@ -205,7 +234,7 @@ public class Game {
     public List<Tile> orderTiles(Player p, List<Tile> toInsert) throws RemoteException {
         serverController.sendMessage(new SimpleReply("Choose the order you want to insert them: ", Action.INGAMEEVENT), p.getNickname());
         List<Integer> order = new ArrayList<>();
-        while(order.isEmpty()){
+        while(order.isEmpty() && p.isConnected()){
             order = controller.chooseOrder(p.getNickname(), id);
             try{
                 toInsert = p.orderTiles(toInsert, order);
@@ -222,7 +251,7 @@ public class Game {
      * @param toInsert list of tiles to be inserted*/
     public void selectColumn(Player p, List<Tile> toInsert) throws RemoteException {
         int col = -1;
-        while(col == -1) {
+        while(col == -1 && p.isConnected()) {
             col = controller.chooseColumn(p.getNickname(), id);
             try {
                 p.insertInShelf(toInsert, (col-1));

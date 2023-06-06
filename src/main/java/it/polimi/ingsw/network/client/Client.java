@@ -41,7 +41,7 @@ public class Client extends Application {
     private static RMIclientImpl RMIclient;
     private static View virtualView;
     private static int ping = 0;
-    private static final int pingTime = 30;
+    private static final int pingTime = 15;
     public static boolean connected = true;
     private static boolean firstTurn;
 
@@ -253,11 +253,12 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        //Client.connection("192.168.1.234", 2345);
+        //Client.connection("192.168.130.45", 5000); //pc di luca
         Client.connection("127.0.0.1", 23450);
         String username;
-        SetNameMessage nick;
-
+        GeneralMessage nick;
+        String mex;
+        Action action=Action.SETNAME;
         //Request unique nickname for the client
         System.out.println(in.readLine());
         do {
@@ -265,12 +266,29 @@ public class Client extends Application {
             nick = new SetNameMessage(username,true);
             out.println(nick);
             try{
-                nick = SetNameMessage.decrypt(in.readLine());
+                mex=in.readLine();
+                System.out.println(mex);
+                action=GeneralMessage.identify(mex);
+                if(action.equals(Action.SETNAME)){
+                    nick = SetNameMessage.decrypt(mex);
+                }else{
+                    nick = ReconnectMessage.decrypt(mex);
+
+                }
             } catch(Exception ignored){}
             virtualView.printUsername(nick.getUsername(), nick.isAvailable());
         } while (!nick.isAvailable());
         //If the nickname is available the clientController is created
         controller = new clientController(nick.getUsername());
+        System.out.println(action);
+        if(!action.equals(Action.SETNAME)){
+            if(nick.getIdLobby()>0){
+                controller.setIdLobby(nick.getIdLobby());
+            }
+            if(nick.getGameId()>0){
+                controller.setIdGame(nick.getGameId());
+            }
+        }
 
         //Connection starts with a pool of thread
         ExecutorService executor = Executors.newSingleThreadExecutor();

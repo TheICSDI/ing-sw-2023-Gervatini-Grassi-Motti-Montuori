@@ -29,5 +29,6 @@ public enum Action {
     COMMONCOMPLETED,
     SHOWOTHERS,
     PING,
-    ERROR;
+    ERROR,
+    RECONNECT
 }

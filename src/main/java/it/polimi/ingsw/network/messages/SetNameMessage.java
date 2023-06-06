@@ -41,6 +41,7 @@ public class SetNameMessage extends GeneralMessage{
      * Getter of Available
      * @return
      */
+    @Override
     public boolean isAvailable() {
         return this.Available;
     }

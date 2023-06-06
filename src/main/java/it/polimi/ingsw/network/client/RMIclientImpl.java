@@ -4,6 +4,9 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.exceptions.InvalidKeyException;
+import it.polimi.ingsw.network.messages.Action;
+import it.polimi.ingsw.network.messages.GeneralMessage;
+import it.polimi.ingsw.network.messages.ReconnectMessage;
 import it.polimi.ingsw.network.messages.SetNameMessage;
 import it.polimi.ingsw.network.server.RMIconnection;
 import org.json.simple.parser.ParseException;
@@ -20,14 +23,33 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
 
     @Override
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
-        //CC.getName(m);
-        if(!SetNameMessage.decrypt(m).isAvailable()){
-            Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
-            Client.setName();
-        } else {
-            Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
-            this.CC.setNickname(SetNameMessage.decrypt(m).getUsername());
+        Action action;
+        try {
+            action=GeneralMessage.identify(m);
+        } catch (ParseException | InvalidKeyException e) {
+            throw new RuntimeException(e);
         }
+        if(action.equals(Action.SETNAME)){
+            if(!SetNameMessage.decrypt(m).isAvailable()){
+                Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
+                Client.setName();
+            } else {
+                Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
+                this.CC.setNickname(SetNameMessage.decrypt(m).getUsername());
+            }
+        }else{
+            System.out.println("SI");
+            Client.getVirtualView().printUsername(ReconnectMessage.decrypt(m).getUsername(), ReconnectMessage.decrypt(m).isAvailable());
+            this.CC.setNickname(ReconnectMessage.decrypt(m).getUsername());
+            if(ReconnectMessage.decrypt(m).getIdLobby()>0){
+                this.CC.setIdLobby(ReconnectMessage.decrypt(m).getIdLobby());
+            }
+            if(ReconnectMessage.decrypt(m).getGameId()>0){
+                this.CC.setIdGame(ReconnectMessage.decrypt(m).getGameId());
+            }
+        }
+        //CC.getName(m);
+
     }
 
     @Override

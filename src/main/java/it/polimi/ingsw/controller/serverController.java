@@ -249,9 +249,36 @@ public class serverController {
    public void getName(String input, RMIconnection reply) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex;
       mex = SetNameMessage.decrypt(input);
+      System.out.println(mex);
       if(gameController.allPlayers.containsKey(mex.getUsername())){
-          //Nickname already taken
-          reply.RMIsendName(new SetNameMessage("Nickname already taken!",false).toString(), null);
+         if(gameController.allPlayers.get(mex.getUsername()).isConnected()) {
+            //Nickname already taken
+            reply.RMIsendName(new SetNameMessage("Nickname already taken!", false).toString(), null);
+         }else{
+            //Riconnessione
+            //TODO non funziona
+            gameController.allPlayers.get(mex.getUsername()).setConnected(true);
+            serverController.connections.get(mex.getUsername()).changeConnection(false,null,reply);
+            int lobbyId=-1;
+            for (Lobby L:
+                    gameController.allLobbies) {
+               if(L.isPlayerInLobby(gameController.allPlayers.get(mex.getUsername()))){
+                  lobbyId=L.lobbyId;
+               }
+            }
+
+            int gameId=-1;
+            for (int i:
+                    gameController.allGames.keySet()) {
+               if(gameController.allGames.get(i).getPlayers().contains(gameController.allPlayers.get(mex.getUsername()))){
+                  gameId=i;
+               }
+            }
+            reply.RMIsendName(new ReconnectMessage(lobbyId,gameId,mex.getUsername()).toString(),null);
+            if(gameId>0){
+               gameController.allGames.get(gameId).reconnectPlayer(mex.getUsername());
+            }
+         }
       } else {
           //Nickname available
           reply.RMIsendName(new SetNameMessage(mex.getUsername(),true).toString(), null);
@@ -264,13 +291,14 @@ public class serverController {
                    x=connections.get(mex.getUsername()).getPing();
                    //System.out.println("Ping n^" + connections.get(mex.getUsername()).getPing());
                    try {
-                      TimeUnit.SECONDS.sleep(30);
+                      TimeUnit.SECONDS.sleep(15);
                    } catch (InterruptedException e) {
                       throw new RuntimeException(e);
                    }
                 }
                 System.out.println(mex.getUsername() + " disconnected");
                 gameController.allPlayers.get(mex.getUsername()).setConnected(false);
+                gameController.unlockQueue();
           });
       }
    }
