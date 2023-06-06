@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class serverController {
-   /**Map that contains all the connections, the key is the nickname of the client*/
+   /** Map that contains all the connections, the key is the nickname of the client. */
    public static Map<String, connectionType>  connections = new HashMap<>();
    public static gameController controller = new gameController();
 
@@ -27,9 +27,10 @@ public class serverController {
 
    /** It takes a message from the client and does the requested action.
     * It sends a reply if needed.
-    * @param message the received message to be elaborated
+    * @param message the received message to be elaborated.
+    * @return true only if the message is successful, false otherwise. For tests purposes.
     */
-   public void executeMessage(GeneralMessage message) throws RemoteException {
+   public boolean executeMessage(GeneralMessage message) throws RemoteException {
       //Constants to lighten the code
       final int id = message.getMessage_id();
       final int gameId = message.getGameId();
@@ -44,8 +45,10 @@ public class serverController {
             //It checks if the player is already in a game or in a lobby
             if (isInAGame(gameController.allPlayers.get(player))){
                sendMessage(new SimpleReply("Already in a game!", Action.ERROR), player);
+               return false;
             } else if(isInALobby(gameController.allPlayers.get(player))){
                sendMessage(new SimpleReply("Already in a lobby!", Action.ERROR), player);
+               return false;
             } else {
                //Otherwise it creates the lobby
                Player pl = gameController.allPlayers.get(player);
@@ -53,6 +56,7 @@ public class serverController {
                Lobby NewLobby = new Lobby(pl, limit);
                gameController.allLobbies.add(NewLobby);
                sendMessage(new CreateLobbyMessage("Lobby created with id " + NewLobby.lobbyId, NewLobby.lobbyId, limit), player);
+               return true;
             }
          }
 
@@ -61,8 +65,10 @@ public class serverController {
             //If the player is already in a game the command cannot be executed
             if(isInAGame(gameController.allPlayers.get(player))) {
                sendMessage(new SimpleReply("Invalid command", Action.ERROR), player);
+               return false;
             } else {
                sendMessage(new ShowLobbyMessage("Show", gameController.allLobbies), player);
+               return true;
             }
          }
 
@@ -72,8 +78,10 @@ public class serverController {
             //It checks if the player is already in a game or in a lobby
             if(isInAGame(gameController.allPlayers.get(player))) {
                sendMessage(new SimpleReply("Already in a game!", Action.ERROR), player);
+               return false;
             }else if(isInALobby(gameController.allPlayers.get(player))){
                sendMessage(new SimpleReply("Already in a lobby!", Action.ERROR), player);
+               return false;
             }else{
                //Otherwise, it found the chosen lobby by the given id, and it added the player
                for (Lobby l: gameController.allLobbies) {
@@ -84,13 +92,15 @@ public class serverController {
                         sendMessage(new JoinLobbyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
                      }catch(InputMismatchException x){
                         sendMessage(new SimpleReply("The selected lobby is full!", Action.ERROR), player);
+                        return false;
                      }
                   }
                }
                //If the lobby is not found it is reported to the client
                if(!found){
                   sendMessage(new SimpleReply("The selected lobby does not exist!", Action.ERROR), player);
-               }
+                  return false;
+               } else return true;
             }
          }
 
@@ -131,6 +141,9 @@ public class serverController {
                } else if (notInLobby){
                   sendMessage(new SimpleReply("Not in a Lobby!", Action.ERROR), player);
                }
+               return false;
+            } else {
+               return true;
             }
          }
 
@@ -140,6 +153,7 @@ public class serverController {
             List<Position> pos = new ArrayList<>();
             ((PickTilesMessage)message).getPos(pos);
             controller.pickTiles(player, pos, gameId, id);
+            return true;
          }
 
          //Select the order of the selected tiles
@@ -147,12 +161,14 @@ public class serverController {
             List<Integer> order = new ArrayList<>();
             ((SelectOrderMessage)message).getOrder(order);
             controller.selectOrder(player, order, gameId, id);
+            return true;
          }
 
          //Select che column in which to put the tiles
          case SC -> {
             int numCol = ((SelectColumnMessage)message).getCol();
             controller.selectColumn(player, numCol, gameId, id);
+            return true;
          }
 
          //Single chat with a specified player
@@ -160,8 +176,10 @@ public class serverController {
             String recipient = ((ChatMessage)message).getRecipient();
             if(gameController.allPlayers.containsKey(recipient)) {
                sendMessage(message, recipient);
+               return true;
             } else {
                sendMessage(new SimpleReply("Player does not exist!", Action.ERROR), player);
+               return false;
             }
          }
 
@@ -175,9 +193,9 @@ public class serverController {
                      for(Player p : l.Players){
                         if(!p.getNickname().equals(player)) {
                            sendMessage(message, p.getNickname());
+                           return true;
                         }
                      }
-                     break;
                   }
                }
             } else if(gameId > 0){
@@ -186,11 +204,13 @@ public class serverController {
                for(Player p: g.getPlayers()){
                   if(!p.getNickname().equals(player)){
                      sendMessage(message, p.getNickname());
+                     return true;
                   }
                }
             }
          }
       }
+      return false;
    }
 
    /**
@@ -256,8 +276,9 @@ public class serverController {
    }
 
    /** It gets a message from the server, and it calls the method execute.
-    * @param input message from the server.*/
-   public void getMessage(String input) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
+    * @param input message from the server.
+    * @return action of the created message only for test purposes. */
+   public Action getMessage(String input) throws ParseException, InvalidKeyException, InvalidActionException, RemoteException {
       GeneralMessage mex = null;
       switch (GeneralMessage.identify(input)){
          case CREATELOBBY -> mex = CreateLobbyMessage.decrypt(input);
@@ -278,7 +299,9 @@ public class serverController {
       //If the message is valid the command is executed by the serverController
       if (!(mex == null)) {
          this.executeMessage(mex);
+         return mex.getAction();
       }
+      return null;
    }
 
    /** It sends a message to a designated client.
