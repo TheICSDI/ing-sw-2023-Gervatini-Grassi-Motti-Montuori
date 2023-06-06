@@ -34,7 +34,6 @@ public class Player implements Serializable {
      * The nickname is final, so it can't be changed. It is unique.
      * It initializes total points to 0.
      * It initializes all tiles in shelf to "empty".
-     *
      * @param nick nickname of the player.
      */
     public Player(String nick){
@@ -118,10 +117,10 @@ public class Player implements Serializable {
     }
 
     /**
-     * Return a list of tiles chosen by the player to be taken from the board.
-     * It checks if the position are available to be taken, and after taking the tiles it removes them from the board.
+     * It checks if the selected tiles are available to be taken, and after taking the tiles it removes them from the board.
      * @param chosen a set of position that the player has chosen.
      * @param b board from which the player can take the tiles.
+     * @return a list of tiles chosen by the player to be taken from the board.
      */
     public List<Tile> pickTiles(List<Position> chosen, Board b, Player player) throws RemoteException {
         List<Tile> choice = new ArrayList<>();

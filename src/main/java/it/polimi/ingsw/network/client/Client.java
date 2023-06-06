@@ -43,13 +43,7 @@ public class Client extends Application {
     private static final int pingTime = 30;
     public static boolean connected = true;
     private static boolean firstTurn;
-
-
-    /*
-        // Load root layout from fxml file.
-        FXMLLoader loader = new FXMLLid per il client e un id per i giocatore assegnato solo
-        per il game per esempio (questione aperta, almeno per me)
-         */
+    
     /** It starts the socket connection on the given ip and port. */
     public void connection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);
@@ -332,7 +326,6 @@ public class Client extends Application {
         int x = -1;
         while(x < ping) {
             x = ping;
-            //System.out.println("Ping n^" + ping);
             TimeUnit.SECONDS.sleep(pingTime);
         }
         System.out.println("Disconnected"); //TODO dovrebbe essere in view

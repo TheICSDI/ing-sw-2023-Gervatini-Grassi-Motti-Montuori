@@ -19,7 +19,6 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
 
     @Override
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
-        //CC.getName(m);
         if(!SetNameMessage.decrypt(m).isAvailable()){
             Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
             Client.setName();
