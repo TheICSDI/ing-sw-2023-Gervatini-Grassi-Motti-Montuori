@@ -8,7 +8,7 @@ import com.google.gson.Gson;
  */
 public class CreateLobbyMessage extends GeneralMessage{
 
-    private int limit;
+    private final int limit;
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param message_id uid of the message

@@ -7,7 +7,7 @@ import com.google.gson.Gson;
  * It extends the GeneralMessage class to include specific behavior for setting a username for the game.
  */
 public class SetNameMessage extends GeneralMessage{
-    private boolean Available;
+    private final boolean Available;
 
     /**
      * Constructor that initializes a message with the provided parameters.

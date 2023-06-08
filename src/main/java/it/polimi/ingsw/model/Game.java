@@ -20,12 +20,14 @@ public class Game {
     private String pTurn="";
     private Board board;
     private Board backupBoard;
-    private final List<CCStrategy> allCC = new ArrayList<>(); //TODO i punti delle common cambiano in base al n player
+    private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private final List<Integer> ccId = new ArrayList<>();
 
     private final List<PersonalCard> allPC = new ArrayList<>();
     public final gameController controller;
+
+    private final static Object lockWaitPLayers=new Object();
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
@@ -95,6 +97,9 @@ public class Game {
             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
             serverController.sendMessage(new SimpleReply("It's " + pTurn + "'s turn!",Action.TURN), reconnected.getNickname());
         }
+        synchronized (lockWaitPLayers){
+            lockWaitPLayers.notifyAll();
+        }
     }
 
     /**
@@ -119,6 +124,22 @@ public class Game {
         //Start turns
         while(!endGame){
             for (Player p: players) {
+                int connectedPlayers=0;
+                for (Player pConnectionCheck:
+                     players) {
+                    if(pConnectionCheck.isConnected()) connectedPlayers++;
+                }
+                if(connectedPlayers<=1){
+                    for (Player waiters:
+                         players) {
+                        if(waiters.isConnected()){
+                            serverController.sendMessage(new SimpleReply("Waiting for players...",Action.TURN), waiters.getNickname());
+                        }
+                    }
+                    synchronized (lockWaitPLayers){
+                        lockWaitPLayers.wait();
+                    }
+                }
                 if(p.isConnected()){
                     this.backupBoard.cloneBoard(this.board);
                     pTurn=p.getNickname();
@@ -314,7 +335,6 @@ public class Game {
 
     public void calculateCC(Player p) throws RemoteException {
         if(CommonCards.get(0).control(p) && p.getScoreToken1()==0){
-            //ToDo LA condizione rimane vera ogni turno e continua ad assegnarli punti, da fixare obv
             for (Player pcc : players) {
                 serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the first " +
                         "common goal and gained " + CommonCards.get(0).getPoints() + "! Points for this goal are being " +

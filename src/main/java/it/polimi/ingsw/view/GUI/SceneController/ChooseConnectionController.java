@@ -3,14 +3,7 @@ package it.polimi.ingsw.view.GUI.SceneController;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-
-import java.io.IOException;
-
-import static it.polimi.ingsw.network.client.Client.RMI;
-import static it.polimi.ingsw.network.client.Client.socket;
 
 public class ChooseConnectionController {
 
@@ -42,9 +35,9 @@ public class ChooseConnectionController {
     }
 
     protected void send(String type){
-        synchronized (gui.ConnectionLock) {
+        synchronized (GUI.ConnectionLock) {
             gui.connectionChosen = type;
-            gui.ConnectionLock.notifyAll();
+            GUI.ConnectionLock.notifyAll();
         }
     }
 
