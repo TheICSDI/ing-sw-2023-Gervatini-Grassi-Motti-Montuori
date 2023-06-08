@@ -177,4 +177,11 @@ public class Board {
     public Tile getTile(Position p){
         return this.board[p.getX()][p.getY()];
     }
+    public void cloneBoard(Board newBoard){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                this.board[i][j]=newBoard.board[i][j];
+            }
+        }
+    }
 }

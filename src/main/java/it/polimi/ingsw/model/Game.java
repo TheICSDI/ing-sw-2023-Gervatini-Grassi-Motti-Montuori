@@ -18,7 +18,8 @@ public class Game {
     public int id;
     private final List<Player> players;
     private String pTurn="";
-    private final Board board;
+    private Board board;
+    private Board backupBoard;
     private final List<CCStrategy> allCC = new ArrayList<>(); //TODO i punti delle common cambiano in base al n player
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private final List<Integer> ccId = new ArrayList<>();
@@ -42,6 +43,7 @@ public class Game {
 
         //Initializes the new board
         this.board = new Board(players.size());
+        this.backupBoard = new Board(players.size());
         this.board.fillBoard();
 
         //Initializes the common and personal goal cards
@@ -118,6 +120,7 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 if(p.isConnected()){
+                    this.backupBoard.cloneBoard(this.board);
                     pTurn=p.getNickname();
                     for (Player p1: players) {
                         if(p1.getNickname().equals(p.getNickname())){
@@ -133,19 +136,31 @@ public class Game {
 
                     //Handles the action "pick tiles"
                     List<Tile> toInsert = pickTiles(p);
+                    if(toInsert!=null) {
+                        //Handles the action "select order"
+                        boolean allTheSame = checkTiles(toInsert);
+                        serverController.sendMessage(new ChosenTilesMessage(toInsert, !allTheSame), p.getNickname());
 
-                    //Handles the action "select order"
-                    boolean allTheSame = checkTiles(toInsert);
-                    serverController.sendMessage(new ChosenTilesMessage(toInsert,!allTheSame), p.getNickname());
+                        if (!allTheSame) {
+                            toInsert = orderTiles(p, toInsert);
+                        }
+                        if(toInsert!= null) {
+                            serverController.sendMessage(new SimpleReply("Choose column: ", Action.INGAMEEVENT), p.getNickname());
 
-                    if(!allTheSame){
-                        toInsert = orderTiles(p, toInsert);
+                            //Handles the action "select column"
+                            selectColumn(p, toInsert);
+
+                        }
+
+
                     }
-                    serverController.sendMessage(new SimpleReply("Choose column: ",Action.INGAMEEVENT), p.getNickname());
-
-                    //Handles the action "select column"
-                    selectColumn(p, toInsert);
-
+                    if (!p.isConnected()) {
+                        this.board.cloneBoard(this.backupBoard);
+                        for (Player p1 :
+                                players) {
+                            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
+                        }
+                    }
                     for (Player other: players) {
                         if(!other.getNickname().equals(p.getNickname())){
                             serverController.sendMessage(new OtherPlayersMessage(p),other.getNickname());
@@ -208,9 +223,12 @@ public class Game {
                 chosen = controller.chooseTiles(p.getNickname(), id);
             }
         }
-        List<Tile> toInsert = p.pickTiles(chosen, board, p);
-        serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
-        return toInsert;
+        if(p.isConnected()){
+            List<Tile> toInsert = p.pickTiles(chosen, board, p);
+            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
+            return toInsert;
+        }
+        return null;
     }
 
     /** Checks if the tiles are all the same.
@@ -235,14 +253,20 @@ public class Game {
         List<Integer> order = new ArrayList<>();
         while(order.isEmpty() && p.isConnected()){
             order = controller.chooseOrder(p.getNickname(), id);
-            try{
-                toInsert = p.orderTiles(toInsert, order);
-            } catch (InputMismatchException e){
-                order.clear();
+            if(!order.isEmpty()) {
+                try {
+                    toInsert = p.orderTiles(toInsert, order);
+                } catch (InputMismatchException e) {
+                    order.clear();
+                }
             }
         }
-        serverController.sendMessage(new ChosenTilesMessage(toInsert,false), p.getNickname());
-        return toInsert;
+        if(!order.isEmpty()) {
+            serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
+            return toInsert;
+        }else{
+            return null;
+        }
     }
 
     /** Handles the action "select column".
@@ -252,12 +276,15 @@ public class Game {
         int col = -1;
         while(col == -1 && p.isConnected()) {
             col = controller.chooseColumn(p.getNickname(), id);
-            try {
-                p.insertInShelf(toInsert, (col-1));
-            } catch (InputMismatchException e) {
-                col = -1;//serve per il while
+            if(col != -2) {
+                try {
+                    p.insertInShelf(toInsert, (col - 1));
+                } catch (InputMismatchException e) {
+                    col = -1;//serve per il while
+                }
             }
         }
+        if(col==-2){ return;}
         serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
         serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
     }

@@ -30,6 +30,9 @@ public class gameController {
     public int chooseColumn(String player, int gameId) {
         Optional<command> order;
         order = findTheRequest(player, gameId, Action.SC);
+        if(order.isEmpty()){
+            return -2;
+        }
         return order.get().getNumCol();
     }
 
@@ -39,6 +42,9 @@ public class gameController {
      * @return list of chosen tiles. */
     public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SO);
+        if(order.isEmpty()){
+            return new ArrayList<>();
+        }
         return order.get().getOrder();
     }
 
@@ -48,7 +54,11 @@ public class gameController {
      * @return list of positions.*/
     public List<Position> chooseTiles(String player , int gameId) {
         Optional<command> order = findTheRequest(player,gameId,Action.PT);
-        return order.get().getPos();
+        if(order.isEmpty()){
+            return null;
+        }else {
+            return order.get().getPos();
+        }
     }
 
     /** It finds the request of the given player in the queue of commands.
@@ -139,6 +149,8 @@ public class gameController {
     }
 
     public static void unlockQueue(){
-        queueLock.notifyAll();
+        synchronized (queueLock) {
+            queueLock.notifyAll();
+        }
     }
 }
