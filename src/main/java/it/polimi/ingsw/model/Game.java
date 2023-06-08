@@ -125,19 +125,23 @@ public class Game {
         while(!endGame){
             for (Player p: players) {
                 int connectedPlayers=0;
-                for (Player pConnectionCheck:
-                     players) {
-                    if(pConnectionCheck.isConnected()) connectedPlayers++;
-                }
-                if(connectedPlayers<=1){
-                    for (Player waiters:
-                         players) {
-                        if(waiters.isConnected()){
-                            serverController.sendMessage(new SimpleReply("Waiting for players...",Action.TURN), waiters.getNickname());
-                        }
+                while (connectedPlayers<=1) {
+                    connectedPlayers = 0;
+                    for (Player pConnectionCheck :
+                            players) {
+                        if (pConnectionCheck.isConnected()) connectedPlayers++;
                     }
-                    synchronized (lockWaitPLayers){
-                        lockWaitPLayers.wait();
+                    if (connectedPlayers <= 1) {
+                        for (Player waiters :
+                                players) {
+                            if (waiters.isConnected()) {
+                                serverController.sendMessage(new SimpleReply("Waiting for players...", Action.TURN), waiters.getNickname());
+                            }
+                        }
+                        synchronized (lockWaitPLayers) {
+                            lockWaitPLayers.wait();
+                        }
+                        connectedPlayers++;
                     }
                 }
                 if(p.isConnected()){
