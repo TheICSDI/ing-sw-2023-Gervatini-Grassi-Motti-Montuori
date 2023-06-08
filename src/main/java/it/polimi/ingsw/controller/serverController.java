@@ -255,7 +255,6 @@ public class serverController {
             reply.RMIsendName(new SetNameMessage("Nickname already taken!", false).toString(), null);
          }else{
             //Riconnessione
-            //TODO non funziona
             gameController.allPlayers.get(mex.getUsername()).setConnected(true);
             serverController.connections.get(mex.getUsername()).changeConnection(false,null,reply);
             int lobbyId=-1;

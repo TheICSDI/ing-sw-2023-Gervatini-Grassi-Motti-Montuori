@@ -36,6 +36,8 @@ public class nameSceneController implements Initializable {
     private TextField GetNickname;
     Font font = null;
 
+    private GUI gui;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,9 +65,9 @@ public class nameSceneController implements Initializable {
 
     @FXML
     public void getText(){
-        synchronized (GUI.NameLock) {
-            GUI.Name = GetNickname.getText();
-            GUI.NameLock.notifyAll();
+        synchronized (gui.NameLock) {
+            gui.Name = GetNickname.getText();
+            gui.NameLock.notifyAll();
         }
     }
 
@@ -87,6 +89,8 @@ public class nameSceneController implements Initializable {
         this.Information.setText(text);
     }
 
-
+    public void setGUI(GUI gui){
+        this.gui=gui;
+    }
 
 }

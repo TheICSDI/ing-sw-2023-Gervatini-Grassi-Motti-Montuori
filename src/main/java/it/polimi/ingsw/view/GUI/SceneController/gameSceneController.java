@@ -22,7 +22,6 @@ import javafx.scene.paint.Paint;
 
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 
@@ -130,8 +129,6 @@ public class gameSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        YourName.setText(GUI.Name);
-        players.add(GUI.Name);
         myShelfToken.setAlignment(Pos.CENTER);
         this.othersShelf.add(p2Shelf);
         p2Token.setAlignment(Pos.CENTER);
@@ -264,6 +261,8 @@ public class gameSceneController implements Initializable {
     public void showOthers(Map<String, Player> others){
         if(firstOthers){
             firstOthers=false;
+            YourName.setText(gui.Name);
+            players.add(gui.Name);
             List<String> names= new ArrayList<>(others.keySet());//sperando gli metta in ordine
             for (String s:
                     names) {
@@ -434,9 +433,9 @@ public class gameSceneController implements Initializable {
             pt.append(" ").append(p.getY()).append(" ").append(p.getX());
         }
         System.out.println(pt);
-        synchronized (GUI.Lock){
-            GUI.message= String.valueOf(pt);
-            GUI.Lock.notifyAll();
+        synchronized (gui.Lock){
+            gui.message= String.valueOf(pt);
+            gui.Lock.notifyAll();
         }
         for (Position p:
                 this.Chosen) {
@@ -607,4 +606,5 @@ public class gameSceneController implements Initializable {
             p4Token.add(endToken,1,1);
         }
     }
+
 }

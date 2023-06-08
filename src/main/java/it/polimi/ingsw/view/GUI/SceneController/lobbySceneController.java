@@ -1,11 +1,9 @@
 package it.polimi.ingsw.view.GUI.SceneController;
 
-import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -34,6 +32,8 @@ public class lobbySceneController {
     private List<Lobby> AvailableLobbies;
     private int limit = 2;
 
+    private GUI gui;
+
     public void setName(String name){
         Name.setText("Your name: " + name);
     }
@@ -52,9 +52,9 @@ public class lobbySceneController {
     }
 
     public void createLobby() throws InterruptedException {
-        synchronized (GUI.Lock) {
-            GUI.message = "createlobby " + limit;
-            GUI.Lock.notifyAll();
+        synchronized (gui.Lock) {
+            gui.message = "createlobby " + limit;
+            gui.Lock.notifyAll();
         }
         //showLobbies(gameController.allLobbies);
         TimeUnit.MILLISECONDS.sleep(250);
@@ -66,18 +66,18 @@ public class lobbySceneController {
     }
 
     public void showLobbies() {
-        synchronized (GUI.Lock) {
-            GUI.message = "showlobby";
-            GUI.Lock.notifyAll();
+        synchronized (gui.Lock) {
+            gui.message = "showlobby";
+            gui.Lock.notifyAll();
         }
     }
 
     public void Join() throws InterruptedException {
         ObservableList<Integer> selectedIndices = this.Lobbies.getSelectionModel().getSelectedIndices();
         for(Integer o : selectedIndices){
-            synchronized (GUI.Lock) {
-                GUI.message = "joinlobby " + AvailableLobbies.get(o).lobbyId;
-                GUI.Lock.notifyAll();
+            synchronized (gui.Lock) {
+                gui.message = "joinlobby " + AvailableLobbies.get(o).lobbyId;
+                gui.Lock.notifyAll();
             }
         }
         //showLobbies(gameController.allLobbies);
@@ -97,9 +97,13 @@ public class lobbySceneController {
 
     @FXML
     public void StartGame() {
-        synchronized (GUI.Lock) {
-            GUI.message = "startgame";
-            GUI.Lock.notifyAll();
+        synchronized (gui.Lock) {
+            gui.message = "startgame";
+            gui.Lock.notifyAll();
         }
+    }
+
+    public void setGUI(GUI gui){
+        this.gui=gui;
     }
 }

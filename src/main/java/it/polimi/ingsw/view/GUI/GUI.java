@@ -22,10 +22,10 @@ import java.util.Objects;
 public class GUI implements View {
     private int nPage=1;
     private Stage stage;
-    public static String Name="";
-    public static String message;
-    public static final Object NameLock = new Object();
-    public static final Object Lock = new Object(); //TODO: importare l'oggetto currGUI in ogni controller così da togliere static
+    public String Name="";
+    public String message;
+    public final Object NameLock = new Object();
+    public final Object Lock = new Object();
     public ChooseConnectionController ccc;
     public nameSceneController nsc;
     public lobbySceneController lsc;
@@ -33,7 +33,7 @@ public class GUI implements View {
     public endSceneController esc;
     private Stage primaryStage;
     public String connectionChosen;
-    public static final Object ConnectionLock =  new Object();
+    public final Object ConnectionLock =  new Object();
 
     private final GUI currGui;
 
@@ -42,7 +42,7 @@ public class GUI implements View {
     }
 
     @Override
-    public String chooseConnection() {//TODO cambiare
+    public String chooseConnection() {
         synchronized (ConnectionLock) {
             try{
                 ConnectionLock.wait();
@@ -268,6 +268,7 @@ public class GUI implements View {
             root=loader.load();
         }catch(Exception ignored){}
         nsc=loader.getController();
+        nsc.setGUI(this.currGui);
         //stage=primaryStage;
         stage.setTitle("My Shelfie");
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
@@ -289,6 +290,7 @@ public class GUI implements View {
         }
         lsc = loader.getController();
         lsc.setName(Name);
+        lsc.setGUI(this.currGui);
         stage.centerOnScreen();
         nPage=3;
         stage.setResizable(false);
@@ -305,7 +307,7 @@ public class GUI implements View {
         } catch (Exception ignored) {
         }
         gsc = loader.getController();
-        gsc.setGui(currGui);
+        gsc.setGui(this.currGui);
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
