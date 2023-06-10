@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
+import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -566,6 +567,11 @@ public class gameSceneController implements Initializable {
             }
         }
         turn.setText(msg);
+        //TODO SOLO PER TESTARE
+        CLI temp=new CLI();
+        System.out.println("local baord");
+        temp.showBoard(localBoard);
+
     }
 
     public void setIngameEvents(String msg){

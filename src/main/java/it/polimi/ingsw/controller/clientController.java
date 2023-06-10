@@ -34,6 +34,7 @@ public class clientController{
         //Input parsing
         input = input.trim();
         //Words delimiter
+
         String[] words = input.split(" ");
         //First word is the action
         Action currAction;

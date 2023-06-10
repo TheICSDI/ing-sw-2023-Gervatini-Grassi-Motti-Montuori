@@ -238,22 +238,27 @@ public class Game {
      * @param p the current player.
      * @return list of chosen tiles. */
     public List<Tile> pickTiles(Player p) throws RemoteException {
-        List<Position> chosen = controller.chooseTiles(p.getNickname(), id);
-        boolean check = false;
-        while(!check && p.isConnected()){
-            if(board.AvailableTiles().containsAll(chosen)){
-                check = true;
+        while(true) {//Ricomincia se non trova return, unico caso shelf piena
+            List<Position> chosen = controller.chooseTiles(p.getNickname(), id);
+            boolean check = false;
+            while (!check && p.isConnected()) {
+                if (board.AvailableTiles().containsAll(chosen)) {
+                    check = true;
+                } else {
+                    serverController.sendMessage(new SimpleReply("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), p.getNickname());
+                    chosen = controller.chooseTiles(p.getNickname(), id);
+                }
+            }
+            if (p.isConnected()) {
+                List<Tile> toInsert = p.pickTiles(chosen, board, p);
+                serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
+                if (!toInsert.isEmpty()) {
+                    return toInsert;
+                }
             } else {
-                serverController.sendMessage(new SimpleReply("The chosen tiles are not available to be taken!", Action.INGAMEEVENT), p.getNickname());
-                chosen = controller.chooseTiles(p.getNickname(), id);
+                return null;
             }
         }
-        if(p.isConnected()){
-            List<Tile> toInsert = p.pickTiles(chosen, board, p);
-            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
-            return toInsert;
-        }
-        return null;
     }
 
     /** Checks if the tiles are all the same.
