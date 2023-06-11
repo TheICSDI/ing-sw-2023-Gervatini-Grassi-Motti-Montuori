@@ -86,9 +86,9 @@ public class GUI implements View {
     }
 
     @Override
-    public void createLobby(String lobbyName/*, int maxPlayers non serve?*/) {
+    public void createLobby(String lobbyName) {
         Platform.runLater(() -> {
-            lsc.setText(lobbyName);//provvisorio
+            lsc.setText(lobbyName);
         });
     }
 
@@ -99,7 +99,7 @@ public class GUI implements View {
 
     @Override
     public void startGame(String message) {
-        Platform.runLater(()->openGameScene());
+        Platform.runLater(()-> openGameScene());
     }
 
     @Override
@@ -140,15 +140,6 @@ public class GUI implements View {
     @Override
     public void updateOthers(Map<String,Player> others) {
         Platform.runLater(() ->gsc.showOthers(others));
-    }
-    @Override
-    public void joinLobby(int lobby_id) {
-
-    }
-
-    @Override
-    public void exitLobby(int lobby_id) {
-
     }
 
     @Override

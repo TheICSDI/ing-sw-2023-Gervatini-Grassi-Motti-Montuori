@@ -1,10 +1,9 @@
 /** It manages multiple client connections via socket.
- * @author Caterina Motti*/
+ * @author Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.messages.ReconnectMessage;
@@ -50,35 +49,32 @@ public class ClientHandler extends Thread{
                 nickname = SetNameMessage.decrypt(in.readLine());
             }
             if(gameController.allPlayers.containsKey(nickname.getUsername()) && !gameController.allPlayers.get(nickname.getUsername()).isConnected()){
-                //RICONNESSIONE TODO
                 gameController.allPlayers.get(nickname.getUsername()).setConnected(true);
-                serverController.connections.get(nickname.getUsername()).changeConnection(true,out,null);
-                int lobbyId=-1;
-                for (Lobby L:
-                     gameController.allLobbies) {
+                serverController.connections.get(nickname.getUsername()).changeConnection(true, out,null);
+                int lobbyId = -1;
+                for (Lobby L: gameController.allLobbies) {
                     if(L.isPlayerInLobby(gameController.allPlayers.get(nickname.getUsername()))){
-                        lobbyId=L.lobbyId;
+                        lobbyId = L.lobbyId;
                     }
                 }
 
-                int gameId=-1;
-                for (int i:
-                     gameController.allGames.keySet()) {
+                int gameId = -1;
+                for (int i: gameController.allGames.keySet()) {
                     if(gameController.allGames.get(i).getPlayers().contains(gameController.allPlayers.get(nickname.getUsername()))){
-                        gameId=i;
+                        gameId = i;
                     }
                 }
                 out.println(new ReconnectMessage(lobbyId,gameId,nickname.getUsername()));
                 if(gameId>0){
                     gameController.allGames.get(gameId).reconnectPlayer(nickname.getUsername());
                 }
-            }else{
+
+            } else {
+                //If the nickname is not already taken, it is added to the static hashmap allPlayers and connections
                 gameController.allPlayers.put(nickname.getUsername(), new Player(nickname.getUsername()));
-                out.println(new SetNameMessage(nickname.getUsername(),true ));
+                out.println(new SetNameMessage(nickname.getUsername(), true));
                 serverController.connections.put(nickname.getUsername(), new connectionType(true, out, null));
             }
-            //If the nickname is not already taken, it is added to the static hashmap allPlayers and connections
-
 
             //Loop that enable the reception of messages from the client
             String input;
@@ -95,7 +91,7 @@ public class ClientHandler extends Thread{
                     //TODO non funziona, not thread owner
                     gameController.unlockQueue();
                 }
-            }else{
+            } else {
                 System.out.println("Client has disconnected!");
             }
         } catch (ParseException ignored ){

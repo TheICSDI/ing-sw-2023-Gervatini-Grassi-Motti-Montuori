@@ -60,8 +60,8 @@ public class CLI implements View{
     }
 
     @Override
-    public void createLobby(String lobbyName/*, int maxPlayers*/) {
-        System.out.println(lobbyName);
+    public void createLobby(String lobbyName) {
+
     }
 
     @Override
@@ -170,16 +170,9 @@ public class CLI implements View{
     }
 
     @Override
-    public void commonCompleted(String msg,boolean first,String whoCompleted) {
+    public void commonCompleted(String msg, boolean first, String whoCompleted) {
         System.out.println(msg);
     }
-
-    /*
-    @Override
-    public void createLobby(String lobbyName, int maxPlayers){
-
-    }
-     */
 
     @Override
     public void showLobby(List<Lobby> Lobbies){
@@ -221,16 +214,6 @@ public class CLI implements View{
     }
 
     @Override
-    public void joinLobby(int lobby_id){
-
-    }
-
-    @Override
-    public void exitLobby(int lobby_id){
-
-    }
-
-    @Override
     public void startGame(String message){
         System.out.println(message);
     }
@@ -266,7 +249,7 @@ public class CLI implements View{
         out.println(msg);
     }
     @Override
-    public void playersTurn(String msg,boolean firstTurn){
+    public void playersTurn(String msg, boolean firstTurn){
         System.out.println(msg);
     }
 
@@ -281,23 +264,22 @@ public class CLI implements View{
                 \u001B[31mThis is the command list:\s
                 createlobby <Number of players>
                 joinlobby <Lobby id>
-                showlobby
-                exitlobby (WIP)
-                C <Player's name> <message>
+                showlobby 
+                C <recipient name> <message>
                 CA <message>
                 startgame
-                pt <Row1> <Column1> (up to three tiles)
-                so <First> <Second> <Third>
-                sc <ShelfColumn>
-                showothers (WIP)
+                pt <Row1> <Column1> (pick tiles)
+                so <First> <Second> <Third> (select order)
+                sc <ShelfColumn> (select column)
+                showothers 
                 showpersonal
                 showcommons
-                exit (WIP)\u001B[0m""");
+                \u001B[0m""");
     }
 
     @Override
     public String getInput() {
-        Scanner input=new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
 }

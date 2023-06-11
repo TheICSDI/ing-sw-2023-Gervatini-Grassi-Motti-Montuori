@@ -18,8 +18,8 @@ public class Game {
     public int id;
     private final List<Player> players;
     private String pTurn="";
-    private Board board;
-    private Board backupBoard;
+    private final Board board;
+    private final Board backupBoard;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private final List<Integer> ccId = new ArrayList<>();
@@ -73,12 +73,11 @@ public class Game {
 
 
     public void reconnectPlayer(String player) throws RemoteException {
-        serverController.sendMessage(new StartGameMessage("You reconnected!" ,this.id), player);
+        serverController.sendMessage(new StartGameMessage("You reconnected!", this.id), player);
         Player reconnected=null;
-        for (Player p:
-             players) {
+        for (Player p: players) {
             if(p.getNickname().equals(player)){
-                reconnected=p;
+                reconnected = p;
             }
         }
         String personalId = String.valueOf(reconnected.getPersonalCard().getId());
@@ -132,8 +131,7 @@ public class Game {
                         if (pConnectionCheck.isConnected()) connectedPlayers++;
                     }
                     if (connectedPlayers <= 1) {
-                        for (Player waiters :
-                                players) {
+                        for (Player waiters : players) {
                             if (waiters.isConnected()) {
                                 serverController.sendMessage(new SimpleReply("Waiting for players...", Action.TURN), waiters.getNickname());
                             }
@@ -146,7 +144,7 @@ public class Game {
                 }
                 if(p.isConnected()){
                     this.backupBoard.cloneBoard(this.board);
-                    pTurn=p.getNickname();
+                    pTurn = p.getNickname();
                     for (Player p1: players) {
                         if(p1.getNickname().equals(p.getNickname())){
                             serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), p1.getNickname());
@@ -171,10 +169,8 @@ public class Game {
                         }
                         if(toInsert!= null) {
                             serverController.sendMessage(new SimpleReply("Choose column: ", Action.INGAMEEVENT), p.getNickname());
-
                             //Handles the action "select column"
                             selectColumn(p, toInsert);
-
                         }
 
 
@@ -310,7 +306,7 @@ public class Game {
                 try {
                     p.insertInShelf(toInsert, (col - 1));
                 } catch (InputMismatchException e) {
-                    col = -1;//serve per il while
+                    col = -1;
                 }
             }
         }

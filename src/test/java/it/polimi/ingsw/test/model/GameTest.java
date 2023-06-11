@@ -3,6 +3,7 @@
  */
 package it.polimi.ingsw.test.model;
 
+import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.controller.connectionType;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
@@ -10,6 +11,8 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.network.client.RMIclientImpl;
+import it.polimi.ingsw.network.server.RMIconnection;
 import org.junit.jupiter.api.Test;
 
 import java.io.PrintWriter;
@@ -26,7 +29,7 @@ class GameTest {
     Player p4 = new Player("Fozy");
     List<Player> playerList = new ArrayList<>();
     gameController GC = new gameController();
-    PrintWriter out = new PrintWriter(System.out, true);;
+    PrintWriter out = new PrintWriter(System.out, true);
 
     @Test
     void Game(){
@@ -84,21 +87,25 @@ class GameTest {
     void startGame() throws RemoteException {
         playerList.add(p1);
         playerList.add(p2);
+        playerList.add(p3);
         p1.setConnected(true);
         p2.setConnected(true);
+        p3.setConnected(false);
         connectionType type = new connectionType(true, out, null);
         serverController.connections.put(p1.getNickname(), type);
         serverController.connections.put(p2.getNickname(), type);
+        serverController.connections.put(p3.getNickname(), type);
 
         Game g = new Game(playerList, GC);
         gameController.allGames.put(g.id, g);
         gameController.allPlayers.put(p1.getNickname(), p1);
         gameController.allPlayers.put(p2.getNickname(), p2);
+        gameController.allPlayers.put(p3.getNickname(), p3);
 
         //Select some position from the board
         List<Position> pos = new ArrayList<>();
-        Position pos1 = new Position(3, 1);
-        Position pos2 = new Position(3, 2);
+        Position pos1 = new Position(3, 0);
+        Position pos2 = new Position(3, 1);
         pos.add(pos1);
         pos.add(pos2);
         GC.pickTiles(p1.getNickname(), pos, g.id, 1);
@@ -135,8 +142,8 @@ class GameTest {
             }
         }
         assertTrue(g.getBoard().isBoardEmpty());
+        g.getBoard().board[3][0] = new Tile("games");
         g.getBoard().board[3][1] = new Tile("games");
-        g.getBoard().board[3][2] = new Tile("games");
 
         try {
             g.startGame();
@@ -202,5 +209,29 @@ class GameTest {
         } else {
             assertEquals(p3, g.calculateWinner());
         }
+    }
+
+    @Test
+    void reconnectPlayer() throws RemoteException {
+        RMIconnection reply = new RMIclientImpl(new clientController(p1.getNickname()));
+        connectionType typeRMI = new connectionType(false, null, reply);
+        connectionType type = new connectionType(true, out, null);
+        serverController.connections.put(p1.getNickname(), typeRMI);
+        serverController.connections.put(p2.getNickname(), type);
+        serverController.connections.put(p3.getNickname(), type);
+        p1.setConnected(true);
+        p2.setConnected(true);
+        p3.setConnected(false);
+        playerList.add(p1);
+        playerList.add(p2);
+        playerList.add(p3);
+        Game g = new Game(playerList, GC);
+        gameController.allGames.put(g.id, g);
+        gameController.allPlayers.put(p1.getNickname(), p1);
+        gameController.allPlayers.put(p2.getNickname(), p2);
+        gameController.allPlayers.put(p3.getNickname(), p3);
+
+        typeRMI.changeConnection(true, out, null);
+        g.reconnectPlayer(p3.getNickname());
     }
 }

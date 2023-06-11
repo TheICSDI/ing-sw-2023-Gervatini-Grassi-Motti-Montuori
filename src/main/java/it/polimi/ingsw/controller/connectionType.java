@@ -23,10 +23,14 @@ public class connectionType {
         this.ping = 0;
      }
 
+     /** It changes the connectionType. It is used when a clients reconnect after disconnection.
+      *  @param socket true only if the new connection is of type socket.
+      *  @param out the PrintWriter of the client if connected via socket, null otherwise.
+      *  @param reply the RMIConnection of the client if connected via RMI, null otherwise.*/
      public void changeConnection(boolean socket, PrintWriter out, RMIconnection reply){
-         this.socket=socket;
-         this.out=out;
-         this.reply=reply;
+         this.socket = socket;
+         this.out = out;
+         this.reply = reply;
      }
 
     public boolean isSocket() {

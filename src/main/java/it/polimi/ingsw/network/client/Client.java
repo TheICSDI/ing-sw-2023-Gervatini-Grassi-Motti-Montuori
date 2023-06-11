@@ -44,19 +44,14 @@ public class Client extends Application {
     public static boolean connected = true;
     private static boolean firstTurn;
     
-    /** It starts the socket connection on the given ip and port. */
+    /** It starts the socket connection on the given ip and port.
+     * @param ip address of the connection.
+     * @param port chosen port for the connection. */
     public void connection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);
         //Directed communication between client and server
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    }
-
-    /** It closes the socket connection. */
-    public void endConnection() throws IOException {
-        in.close();
-        out.close();
-        clientSocket.close();
     }
 
     /** It listens to the messages received by via socket, and it calls the elaborate method. */
@@ -94,7 +89,7 @@ public class Client extends Application {
                 controller.setIdGame(reply.getGameId());
                 controller.setFirstTurn(true);
                 virtualView.startGame(reply.getMessage());
-                firstTurn=true;
+                firstTurn = true;
             }
             case UPDATEBOARD -> {
                 reply = UpdateBoardMessage.decrypt(message);
@@ -115,8 +110,8 @@ public class Client extends Application {
             }
             case TURN -> {
                 reply = SimpleReply.decrypt(message);
-                virtualView.playersTurn(reply.getMessage(),firstTurn);
-                firstTurn=false;
+                virtualView.playersTurn(reply.getMessage(), firstTurn);
+                firstTurn = false;
             }
             case CHOSENTILES ->{
                 reply = ChosenTilesMessage.decrypt(message);
@@ -259,21 +254,18 @@ public class Client extends Application {
             nick = new SetNameMessage(username,true);
             out.println(nick);
             try{
-                mex=in.readLine();
-                System.out.println(mex);
-                action=GeneralMessage.identify(mex);
+                mex = in.readLine();
+                action = GeneralMessage.identify(mex);
                 if(action.equals(Action.SETNAME)){
                     nick = SetNameMessage.decrypt(mex);
-                }else{
+                } else {
                     nick = ReconnectMessage.decrypt(mex);
-
                 }
             } catch(Exception ignored){}
             virtualView.printUsername(nick.getUsername(), nick.isAvailable());
         } while (!nick.isAvailable());
         //If the nickname is available the clientController is created
         controller = new clientController(nick.getUsername());
-        System.out.println(action);
         if(!action.equals(Action.SETNAME)){
             if(nick.getIdLobby()>0){
                 controller.setIdLobby(nick.getIdLobby());

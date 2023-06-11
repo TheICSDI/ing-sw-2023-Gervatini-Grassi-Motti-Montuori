@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface View {
-
     String chooseConnection();
     String askUsername();
     void printUsername(String username, boolean isAvailable);
@@ -20,17 +19,13 @@ public interface View {
     void showPersonal(PersonalCard PC);
     void showChosenTiles(List<Tile> tiles,boolean toOrder);
     void showCommons(List<Integer> cc);
-
     void commonCompleted(String msg, boolean first, String whoCompleted);
-
     void showOthers(Map<String,Player> others);
     void updateOthers(Map<String,Player> others);
-    void joinLobby(int lobby_id);
-    void exitLobby(int lobby_id);
     void startGame(String message);
     void showPoints(String message);
     void winner(String message);
-    void endGame(); // da controllare input
+    void endGame();
     void endGameToken(String player);
     void displayError(String msg);
     void displayMessage(String msg);
