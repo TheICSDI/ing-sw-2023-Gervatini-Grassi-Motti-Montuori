@@ -10,12 +10,11 @@ public class CommonCard{
 
     /** Creates a common goal card given its type.
      * @param currStrategy type of card that has to be created.
-     * @param first true only if is the first card of the game, false otherwise.
-     * @param nPlayers number of players of the game. */
-    public CommonCard(CCStrategy currStrategy, boolean first, int nPlayers){
+     * @param first true only if is the first card of the game, false otherwise. */
+    public CommonCard(CCStrategy currStrategy, boolean first){
         this.strategy = currStrategy;
         this.firstCard = first;
-        this.points = 2 * nPlayers;
+        this.points = 8;
     }
 
     /** Controls if the given player has completed the common goal card.
@@ -26,19 +25,19 @@ public class CommonCard{
     }
 
     /** Sets the score token of the given player according to how many points are still available. */
-    public void givePoints(Player p){
+    public void givePoints(Player p, int commonPoints){
         if(this.points > 0){
             //If it is the first card of the game then it will modify the first score token
             if(this.firstCard){
                 //if(p.getScoreToken1() == 0){
                     p.setScoreToken1(points);
-                    this.points = points - 2;
+                    this.points = points - commonPoints;
                 //}
             } else {
                 //Otherwise it will modify the second score token
                 //if(p.getScoreToken2() == 0){
                     p.setScoreToken2(points);
-                    this.points = points - 2;
+                    this.points = points - commonPoints;
                 //}
             }
         }

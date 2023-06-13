@@ -22,6 +22,7 @@ public class Game {
     private final Board backupBoard;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
+    private int commonPoints;
     private final List<Integer> ccId = new ArrayList<>();
 
     private final List<PersonalCard> allPC = new ArrayList<>();
@@ -65,10 +66,15 @@ public class Game {
 
         //Shuffle the common goal cards to randomically draws two of them
         Collections.shuffle(allCC);
-        CommonCards.add(new CommonCard(allCC.get(0),true , players.size()));
-        CommonCards.add(new CommonCard(allCC.get(1),false , players.size()));
+        CommonCards.add(new CommonCard(allCC.get(0),true));
+        CommonCards.add(new CommonCard(allCC.get(1),false));
         ccId.add(allCC.get(0).getId());
         ccId.add(allCC.get(1).getId());
+        if(players.size()==2){
+            commonPoints=4;
+        }else{
+            commonPoints=2;
+        }
     }
 
 
@@ -343,17 +349,17 @@ public class Game {
             for (Player pcc : players) {
                 serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the first " +
                         "common goal and gained " + CommonCards.get(0).getPoints() + "! Points for this goal are being " +
-                        "reduced to " + (CommonCards.get(0).getPoints()-2),true,p.getNickname()),pcc.getNickname());
+                        "reduced to " + (CommonCards.get(0).getPoints()-commonPoints),true,p.getNickname()),pcc.getNickname());
             }
-            CommonCards.get(0).givePoints(p);
+            CommonCards.get(0).givePoints(p,commonPoints);
         }
         if(CommonCards.get(1).control(p) && p.getScoreToken2()==0){
             for (Player pcc : players) {
                 serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the second" +
                         " common goal and gained " + CommonCards.get(1).getPoints() + "! Points for this goal are being " +
-                        "reduced to " + (CommonCards.get(1).getPoints()-2),false, p.getNickname()),pcc.getNickname());
+                        "reduced to " + (CommonCards.get(1).getPoints()-commonPoints),false, p.getNickname()),pcc.getNickname());
             }
-            CommonCards.get(1).givePoints(p);
+            CommonCards.get(1).givePoints(p,commonPoints);
         }
     }
 

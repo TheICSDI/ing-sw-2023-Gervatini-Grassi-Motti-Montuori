@@ -104,7 +104,7 @@ public class gameSceneController implements Initializable {
     @FXML
     public GridPane orderedTiles;
     private List<Position> Chosen = new ArrayList<>();
-    private final Tile[][] localBoard = new Tile[dim][dim];
+    //private final Tile[][] localBoard = new Tile[dim][dim];
     @FXML
     public GridPane board;
     @FXML
@@ -121,11 +121,11 @@ public class gameSceneController implements Initializable {
     /** It initialises the version of the local board to not_accessible type. */
     // Non ho capito quando lo chiama però se non lo metto non funziona :P
     public gameSceneController(){
-        for (int i = 0; i < this.dim; i++) {
+        /*for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
                 this.localBoard[i][j] = new Tile("NOT_ACCESSIBLE");
             }
-        }
+        }*/
     }
 
     @Override
@@ -144,9 +144,13 @@ public class gameSceneController implements Initializable {
             }
         });
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
-        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+        if(players.size()==4) {
+            CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+        }
         CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
-        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+        if(players.size()>=3) {
+            CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+        }
         CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
     }
 
@@ -155,8 +159,58 @@ public class gameSceneController implements Initializable {
     @FXML
     public void showBoard(Tile[][] board){
         //For each element in the board
-        //this.board.getChildren().clear();
+        //TODO try x2
+        this.board.getChildren().clear();
         for (int i = 0; i < this.dim; i++) {
+            for (int j = 0; j < this.dim; j++) {
+                ImageView Tile = new ImageView();
+                HBox pane= new HBox();
+                pane.setMaxWidth(47);
+                pane.setMaxHeight(47);
+                Tile.setFitHeight(43);
+                Tile.setFitWidth(43);
+                if(!board[i][j].getCategory().equals(type.EMPTY) && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)) {
+                    Image image = new Image(board[i][j].getImage());
+                    Tile.setImage(image);
+                    pane.getChildren().add(Tile);
+                    pane.setAlignment(Pos.CENTER);
+                    int finalJ = j;
+                    int finalI = i;
+                    pane.setOnMouseClicked(event -> {
+                        boolean alreadyChosen = false;
+                        for (Position p :
+                                this.Chosen) {
+                            if (p.getY() == finalI && p.getX() == finalJ) {
+                                pane.setStyle("");
+                                this.Chosen.remove(p);
+                                alreadyChosen = true;
+                                break;
+                            }
+                        }
+                        if (!alreadyChosen) {
+                            pane.setStyle("-fx-background-color: #ff0000;");
+                            if (this.Chosen.size() == 3) {
+                                Node node = this.board.getChildren().stream()
+                                        .filter(child -> GridPane.getColumnIndex(child) == this.Chosen.get(0).getY() && GridPane.getRowIndex(child) == this.Chosen.get(0).getX())
+                                        .findFirst()
+                                        .orElse(null);
+                                HBox toDes = null;
+                                if (node instanceof HBox) {
+                                    toDes = (HBox) node;
+                                }
+                                toDes.setStyle("");
+                                this.Chosen.remove(0);
+                            }
+                            this.Chosen.add(new Position(finalJ, finalI));
+                        }
+                    });
+                    this.board.add(pane, i, j);
+                    this.board.setAlignment(Pos.CENTER);
+                }
+            }
+        }
+        //TODO try x2 end
+   /*     for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
                 //If the current tile is accessible and different from the local board
                 //its corresponding image is set
@@ -229,6 +283,8 @@ public class gameSceneController implements Initializable {
                 }
             }
         }
+
+    */
     }
 
     @FXML
@@ -271,27 +327,19 @@ public class gameSceneController implements Initializable {
             }
             p2Name.setText(names.get(0) + "'s shelf:");
             players.add(names.get(0));
-            common1points.setImage(CommonPoints.get(1));
-            c1Index=1;
-            common2points.setImage(CommonPoints.get(1));
-            c2Index=1;
+            common1points.setImage(CommonPoints.get(CommonPoints.size()-1));
+            c1Index=CommonPoints.size()-1;
+            common2points.setImage(CommonPoints.get(CommonPoints.size()-1));
+            c2Index=CommonPoints.size()-1;
             if(names.size()>1){ //3 giocatori
                 p3Name.setText(names.get(1) + "'s shelf:");
                 players.add(names.get(1));
                 p3ImageShelf.setVisible(true);
-                common1points.setImage(CommonPoints.get(2));//da fare con common2
-                c1Index=2;
-                common2points.setImage(CommonPoints.get(2));
-                c2Index=2;
             }
             if(names.size()>2){//4 giocatori
                 p4Name.setText(names.get(2) + "'s shelf:");
                 players.add(names.get(2));
                 p4ImageShelf.setVisible(true);
-                common1points.setImage(CommonPoints.get(3));
-                c1Index=3;
-                common2points.setImage(CommonPoints.get(3));
-                c2Index=3;
             }
             for (String n: names) {
                 MenuItem player=new MenuItem(n);
@@ -568,10 +616,9 @@ public class gameSceneController implements Initializable {
         }
         turn.setText(msg);
         //TODO SOLO PER TESTARE
-        CLI temp=new CLI();
+        /*CLI temp=new CLI();
         System.out.println("local baord");
-        temp.showBoard(localBoard);
-
+        temp.showBoard(localBoard);*/
     }
 
     public void setIngameEvents(String msg){

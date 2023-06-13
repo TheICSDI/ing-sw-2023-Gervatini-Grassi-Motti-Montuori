@@ -276,42 +276,39 @@
                                 <Image url="@../Images/boards/livingroom.png" />
                             </image>
                         </ImageView>
-                        <GridPane fx:id="board" hgap="3.0" layoutY="27.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="3.0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="486.0" minWidth="10.0" prefWidth="47.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="180.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="375.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="22.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <Button fx:id="pickTiles" mnemonicParsing="false" onAction="#pickTiles" opacity="0.85" prefHeight="49.0" prefWidth="131.0" styleClass="ButtonPickTiles" stylesheets="@../CSS/GameSceneStyle.css" text="Pick Tiles" GridPane.columnIndex="10" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-                                    <GridPane.margin>
-                                        <Insets right="20.0" />
-                                    </GridPane.margin></Button>
-                            </children>
-                            <padding>
-                                <Insets left="22.0" />
-                            </padding>
-                        </GridPane>
+                  <HBox alignment="CENTER" layoutY="27.0" spacing="50.0">
+                     <children>
+                              <GridPane fx:id="board" hgap="3.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="3.0">
+                                  <columnConstraints>
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="47.0" prefWidth="47.0" />
+                                  </columnConstraints>
+                                  <rowConstraints>
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="375.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="47.0" minHeight="47.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="22.0" vgrow="SOMETIMES" />
+                                  </rowConstraints>
+                                  <padding>
+                                      <Insets left="22.0" />
+                                  </padding>
+                              </GridPane>
+                                <Button fx:id="pickTiles" alignment="CENTER" mnemonicParsing="false" onAction="#pickTiles" opacity="0.85" prefHeight="49.0" prefWidth="131.0" styleClass="ButtonPickTiles" stylesheets="@../CSS/GameSceneStyle.css" text="Pick Tiles" />
+                     </children>
+                  </HBox>
                   <ImageView fx:id="endGameToken" fitHeight="50.0" fitWidth="50.0" layoutX="404.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" rotate="9.0">
                      <image>
                         <Image url="@../Images/scoring%20tokens/end%20game.jpg" />
