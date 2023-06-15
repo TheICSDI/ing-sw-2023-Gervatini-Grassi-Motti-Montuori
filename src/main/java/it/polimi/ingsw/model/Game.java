@@ -86,6 +86,7 @@ public class Game {
                 reconnected = p;
             }
         }
+        assert reconnected != null;
         String personalId = String.valueOf(reconnected.getPersonalCard().getId());
         serverController.sendMessage(new ShowPersonalCardMessage(personalId), reconnected.getNickname());
         serverController.sendMessage(new ShowCommonCards(ccId), reconnected.getNickname());
@@ -165,6 +166,7 @@ public class Game {
 
                     //Handles the action "pick tiles"
                     List<Tile> toInsert = pickTiles(p);
+                    System.out.println(toInsert);
                     if(toInsert!=null) {
                         //Handles the action "select order"
                         boolean allTheSame = checkTiles(toInsert);

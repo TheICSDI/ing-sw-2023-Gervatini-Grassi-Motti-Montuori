@@ -140,11 +140,11 @@ public class Client extends Application {
             }
             case C -> {
                 reply = ChatMessage.decrypt(message);
-                virtualView.showChat(reply.getUsername() + " to you: " + ((ChatMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + " -> You: " + ((ChatMessage)reply).getPhrase());
             }
             case CA -> {
                 reply=BroadcastMessage.decrypt(message);
-                virtualView.showChat(reply.getUsername() + " to all: " + ((BroadcastMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + " -> All: " + ((BroadcastMessage)reply).getPhrase());
             }
             case POINTS -> {
                 reply = SimpleReply.decrypt(message);

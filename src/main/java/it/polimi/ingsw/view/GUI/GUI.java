@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-//TODO RENDERLO BELLO GRAFICAMENTE :D
 public class GUI implements View {
     private int nPage=1;
     private Stage stage;

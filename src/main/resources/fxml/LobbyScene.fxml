@@ -43,7 +43,10 @@
                <children>
                   <VBox prefHeight="313.0" prefWidth="144.0" spacing="20.0">
                      <children>
-                        <Label text="Create Lobby:" textFill="WHITE" />
+                        <Label fx:id="createLobbytext" text="Create Lobby:" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
                         <HBox alignment="CENTER" prefHeight="60.0" prefWidth="86.0" spacing="5.0">
                            <VBox.margin>
                               <Insets bottom="17.0" left="5.0" top="-19.0" />
@@ -100,7 +103,7 @@
                               <Insets />
                            </VBox.margin>
                            <padding>
-                              <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                              <Insets left="5.0" />
                            </padding></Label>
                      </children>
                   </VBox>

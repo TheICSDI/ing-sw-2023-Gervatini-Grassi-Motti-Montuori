@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
-import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -123,7 +122,7 @@ public class gameSceneController implements Initializable {
     @FXML
     public GridPane orderedTiles;
     private List<Position> Chosen = new ArrayList<>();
-    //private final Tile[][] localBoard = new Tile[dim][dim];
+    private final Tile[][] localBoard = new Tile[dim][dim];
     @FXML
     public GridPane board;
     @FXML
@@ -140,11 +139,11 @@ public class gameSceneController implements Initializable {
     /** It initialises the version of the local board to not_accessible type. */
     // Non ho capito quando lo chiama però se non lo metto non funziona :P
     public gameSceneController(){
-        /*for (int i = 0; i < this.dim; i++) {
+        for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
                 this.localBoard[i][j] = new Tile("NOT_ACCESSIBLE");
             }
-        }*/
+        }
     }
 
     @Override
@@ -163,6 +162,7 @@ public class gameSceneController implements Initializable {
             }
         });
         setLabelText(this.ChosenText,"Comic Sans MS",20,"Your Tiles:");
+        this.ChosenText.setVisible(false);
         setLabelText(goalText,"Comic Sans MS", 20,"Your personal goal");
         setLabelText(yourShelfText,"Comic Sans MS", 20, "Your shelf:");
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
@@ -181,7 +181,6 @@ public class gameSceneController implements Initializable {
     @FXML
     public void showBoard(Tile[][] board){
         //For each element in the board
-        //TODO try x2
         this.board.getChildren().clear();
         for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
@@ -221,8 +220,12 @@ public class gameSceneController implements Initializable {
                                 if (node instanceof HBox) {
                                     toDes = (HBox) node;
                                 }
-                                toDes.setStyle("");
-                                this.Chosen.remove(0);
+                                if(toDes!=null) {
+                                    toDes.setStyle("");
+                                    this.Chosen.remove(0);
+                                }else{
+                                    System.out.println("toDes == null");
+                                }
                             }
                             this.Chosen.add(new Position(finalJ, finalI));
                         }
@@ -232,8 +235,8 @@ public class gameSceneController implements Initializable {
                 }
             }
         }
-        //TODO try x2 end
-   /*     for (int i = 0; i < this.dim; i++) {
+        //
+        /*for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
                 //If the current tile is accessible and different from the local board
                 //its corresponding image is set
@@ -305,9 +308,9 @@ public class gameSceneController implements Initializable {
                     this.localBoard[i][j] = board[i][j];
                 }
             }
-        }
+        }*/
 
-    */
+
     }
 
     @FXML
@@ -632,7 +635,7 @@ public class gameSceneController implements Initializable {
             firstPlayerToken.setFitHeight(45);
             firstPlayerToken.setFitWidth(45);
 
-            if(msg.equals("It's your turn!")){ //todo possibile sostituire con la condizione is firstturn del player
+            if(msg.equals("It's your turn!")){
                 myShelfToken.add(firstPlayerToken,0,1);
             }else if(msg.equals("It's " + players.get(1) + "'s turn!")){
                 p2Token.add(firstPlayerToken,1,1);
@@ -642,12 +645,9 @@ public class gameSceneController implements Initializable {
                 p4Token.add(firstPlayerToken,0,1);
             }
         }
-        setLabelText(turn,"Jokerman",50,msg);
+        setLabelText(turn,"Comic Sans MS",50,msg);
         //turn.setText(cartoonText);
-        //TODO SOLO PER TESTARE
-        /*CLI temp=new CLI();
-        System.out.println("local baord");
-        temp.showBoard(localBoard);*/
+
     }
 
     public void setIngameEvents(String msg){

@@ -5,12 +5,18 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.text.Font;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-public class lobbySceneController {
+public class lobbySceneController implements Initializable {
     @FXML
     public Label Name;
     @FXML
@@ -23,16 +29,42 @@ public class lobbySceneController {
     public Label text;
     @FXML
     public Button Join;
+    @FXML
     public RadioButton limit2;
+    @FXML
     public RadioButton limit3;
+    @FXML
     public RadioButton limit4;
     public ToggleGroup Prova;
     @FXML
     public Button Start;
+    @FXML
+    public Label createLobbytext;
     private List<Lobby> AvailableLobbies;
     private int limit = 2;
 
     private GUI gui;
+
+    Font font;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            font = Font.loadFont(Objects.requireNonNull(getClass().getResource("/fonts/Poppins-Regular.ttf")).openStream(), 12);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Name.setFont(font);
+        text.setFont(font);
+        Start.setFont(font);
+        Join.setFont(font);
+        Refresh.setFont(font);
+        limit2.setFont(font);
+        limit3.setFont(font);
+        limit4.setFont(font);
+        createLobbytext.setFont(font);
+        CreateLobby.setFont(font);
+    }
 
     public void setName(String name){
         Name.setText("Your name: " + name);

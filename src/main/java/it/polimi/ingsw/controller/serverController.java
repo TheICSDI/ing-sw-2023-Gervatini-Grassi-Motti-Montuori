@@ -27,6 +27,7 @@ public class serverController {
     * @return true only if the message is successful, false otherwise. For tests purposes.
     */
    public boolean executeMessage(GeneralMessage message) throws RemoteException {
+      System.out.println(message.toString());
       //Constants to lighten the code
       final int id = message.getMessage_id();
       final int gameId = message.getGameId();
@@ -257,7 +258,9 @@ public class serverController {
          case PING -> {
             mex = PingMessage.decrypt(input);
             connections.get(mex.getUsername()).addPing();
+            System.out.println("ping to " + mex.getUsername());
             sendMessage(new PingMessage(""), mex.getUsername());
+            System.out.println("lol");
          }
       }
       //If the message is valid the command is executed by the serverController
@@ -272,11 +275,13 @@ public class serverController {
     * @param m the message to be sent.
     * @param nick the client's nickname. */
    public static void sendMessage(GeneralMessage m, String nick) throws RemoteException {
-      if(connections.get(nick).isSocket()){
-         System.out.println("Sending message "+ m.getAction() + " to " + nick);
-         connections.get(nick).getOut().println(m);
-      } else {
-         connections.get(nick).getReply().RMIsend(m.toString());
+      if(gameController.allPlayers.get(nick).isConnected()) {
+         if (connections.get(nick).isSocket()) {
+            System.out.println("Sending message " + m.getAction() + " to " + nick);
+            connections.get(nick).getOut().println(m);
+         } else {
+            connections.get(nick).getReply().RMIsend(m.toString());
+         }
       }
    }
 }

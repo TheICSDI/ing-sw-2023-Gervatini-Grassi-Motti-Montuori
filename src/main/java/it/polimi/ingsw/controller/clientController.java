@@ -172,7 +172,7 @@ public class clientController{
                             phrase = phrase.concat(" ");
                         }
                         if (idLobby > 0 || idGame > 0) {
-                            return new BroadcastMessage(-1, idLobby, nickname, phrase);
+                            return new BroadcastMessage(idGame, idLobby, nickname, phrase);
                         } else {
                             return new DefaultErrorMessage("You are not in a game or lobby!");
                         }
