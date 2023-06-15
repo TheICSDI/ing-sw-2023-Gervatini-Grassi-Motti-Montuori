@@ -41,7 +41,7 @@
             <children>
                 <HBox GridPane.rowIndex="2">
                     <children>
-                        <Pane>
+                        <Pane prefHeight="316.0" prefWidth="286.0">
                             <children>
                                 <GridPane fx:id="myShelf" hgap="8.0" layoutX="5.0" layoutY="-23.0" stylesheets="@../CSS/GameSceneStyle.css" vgap="5.0">
                                     <columnConstraints>
@@ -68,11 +68,11 @@
                                         <Image url="@../Images/boards/bookshelf.png" />
                                     </image>
                                 </ImageView>
-                                <Pane layoutX="32.0" layoutY="-23.0" onMouseClicked="#choose1" prefHeight="233.0" prefWidth="40.0" />
-                                <Pane layoutX="77.0" layoutY="-26.0" onMouseClicked="#choose2" prefHeight="236.0" prefWidth="42.0" />
-                                <Pane layoutX="121.0" layoutY="-25.0" onMouseClicked="#choose3" prefHeight="235.0" prefWidth="42.0" />
-                                <Pane layoutX="167.0" layoutY="-27.0" onMouseClicked="#choose4" prefHeight="237.0" prefWidth="42.0" />
-                                <Pane layoutX="212.0" layoutY="-27.0" onMouseClicked="#choose5" prefHeight="237.0" prefWidth="43.0" />
+                                <Pane fx:id="col1" layoutX="32.0" layoutY="-23.0" onMouseClicked="#choose1" onMouseEntered="#highlightCol1" onMouseExited="#desCol1" prefHeight="233.0" prefWidth="40.0" />
+                                <Pane fx:id="col2" layoutX="77.0" layoutY="-26.0" onMouseClicked="#choose2" onMouseEntered="#highlightCol2" onMouseExited="#desCol2" prefHeight="236.0" prefWidth="42.0" />
+                                <Pane fx:id="col3" layoutX="121.0" layoutY="-25.0" onMouseClicked="#choose3" onMouseEntered="#highlightCol3" onMouseExited="#desCol3" prefHeight="235.0" prefWidth="42.0" />
+                                <Pane fx:id="col4" layoutX="167.0" layoutY="-27.0" onMouseClicked="#choose4" onMouseEntered="#highlightCol4" onMouseExited="#desCol4" prefHeight="237.0" prefWidth="42.0" />
+                                <Pane fx:id="col5" layoutX="212.0" layoutY="-27.0" onMouseClicked="#choose5" onMouseEntered="#highlightCol5" onMouseExited="#desCol5" prefHeight="237.0" prefWidth="43.0" />
                             </children>
                         </Pane>
                         <GridPane fx:id="myShelfToken">

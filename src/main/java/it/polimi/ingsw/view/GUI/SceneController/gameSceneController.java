@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 
@@ -37,6 +38,16 @@ public class gameSceneController implements Initializable {
     public GridPane p3Token;
     @FXML
     public ImageView endGameToken;
+    @FXML
+    public Pane col1;
+    @FXML
+    public Pane col2;
+    @FXML
+    public Pane col3;
+    @FXML
+    public Pane col4;
+    @FXML
+    public Pane col5;
     private List<String> players=new ArrayList<>();
     @FXML
     public Label YourName;
@@ -660,4 +671,43 @@ public class gameSceneController implements Initializable {
         }
     }
 
+    public void highlightCol1(MouseEvent mouseEvent) {
+        col1.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
+    }
+
+    public void highlightCol2(MouseEvent mouseEvent) {
+        col2.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
+    }
+
+    public void highlightCol3(MouseEvent mouseEvent) {
+        col3.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
+    }
+
+    public void highlightCol4(MouseEvent mouseEvent) {
+        col4.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
+    }
+
+    public void highlightCol5(MouseEvent mouseEvent) {
+        col5.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
+    }
+
+    public void desCol1(MouseEvent mouseEvent) {
+        col1.setStyle("");
+    }
+
+    public void desCol2(MouseEvent mouseEvent) {
+        col2.setStyle("");
+    }
+
+    public void desCol3(MouseEvent mouseEvent) {
+        col3.setStyle("");
+    }
+
+    public void desCol4(MouseEvent mouseEvent) {
+        col4.setStyle("");
+    }
+
+    public void desCol5(MouseEvent mouseEvent) {
+        col5.setStyle("");
+    }
 }
