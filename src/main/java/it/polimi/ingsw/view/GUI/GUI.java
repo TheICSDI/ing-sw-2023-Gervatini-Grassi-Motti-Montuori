@@ -302,7 +302,7 @@ public class GUI implements View {
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
-        stage.setResizable(true);
+        stage.setResizable(false);
         //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=4;
         //stage.setFullScreenExitHint("");
@@ -321,8 +321,7 @@ public class GUI implements View {
         esc = loader.getController();
         esc.setGui(currGui);
         //stage.setFullScreen(true);
-        stage.setX(0);
-        stage.setY(0);
+        stage.centerOnScreen();
         stage.setResizable(false);
         nPage=5;
         stage.setFullScreenExitHint("");

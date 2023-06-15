@@ -306,7 +306,13 @@
                                       <Insets left="22.0" />
                                   </padding>
                               </GridPane>
-                                <Button fx:id="pickTiles" alignment="CENTER" mnemonicParsing="false" onAction="#pickTiles" opacity="0.85" prefHeight="49.0" prefWidth="131.0" styleClass="ButtonPickTiles" stylesheets="@../CSS/GameSceneStyle.css" text="Pick Tiles" />
+                                <Button fx:id="pickTiles" alignment="CENTER" mnemonicParsing="false" onAction="#pickTiles" opacity="0.85" prefHeight="49.0" prefWidth="131.0" style="-fx-background-color: #ffeb99;" text="Pick Tiles">
+                           <font>
+                              <Font name="Comic Sans MS Bold" size="20.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets></Button>
                      </children>
                   </HBox>
                   <ImageView fx:id="endGameToken" fitHeight="50.0" fitWidth="50.0" layoutX="404.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" rotate="9.0">
@@ -358,7 +364,7 @@
                         <Insets bottom="30.0" top="10.0" />
                     </padding>
                     <children>
-                        <Label fx:id="p2Name" styleClass="Label" text="Label" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+                        <Label fx:id="p2Name" styleClass="Label" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
                             <GridPane.margin>
                                 <Insets left="180.0" />
                             </GridPane.margin></Label>
@@ -408,20 +414,12 @@
                         <Insets bottom="30.0" top="10.0" />
                     </padding>
                     <children>
-                        <Label styleClass="Label" text="Your shelf: " GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
+                        <Label fx:id="yourShelfText" styleClass="Label" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
                         <Label fx:id="p4Name" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
                         <ImageView fx:id="personal" fitHeight="242.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                             <GridPane.margin>
                                 <Insets bottom="40.0" />
                             </GridPane.margin></ImageView>
-                        <Label styleClass="Label" text="Your Personal goal" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
-                            <GridPane.margin>
-                                <Insets />
-                            </GridPane.margin>
-                            <padding>
-                                <Insets top="15.0" />
-                            </padding>
-                        </Label>
                         <GridPane fx:id="chosenTiles" hgap="3.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
@@ -435,6 +433,14 @@
                                 <Insets left="44.0" right="44.0" top="30.0" />
                             </GridPane.margin>
                         </GridPane>
+                        <Label fx:id="goalText" styleClass="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                            <padding>
+                                <Insets top="15.0" />
+                            </padding>
+                        </Label>
                         <GridPane fx:id="orderedTiles" hgap="3.0" GridPane.rowIndex="2">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
@@ -448,8 +454,8 @@
                                 <Insets bottom="87.0" left="44.0" right="44.0" top="80.0" />
                             </GridPane.margin>
                         </GridPane>
-                        <Label fx:id="ChosenText" styleClass="Label" text="Your Tiles:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                        <Label fx:id="OrderText" styleClass="Label" text="Choose order:" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                        <Label fx:id="ChosenText" styleClass="Label" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <Label fx:id="OrderText" styleClass="Label" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
                     </children>
                 </GridPane>
                 <GridPane stylesheets="@../CSS/GameSceneStyle.css" GridPane.columnIndex="1">
@@ -460,20 +466,23 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label fx:id="turn" text="Label" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <Label fx:id="turn" style="-fx-text-fill: white;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                             <font>
-                                <Font size="28.0" />
+                                <Font name="Jokerman" size="30.0" />
                             </font>
                             <GridPane.margin>
                                 <Insets right="150.0" />
                             </GridPane.margin></Label>
-                        <Label fx:id="ingameEvents" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" text="Label" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+                        <Label fx:id="ingameEvents" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                             <GridPane.margin>
-                                <Insets right="150.0" />
+                                <Insets left="20.0" right="150.0" />
                             </GridPane.margin>
                      <font>
-                        <Font size="24.0" />
-                     </font></Label>
+                        <Font name="Comic Sans MS" size="24.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></Label>
                         <Label fx:id="YourName" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" text="Label" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                             <GridPane.margin>
                                 <Insets />

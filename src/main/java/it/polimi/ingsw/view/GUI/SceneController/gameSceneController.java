@@ -20,7 +20,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
@@ -48,6 +52,10 @@ public class gameSceneController implements Initializable {
     public Pane col4;
     @FXML
     public Pane col5;
+    @FXML
+    public Label yourShelfText;
+    @FXML
+    public Label goalText;
     private List<String> players=new ArrayList<>();
     @FXML
     public Label YourName;
@@ -154,6 +162,9 @@ public class gameSceneController implements Initializable {
                 sendChatMessage();
             }
         });
+        setLabelText(this.ChosenText,"Comic Sans MS",20,"Your Tiles:");
+        setLabelText(goalText,"Comic Sans MS", 20,"Your personal goal");
+        setLabelText(yourShelfText,"Comic Sans MS", 20, "Your shelf:");
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
         if(players.size()==4) {
             CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
@@ -185,6 +196,7 @@ public class gameSceneController implements Initializable {
                     Tile.setImage(image);
                     pane.getChildren().add(Tile);
                     pane.setAlignment(Pos.CENTER);
+
                     int finalJ = j;
                     int finalI = i;
                     pane.setOnMouseClicked(event -> {
@@ -336,19 +348,22 @@ public class gameSceneController implements Initializable {
                     names) {
                 System.out.println(s);
             }
-            p2Name.setText(names.get(0) + "'s shelf:");
+            setLabelText(p2Name,"Comic Sans MS", 20, names.get(0) + "'s shelf:");
+            //p2Name.setText(names.get(0) + "'s shelf:");
             players.add(names.get(0));
             common1points.setImage(CommonPoints.get(CommonPoints.size()-1));
             c1Index=CommonPoints.size()-1;
             common2points.setImage(CommonPoints.get(CommonPoints.size()-1));
             c2Index=CommonPoints.size()-1;
             if(names.size()>1){ //3 giocatori
-                p3Name.setText(names.get(1) + "'s shelf:");
+                setLabelText(p3Name,"Comic Sans MS", 20, names.get(1) + "'s shelf:");
+                //p3Name.setText(names.get(1) + "'s shelf:");
                 players.add(names.get(1));
                 p3ImageShelf.setVisible(true);
             }
             if(names.size()>2){//4 giocatori
-                p4Name.setText(names.get(2) + "'s shelf:");
+                setLabelText(p4Name,"Comic Sans MS", 20, names.get(2) + "'s shelf:");
+                //p4Name.setText(names.get(2) + "'s shelf:");
                 players.add(names.get(2));
                 p4ImageShelf.setVisible(true);
             }
@@ -519,7 +534,8 @@ public class gameSceneController implements Initializable {
         if(this.toShow) {
             if(toOrder){
                 this.OrderText.setVisible(true);
-                this.OrderText.setText("Choose the order to insert them : ");
+                setLabelText(this.OrderText,"Comic Sans MS", 20, "Choose insert order: ");
+                //this.OrderText.setText("Choose the order to insert them : ");
             }
             this.ChosenText.setVisible(true);
             this.pickedTiles = tiles.size();
@@ -559,7 +575,8 @@ public class gameSceneController implements Initializable {
                             this.tilesOrdered=0;
                             this.newOrder.clear();
                             this.ChosenText.setVisible(false);
-                            this.OrderText.setText("Your ordered Tiles: ");
+                            setLabelText(this.OrderText,"Comic Sans MS", 20, "Your ordered Tiles: ");
+                            //this.OrderText.setText("Your ordered Tiles: ");
                         }
                     });
                 }
@@ -625,7 +642,8 @@ public class gameSceneController implements Initializable {
                 p4Token.add(firstPlayerToken,0,1);
             }
         }
-        turn.setText(msg);
+        setLabelText(turn,"Jokerman",50,msg);
+        //turn.setText(cartoonText);
         //TODO SOLO PER TESTARE
         /*CLI temp=new CLI();
         System.out.println("local baord");
@@ -633,7 +651,8 @@ public class gameSceneController implements Initializable {
     }
 
     public void setIngameEvents(String msg){
-        this.ingameEvents.setText(msg);
+        setLabelText(ingameEvents,"Comic Sans MS", 24,msg);
+        //this.ingameEvents.setText(msg);
     }
 
     public void sendChatMessage(){
@@ -709,5 +728,16 @@ public class gameSceneController implements Initializable {
 
     public void desCol5(MouseEvent mouseEvent) {
         col5.setStyle("");
+    }
+
+    public void setLabelText(Label label, String font, int size, String msg){
+        Text cartoonText = new Text(msg);
+
+        // Impostazione dello stile del testo
+        cartoonText.setFont(Font.font(font, FontWeight.BOLD, size));
+        cartoonText.setFill(Color.WHITE);
+        cartoonText.setStroke(Color.BLACK);
+        cartoonText.setStrokeWidth(1);
+        label.setGraphic(cartoonText);
     }
 }
