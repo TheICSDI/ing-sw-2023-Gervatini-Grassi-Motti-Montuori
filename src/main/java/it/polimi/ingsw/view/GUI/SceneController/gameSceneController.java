@@ -174,6 +174,8 @@ public class gameSceneController implements Initializable {
             CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
         }
         CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+
+        //immagini tiles
     }
 
 
@@ -182,6 +184,7 @@ public class gameSceneController implements Initializable {
     public void showBoard(Tile[][] board){
         //For each element in the board
         this.board.getChildren().clear();
+        clearChosen();
         for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
                 ImageView Tile = new ImageView();
@@ -192,6 +195,7 @@ public class gameSceneController implements Initializable {
                 Tile.setFitWidth(43);
                 if(!board[i][j].getCategory().equals(type.EMPTY) && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)) {
                     Image image = new Image(board[i][j].getImage());
+                    System.out.println(image);
                     Tile.setImage(image);
                     pane.getChildren().add(Tile);
                     pane.setAlignment(Pos.CENTER);
@@ -311,6 +315,24 @@ public class gameSceneController implements Initializable {
         }*/
 
 
+    }
+
+    private void clearChosen() {
+        for (Position p:
+                this.Chosen) {
+            Node node = this.board.getChildren().stream()
+                    .filter(child -> GridPane.getColumnIndex(child) == p.getY() && GridPane.getRowIndex(child) == p.getX())
+                    .findFirst()
+                    .orElse(null);
+            HBox toDes = null;
+            if (node instanceof HBox) {
+                toDes = (HBox) node;
+            }
+            if(toDes != null) {
+                toDes.setStyle("");
+            }
+        }
+        this.Chosen=new ArrayList<>();
     }
 
     @FXML
@@ -515,21 +537,7 @@ public class gameSceneController implements Initializable {
             gui.message= String.valueOf(pt);
             gui.Lock.notifyAll();
         }
-        for (Position p:
-                this.Chosen) {
-            Node node = this.board.getChildren().stream()
-                    .filter(child -> GridPane.getColumnIndex(child) == p.getY() && GridPane.getRowIndex(child) == p.getX())
-                    .findFirst()
-                    .orElse(null);
-            HBox toDes = null;
-            if (node instanceof HBox) {
-                toDes = (HBox) node;
-            }
-            if(toDes != null) {
-                toDes.setStyle("");
-            }
-        }
-        this.Chosen=new ArrayList<>();
+        clearChosen();
     }
 
     @FXML
