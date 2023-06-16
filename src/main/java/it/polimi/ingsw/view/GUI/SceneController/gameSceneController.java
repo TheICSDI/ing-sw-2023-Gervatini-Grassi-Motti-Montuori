@@ -741,16 +741,17 @@ public class gameSceneController implements Initializable {
     }
 
     public void setLabelText(Label label, String font, int size, String msg){
-        /*Text cartoonText = new Text(msg);
-
-        // Impostazione dello stile del testo
-        cartoonText.setFont(Font.font(font, FontWeight.BOLD, size));
-        //cartoonText.setFill(Color.WHITE);
-        cartoonText.setStyle("-fx-fill: WHITE");
-        cartoonText.setStroke(Color.BLACK);
-        cartoonText.setStrokeWidth(1);
-        label.setGraphic(cartoonText);*/
-
-        label.setText(msg);
+        System.out.println(msg);
+        if(msg!=null) {
+            Text cartoonText = new Text(msg);
+            // Impostazione dello stile del testo
+            cartoonText.setFont(Font.font(font, FontWeight.BOLD, size));
+            cartoonText.setFill(Color.WHITE);
+            //cartoonText.setStyle("-fx-colo: WHITE");
+            cartoonText.setStroke(Color.BLACK);
+            cartoonText.setStrokeWidth(1);
+            label.setGraphic(cartoonText);
+        }
+        //label.setText(msg);
     }
 }
