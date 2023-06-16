@@ -7,7 +7,6 @@ import it.polimi.ingsw.network.client.ClientHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.concurrent.ExecutorService;
@@ -45,7 +44,7 @@ public class Server {
     /** It starts the server via RMI on port 23451. */
     public static void startRMI() throws InterruptedException{
             try {
-                System.setProperty("java.rmi.server.hostname","192.168.227.190");
+                System.setProperty("java.rmi.server.hostname","192.168.1.194");
                 Registry registry = LocateRegistry.createRegistry(23451);
                 RMIserverImpl s = new RMIserverImpl(SC);
                 registry.rebind("RMIServer", s);

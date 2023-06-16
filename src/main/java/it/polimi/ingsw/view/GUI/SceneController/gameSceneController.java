@@ -19,16 +19,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
-
-import static junit.framework.Assert.assertNotNull;
 
 
 public class gameSceneController implements Initializable {
@@ -137,7 +131,7 @@ public class gameSceneController implements Initializable {
     public GridPane p4Shelf;
     private GUI gui;
 
-    private String font= "";
+    private final String font= "Comic Sans MS";
 
     /** It initialises the version of the local board to not_accessible type. */
     // Non ho capito quando lo chiama però se non lo metto non funziona :P
@@ -741,18 +735,12 @@ public class gameSceneController implements Initializable {
     }
 
     public void setLabelText(Label label, String font, int size, String msg){
-        /*System.out.println(msg);
-        if(msg!=null) {
-            Text cartoonText = new Text(msg);
-            // Impostazione dello stile del testo
-            cartoonText.setFont(Font.font(font, FontWeight.BOLD, size));
-            cartoonText.setFill(Color.WHITE);
-            cartoonText.setStroke(Color.BLACK);
-            cartoonText.setStrokeWidth(1);
-            label.setGraphic(cartoonText);
-        }*/
+        label.setStyle("-fx-font-family: '"+font+"';"+
+                "-fx-font-size: " + size +"px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #ecd8c4;"
+                );
+
         label.setText(msg);
-        label.setFont(Font.font(font));
-        label.setPrefSize(100,size);
     }
 }

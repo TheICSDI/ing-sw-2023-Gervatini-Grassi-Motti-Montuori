@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIconnection;
-import it.polimi.ingsw.network.server.RMIserverImpl;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.View;
@@ -19,16 +18,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.Socket;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Client extends Application {
     private Socket clientSocket;
@@ -166,8 +165,8 @@ public class Client extends Application {
             case PING -> {
                 //RMI
                 ping++;
-                TimeUnit.SECONDS.sleep(pingTime);
                 if(!socket){
+                    TimeUnit.SECONDS.sleep(pingTime);
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 }
             }
@@ -244,7 +243,7 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        Client.connection("192.168.227.174", 23450); //pc di luca
+        Client.connection("192.168.1.194", 23450); //pc di luca
         socket=true;
         //Client.connection("127.0.0.1", 23450);
         String username;
@@ -288,12 +287,52 @@ public class Client extends Application {
                 throw new RuntimeException(e);
             }
         });
-        System.out.println("Si");
-        new Thread(()->{
-            while (connected){
-                System.out.println("SI");
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+// Task per l'invio dei ping
+        Runnable sendPing = () -> {
+            while (connected) {
+                synchronized (SocketLock) {
                     out.println(new PingMessage(controller.getNickname()));
-                    System.out.println("ping " + ping);
+                }
+                try {
+                    Thread.sleep( pingTime*1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+// Task per l'input da tastiera
+        Runnable input = () -> {
+            while (true) {
+                String toSend = virtualView.getInput();
+                try {
+                    synchronized (SocketLock) {
+                        sendMessage(toSend, true);
+                    }
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        Runnable checkPing =() ->{
+            try {
+                ping();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+// Esecuzione dei due task in parallelo utilizzando ExecutorService
+        executorService.submit(sendPing);
+        executorService.submit(checkPing);
+        executorService.submit(input);
+        /*new Thread(()->{
+            while (connected) {
+                out.println(new PingMessage(controller.getNickname()));
+                System.out.println("ping " + ping);
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -319,18 +358,25 @@ public class Client extends Application {
         virtualView.displayMessage("Write /help for command list.");
 
         //TODO: condizione valida sse il client è connesso, da rivedere
-        while(true) {
-            String toSend=virtualView.getInput();
-            sendMessage(toSend, true);
-        }
-        //executor.shutdownNow();
+        new Thread(()->{
+            while (connected) {
+                String toSend = virtualView.getInput();
+                try {
+                    sendMessage(toSend, true);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();*/
+
+        executor.shutdown();
     }
 
     /** It starts the RMI connection with the server. */
     public static void RMI(){
         controller = new clientController();
         try {
-            Registry registry = LocateRegistry.getRegistry("192.168.227.190", 23451);
+            Registry registry = LocateRegistry.getRegistry("192.168.1.194", 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
@@ -371,7 +417,6 @@ public class Client extends Application {
         int x = -1;
         while(x < ping) {
             x = ping;
-            System.out.println("x " + x);
             Thread.sleep(pingTime*1000);
         }
         System.out.println("Disconnected"); //TODO dovrebbe essere in view
