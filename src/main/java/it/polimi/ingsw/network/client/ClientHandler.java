@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientHandler extends Thread{
     private final Socket clientSocket;
@@ -43,10 +45,12 @@ public class ClientHandler extends Thread{
             //Firstly it ask for a nickname until the given one is available
             //In this way each client is represented by a unique nickname
             out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
-            nickname = SetNameMessage.decrypt(in.readLine());
+            String name = in.readLine().replaceAll(" ", "");
+            nickname = SetNameMessage.decrypt(name);
             while(gameController.allPlayers.containsKey(nickname.getUsername()) && gameController.allPlayers.get(nickname.getUsername()).isConnected()){
                 out.println(new SetNameMessage("",false));
-                nickname = SetNameMessage.decrypt(in.readLine());
+                name = in.readLine().replaceAll(" ", "");
+                nickname = SetNameMessage.decrypt(name);
             }
             if(gameController.allPlayers.containsKey(nickname.getUsername()) && !gameController.allPlayers.get(nickname.getUsername()).isConnected()){
                 gameController.allPlayers.get(nickname.getUsername()).setConnected(true);

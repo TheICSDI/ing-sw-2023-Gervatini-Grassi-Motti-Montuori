@@ -345,7 +345,7 @@ public class Client extends Application {
     public static void setName() throws RemoteException {
         String input;
         SetNameMessage nick;
-        input = virtualView.askUsername();
+        input = virtualView.askUsername().replaceAll(" ", "");
         nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);
     }

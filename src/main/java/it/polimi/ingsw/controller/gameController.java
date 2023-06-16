@@ -148,6 +148,7 @@ public class gameController {
         }
     }
 
+    /**It releases the lock on queue. It is used when the player disconnects on his turn.*/
     public static void unlockQueue(){
         synchronized (queueLock) {
             queueLock.notifyAll();
