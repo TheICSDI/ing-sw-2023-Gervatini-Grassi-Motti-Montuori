@@ -42,6 +42,7 @@ public class Client extends Application {
     private static int ping = 0;
     private static final int pingTime = 15;
     public static boolean connected = true;
+    private static boolean socket=false;
     private static boolean firstTurn;
     
     /** It starts the socket connection on the given ip and port.
@@ -166,7 +167,9 @@ public class Client extends Application {
                 //RMI
                 ping++;
                 TimeUnit.SECONDS.sleep(pingTime);
-                stub.RMIsend(new PingMessage(controller.getNickname()).toString());
+                if(!socket){
+                    stub.RMIsend(new PingMessage(controller.getNickname()).toString());
+                }
             }
             case ERROR -> {
                 reply = SimpleReply.decrypt(message);
@@ -241,8 +244,9 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        //Client.connection("192.168.130.45", 5000); //pc di luca
-        Client.connection("127.0.0.1", 23450);
+        Client.connection("192.168.80.190", 23450); //pc di luca
+        socket=true;
+        //Client.connection("127.0.0.1", 23450);
         String username;
         GeneralMessage nick;
         String mex;
@@ -281,6 +285,25 @@ public class Client extends Application {
             try {
                 listenSocket();
             } catch (IOException | ParseException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        ExecutorService executor1 = Executors.newSingleThreadExecutor();
+        executor1.submit(()-> {
+            while (connected){
+                out.println(new PingMessage(controller.getNickname()));
+                try {
+                    TimeUnit.SECONDS.sleep(pingTime);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        ExecutorService executor2 = Executors.newSingleThreadExecutor();
+        executor2.submit(()-> {
+            try {
+                ping();
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });

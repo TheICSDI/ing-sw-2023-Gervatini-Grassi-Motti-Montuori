@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +82,22 @@ public class ClientHandler extends Thread{
                 out.println(new SetNameMessage(nickname.getUsername(), true));
                 serverController.connections.put(nickname.getUsername(), new connectionType(true, out, null));
             }
-
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            String finalNickname = nickname.getUsername();
+            executor.submit(() -> {
+                int x = -1;
+                while (x < serverController.connections.get(finalNickname).getPing()) {
+                    x = serverController.connections.get(finalNickname).getPing();
+                    try {
+                        TimeUnit.SECONDS.sleep(15);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                System.out.println(finalNickname + " disconnected");
+                gameController.allPlayers.get(finalNickname).setConnected(false);
+                gameController.unlockQueue();
+            });
             //Loop that enable the reception of messages from the client
             String input;
             while((input = in.readLine()) != null){
