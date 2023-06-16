@@ -260,7 +260,6 @@ public class serverController {
             connections.get(mex.getUsername()).addPing();
             System.out.println("ping to " + mex.getUsername());
             sendMessage(new PingMessage(""), mex.getUsername());
-            System.out.println("lol");
          }
       }
       //If the message is valid the command is executed by the serverController
