@@ -45,9 +45,10 @@ public class Server {
     /** It starts the server via RMI on port 23451. */
     public static void startRMI() throws InterruptedException{
             try {
+                System.setProperty("java.rmi.server.hostname","192.168.227.190");
                 Registry registry = LocateRegistry.createRegistry(23451);
                 RMIserverImpl s = new RMIserverImpl(SC);
-                Naming.rebind("rmi://192.168.80.190:" + 23451 + "/RMIServer", s);
+                registry.rebind("RMIServer", s);
             } catch (Exception e) {
                 System.err.println("Server exception");
                 e.printStackTrace();
