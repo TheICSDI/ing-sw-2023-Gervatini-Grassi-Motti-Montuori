@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.RMIconnection;
+import it.polimi.ingsw.network.server.RMIserverImpl;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.View;
@@ -320,8 +321,8 @@ public class Client extends Application {
     public static void RMI(){
         controller = new clientController();
         try {
-            Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
-            stub = (RMIconnection) Naming.lookup("rmi://192.168.80.190:" + 23451 + "/RMIServer");
+            Registry registry = LocateRegistry.getRegistry("192.168.227.190", 23451);
+            stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
@@ -332,6 +333,7 @@ public class Client extends Application {
                 try {
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 } catch (RemoteException e) {
+                    e.printStackTrace();
                     throw new RuntimeException(e);
                 }
             });
@@ -350,7 +352,7 @@ public class Client extends Application {
             //Otherwise it closes the threads
             executor1.shutdownNow();
             executor2.shutdownNow();
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+        } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
     }
