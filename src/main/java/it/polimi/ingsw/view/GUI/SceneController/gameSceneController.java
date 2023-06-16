@@ -28,6 +28,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.*;
 
+import static junit.framework.Assert.assertNotNull;
 
 
 public class gameSceneController implements Initializable {
@@ -136,6 +137,8 @@ public class gameSceneController implements Initializable {
     public GridPane p4Shelf;
     private GUI gui;
 
+    private String font= "";
+
     /** It initialises the version of the local board to not_accessible type. */
     // Non ho capito quando lo chiama però se non lo metto non funziona :P
     public gameSceneController(){
@@ -161,10 +164,10 @@ public class gameSceneController implements Initializable {
                 sendChatMessage();
             }
         });
-        setLabelText(this.ChosenText,"Comic Sans MS",20,"Your Tiles:");
+        setLabelText(this.ChosenText,font,20,"Your Tiles:");
         this.ChosenText.setVisible(false);
-        setLabelText(goalText,"Comic Sans MS", 20,"Your personal goal");
-        setLabelText(yourShelfText,"Comic Sans MS", 20, "Your shelf:");
+        setLabelText(goalText,font, 20,"Your personal goal");
+        setLabelText(yourShelfText,font, 20, "Your shelf:");
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
         if(players.size()==4) {
             CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
@@ -372,7 +375,7 @@ public class gameSceneController implements Initializable {
                     names) {
                 System.out.println(s);
             }
-            setLabelText(p2Name,"Comic Sans MS", 20, names.get(0) + "'s shelf:");
+            setLabelText(p2Name,font, 20, names.get(0) + "'s shelf:");
             //p2Name.setText(names.get(0) + "'s shelf:");
             players.add(names.get(0));
             common1points.setImage(CommonPoints.get(CommonPoints.size()-1));
@@ -380,13 +383,13 @@ public class gameSceneController implements Initializable {
             common2points.setImage(CommonPoints.get(CommonPoints.size()-1));
             c2Index=CommonPoints.size()-1;
             if(names.size()>1){ //3 giocatori
-                setLabelText(p3Name,"Comic Sans MS", 20, names.get(1) + "'s shelf:");
+                setLabelText(p3Name,font, 20, names.get(1) + "'s shelf:");
                 //p3Name.setText(names.get(1) + "'s shelf:");
                 players.add(names.get(1));
                 p3ImageShelf.setVisible(true);
             }
             if(names.size()>2){//4 giocatori
-                setLabelText(p4Name,"Comic Sans MS", 20, names.get(2) + "'s shelf:");
+                setLabelText(p4Name,font, 20, names.get(2) + "'s shelf:");
                 //p4Name.setText(names.get(2) + "'s shelf:");
                 players.add(names.get(2));
                 p4ImageShelf.setVisible(true);
@@ -544,7 +547,7 @@ public class gameSceneController implements Initializable {
         if(this.toShow) {
             if(toOrder){
                 this.OrderText.setVisible(true);
-                setLabelText(this.OrderText,"Comic Sans MS", 20, "Choose insert order: ");
+                setLabelText(this.OrderText,font, 20, "Choose insert order: ");
                 //this.OrderText.setText("Choose the order to insert them : ");
             }
             this.ChosenText.setVisible(true);
@@ -585,7 +588,7 @@ public class gameSceneController implements Initializable {
                             this.tilesOrdered=0;
                             this.newOrder.clear();
                             this.ChosenText.setVisible(false);
-                            setLabelText(this.OrderText,"Comic Sans MS", 20, "Your ordered Tiles: ");
+                            setLabelText(this.OrderText,font, 20, "Your ordered Tiles: ");
                             //this.OrderText.setText("Your ordered Tiles: ");
                         }
                     });
@@ -652,13 +655,13 @@ public class gameSceneController implements Initializable {
                 p4Token.add(firstPlayerToken,0,1);
             }
         }
-        setLabelText(turn,"Comic Sans MS",50,msg);
+        setLabelText(turn,font,50,msg);
         //turn.setText(cartoonText);
 
     }
 
     public void setIngameEvents(String msg){
-        setLabelText(ingameEvents,"Comic Sans MS", 24,msg);
+        setLabelText(ingameEvents,font, 24,msg);
         //this.ingameEvents.setText(msg);
     }
 
@@ -738,13 +741,16 @@ public class gameSceneController implements Initializable {
     }
 
     public void setLabelText(Label label, String font, int size, String msg){
-        Text cartoonText = new Text(msg);
+        /*Text cartoonText = new Text(msg);
 
         // Impostazione dello stile del testo
         cartoonText.setFont(Font.font(font, FontWeight.BOLD, size));
-        cartoonText.setFill(Color.WHITE);
+        //cartoonText.setFill(Color.WHITE);
+        cartoonText.setStyle("-fx-fill: WHITE");
         cartoonText.setStroke(Color.BLACK);
         cartoonText.setStrokeWidth(1);
-        label.setGraphic(cartoonText);
+        label.setGraphic(cartoonText);*/
+
+        label.setText(msg);
     }
 }
