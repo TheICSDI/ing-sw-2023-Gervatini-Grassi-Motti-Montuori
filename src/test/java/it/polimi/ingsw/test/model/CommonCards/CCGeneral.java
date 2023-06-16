@@ -46,7 +46,7 @@ public class CCGeneral {
             // Initialize the shelf with empty tiles
             for (int i = 0; i < nRow; i++) {
                 for (int j = 0; j < nCol; j++) {
-                    shelf[i][j] = new Tile("EMPTY");
+                    shelf[i][j] = new Tile("EMPTY",0);
                 }
             }
             // Read the tiles from the JSON file
@@ -58,7 +58,7 @@ public class CCGeneral {
                 int indexX = Integer.parseInt(tile.get("x").toString());
                 int indexY = Integer.parseInt(tile.get("y").toString());
                 String t = tile.get("type").toString();
-                shelf[indexX][indexY] = new Tile(t);
+                shelf[indexX][indexY] = new Tile(t,1);
             }
             // Set the shelf for the player and check the common card goal
             p.setShelf(shelf);

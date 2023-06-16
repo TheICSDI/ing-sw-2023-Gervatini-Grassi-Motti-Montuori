@@ -47,7 +47,7 @@ class CommonCardTest {
             int indexX = Integer.parseInt(tmp.get("x").toString());
             int indexY = Integer.parseInt(tmp.get("y").toString());
             String t = tmp.get("type").toString();
-            p.getShelf()[indexX][indexY] = new Tile(t);
+            p.getShelf()[indexX][indexY] = new Tile(t,1);
         }
         return p;
     }
@@ -74,9 +74,12 @@ class CommonCardTest {
 
         //Full shelf that completed the common goal card n3 and n6
         p1 = Parser();
-        c1.givePoints(p1,2);
-        c2.givePoints(p1,2);//Todo secondo parametro deve essere 4 se ci sono 2 players
-        assertEquals(4, p1.getScoreToken1());
-        assertEquals(4, p1.getScoreToken2());
+        c1.givePoints(p1,4);
+        c2.givePoints(p1,4);
+        assertEquals(8, p1.getScoreToken1());
+        assertEquals(8, p1.getScoreToken2());
+        Player p2=Parser();
+        c1.givePoints(p2,4);
+        assertEquals(4, p2.getScoreToken1());
     }
 }

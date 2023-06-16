@@ -40,7 +40,7 @@ public class Board {
         tilesList = new ArrayList<>();
         for (int i = 0; i < numCols; i++) {
             for (int j = 0; j < numRows; j++) {
-                this.board[i][j] = new Tile("empty");
+                this.board[i][j] = new Tile("empty" ,0);
             }
         }
         boardParser(numPlayers);
@@ -59,7 +59,8 @@ public class Board {
                     //Shuffle tilesList
                     Collections.shuffle(tilesList);
                     //Put the first element type in board (randomically)
-                    this.board[i][j] = new Tile(tilesList.get(0));
+                    int imageType= (new Random().nextInt(3)) + 1 ;
+                    this.board[i][j] = new Tile(tilesList.get(0),imageType);
                     this.tilesList.remove(0);
                 }
             }
@@ -112,7 +113,7 @@ public class Board {
             int indexY = Integer.parseInt(tmp.get("y").toString());
             int n = Integer.parseInt(tmp.get("type").toString());
             if(n > numPlayers) {
-                this.board[indexX][indexY] = new Tile("not_accessible");
+                this.board[indexX][indexY] = new Tile("not_accessible",0);
             }
         }
     }
@@ -169,7 +170,7 @@ public class Board {
      */
     public void RemoveTiles(List<Position> ToRemove) {
         for (Position p: ToRemove) {
-            board[p.getX()][p.getY()] = new Tile("empty");
+            board[p.getX()][p.getY()] = new Tile("empty",0);
         }
     }
 

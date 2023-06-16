@@ -52,7 +52,7 @@ public class PersonalCard{
 		//Fill the card with empty tiles
 		for (int i = 0; i < this.numRows; i++) {
 			for (int j = 0; j < this.numCols; j++) {
-				this.card[i][j] = new Tile("empty");
+				this.card[i][j] = new Tile("empty",0);
 			}
 		}
 
@@ -61,7 +61,7 @@ public class PersonalCard{
 		for (int i = 0; i < cardTiles.size(); i++)
 		{
 			JSONObject coordinate = (JSONObject) cardTiles.get(i);
-			temp = new Tile(coordinate.get("type").toString());
+			temp = new Tile(coordinate.get("type").toString(),0);
 			int x = Integer.parseInt(coordinate.get("x").toString());
 			int y = Integer.parseInt(coordinate.get("y").toString());
 			this.card[x][y] = temp;

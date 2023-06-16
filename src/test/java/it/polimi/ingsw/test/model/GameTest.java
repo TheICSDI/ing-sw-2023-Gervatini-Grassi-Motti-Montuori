@@ -126,24 +126,24 @@ class GameTest {
         //Make the shelf of p1 full (except for two places) to make the game end
         for (int i = 0; i < p1.getNumRows(); i++) {
             for (int j = 0; j < p1.getNumCols(); j++) {
-                p1.getShelf()[i][j] = new Tile("games");
+                p1.getShelf()[i][j] = new Tile("games",1);
             }
         }
         assertTrue(p1.isShelfFull());
-        p1.getShelf()[0][col-1] = new Tile("empty");
-        p1.getShelf()[1][col-1] = new Tile("empty");
+        p1.getShelf()[0][col-1] = new Tile("empty",1);
+        p1.getShelf()[1][col-1] = new Tile("empty",1);
 
         //Make the board empty (except for two positions) to test the refill
         for (int i = 0; i < g.getBoard().getNumRows(); i++) {
             for (int j = 0; j < g.getBoard().getNumCols(); j++) {
                 if(!g.getBoard().board[i][j].getCategory().equals(it.polimi.ingsw.model.Tile.type.NOT_ACCESSIBLE)){
-                    g.getBoard().board[i][j] = new Tile("empty");
+                    g.getBoard().board[i][j] = new Tile("empty",1);
                 }
             }
         }
         assertTrue(g.getBoard().isBoardEmpty());
-        g.getBoard().board[3][0] = new Tile("games");
-        g.getBoard().board[3][1] = new Tile("games");
+        g.getBoard().board[3][0] = new Tile("games",1);
+        g.getBoard().board[3][1] = new Tile("games",1);
 
         try {
             g.startGame();
@@ -154,9 +154,9 @@ class GameTest {
 
     @Test
     void checkTiles(){
-        Tile t1 = new Tile("games");
-        Tile t2 = new Tile("games");
-        Tile t3 = new Tile("plants");
+        Tile t1 = new Tile("games",1);
+        Tile t2 = new Tile("games",1);
+        Tile t3 = new Tile("plants",1);
         playerList.add(p1);
         Game g = new Game(playerList, GC);
 

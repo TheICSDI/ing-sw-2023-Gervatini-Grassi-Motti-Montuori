@@ -42,7 +42,7 @@ public class Player implements Serializable {
         this.Shelf = new Tile[numRows][numCols];
         for(int i=0; i<numRows; i++){
             for(int j=0; j<numCols; j++){
-                Shelf[i][j] = new Tile("empty");
+                Shelf[i][j] = new Tile("empty",0);
             }
         }
     }
@@ -164,6 +164,18 @@ public class Player implements Serializable {
     /** Sets the shelf of the player. */
     public void setShelf(Tile[][] shelf) {
         Shelf = shelf;
+    }
+
+
+    /**
+     * Resets shelf to all empty
+     */
+    public void resetShelf(){
+        for(int i=0; i<numRows; i++){
+            for(int j=0; j<numCols; j++){
+                Shelf[i][j] = new Tile("empty",0);
+            }
+        }
     }
 
     /** Return true only if the shelf of the player is full, false otherwise. */

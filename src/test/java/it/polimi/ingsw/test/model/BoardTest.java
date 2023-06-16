@@ -42,7 +42,7 @@ class BoardTest {
             int indexX = Integer.parseInt(tmp.get("x").toString());
             int indexY = Integer.parseInt(tmp.get("y").toString());
             String t = tmp.get("type").toString();
-            b.board[indexX][indexY] = new Tile(t);
+            b.board[indexX][indexY] = new Tile(t,1);
         }
         return b;
     }
@@ -73,11 +73,11 @@ class BoardTest {
         assertTrue(b.isBoardEmpty());
 
         //Limit case: only one tile
-        b.board[5][5] = new Tile("cats");
+        b.board[5][5] = new Tile("cats",1);
         assertTrue(b.isBoardEmpty());
 
         //Limit case: only two near tiles
-        b.board[5][6] = new Tile("cats");
+        b.board[5][6] = new Tile("cats",1);
         assertFalse(b.isBoardEmpty());
 
         //Limit case: the board is full of tiles, but all of them have empty sides
@@ -92,8 +92,8 @@ class BoardTest {
         assertTrue(b.AvailableTiles().isEmpty());
 
         //Some tiles are available
-        b.board[5][5] = new Tile("cats");
-        b.board[5][6] = new Tile("cats");
+        b.board[5][5] = new Tile("cats",1);
+        b.board[5][6] = new Tile("cats",1);
         assertFalse(b.AvailableTiles().isEmpty());
         assertTrue(b.AvailableTiles().contains(new Position(5, 5)));
         assertTrue(b.AvailableTiles().contains(new Position(5, 6)));

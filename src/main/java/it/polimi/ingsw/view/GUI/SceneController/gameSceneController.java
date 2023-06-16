@@ -141,7 +141,7 @@ public class gameSceneController implements Initializable {
     public gameSceneController(){
         for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
-                this.localBoard[i][j] = new Tile("NOT_ACCESSIBLE");
+                this.localBoard[i][j] = new Tile("NOT_ACCESSIBLE",0);
             }
         }
     }
@@ -195,7 +195,6 @@ public class gameSceneController implements Initializable {
                 Tile.setFitWidth(43);
                 if(!board[i][j].getCategory().equals(type.EMPTY) && !board[i][j].getCategory().equals(type.NOT_ACCESSIBLE)) {
                     Image image = new Image(board[i][j].getImage());
-                    System.out.println(image);
                     Tile.setImage(image);
                     pane.getChildren().add(Tile);
                     pane.setAlignment(Pos.CENTER);
@@ -214,7 +213,7 @@ public class gameSceneController implements Initializable {
                             }
                         }
                         if (!alreadyChosen) {
-                            pane.setStyle("-fx-background-color: #ff0000;");
+                            pane.setStyle("-fx-background-color: #ce1a1a;");
                             if (this.Chosen.size() == 3) {
                                 Node node = this.board.getChildren().stream()
                                         .filter(child -> GridPane.getColumnIndex(child) == this.Chosen.get(0).getY() && GridPane.getRowIndex(child) == this.Chosen.get(0).getX())

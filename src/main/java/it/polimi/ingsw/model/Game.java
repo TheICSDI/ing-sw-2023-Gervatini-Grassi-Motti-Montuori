@@ -75,6 +75,11 @@ public class Game {
         }else{
             commonPoints=2;
         }
+
+        for (Player p:
+             players) {
+            p.resetShelf();
+        }
     }
 
 
