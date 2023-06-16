@@ -47,7 +47,7 @@ public class Server {
             try {
                 Registry registry = LocateRegistry.createRegistry(23451);
                 RMIserverImpl s = new RMIserverImpl(SC);
-                Naming.rebind("rmi://localhost:" + 23451 + "/RMIServer", s);
+                Naming.rebind("rmi://192.168.80.190:" + 23451 + "/RMIServer", s);
             } catch (Exception e) {
                 System.err.println("Server exception");
                 e.printStackTrace();

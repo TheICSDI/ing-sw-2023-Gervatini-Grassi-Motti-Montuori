@@ -321,7 +321,7 @@ public class Client extends Application {
         controller = new clientController();
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
-            stub = (RMIconnection) Naming.lookup("rmi://localhost:" + 23451 + "/RMIServer");
+            stub = (RMIconnection) Naming.lookup("rmi://192.168.80.190:" + 23451 + "/RMIServer");
             RMIclient = new RMIclientImpl(controller);
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
             setName();
