@@ -644,7 +644,7 @@ public class gameSceneController implements Initializable {
             ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
             firstPlayerToken.setFitHeight(45);
             firstPlayerToken.setFitWidth(45);
-
+            System.out.println(msg.toString());
             if(msg.equals("It's your turn!")){
                 myShelfToken.add(firstPlayerToken,0,1);
             }else if(msg.equals("It's " + players.get(1) + "'s turn!")){

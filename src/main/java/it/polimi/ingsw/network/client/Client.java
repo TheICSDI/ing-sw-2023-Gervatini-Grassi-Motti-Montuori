@@ -28,9 +28,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class Client extends Application {
     private Socket clientSocket;
@@ -44,6 +42,7 @@ public class Client extends Application {
     private static final int pingTime = 15;
     public static boolean connected = true;
     private static boolean socket=false;
+    private static final Object SocketLock=new Object();
     private static boolean firstTurn;
     
     /** It starts the socket connection on the given ip and port.
@@ -245,7 +244,7 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        Client.connection("192.168.80.190", 23450); //pc di luca
+        Client.connection("192.168.227.174", 23450); //pc di luca
         socket=true;
         //Client.connection("127.0.0.1", 23450);
         String username;
@@ -289,17 +288,26 @@ public class Client extends Application {
                 throw new RuntimeException(e);
             }
         });
-        ExecutorService executor1 = Executors.newSingleThreadExecutor();
-        executor1.submit(()-> {
+        System.out.println("Si");
+        new Thread(()->{
             while (connected){
-                out.println(new PingMessage(controller.getNickname()));
+                System.out.println("SI");
+                    out.println(new PingMessage(controller.getNickname()));
+                    System.out.println("ping " + ping);
                 try {
-                    Thread.sleep(pingTime * 1000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
-        });
+        }).start();
+        new Thread(()->{
+            try {
+                ping();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
         ExecutorService executor2 = Executors.newSingleThreadExecutor();
         executor2.submit(()-> {
             try {
@@ -312,7 +320,8 @@ public class Client extends Application {
 
         //TODO: condizione valida sse il client è connesso, da rivedere
         while(true) {
-            sendMessage(virtualView.getInput(),true);
+            String toSend=virtualView.getInput();
+            sendMessage(toSend, true);
         }
         //executor.shutdownNow();
     }
@@ -362,7 +371,8 @@ public class Client extends Application {
         int x = -1;
         while(x < ping) {
             x = ping;
-            TimeUnit.SECONDS.sleep(pingTime);
+            System.out.println("x " + x);
+            Thread.sleep(pingTime*1000);
         }
         System.out.println("Disconnected"); //TODO dovrebbe essere in view
         connected = false;
