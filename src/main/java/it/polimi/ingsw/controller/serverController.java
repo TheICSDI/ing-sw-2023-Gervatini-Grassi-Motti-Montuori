@@ -20,6 +20,11 @@ public class serverController {
 
    //Each thread of this pool allows maximum 10 games to be played at the same time.
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
+   private static final String RESET = "\u001B[0m";
+   private static final String PINK = "\u001B[35m";
+   private static final String GREEN = "\u001B[32m";
+
+   private static final String BLUE= "\u001B[34m";
 
    /** It takes a message from the client and does the requested action.
     * It sends a reply if needed.
@@ -27,14 +32,13 @@ public class serverController {
     * @return true only if the message is successful, false otherwise. For tests purposes.
     */
    public boolean executeMessage(GeneralMessage message) throws RemoteException {
-      System.out.println(message.toString());
       //Constants to lighten the code
       final int id = message.getMessage_id();
       final int gameId = message.getGameId();
       final int idLobby = message.getIdLobby();
       final Action action = message.getAction();
       final String player = message.getUsername();
-
+      System.out.println(PINK+ player + " sent a " + action +" message" + RESET);
       //Based on the message's action type
       switch(action){
          //It creates a new lobby whose first player is who have called the command
@@ -146,7 +150,7 @@ public class serverController {
 
          //Pick some tiles from the main board
          case PT -> {
-            System.out.println("Operating the pick of tiles");
+            System.out.println(GREEN + "Adding a pick tiles command to queue" + RESET);
             List<Position> pos = new ArrayList<>();
             ((PickTilesMessage)message).getPos(pos);
             controller.pickTiles(player, pos, gameId, id);
@@ -155,6 +159,7 @@ public class serverController {
 
          //Select the order of the selected tiles
          case SO -> {
+            System.out.println(GREEN + "Adding a select order command to queue"+ RESET);
             List<Integer> order = new ArrayList<>();
             ((SelectOrderMessage)message).getOrder(order);
             controller.selectOrder(player, order, gameId, id);
@@ -163,6 +168,7 @@ public class serverController {
 
          //Select che column in which to put the tiles
          case SC -> {
+            System.out.println( GREEN + "Adding a select column command to queue" + RESET);
             int numCol = ((SelectColumnMessage)message).getCol();
             controller.selectColumn(player, numCol, gameId, id);
             return true;
@@ -276,7 +282,7 @@ public class serverController {
    public static void sendMessage(GeneralMessage m, String nick) throws RemoteException {
       if(gameController.allPlayers.get(nick).isConnected()) {
          if (connections.get(nick).isSocket()) {
-            System.out.println("Sending message " + m.getAction() + " to " + nick);
+            System.out.println(BLUE + "Sending message " + m.getAction() + " to " + nick + RESET);
             connections.get(nick).getOut().println(m);
          } else {
             connections.get(nick).getReply().RMIsend(m.toString());

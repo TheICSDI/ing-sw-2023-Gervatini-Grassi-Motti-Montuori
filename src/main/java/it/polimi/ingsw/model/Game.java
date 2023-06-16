@@ -43,6 +43,10 @@ public class Game {
         count++;
         this.id = count;
         this.players = players;
+        for (Player p:
+                players) {
+            p.reset();
+        }
 
         //Initializes the new board
         this.board = new Board(players.size());
@@ -76,10 +80,7 @@ public class Game {
             commonPoints=2;
         }
 
-        for (Player p:
-             players) {
-            p.resetShelf();
-        }
+
     }
 
 
@@ -171,7 +172,6 @@ public class Game {
 
                     //Handles the action "pick tiles"
                     List<Tile> toInsert = pickTiles(p);
-                    System.out.println(toInsert);
                     if(toInsert!=null) {
                         //Handles the action "select order"
                         boolean allTheSame = checkTiles(toInsert);

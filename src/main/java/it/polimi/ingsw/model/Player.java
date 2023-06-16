@@ -168,9 +168,15 @@ public class Player implements Serializable {
 
 
     /**
-     * Resets shelf to all empty
+     * Resets player stats and shelf
      */
-    public void resetShelf(){
+    public void reset(){
+        this.scoreToken1=0;
+        this.scoreToken2=0;
+        this.totalPoints=0;
+        this.PersonalCard=null;
+        this.endToken=false;
+        this.firstToken=false;
         for(int i=0; i<numRows; i++){
             for(int j=0; j<numCols; j++){
                 Shelf[i][j] = new Tile("empty",0);

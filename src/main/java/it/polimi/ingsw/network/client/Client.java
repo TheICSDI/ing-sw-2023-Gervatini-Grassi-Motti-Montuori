@@ -388,8 +388,9 @@ public class Client extends Application {
                 try {
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 } catch (RemoteException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
+                    /*e.printStackTrace();
+                    throw new RuntimeException(e);*/
+                    System.out.println("Server disconnected");
                 }
             });
             ExecutorService executor2 = Executors.newSingleThreadExecutor();

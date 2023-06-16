@@ -23,6 +23,8 @@ public class gameController {
     public static List<command> queue = new ArrayList<>();
     public final static Object queueLock = new Object();
 
+    private final static String RED = "\u001B[31m";
+
     /** It returns the chosen number of column of the given player in the game.
      * @param player nickname of the player that is choosing the column.
      * @param gameId id of the game in which the player is playing.
@@ -73,7 +75,7 @@ public class gameController {
 
         synchronized (queueLock) {
             while(found.isEmpty() && p.isConnected()){
-                System.out.println("Locked queue, finding request " + action);
+                System.out.println(RED + "Locked queue, finding request " + action);
                 toFind = queue.stream()
                         .filter(ob -> ob.g.id == gameId)
                         .filter(ob -> ob.p.getNickname().equals(player))
@@ -108,7 +110,6 @@ public class gameController {
         command pending = new command(g, p, Action.PT, numMess);
         pending.setPos(pos);
         synchronized (queueLock) {
-            System.out.println("Adding picked tiles");
             queue.add(pending);
             queueLock.notifyAll();
         }
@@ -125,7 +126,6 @@ public class gameController {
         command pending = new command(g, p, Action.SO, numMess);
         pending.setOrder(order);
         synchronized (queueLock) {
-            System.out.println("Adding order selection");
             queue.add(pending);
             queueLock.notifyAll();
         }
@@ -142,7 +142,6 @@ public class gameController {
         command pending = new command(g, p, Action.SC,numMess);
         pending.setNumCol(numCol);
         synchronized (queueLock) {
-            System.out.println("Adding column selection");
             queue.add(pending);
             queueLock.notifyAll();
         }
