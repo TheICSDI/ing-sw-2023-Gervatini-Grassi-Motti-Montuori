@@ -294,7 +294,7 @@ public class Client extends Application {
             while (connected){
                 out.println(new PingMessage(controller.getNickname()));
                 try {
-                    TimeUnit.SECONDS.sleep(pingTime);
+                    Thread.sleep(pingTime * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -353,6 +353,7 @@ public class Client extends Application {
             executor1.shutdownNow();
             executor2.shutdownNow();
         } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
