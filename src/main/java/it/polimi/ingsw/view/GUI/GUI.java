@@ -224,7 +224,7 @@ public class GUI implements View {
      */
     private <T> T loadFXML(String fxmlFileName, Class<T> controllerClass) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(controllerClass.getClassLoader().getResource("fxml/" + fxmlFileName));
+        loader.setLocation(getClass().getResource("fxml/" + fxmlFileName));
         loader.load();
         return loader.getController();
     }
@@ -301,6 +301,7 @@ public class GUI implements View {
         if(stage.isIconified()){
             stage.setIconified(false);
         }
+
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
@@ -324,7 +325,9 @@ public class GUI implements View {
         }
         esc = loader.getController();
         esc.setGui(currGui);
-        //stage.setFullScreen(true);
+        if(stage.isIconified()){
+            stage.setIconified(false);
+        }
         stage.centerOnScreen();
         stage.setResizable(false);
         nPage=5;
