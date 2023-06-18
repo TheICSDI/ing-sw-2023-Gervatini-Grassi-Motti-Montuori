@@ -298,13 +298,18 @@ public class GUI implements View {
         }
         gsc = loader.getController();
         gsc.setGui(this.currGui);
+        if(stage.isIconified()){
+            stage.setIconified(false);
+        }
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
+
         stage.setResizable(false);
         //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=4;
         //stage.setFullScreenExitHint("");
+
         stage.setScene(new Scene(root));
         stage.show();
     }

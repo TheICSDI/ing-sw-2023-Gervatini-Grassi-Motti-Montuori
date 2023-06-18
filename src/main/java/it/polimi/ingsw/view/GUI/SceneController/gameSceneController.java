@@ -15,10 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 
 import java.net.URL;
@@ -50,6 +47,7 @@ public class gameSceneController implements Initializable {
     public Label yourShelfText;
     @FXML
     public Label goalText;
+    public javafx.scene.layout.AnchorPane AnchorPane;
     private List<String> players=new ArrayList<>();
     @FXML
     public Label YourName;
