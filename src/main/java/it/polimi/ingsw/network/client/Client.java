@@ -244,9 +244,9 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        Client.connection("192.168.1.194", 23450); //pc di luca
+        //Client.connection("192.168.1.194", 23450); //pc di luca
         socket=true;
-        //Client.connection("127.0.0.1", 23450);
+        Client.connection("127.0.0.1", 23450);
         String username;
         GeneralMessage nick;
         String mex;
@@ -337,7 +337,7 @@ public class Client extends Application {
     public static void RMI(){
         controller = new clientController();
         try {
-            Registry registry = LocateRegistry.getRegistry("192.168.1.194", 23451);
+            Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
             System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
