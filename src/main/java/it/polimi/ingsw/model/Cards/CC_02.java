@@ -1,5 +1,4 @@
-/**
- * CC_02 class implements the logic for checking if the common goal card number 2 is completed by a player.
+/** CC_02 class implements the logic for checking if the common goal card number 2 is completed by a player.
  * It requires four tiles of the same type in the four corners of the bookshelf.
  * @author Marco Gervatini
  */
@@ -16,7 +15,6 @@ public class CC_02 implements CCStrategy {
 	public int getId(){return this.id;}
 	/**
 	 * Checks if the common goal is completed.
-	 *
 	 * @param p a player.
 	 * @return true only if the common goal card is completed.
 	 */

@@ -29,11 +29,7 @@ public class gameController {
      * @param gameId id of the game in which the player is playing.
      * @return chosen column (-2 if not found). */
     public int chooseColumn(String player, int gameId) {
-        Optional<command> order;
-        order = findTheRequest(player, gameId, Action.SC);
-        if(order.isEmpty()){
-            return -2;
-        }
+        Optional<command> order = findTheRequest(player, gameId, Action.SC);
         return order.get().getNumCol();
     }
 
@@ -43,9 +39,6 @@ public class gameController {
      * @return list of chosen tiles (null if not found). */
     public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SO);
-        if(order.isEmpty()){
-            return null;
-        }
         return order.get().getOrder();
     }
 
@@ -55,11 +48,7 @@ public class gameController {
      * @return list of positions (null if not found).*/
     public List<Position> chooseTiles(String player , int gameId) {
         Optional<command> order = findTheRequest(player,gameId,Action.PT);
-        if(order.isEmpty()){
-            return null;
-        } else {
-            return order.get().getPos();
-        }
+        return order.get().getPos();
     }
 
     /** It finds the request of the given player in the queue of commands.

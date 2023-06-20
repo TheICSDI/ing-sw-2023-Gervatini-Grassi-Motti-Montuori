@@ -411,8 +411,8 @@ public class gameSceneController implements Initializable {
     public void showOthers(Map<String, Player> others){
         if(firstOthers){
             firstOthers=false;
-            YourName.setText(gui.Name);
-            players.add(gui.Name);
+            YourName.setText(gui.nick);
+            players.add(gui.nick);
             List<String> names= new ArrayList<>(others.keySet());//sperando gli metta in ordine
             for (String s:
                     names) {
@@ -536,7 +536,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    public void commonCompleted(String msg,boolean first,String whoCompleted){
+    public void commonCompleted(String msg, String whoCompleted, boolean first){
         newMessage(msg);//temporaneo
         if(first){
             ImageView pointsWon=new ImageView(CommonPoints.get(c1Index));

@@ -1,5 +1,4 @@
-/**
- * CC_01 class implements the logic for checking if the common goal card number 1 is completed by a player.
+/** CC_01 class implements the logic for checking if the common goal card number 1 is completed by a player.
  * It requires the player to have at least six groups, each containing at least two tiles of the same type.
  * @author Giulio Montuori
  */
@@ -16,7 +15,6 @@ public class CC_01 implements CCStrategy {
 
     /**
      * Checks if the common goal is completed.
-     *
      * @param p a player.
      * @return true only if count the player has at least six groups that respect the rule of the card.
      */

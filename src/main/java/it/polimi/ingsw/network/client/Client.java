@@ -56,7 +56,7 @@ public class Client extends Application {
 
     /** It listens to the messages received by via socket, and it calls the elaborate method. */
     public static void listenSocket() throws IOException, ParseException, InterruptedException {
-        //TODO: non va bene, da errore con le eccezioni. sarebbe meglio un listener
+        //TODO: non va bene, da errore con le eccezioni, sarebbe meglio un listener
         while(true) {
             String message = in.readLine();
             elaborate(message);
@@ -130,14 +130,14 @@ public class Client extends Application {
             }
             case COMMONCOMPLETED -> {
                 reply = CommonCompletedMessage.decrypt(message);
-                virtualView.commonCompleted(reply.getMessage(),((CommonCompletedMessage) reply).getFirst(),((CommonCompletedMessage) reply).getWhoCompleted());
+                virtualView.commonCompleted(reply.getMessage(), ((CommonCompletedMessage) reply).getWhoCompleted(), ((CommonCompletedMessage) reply).getFirst());
             }
             case SHOWOTHERS -> {
                 reply = OtherPlayersMessage.decrypt(message);
-                String nick=((OtherPlayersMessage) reply).getP().getNickname();
-                Player p=((OtherPlayersMessage) reply).getP();
+                String nick = ((OtherPlayersMessage) reply).getP().getNickname();
+                Player p = ((OtherPlayersMessage) reply).getP();
                 controller.getOthers().put(nick,p);
-                virtualView.updateOthers(controller.getOthers());
+                virtualView.showOthers(controller.getOthers());
             }
             case C -> {
                 reply = ChatMessage.decrypt(message);
@@ -173,7 +173,7 @@ public class Client extends Application {
             }
             case ERROR -> {
                 reply = SimpleReply.decrypt(message);
-                virtualView.displayError(reply.getMessage());
+                virtualView.displayMessage(reply.getMessage());
             }
             default -> reply = SimpleReply.decrypt(message);
         }
@@ -254,7 +254,7 @@ public class Client extends Application {
         //Request unique nickname for the client
         System.out.println(in.readLine());
         do {
-            username = virtualView.askUsername();
+            username = virtualView.askNickname();
             nick = new SetNameMessage(username,true);
             out.println(nick);
             try{
@@ -266,7 +266,7 @@ public class Client extends Application {
                     nick = ReconnectMessage.decrypt(mex);
                 }
             } catch(Exception ignored){}
-            virtualView.printUsername(nick.getUsername(), nick.isAvailable());
+            virtualView.checkNickname(nick.getUsername(), nick.isAvailable());
         } while (!nick.isAvailable());
         //If the nickname is available the clientController is created
         controller = new clientController(nick.getUsername());
@@ -386,7 +386,7 @@ public class Client extends Application {
     public static void setName() throws RemoteException {
         String input;
         SetNameMessage nick;
-        input = virtualView.askUsername().replaceAll(" ", "");
+        input = virtualView.askNickname().replaceAll(" ", "");
         nick = new SetNameMessage(input, true);
         stub.RMIsendName(nick.toString(), RMIclient);
     }

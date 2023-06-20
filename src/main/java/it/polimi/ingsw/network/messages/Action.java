@@ -6,7 +6,6 @@ public enum Action {
     CREATELOBBY,
     SHOWLOBBY,
     JOINLOBBY,
-    EXITLOBBY,
     STARTGAME,
     POINTS,
     WINNER,

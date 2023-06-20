@@ -72,7 +72,7 @@ public class nameSceneController implements Initializable {
     @FXML
     public void getText(){
         synchronized (gui.NameLock) {
-            gui.Name = GetNickname.getText();
+            gui.nick = GetNickname.getText();
             gui.NameLock.notifyAll();
         }
     }

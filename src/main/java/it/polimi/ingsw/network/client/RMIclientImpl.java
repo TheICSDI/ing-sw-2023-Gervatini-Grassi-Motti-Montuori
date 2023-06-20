@@ -30,14 +30,14 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
         }
         if(action.equals(Action.SETNAME)){
             if(!SetNameMessage.decrypt(m).isAvailable()){
-                Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
+                Client.getVirtualView().checkNickname(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
                 Client.setName();
             } else {
-                Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
+                Client.getVirtualView().checkNickname(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
                 this.CC.setNickname(SetNameMessage.decrypt(m).getUsername());
             }
         } else {
-            Client.getVirtualView().printUsername(ReconnectMessage.decrypt(m).getUsername(), ReconnectMessage.decrypt(m).isAvailable());
+            Client.getVirtualView().checkNickname(ReconnectMessage.decrypt(m).getUsername(), ReconnectMessage.decrypt(m).isAvailable());
             this.CC.setNickname(ReconnectMessage.decrypt(m).getUsername());
             if(ReconnectMessage.decrypt(m).getIdLobby()>0){
                 this.CC.setIdLobby(ReconnectMessage.decrypt(m).getIdLobby());

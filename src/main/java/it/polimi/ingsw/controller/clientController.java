@@ -1,4 +1,4 @@
-/** It is used by the client to check the correctness of the input.
+/** It checks the correctness of the input client side. Each client has an instance of the class.
  * @author Marco Gervatini, Andrea Grassi. */
 package it.polimi.ingsw.controller;
 

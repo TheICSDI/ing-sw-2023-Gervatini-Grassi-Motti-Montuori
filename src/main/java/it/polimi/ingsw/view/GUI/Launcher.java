@@ -1,7 +1,7 @@
+/** Extra starter class that does not inherit from javafx.application.Application. */
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.network.client.Client;
-
 import java.io.IOException;
 
 public class Launcher{

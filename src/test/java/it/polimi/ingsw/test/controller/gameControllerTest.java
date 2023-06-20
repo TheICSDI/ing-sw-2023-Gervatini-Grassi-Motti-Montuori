@@ -31,6 +31,12 @@ class gameControllerTest {
         Game g = new Game(players, this.controller);
         gameController.allGames.put(g.id, g);
 
+        //null cases
+        controller.pickTiles(p1.getNickname(), null, g.id, 1);
+        assertNull(controller.chooseTiles(p1.getNickname(), g.id));
+        controller.selectOrder(p1.getNickname(), null, g.id, 2);
+        assertNull(controller.chooseOrder(p1.getNickname(), g.id));
+
         //Player p1 send a pickTiles request
         ArrayList<Position> pos = new ArrayList<>();
         pos.add(new Position(3, 1));
@@ -49,6 +55,5 @@ class gameControllerTest {
         //Player p1 send a selectColumn request
         controller.selectColumn(p1.getNickname(), 2, g.id, 3);
         assertEquals(2, controller.chooseColumn(p1.getNickname(), g.id));
-
     }
 }

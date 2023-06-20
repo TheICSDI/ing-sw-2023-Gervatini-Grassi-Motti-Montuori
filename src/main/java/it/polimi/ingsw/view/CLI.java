@@ -1,3 +1,4 @@
+/** It implements the view interface managing CLI's output.*/
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
@@ -9,7 +10,7 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-//TODO CONTROLLARE che funzioni tutto in cli
+
 public class CLI implements View{
     //"\u001b[48;2;<R code>;<G code>;<B code>m" BACKGROUND COLORS
     public static final String RESET = "\033[0m";
@@ -33,7 +34,7 @@ public class CLI implements View{
                 [2]: for RMI""");
             Scanner input = new Scanner(System.in);
             reply = input.next();
-        }while(!(reply.equals("1") || reply.equals("2")));
+        } while(!(reply.equals("1") || reply.equals("2")));
         if (reply.equals("1")) {
             System.out.println("Socket connection chosen");
         } else {
@@ -43,25 +44,43 @@ public class CLI implements View{
     }
 
     @Override
-    public String askUsername(){
+    public String askNickname(){
         Scanner input = new Scanner(System.in);
         out.print("Enter your nickname: ");
         return input.nextLine();
     }
 
     @Override
-    public void printUsername(String username, boolean isAvailable){
+    public void checkNickname(String nickname, boolean isAvailable){
         if(isAvailable) {
             out.println("Username set correctly\n");
-        }
-        else {
+        } else {
             out.println("Username not available\n");
         }
     }
 
     @Override
-    public void createLobby(String lobbyName) {
+    public void showLobby(List<Lobby> Lobbies){
+        System.out.println("Available lobbies: ");
+        for (Lobby l:
+                Lobbies) {
+            System.out.print("Lobby "+l.lobbyId + ": ");
+            for (Player p:
+                    l.Players) {
+                System.out.print(p.getNickname()+ " ");
+            }
+            System.out.println();
+        }
+    }
 
+    @Override
+    public void startGame(String message){
+        System.out.println(message);
+    }
+
+    @Override
+    public void playersTurn(String msg, boolean firstTurn){
+        System.out.println(msg);
     }
 
     @Override
@@ -105,16 +124,6 @@ public class CLI implements View{
         showShelf(PC.getCard());
     }
 
-    @Override
-    public void showChosenTiles(List<Tile> tiles,boolean toOrder){
-        out.print("Tiles chosen:");
-        for (Tile t:
-             tiles) {
-            out.print(RESET + " " + t.getColor() + " " + t.getInitial() + " " );
-        }
-        out.println(RESET);
-    }
-    
     @Override
     public void showCommons(List<Integer> cc){
         out.println("Common goals:");
@@ -170,23 +179,21 @@ public class CLI implements View{
     }
 
     @Override
-    public void commonCompleted(String msg, boolean first, String whoCompleted) {
-        System.out.println(msg);
+    public void showChosenTiles(List<Tile> tiles,boolean toOrder){
+        out.print("Tiles chosen:");
+        for (Tile t:
+             tiles) {
+            out.print(RESET + " " + t.getColor() + " " + t.getInitial() + " " );
+        }
+        out.println(RESET);
     }
 
     @Override
-    public void showLobby(List<Lobby> Lobbies){
-        System.out.println("Available lobbies: ");
-        for (Lobby l:
-                Lobbies) {
-            System.out.print("Lobby "+l.lobbyId + ": ");
-            for (Player p:
-                    l.Players) {
-                System.out.print(p.getNickname()+ " ");
-            }
-            System.out.println();
-        }
+    public void commonCompleted(String msg, String whoCompleted, boolean first) {
+        System.out.println(msg);
     }
+
+
 
     @Override
     public void showOthers(Map<String, Player> others){
@@ -195,7 +202,7 @@ public class CLI implements View{
             for (int i = 0; i < others.get(nick).getShelf().length; i++){
                 out.print(RESET + "  ");
                 for (int j = -1; j < others.get(nick).getShelf()[0].length; j++) {
-                    if(j==-1) j++;
+                    if(j ==-1) j++;
                     out.print(others.get(nick).getShelf()[i][j].getColor() + " " + others.get(nick).getShelf()[i][j].getInitial() + " ");
                     if(j < others.get(nick).getShelf()[0].length - 1){
                         out.print(DARK_BROWN+" ");
@@ -208,15 +215,18 @@ public class CLI implements View{
         }
     }
 
-    @Override
-    public void updateOthers(Map<String,Player> others){
 
+    @Override
+    public void endGameToken(String player) {
+        System.out.println(player + " filled his shelf first " +
+                "and gained a point! This is the last turn.");
     }
 
     @Override
-    public void startGame(String message){
-        System.out.println(message);
+    public void endGame() {
+        System.out.println("GAME ENDED\nRESULTS: \n");
     }
+
 
     @Override
     public void showPoints(String message) {
@@ -229,28 +239,8 @@ public class CLI implements View{
     }
 
     @Override
-    public void endGame() {
-        System.out.println("GAME ENDED\nRESULTS: \n");
-    }
-
-    @Override
-    public void endGameToken(String player) {
-        System.out.println(player + " filled his shelf first " +
-                "and gained a point! This is the last turn.");
-    }
-
-    @Override
-    public void displayError(String msg){
-        out.println(msg);
-    }
-
-    @Override
     public void displayMessage(String msg){
         out.println(msg);
-    }
-    @Override
-    public void playersTurn(String msg, boolean firstTurn){
-        System.out.println(msg);
     }
 
     @Override

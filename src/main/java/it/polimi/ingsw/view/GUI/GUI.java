@@ -1,3 +1,4 @@
+/** It implements the view interface managing GUI's output.*/
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
@@ -21,7 +22,7 @@ import java.util.Objects;
 public class GUI implements View {
     private int nPage=1;
     private Stage stage;
-    public String Name="";
+    public String nick = "";
     public String message;
     public final Object NameLock = new Object();
     public final Object Lock = new Object();
@@ -30,10 +31,8 @@ public class GUI implements View {
     public lobbySceneController lsc;
     public gameSceneController gsc;
     public endSceneController esc;
-    private Stage primaryStage;
     public String connectionChosen;
-    public final Object ConnectionLock =  new Object();
-
+    public final Object ConnectionLock = new Object();
     private final GUI currGui;
 
     public GUI() {
@@ -46,33 +45,33 @@ public class GUI implements View {
             try{
                 ConnectionLock.wait();
             }catch(InterruptedException e) {
-                throw  new RuntimeException(e);
+                throw new RuntimeException(e);
             }
         }
-        Platform.runLater(() -> startGUI());
+        Platform.runLater(this::startGUI);
         return connectionChosen;
     }
 
     @Override
-    public String askUsername() {
-        Name="";
+    public String askNickname() {
+        nick = "";
         synchronized (NameLock) {
-            while (Name.equals("") || Name.charAt(0) == '\\') {
+            while (nick.equals("") || nick.charAt(0) == '\\') {
                 try {
                     NameLock.wait();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
-            return Name;
+            return nick;
         }
     }
 
     @Override
-    public void printUsername(String username, boolean isAvailable) {
+    public void checkNickname(String nickname, boolean isAvailable) {
         Platform.runLater(() -> {
             if (isAvailable) {
-                Name = username;
+                nick = nickname;
                 openLobbyScene();
                 synchronized (Lock) {
                     message = "showlobby";
@@ -83,14 +82,6 @@ public class GUI implements View {
             }
         });
     }
-
-    @Override
-    public void createLobby(String lobbyName) {
-        Platform.runLater(() -> {
-            lsc.setText(lobbyName);
-        });
-    }
-
     @Override
     public void showLobby(List<Lobby> Lobbies) {
         Platform.runLater(() -> lsc.showLobbies(Lobbies));
@@ -98,7 +89,12 @@ public class GUI implements View {
 
     @Override
     public void startGame(String message) {
-        Platform.runLater(()-> openGameScene());
+        Platform.runLater(this::openGameScene);
+    }
+
+    @Override
+    public void playersTurn(String msg, boolean firstTurn){
+        Platform.runLater(()-> gsc.Turn(msg, firstTurn));
     }
 
     @Override
@@ -117,29 +113,36 @@ public class GUI implements View {
     }
 
     @Override
-    public void showChosenTiles(List<Tile> tiles, boolean toOrder) {
-        Platform.runLater(() -> gsc.showChosenTiles(tiles,toOrder));
-    }
-
-    @Override
     public void showCommons(List<Integer> cc) {
         Platform.runLater(() -> gsc.showCommons(cc));
     }
 
     @Override
-    public void commonCompleted(String msg, boolean first, String whoCompleted) {
-        Platform.runLater(()->gsc.commonCompleted(msg,first,whoCompleted));
+    public void showChosenTiles(List<Tile> tiles, boolean toOrder) {
+        Platform.runLater(() -> gsc.showChosenTiles(tiles,toOrder));
+    }
+
+    @Override
+    public void commonCompleted(String msg, String whoCompleted, boolean first) {
+        Platform.runLater(()-> gsc.commonCompleted(msg, whoCompleted, first));
     }
 
     @Override
     public void showOthers(Map<String,Player> others) {
-
+        Platform.runLater(() ->gsc.showOthers(others));
     }
 
     @Override
-    public void updateOthers(Map<String,Player> others) {
-        Platform.runLater(() ->gsc.showOthers(others));
+    public void endGameToken(String player) {
+        Platform.runLater(() -> gsc.endGameToken(player));
     }
+
+
+    @Override
+    public void endGame() {
+        Platform.runLater(this::openEndScene);
+    }
+
 
     @Override
     public void showPoints(String message) {
@@ -152,43 +155,21 @@ public class GUI implements View {
     }
 
     @Override
-    public void endGame() {
-        Platform.runLater(()->openEndScene());
-    }
-
-    @Override
-    public void endGameToken(String player) {
-        Platform.runLater(()->gsc.endGameToken(player));
-    }
-
-    @Override
-    public void displayError(String msg) {
-        Platform.runLater(() -> {
-            lsc.setText(msg);
-        });
-    }
-
-    @Override
     public void displayMessage(String msg) {
         Platform.runLater(() -> {
-            if(nPage==2) {
+            if(nPage == 2) {
                 nsc.setText(msg);
-            }
-            else if(nPage==3) {
+            } else if (nPage == 3) {
                 lsc.setText(msg);
-            }else if(nPage==4) {
+            } else if(nPage == 4) {
                 gsc.setIngameEvents(msg);
             }
         });
     }
 
     @Override
-    public void playersTurn(String msg,boolean firstTurn){
-        Platform.runLater(()->gsc.Turn(msg,firstTurn));
-    }
-    @Override
     public void showChat(String msg) {
-        Platform.runLater(()->gsc.newMessage(msg));
+        Platform.runLater(() -> gsc.newMessage(msg));
     }
 
 
@@ -196,9 +177,6 @@ public class GUI implements View {
     public void help() {
 
     }
-
-    //METODO PER MANDARE I MESSAGGI AL SERVER, QUANDO X PULSANTE VIENE PREMUTO BISOGNA SETTARE IL MESSAGE DI QUESTA CLASSE
-    // AL MESSAGGIO DA MANDARE E FARE MESSAGELOCK.NOTIFYALL E IL MESSAGGIO VIENE INVIATO
 
     @Override
     public String getInput() {
@@ -279,7 +257,7 @@ public class GUI implements View {
         } catch (Exception ignored) {
         }
         lsc = loader.getController();
-        lsc.setName(Name);
+        lsc.setName(nick);
         lsc.setGUI(this.currGui);
         stage.centerOnScreen();
         nPage=3;
