@@ -22,13 +22,12 @@ public class gameController {
     /**List that contains all pending commands.*/
     public static List<command> queue = new ArrayList<>();
     public final static Object queueLock = new Object();
-
     private final static String RED = "\u001B[31m";
 
     /** It returns the chosen number of column of the given player in the game.
      * @param player nickname of the player that is choosing the column.
      * @param gameId id of the game in which the player is playing.
-     * @return chosen column. */
+     * @return chosen column (-2 if not found). */
     public int chooseColumn(String player, int gameId) {
         Optional<command> order;
         order = findTheRequest(player, gameId, Action.SC);
@@ -41,11 +40,11 @@ public class gameController {
     /** It returns the chosen order of tiles of the given player in the game.
      * @param player nickname of the player that is choosing the order.
      * @param gameId id of the game in which the player is playing.
-     * @return list of chosen tiles. */
+     * @return list of chosen tiles (null if not found). */
     public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SO);
         if(order.isEmpty()){
-            return new ArrayList<>();
+            return null;
         }
         return order.get().getOrder();
     }
@@ -53,12 +52,12 @@ public class gameController {
     /** It returns the chosen position (regarding the tiles in the board) of the given player in the game.
      * @param player nickname of the player that is choosing the tiles.
      * @param gameId id of the game in which the player is playing.
-     * @return list of positions.*/
+     * @return list of positions (null if not found).*/
     public List<Position> chooseTiles(String player , int gameId) {
         Optional<command> order = findTheRequest(player,gameId,Action.PT);
         if(order.isEmpty()){
             return null;
-        }else {
+        } else {
             return order.get().getPos();
         }
     }

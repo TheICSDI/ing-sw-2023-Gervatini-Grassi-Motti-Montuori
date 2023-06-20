@@ -24,7 +24,7 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
         Action action;
         try {
-            action=GeneralMessage.identify(m);
+            action = GeneralMessage.identify(m);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -36,8 +36,7 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
                 Client.getVirtualView().printUsername(SetNameMessage.decrypt(m).getUsername(), SetNameMessage.decrypt(m).isAvailable());
                 this.CC.setNickname(SetNameMessage.decrypt(m).getUsername());
             }
-        }else{
-            System.out.println("SI");
+        } else {
             Client.getVirtualView().printUsername(ReconnectMessage.decrypt(m).getUsername(), ReconnectMessage.decrypt(m).isAvailable());
             this.CC.setNickname(ReconnectMessage.decrypt(m).getUsername());
             if(ReconnectMessage.decrypt(m).getIdLobby()>0){
@@ -52,7 +51,6 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
     @Override
     public void RMIsend(String m) throws RemoteException {
         try {
-            //CC.getMessage(m);
             Client.elaborate(m);
         } catch (ParseException | InterruptedException e) {
             throw new RuntimeException(e);

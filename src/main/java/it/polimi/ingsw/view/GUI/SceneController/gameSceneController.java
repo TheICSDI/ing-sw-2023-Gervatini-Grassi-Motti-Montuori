@@ -51,7 +51,7 @@ public class gameSceneController implements Initializable {
     public Label commonDescription;
     public Pane commonBack;
     public BorderPane commonWindow;
-    private List<String> players=new ArrayList<>();
+    private final List<String> players = new ArrayList<>();
     @FXML
     public Label YourName;
     @FXML
@@ -104,8 +104,8 @@ public class gameSceneController implements Initializable {
     @FXML
     public ImageView common2;
 
-    private List<Image> CommonPoints=new ArrayList<>();
-    private String[] commonDescs= new String[12];
+    private final List<Image> CommonPoints=new ArrayList<>();
+    private final String[] commonDescs= new String[12];
     @FXML
     public VBox chat;
     @FXML
@@ -715,7 +715,7 @@ public class gameSceneController implements Initializable {
     }
 
     public void setIngameEvents(String msg){
-        setLabelText(ingameEvents,font, 24,msg);
+        setLabelText(ingameEvents, font, 24,msg);
         //this.ingameEvents.setText(msg);
     }
 

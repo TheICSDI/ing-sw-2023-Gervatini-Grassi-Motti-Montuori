@@ -23,7 +23,6 @@ public class serverController {
    private static final String RESET = "\u001B[0m";
    private static final String PINK = "\u001B[35m";
    private static final String GREEN = "\u001B[32m";
-
    private static final String BLUE= "\u001B[34m";
 
    /** It takes a message from the client and does the requested action.
@@ -38,7 +37,7 @@ public class serverController {
       final int idLobby = message.getIdLobby();
       final Action action = message.getAction();
       final String player = message.getUsername();
-      System.out.println(PINK+ player + " sent a " + action +" message" + RESET);
+      System.out.println(PINK + player + " sent a " + action +" message" + RESET);
       //Based on the message's action type
       switch(action){
          //It creates a new lobby whose first player is who have called the command
@@ -80,10 +79,10 @@ public class serverController {
             if(isInAGame(gameController.allPlayers.get(player))) {
                sendMessage(new SimpleReply("Already in a game!", Action.ERROR), player);
                return false;
-            }else if(isInALobby(gameController.allPlayers.get(player))){
+            } else if(isInALobby(gameController.allPlayers.get(player))){
                sendMessage(new SimpleReply("Already in a lobby!", Action.ERROR), player);
                return false;
-            }else{
+            } else{
                //Otherwise, it found the chosen lobby by the given id, and it added the player
                for (Lobby l: gameController.allLobbies) {
                   if(l.lobbyId == idLobby){
@@ -91,7 +90,7 @@ public class serverController {
                      try{
                         l.Join(gameController.allPlayers.get(player));
                         sendMessage(new JoinLobbyMessage("Lobby "+ l.lobbyId +" joined", l.lobbyId), player);
-                     }catch(InputMismatchException x){
+                     } catch(InputMismatchException x){
                         sendMessage(new SimpleReply("The selected lobby is full!", Action.ERROR), player);
                         return false;
                      }
@@ -271,9 +270,8 @@ public class serverController {
       //If the message is valid the command is executed by the serverController
       if (!(mex == null)) {
          this.executeMessage(mex);
-         return mex.getAction();
       }
-      return null;
+      return mex.getAction();
    }
 
    /** It sends a message to a designated client.

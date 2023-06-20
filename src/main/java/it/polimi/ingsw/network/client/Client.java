@@ -56,6 +56,7 @@ public class Client extends Application {
 
     /** It listens to the messages received by via socket, and it calls the elaborate method. */
     public static void listenSocket() throws IOException, ParseException, InterruptedException {
+        //TODO: non va bene, da errore con le eccezioni. sarebbe meglio un listener
         while(true) {
             String message = in.readLine();
             elaborate(message);
@@ -289,7 +290,7 @@ public class Client extends Application {
         });
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-// Task per l'invio dei ping
+        //Task for the ping messages
         Runnable sendPing = () -> {
             while (connected) {
                 synchronized (SocketLock) {
@@ -303,7 +304,7 @@ public class Client extends Application {
             }
         };
 
-// Task per l'input da tastiera
+        //Task for the input
         Runnable input = () -> {
             while (true) {
                 String toSend = virtualView.getInput();
@@ -325,50 +326,10 @@ public class Client extends Application {
             }
         };
 
-// Esecuzione dei due task in parallelo utilizzando ExecutorService
+        //Both tasks are executed in parallel
         executorService.submit(sendPing);
         executorService.submit(checkPing);
         executorService.submit(input);
-        /*new Thread(()->{
-            while (connected) {
-                out.println(new PingMessage(controller.getNickname()));
-                System.out.println("ping " + ping);
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
-        new Thread(()->{
-            try {
-                ping();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
-        ExecutorService executor2 = Executors.newSingleThreadExecutor();
-        executor2.submit(()-> {
-            try {
-                ping();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        virtualView.displayMessage("Write /help for command list.");
-
-        //TODO: condizione valida sse il client è connesso, da rivedere
-        new Thread(()->{
-            while (connected) {
-                String toSend = virtualView.getInput();
-                try {
-                    sendMessage(toSend, true);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();*/
-
         executor.shutdown();
     }
 
@@ -388,8 +349,6 @@ public class Client extends Application {
                 try {
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 } catch (RemoteException e) {
-                    /*e.printStackTrace();
-                    throw new RuntimeException(e);*/
                     System.out.println("Server disconnected");
                 }
             });
@@ -437,43 +396,7 @@ public class Client extends Application {
         ((GUI)virtualView).startGuiConnection(stage);
     }
 
-    //GETTER/SETTER
-    public static void setVirtualView(View virtualView) {
-        Client.virtualView = virtualView;
-    }
-
-    public Socket getClientSocket() {
-        return clientSocket;
-    }
-
-    public void setClientSocket(Socket clientSocket) {
-        this.clientSocket = clientSocket;
-    }
-
-    public static clientController getController() {
-        return controller;
-    }
-
-    public static void setController(clientController controller) {
-        Client.controller = controller;
-    }
-
-    public static PrintWriter getOut() {
-        return out;
-    }
-
-    public static void setOut(PrintWriter out) {
-        Client.out = out;
-    }
-
-    public static BufferedReader getIn() {
-        return in;
-    }
-
-    public static void setIn(BufferedReader in) {
-        Client.in = in;
-    }
-
+    /** It gets the view of the client. */
     public static View getVirtualView() {
         return virtualView;
     }

@@ -19,14 +19,16 @@ public class clientController{
     private PersonalCard simpleGoal;
     public List<Integer> cc = new ArrayList<>();
 
+    /** It creates a clientController specific for a client given its nickname.
+     * @param nickname of the client. */
     public clientController(String nickname){
         this.nickname = nickname;
     }
+    /** It creates a generic clientController. */
     public clientController(){}
 
-    /**
-     * Checks if the command called by the client has the right number of parameters and create the message in the
-     * JSON format to be sent to the server.
+    /** Checks if the command called by the client has the right number of parameters and create the message in the
+     * JSON format, ready to be sent to the server.
      * @param input message to check.
      * @return subclass of general message based on the action type.
      */
@@ -34,7 +36,6 @@ public class clientController{
         //Input parsing
         input = input.trim();
         //Words delimiter
-
         String[] words = input.split(" ");
         //First word is the action
         Action currAction;
@@ -252,29 +253,37 @@ public class clientController{
         return a.getY() == b.getY() && ((a.getX() == b.getX() - 1) || (a.getX() == b.getX() + 1));
     }
 
-    //SETTER and GETTER methods
+    /** It gets a map of the other players that are in the same game of the client. */
     public Map<String, Player> getOthers() {
         return others;
     }
+    /** It gets the personal goal card of the client. */
     public PersonalCard getSimpleGoal(){return this.simpleGoal;}
+    /** It sets the id of the personal goal card of the client, passed by parameter. */
     public void setSimpleGoal(int id) {
         this.simpleGoal = new PersonalCard(id);
     }
+    /** It gets the value of firstTurn. */
     public boolean isFirstTurn() {
         return firstTurn;
     }
+    /** It sets the value of firstTurn passed by parameter. It is true only if the turn is the first of the client. */
     public void setFirstTurn(boolean firstTurn) {
         this.firstTurn = firstTurn;
     }
+    /** It sets the id of the lobby that the client joined passed by parameter. */
     public void setIdLobby(int idLobby) {
         this.idLobby = idLobby;
     }
+    /** It sets the id of the game that the client is playing passed by parameter. */
     public void setIdGame(int idGame) {
         this.idGame = idGame;
     }
+    /** It gets the nickname. */
     public String getNickname(){
         return this.nickname;
     }
+    /** It sets the nickname passed by parameter. */
     public void setNickname(String nick){
         this.nickname = nick;
     }

@@ -18,8 +18,7 @@ public class command {
     private List<Integer> order = null;
     private int numCol;
 
-    /** Constructor that creates a book of commands associated to a specific game, player, action and a unique number
-     * of a message. */
+    /** It creates a book of commands associated to a specific game, player, action and a unique message's number. */
     public command(Game g, Player p, Action a, int numMess){
         this.g = g;
         this.p = p;
@@ -27,17 +26,17 @@ public class command {
         this.numMess = numMess;
     }
 
-    /** It sets the list of position. */
+    /** It sets the list of position passed by parameter. */
     public void setPos(List<Position> pos) {
         this.pos = pos;
     }
 
-    /** It sets the list of order. */
+    /** It sets the list of order passed by parameter. */
     public void setOrder(List<Integer> order) {
         this.order = order;
     }
 
-    /** It sets the number of column. */
+    /** It sets the number of column passed by parameter. */
     public void setNumCol(int numCol) {this.numCol = numCol;}
 
     /** It gets the list of position. */
