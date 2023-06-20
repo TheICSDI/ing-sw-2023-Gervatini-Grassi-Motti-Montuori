@@ -48,6 +48,9 @@ public class gameSceneController implements Initializable {
     @FXML
     public Label goalText;
     public javafx.scene.layout.AnchorPane AnchorPane;
+    public Label commonDescription;
+    public Pane commonBack;
+    public BorderPane commonWindow;
     private List<String> players=new ArrayList<>();
     @FXML
     public Label YourName;
@@ -102,6 +105,7 @@ public class gameSceneController implements Initializable {
     public ImageView common2;
 
     private List<Image> CommonPoints=new ArrayList<>();
+    private String[] commonDescs= new String[12];
     @FXML
     public VBox chat;
     @FXML
@@ -170,7 +174,54 @@ public class gameSceneController implements Initializable {
         }
         CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
 
-        //immagini tiles
+        commonDescs[0]= """
+                Six groups each containing at least
+                2 tiles of the same type (not necessarily
+                in the depicted shape).
+                The tiles of one group can be different
+                from those of another group.""";
+        commonDescs[1]="Four tiles of the same type in the four\n" +
+        "corners of the bookshelf.";
+        commonDescs[2]= """
+                Four groups each containing at least
+                4 tiles of the same type (not necessarily
+                in the depicted shape).
+                The tiles of one group can be different
+                from those of another group""";
+        commonDescs[3]= """
+                Two groups each containing 4 tiles of
+                the same type in a 2x2 square. The tiles
+                 of one square can be different from
+                those of the other square.""";
+        commonDescs[4]= """
+                Three columns each formed by 6 tiles Five tiles of the same type forming an X.
+                                        "of maximum three different types. One
+                                        "column can show the same or a different
+                                        "combination of another column.""";
+        commonDescs[5]= """
+                Eight tiles of the same type. There’s no
+                restriction about the position of these""";
+        commonDescs[6]="Five tiles of the same type forming a\n" +
+                "diagonal.";
+        commonDescs[7]= """
+                Four lines each formed by 5 tiles of
+                maximum three different types. One
+                line can show the same or a different
+                combination of another line.""";
+        commonDescs[8]="Two columns each formed by 6\n" +
+                "different types of tiles.";
+        commonDescs[9]= """
+                Two lines each formed by 5 different
+                types of tiles. One line can show the
+                "same or a different combination of the
+                other line.""";
+        commonDescs[10]="Five tiles of the same type forming an X.";
+        commonDescs[11]= """
+                Five columns of increasing or decreasing
+                height. Starting from the first column on
+                the left or on the right, each next column
+                must be made of exactly one more tile.
+                Tiles can be of any type.""";
     }
 
 
@@ -450,6 +501,7 @@ public class gameSceneController implements Initializable {
         Image image2 = null;
         for (int id: cc) {
             String commonURL = null;
+
             switch (id){
                 case 1 -> commonURL= "/Images/common goal cards/4.jpg";
                 case 2 -> commonURL = "/Images/common goal cards/8.jpg";
@@ -467,9 +519,19 @@ public class gameSceneController implements Initializable {
             if(image1 == null){
                 image1 = new Image(commonURL);
                 this.common1.setImage(image1);
+                this.common1.setOnMouseClicked(event ->{
+                    commonWindow.setVisible(true);
+                    commonBack.setVisible(true);
+                    setLabelText(commonDescription,font,16,"Goal: " +commonDescs[id-1]);
+                });
             } else {
                 image2 = new Image(commonURL);
                 this.common2.setImage(image2);
+                this.common2.setOnMouseClicked(event ->{
+                    commonWindow.setVisible(true);
+                    commonBack.setVisible(true);
+                    setLabelText(commonDescription,font,16,"Goal: " +commonDescs[id-1]);
+                });
             }
         }
     }
@@ -740,5 +802,10 @@ public class gameSceneController implements Initializable {
                 );
 
         label.setText(msg);
+    }
+
+    public void closeCommon() {
+        commonBack.setVisible(false);
+        commonWindow.setVisible(false);
     }
 }

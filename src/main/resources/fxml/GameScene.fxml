@@ -11,6 +11,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -499,5 +500,32 @@
                 </GridPane>
             </children>
         </GridPane>
+      <Pane fx:id="commonBack" onMouseClicked="#closeCommon" opacity="0.6" prefHeight="1040.0" prefWidth="1700.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <BorderPane fx:id="commonWindow" onMouseClicked="#closeCommon" prefHeight="1040.0" prefWidth="1700.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox alignment="CENTER" prefHeight="160.0" prefWidth="455.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane maxHeight="-Infinity" maxWidth="455.0" prefHeight="134.0" prefWidth="455.0">
+                     <children>
+                        <ImageView fitHeight="134.0" fitWidth="455.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Images/misc/base_pagina2.jpg" />
+                           </image>
+                        </ImageView>
+                        <VBox alignment="CENTER" prefHeight="134.0" prefWidth="455.0" spacing="10.0">
+                           <children>
+                              <Label fx:id="commonDescription" alignment="TOP_LEFT">
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
     </children>
 </AnchorPane>
