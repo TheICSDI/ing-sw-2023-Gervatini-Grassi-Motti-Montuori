@@ -18,13 +18,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GUI implements View {
     private int nPage=1;
     private Stage stage;
     public String nick = "";
+    public String IPv4 = "";
     public String message;
     public final Object NameLock = new Object();
+    public final Object IPLock = new Object();
     public final Object Lock = new Object();
     public ChooseConnectionController ccc;
     public nameSceneController nsc;
@@ -51,7 +55,41 @@ public class GUI implements View {
         Platform.runLater(this::startGUI);
         return connectionChosen;
     }
-
+    @Override
+    public String askIP() {
+        // Regex Pattern for well formatted IPv4
+        Pattern correct_ip = Pattern.compile("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
+                "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
+                "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
+                "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^0$|^$");
+        boolean correct = false;
+        Matcher matcher;
+        synchronized (IPLock) {
+            while(!correct){
+                try{
+                    IPLock.wait();
+                }catch(InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                // The matcher() method is used to search for the pattern in a string.
+                matcher = correct_ip.matcher(IPv4);
+                // The find() method returns true if the pattern was found in the string and false if it was not found.
+                correct = matcher.find();
+                if(!correct){
+                    Platform.runLater(() -> {
+                        ccc.showIP("Ip wrongly formatted", "RED");
+                    });
+                }
+            }
+            if(IPv4.equals("0") || IPv4.equals("")){
+                IPv4 = "127.0.0.1";
+            }
+            Platform.runLater(() -> {
+                ccc.showIP("DONE", "GREEN");
+            });
+            return IPv4;
+        }
+    }
     @Override
     public String askNickname() {
         nick = "";
@@ -66,7 +104,6 @@ public class GUI implements View {
             return nick;
         }
     }
-
     @Override
     public void checkNickname(String nickname, boolean isAvailable) {
         Platform.runLater(() -> {

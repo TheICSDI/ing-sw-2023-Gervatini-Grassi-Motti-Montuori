@@ -15,6 +15,10 @@ public interface View {
      * @return "1" for socket, "2" for RMI. */
     String chooseConnection();
 
+    /** It asks the client a valid IPv4.
+     * @return the chosen IPv4*/
+    String askIP();
+
     /** It asks the client a unique nickname.
      * @return chosen nickname. */
     String askNickname();

@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CLI implements View{
     //"\u001b[48;2;<R code>;<G code>;<B code>m" BACKGROUND COLORS
@@ -25,11 +27,12 @@ public class CLI implements View{
 
     @Override
     public String chooseConnection(){
-        out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
+        out.println("\u001b[34mWelcome to MyShelfie!\u001b");
         String reply;
         do {
             System.out.println("""
-                Choose connection type:\s
+                Choose connection type and ip address:\s
+                For local host just the type of connection
                 [1]: for Socket
                 [2]: for RMI""");
             Scanner input = new Scanner(System.in);
@@ -42,7 +45,34 @@ public class CLI implements View{
         }
         return reply;
     }
-
+    @Override
+    public String askIP(){
+        // Regex Pattern for well formatted IPv4
+        Pattern correct_ip = Pattern.compile("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
+                "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
+                "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
+                "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^0$");
+        boolean correct = false;
+        String reply;
+        Matcher matcher;
+        String ip;
+        do {
+            System.out.println("""
+                            Select IPv4 address
+                            For localhost you can also write 0""");
+            Scanner input = new Scanner(System.in);
+            ip = input.next();
+            // The matcher() method is used to search for the pattern in a string.
+            matcher = correct_ip.matcher(ip);
+            // The find() method returns true if the pattern was found in the string and false if it was not found.
+            correct = matcher.find();
+        }while(!correct);
+        if(ip.equals("0")){
+            ip = "127.0.0.1";
+        }
+        System.out.println(ip + " chosen");
+        return ip;
+    }
     @Override
     public String askNickname(){
         Scanner input = new Scanner(System.in);
