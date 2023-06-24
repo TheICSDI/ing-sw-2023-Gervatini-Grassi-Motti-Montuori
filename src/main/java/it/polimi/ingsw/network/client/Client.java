@@ -242,16 +242,17 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        //Client.connection("192.168.1.194", 23450); //pc di luca
+        //Client.connection("192.168.1.194", 23450);
         //Client.connection("127.0.0.1", 23450);
-        //System.out.println("Ecco IPv4 scelto: " + IPv4);
+        //System.out.println("Chosen IPv4: " + IPv4);
         Client.connection(IPv4, 23450);
-        socket=true;
+        socket = true;
         String username;
         GeneralMessage nick;
         String mex;
-        Action action=Action.SETNAME;
+
         //Request unique nickname for the client
+        Action action = Action.SETNAME;
         System.out.println(in.readLine());
         do {
             username = virtualView.askNickname();
@@ -337,7 +338,7 @@ public class Client extends Application {
     public static void RMI(){
         controller = new clientController();
         try {
-            // System.out.println("Ecco IPv4 scelto:" + IPv4);
+            //System.out.println("Chosen IPv4:" + IPv4);
             //Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             Registry registry = LocateRegistry.getRegistry(IPv4, 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
