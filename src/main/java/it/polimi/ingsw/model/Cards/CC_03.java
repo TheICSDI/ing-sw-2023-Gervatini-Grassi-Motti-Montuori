@@ -1,5 +1,4 @@
-/**
- * CC_03 class implements the logic for checking if the common goal card number 3 is completed by a player.
+/** CC_03 class implements the logic for checking if the common goal card number 3 is completed by a player.
  * It requires four groups of tiles each containing at least 4 tiles of the same type.
  * The tiles of one group can be different from those of another group.
  * @author Andrea Grassi
@@ -14,11 +13,10 @@ public class CC_03 implements CCStrategy {
     @Override
     public int getId(){return this.id;}
     Tile[][] shelf;
-
     boolean[][] Seen;
+
     /**
      * Checks if the common goal is completed.
-     *
      * @param p a player.
      * @return true only if the common goal card is completed.
      */
@@ -51,7 +49,8 @@ public class CC_03 implements CCStrategy {
         return limit >= 4;
     }
 
-    private int adj(type c,int x,int y) {
+    //TODO: JAVADOC
+    private int adj(type c, int x, int y) {
         int p = 1;
 
 		try{

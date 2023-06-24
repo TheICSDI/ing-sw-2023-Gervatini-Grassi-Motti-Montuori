@@ -17,8 +17,6 @@ public class serverController {
    /** Map that contains all the connections, the key is the nickname of the client. */
    public static Map<String, connectionType>  connections = new HashMap<>();
    public static gameController controller = new gameController();
-
-   //Each thread of this pool allows maximum 10 games to be played at the same time.
    ExecutorService executorsService = Executors.newFixedThreadPool(10);
    private static final String RESET = "\u001B[0m";
    private static final String PINK = "\u001B[35m";

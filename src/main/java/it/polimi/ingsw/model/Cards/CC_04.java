@@ -1,5 +1,4 @@
-/**
- * CC_04 class implements the logic for checking if the common goal card number 4 is completed by a player.
+/** CC_04 class implements the logic for checking if the common goal card number 4 is completed by a player.
  * It requires the player to have two groups, each containing four tiles of the same type in a 2x2 square.
  * @author Giulio Montuori
  */
@@ -13,9 +12,9 @@ public class CC_04 implements CCStrategy {
     private final int id=4;
     @Override
     public int getId(){return this.id;}
+
     /**
      * Checks if the common goal is completed.
-     *
      * @param p a player.
      * @return true only if the common goal card is completed.
      */

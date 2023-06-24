@@ -13,6 +13,7 @@ public class CC_02 implements CCStrategy {
 	private final int id=2;
 	@Override
 	public int getId(){return this.id;}
+
 	/**
 	 * Checks if the common goal is completed.
 	 * @param p a player.

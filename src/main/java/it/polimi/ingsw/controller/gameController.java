@@ -13,13 +13,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class gameController {
-    /**Map that contains all connected players, the nickname is the key. */
+    /** Map that contains all connected players, the nickname is the key. */
     public static Map<String, Player> allPlayers = new HashMap<>();
-    /**Map that contains all started games, the id is the key*/
+    /** Map that contains all started games, the id is the key*/
     public static Map<Integer, Game> allGames = new HashMap<>();
-    /**List that contains all the created lobbies.*/
+    /** List that contains all the created lobbies.*/
     public static List<Lobby> allLobbies = new ArrayList<>();
-    /**List that contains all pending commands.*/
+    /** List that contains all pending commands.*/
     public static List<command> queue = new ArrayList<>();
     public final static Object queueLock = new Object();
     private final static String RED = "\u001B[31m";
@@ -60,7 +60,6 @@ public class gameController {
         Player p = allPlayers.get(player);
         List<command> toFind;
         Optional<command> found = Optional.empty();
-
         synchronized (queueLock) {
             while(found.isEmpty() && p.isConnected()){
                 System.out.println(RED + "Locked queue, finding request " + action);
@@ -135,7 +134,7 @@ public class gameController {
         }
     }
 
-    /**It releases the lock on queue. It is used when the player disconnects on his turn.*/
+    /** It releases the lock on queue. It is used when the player disconnects on his turn.*/
     public static void unlockQueue(){
         synchronized (queueLock) {
             queueLock.notifyAll();

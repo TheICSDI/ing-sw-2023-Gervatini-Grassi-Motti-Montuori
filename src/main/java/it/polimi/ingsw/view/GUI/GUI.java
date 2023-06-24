@@ -55,6 +55,7 @@ public class GUI implements View {
         Platform.runLater(this::startGUI);
         return connectionChosen;
     }
+
     @Override
     public String askIP() {
         // Regex Pattern for well formatted IPv4
@@ -90,6 +91,7 @@ public class GUI implements View {
             return IPv4;
         }
     }
+
     @Override
     public String askNickname() {
         nick = "";
@@ -104,6 +106,7 @@ public class GUI implements View {
             return nick;
         }
     }
+
     @Override
     public void checkNickname(String nickname, boolean isAvailable) {
         Platform.runLater(() -> {
@@ -119,6 +122,7 @@ public class GUI implements View {
             }
         });
     }
+
     @Override
     public void showLobby(List<Lobby> Lobbies) {
         Platform.runLater(() -> lsc.showLobbies(Lobbies));

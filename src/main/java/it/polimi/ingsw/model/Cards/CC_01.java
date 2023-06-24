@@ -1,7 +1,6 @@
 /** CC_01 class implements the logic for checking if the common goal card number 1 is completed by a player.
  * It requires the player to have at least six groups, each containing at least two tiles of the same type.
- * @author Giulio Montuori
- */
+ * @author Giulio Montuori */
 package it.polimi.ingsw.model.Cards;
 
 import it.polimi.ingsw.model.Player;
