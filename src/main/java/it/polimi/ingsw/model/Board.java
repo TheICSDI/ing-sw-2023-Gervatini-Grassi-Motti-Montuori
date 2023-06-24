@@ -1,7 +1,7 @@
-package it.polimi.ingsw.model;
 /** Represent the board of a game. It has to be declared in each game.
- * @author Caterina Motti.
- */
+ * @author Caterina Motti. */
+package it.polimi.ingsw.model;
+
 import java.io.*;
 import java.util.*;
 
@@ -19,20 +19,9 @@ public class Board {
     public Tile[][] board;
     private final List<String> tilesList;
 
-    /** Gets the number of columns of the board */
-    public int getNumCols() {
-        return numCols;
-    }
-
-    /** Gets the number of rows of the board */
-    public int getNumRows() {
-        return numRows;
-    }
-
     /** Create a board for a specified number of players.
      * It initializes the board with empty tiles.
      * It initializes tilesList with all the possible tiles.
-     *
      * @param numPlayers number of players
      */
     public Board(int numPlayers){
@@ -47,11 +36,9 @@ public class Board {
         fillTilesList();
     }
 
-    /**
-     * Fills the empty cells of the board, if accessible.
+    /** Fills the empty cells of the board, if accessible.
      * It randomically takes the tiles from tilesList, add them to the board and remove them from the list.
-     * In this way there is no possibility for a tile to be used two times in the same game.
-     */
+     * In this way there is no possibility for a tile to be used two times in the same game. */
     public void fillBoard(){
         for(int i=0; i < numCols; i++) {
             for (int j=0; j < numRows; j++) {
@@ -67,8 +54,7 @@ public class Board {
         }
     }
 
-    /**
-     * Determine if the board has to be filled.
+    /** Determine if the board has to be filled.
      * @return  true only if the board has to be filled, false otherwise.
      */
     public boolean isBoardEmpty(){
@@ -91,7 +77,6 @@ public class Board {
 
     /** Parse board_na.JSON. It initializes the board by making not accessible some cells according to the
      * number of players that will use the board.
-     *
      * @param numPlayers number of players, used to determine if an element of the board should be accessible or not
      */
     private void boardParser(int numPlayers){
@@ -131,7 +116,6 @@ public class Board {
 
     /** Returns a set of positions in which the tiles can be picked from the player.
      * A tile can be picked if it has an empty or not accessible side on the board.
-     *
      * @return a set of available positions.
      */
     public Set<Position> AvailableTiles(){
@@ -166,23 +150,34 @@ public class Board {
     }
 
     /** Remove tiles from the board indexed by the given positions.
-     * @param ToRemove a set of positions.
-     */
+     * @param ToRemove a set of positions. */
     public void RemoveTiles(List<Position> ToRemove) {
         for (Position p: ToRemove) {
             board[p.getX()][p.getY()] = new Tile("empty",0);
         }
     }
 
-    /** Gets the tile ad the position passed by parameter. */
+    /** It copy the current board into a given one passed by parameter. */
+    public void cloneBoard(Board newBoard){
+        for (int i = 0; i < this.numRows; i++) {
+            for (int j = 0; j < this.numCols; j++) {
+                this.board[i][j] = newBoard.board[i][j];
+            }
+        }
+    }
+
+    /** Gets the tile on the position passed by parameter. */
     public Tile getTile(Position p){
         return this.board[p.getX()][p.getY()];
     }
-    public void cloneBoard(Board newBoard){
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                this.board[i][j]=newBoard.board[i][j];
-            }
-        }
+
+    /** Gets the number of columns of the board */
+    public int getNumCols() {
+        return numCols;
+    }
+
+    /** Gets the number of rows of the board */
+    public int getNumRows() {
+        return numRows;
     }
 }

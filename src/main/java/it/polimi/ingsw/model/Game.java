@@ -1,6 +1,6 @@
 /** Represents a game. It is identified by a unique id.
  * Each game has some players (from 2 to 4), a board, 12 common goal cards and 12 personal goal cards.
- * @author Andrea Grassi, Caterina Motti
+ * @author Andrea Grassi, Caterina Motti.
  */
 package it.polimi.ingsw.model;
 
@@ -17,18 +17,16 @@ public class Game {
     private static int count = 0;
     public int id;
     private final List<Player> players;
-    private String pTurn="";
+    private String pTurn = "";
     private final Board board;
     private final Board backupBoard;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
     private int commonPoints;
     private final List<Integer> ccId = new ArrayList<>();
-
     private final List<PersonalCard> allPC = new ArrayList<>();
     public final gameController controller;
-
-    private final static Object lockWaitPLayers=new Object();
+    private final static Object lockWaitPLayers = new Object();
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
@@ -76,14 +74,14 @@ public class Game {
         ccId.add(allCC.get(1).getId());
         if(players.size()==2){
             commonPoints=4;
-        }else{
+        } else {
             commonPoints=2;
         }
-
-
     }
 
 
+    /** It manages the reconnection to the game of a player that has previously disconnected.
+     * @param player nickname of the player that is reconnecting. */
     public void reconnectPlayer(String player) throws RemoteException {
         serverController.sendMessage(new StartGameMessage("You reconnected!", this.id), player);
         Player reconnected=null;
@@ -351,6 +349,8 @@ public class Game {
         return winner;
     }
 
+    /** It checks if the given player has completed one of the common goal of the game.
+     * @param p given player. */
     public void calculateCC(Player p) throws RemoteException {
         if(CommonCards.get(0).control(p) && p.getScoreToken1()==0){
             for (Player pcc : players) {
@@ -370,8 +370,7 @@ public class Game {
         }
     }
 
-    /**
-     * Initializes all common and personal goal cards.
+    /** Initializes all common and personal goal cards.
      * Each personal goal card is represented by an index between 0 and 11.
      * In this way each game has its own set of cards.
      */
@@ -394,7 +393,6 @@ public class Game {
             allPC.add(new PersonalCard(i));
         }
     }
-
 
     /** Gets the list of player. */
     public List<Player> getPlayers() {

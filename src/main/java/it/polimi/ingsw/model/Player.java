@@ -1,6 +1,5 @@
-/** Represents a player.
- *  Each player has a shelf and a personal goal card.
- * @Author Caterina Motti, Andrea Grassi, Marco Gervatini
+/** Represents a player. Each player has a shelf and a personal goal card.
+ * @Author Caterina Motti, Andrea Grassi, Marco Gervatini.
  */
 package it.polimi.ingsw.model;
 
@@ -29,8 +28,7 @@ public class Player implements Serializable {
     private int turn;
     private boolean connected = true;
 
-    /**
-     * Create a player with a specified id and nickname.
+    /** Create a player with a specified id and nickname.
      * The nickname is final, so it can't be changed. It is unique.
      * It initializes total points to 0.
      * It initializes all tiles in shelf to "empty".
@@ -47,13 +45,13 @@ public class Player implements Serializable {
         }
     }
 
-    /**
-     * Orders the selected tiles as order passed as a parameter.
+    /** Orders the selected tiles as order passed by parameter.
      * The order is represented by a list in which each element refers to the desired position for the ordered tiles.
      * Example: selected("frames", "cats", "books"), order(3, 2, 1) -> ordered("books", "cats", "frames").
      * @param selected list of selected tiles to order.
      * @param order represents the order in which the tiles have to be put in shelf. It is a preference of the player.
      * @return orderedTiles list of selected tiles in order.
+     * @throws InputMismatchException if the order passed by parameter is wrong.
      */
     public List<Tile> orderTiles(List<Tile> selected, List<Integer> order) throws RemoteException, InputMismatchException {
         List<Tile> orderedTiles = new ArrayList<>();
@@ -73,8 +71,7 @@ public class Player implements Serializable {
         return orderedTiles;
     }
 
-    /**
-     * Check if the chosen column has enough space for the given tiles.
+    /** Check if the chosen column has enough space for the given tiles.
      * @param numTiles number of tiles to be inserted.
      * @param col chosen column from the player. It goes from 0 to 5.
      * @return true only if the shelf has enough space for the given tiles, false otherwise.
@@ -156,20 +153,7 @@ public class Player implements Serializable {
         return maxSpace;
     }
 
-    /** Gets the shelf of the player. */
-    public Tile[][] getShelf() {
-        return Shelf;
-    }
-
-    /** Sets the shelf of the player. */
-    public void setShelf(Tile[][] shelf) {
-        Shelf = shelf;
-    }
-
-
-    /**
-     * Resets player stats and shelf
-     */
+    /** Resets player stats and shelf. */
     public void reset(){
         this.scoreToken1=0;
         this.scoreToken2=0;
@@ -192,24 +176,6 @@ public class Player implements Serializable {
             }
         }
         return true;
-    }
-
-    /**
-     * Update the total points of the player.
-     * @param toSum points to be summed to the total of the player
-     */
-    public void addPoints(int toSum){
-        this.totalPoints += toSum;
-    }
-
-    /** Gets the total points of the player */
-    public int getTotalPoints() {
-        return totalPoints;
-    }
-
-    /** Sets the total points of the player */
-    public void setTotalPoints(int totalPoints) {
-        this.totalPoints = totalPoints;
     }
 
     /** Calculate the points based on the rule wrote on the board, that refer to the general clustering of the shelf. */
@@ -268,7 +234,11 @@ public class Player implements Serializable {
         }
     }
 
-    /** Recursive function that calculate the dimension of the current cluster.*/
+    /** Recursive function that calculate the dimension of the current cluster.
+     * @param x x-index of the current tile.
+     * @param y y-index of the current tile.
+     * @param checked matrix of boolean that are true only if the tile in the corresponding position has
+     * alreaby been checked. */
     private int clusteringRes(int x, int y, boolean[][] checked){
         Tile t = this.Shelf[x][y];
         int clusterDim = 1;
@@ -298,6 +268,22 @@ public class Player implements Serializable {
             }
         } catch (IndexOutOfBoundsException ignored){}
         return clusterDim;
+    }
+
+    /** Update the total points of the player.
+     * @param toSum points to be summed to the total of the player. */
+    public void addPoints(int toSum){
+        this.totalPoints += toSum;
+    }
+
+    /** Gets the total points of the player. */
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    /** Sets the total points of the player. */
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
     }
 
     /** @return true only if the player has the end token, false otherwise. */
@@ -335,18 +321,22 @@ public class Player implements Serializable {
         return firstToken;
     }
 
+    /** Sets the value of the first score token. */
     public void setScoreToken1(int value) {
         this.scoreToken1 = value;
     }
 
+    /** Gets the value of the first score token. */
     public int getScoreToken1() {
         return scoreToken1;
     }
 
+    /** Sets the value of the second score token. */
     public void setScoreToken2(int value) {
         this.scoreToken2 = value;
     }
 
+    /** Gets the value of the second score token. */
     public int getScoreToken2() {
         return scoreToken2;
     }
@@ -379,6 +369,16 @@ public class Player implements Serializable {
     /** Gets the connection status of the player. */
     public void setConnected(boolean connected) {
         this.connected = connected;
+    }
+
+    /** Gets the shelf of the player. */
+    public Tile[][] getShelf() {
+        return Shelf;
+    }
+
+    /** Sets the shelf of the player. */
+    public void setShelf(Tile[][] shelf) {
+        Shelf = shelf;
     }
 
 }
