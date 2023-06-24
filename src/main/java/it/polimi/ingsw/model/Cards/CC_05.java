@@ -1,9 +1,7 @@
-/**
- * CC_05 class implements the logic for checking if the common goal card number 5 is completed by a player.
+/** CC_05 class implements the logic for checking if the common goal card number 5 is completed by a player.
  * It requires the player to have three columns each formed by 6 tiles of maximum three different types.
  * One column can show the same or a different combination of another column.
- * @author Andrea Grassi
- */
+ * @author Andrea Grassi. */
 package it.polimi.ingsw.model.Cards;
 
 import it.polimi.ingsw.model.Player;
@@ -16,9 +14,9 @@ public class CC_05 implements CCStrategy {
     private final int id=5;
     @Override
     public int getId(){return this.id;}
+
     /**
      * Checks if the common goal is completed.
-     *
      * @param p a player.
      * @return true only if the common goal card is completed.
      */
