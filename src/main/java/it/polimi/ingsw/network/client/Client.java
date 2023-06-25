@@ -40,8 +40,8 @@ public class Client extends Application {
     private static int ping = 0;
     private static final int pingTime = 15;
     public static boolean connected = true;
-    private static boolean socket=false;
-    private static final Object SocketLock=new Object();
+    private static boolean socket = false;
+    private static final Object SocketLock = new Object();
     private static boolean firstTurn;
     private static String IPv4;
     

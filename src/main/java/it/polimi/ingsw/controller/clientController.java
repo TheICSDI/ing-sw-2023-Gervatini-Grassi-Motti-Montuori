@@ -130,7 +130,7 @@ public class clientController{
 
                 case SHOWCOMMONS -> {
                     if(idGame > 0){
-                        return new ShowCommonCards(gameController.allGames.get(idGame).getCCid());
+                        return new ShowCommonCards();
                     } else {
                         return new DefaultErrorMessage("You are not in a game!");
                     }
@@ -286,5 +286,9 @@ public class clientController{
     /** It sets the nickname passed by parameter. */
     public void setNickname(String nick){
         this.nickname = nick;
+    }
+
+    public void setCc(List<Integer> cc) {
+        this.cc = cc;
     }
 }
