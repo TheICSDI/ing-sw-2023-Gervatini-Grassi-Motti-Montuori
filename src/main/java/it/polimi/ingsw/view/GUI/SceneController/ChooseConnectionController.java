@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 
 public class ChooseConnectionController implements Initializable {
 
-
     @FXML
     public Button ConfirmIP;
     @FXML
@@ -41,7 +40,7 @@ public class ChooseConnectionController implements Initializable {
         //Setting the font
         GetIP.setFont(font);
         //Setting color of the text
-        GetIP.setPromptText("Enter IP,  0 for localhost");
+        GetIP.setPromptText("Enter IP,  Empty for localhost");
         GetIP.setFocusTraversable(false);
         GetIP.setStyle("-fx-text-fill: WHITE;-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: WHITE; -fx-prompt-text-fill: WHITE");
         HBox.setHgrow(GetIP, Priority.ALWAYS);
@@ -55,14 +54,28 @@ public class ChooseConnectionController implements Initializable {
     @FXML
     protected void socketButtonAction(ActionEvent event)
     {
-        System.out.println("Socket Connection");
+        getText();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         send("1");
+        System.out.println("Socket Connection");
     }
     @FXML
     protected void rmiButtonAction(ActionEvent event)
     {
-        System.out.println("RMI Connection");
+        getText();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         send("2");
+        System.out.println("RMI Connection");
     }
 
     protected void send(String type){
