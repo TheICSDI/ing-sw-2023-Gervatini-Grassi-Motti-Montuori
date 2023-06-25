@@ -1,7 +1,6 @@
-/**
- * CC_11 class implements the logic for checking if the common goal card number 11 is completed by a player.
+/** CC_11 class implements the logic for checking if the common goal card number 11 is completed by a player.
  * It requires the player to have five tiles of the same type forming an X.
- * @author Andrea Grassi
+ * @author Andrea Grassi.
  */
 package it.polimi.ingsw.model.Cards;
 
@@ -12,9 +11,9 @@ public class CC_11 implements CCStrategy {
     private final int id=11;
     @Override
     public int getId(){return this.id;}
+
     /**
      * Checks if the common goal is completed.
-     *
      * @param p a player.
      * @return true only if the common goal card is completed.
      */

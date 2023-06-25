@@ -1,8 +1,7 @@
-/**
- * CC_10 class implements the logic for checking if the common goal card number 10 is completed by a player.
+/** CC_10 class implements the logic for checking if the common goal card number 10 is completed by a player.
  * It requires the player to have two rows each formed by 5 different types of tiles. One line can show the
  * same or a different combination of the other line
- * @author Andrea Grassi
+ * @author Andrea Grassi..
  */
 package it.polimi.ingsw.model.Cards;
 
@@ -16,9 +15,9 @@ public class CC_10  implements CCStrategy {
     private final int id=10;
     @Override
     public int getId(){return this.id;}
+
     /**
      * Checks if the common goal is completed.
-     *
      * @param p a player.
      * @return true only if the common goal card is completed.
      */

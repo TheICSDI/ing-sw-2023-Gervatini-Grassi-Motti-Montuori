@@ -1,7 +1,7 @@
 /** Represents the personal goal card. Each player has one.
  * At the start of the game, depending on the number of player, different integers will be randomically generated.
  * Thanks to the constructor a personal goal card will be generated as a matrix of tiles.
- * @author Giulio Montuori
+ * @author Giulio Montuori.
  */
 package it.polimi.ingsw.model.Cards;
 
@@ -24,8 +24,7 @@ public class PersonalCard{
 
 	/** Creates a personal goal card based on the id.
 	 * Each card has unique id.
-	 * @param uid represent the number of the card to be created. It goes from 0 to 11.
-	 */
+	 * @param uid represent the number of the card to be created. It goes from 0 to 11. */
 	public PersonalCard(int uid)
 	{
 		this.id = uid;
@@ -34,9 +33,7 @@ public class PersonalCard{
 	}
 
 	/** A parser for the personal_card.json that contains all 12 personal goal cards. */
-	private void personalCardParser()
-	{
-
+	private void personalCardParser() {
 		JSONParser parser = new JSONParser();
 		JSONArray personalCardFile = null;
 		Tile temp;
@@ -58,8 +55,7 @@ public class PersonalCard{
 
 		JSONObject card = (JSONObject) personalCardFile.get(this.id);
 		JSONArray cardTiles = (JSONArray) card.get("tiles");
-		for (int i = 0; i < cardTiles.size(); i++)
-		{
+		for (int i = 0; i < cardTiles.size(); i++) {
 			JSONObject coordinate = (JSONObject) cardTiles.get(i);
 			temp = new Tile(coordinate.get("type").toString(),0);
 			int x = Integer.parseInt(coordinate.get("x").toString());
@@ -69,27 +65,21 @@ public class PersonalCard{
 	}
 
 	/** Calculate the points given by the personal goal card according to the shelf of the player.
-	 *
 	 * @param shelf the player's shelf.
 	 * @return the points corresponding the matches between the shelf and the personal goal card.
 	 */
-	public int calculatePoints(Tile[][] shelf)
-	{
+	public int calculatePoints(Tile[][] shelf) {
 		int matches = 0, score = 0;
 		int max_matches = 6;
 
-		for(int i = 0; i < this.numRows; i++)
-		{
-			for(int j = 0; matches != max_matches && j < this.numCols; j++)
-			{
+		for(int i = 0; i < this.numRows; i++) {
+			for(int j = 0; matches != max_matches && j < this.numCols; j++) {
 				if(!shelf[i][j].getCategory().equals(type.EMPTY)
-						&& shelf[i][j].getCategory().equals(this.card[i][j].getCategory()))
-				{
+						&& shelf[i][j].getCategory().equals(this.card[i][j].getCategory())) {
 					matches++;
 				}
 			}
 		}
-
 		switch (matches) {
 			case 1 -> score = 1;
 			case 2 -> score = 2;
@@ -101,7 +91,7 @@ public class PersonalCard{
 		return score;
 	}
 
-	/** Gets the personal card */
+	/** Gets the personal card. */
 	public Tile[][] getCard() {
 		return card;
 	}

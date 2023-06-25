@@ -1,28 +1,25 @@
-package it.polimi.ingsw.model.Tile;
-
-
 /** Represents a tile of the game.
  * @author Marco Gervatini, Giulio Montuori.
  */
+package it.polimi.ingsw.model.Tile;
+
 public class Tile {
 	private final type category;
 	private String color;
 	private char initial;
 	private String image;
 
-	public String getImage() {
-		return image;
-	}
-
-	/** Creates a tile according to a given type. */
+	/** Creates a tile according to a given type.
+	 * @param any name of the tile's type.
+	 * @param it number of the image. */
 	public Tile(String any , int it) {
 		this.category = type.valueOf(any.toUpperCase());
 		switch (category){
 			case NOT_ACCESSIBLE -> {
-				color =/*"\u001b[48;2;33;19;13m"*/"\u001b[48;2;117;61;34m";
+				color = "\u001b[48;2;117;61;34m";
 				initial=' ';
 			}
-			case EMPTY -> {  //"\u001b[48;2;<R code>;<G code>;<B code> + output text" //Formato per usare i colori rgb se serve
+			case EMPTY -> {
 				color ="\033[48;5;94m";
 				initial=' ';
 			}
@@ -59,46 +56,48 @@ public class Tile {
 		}
 	}
 
+	/** Creates a tile according to a given type.
+	 * @param any name of the tile's type. */
 	public Tile(String any) {
 		this.category = type.valueOf(any.toUpperCase());
 		switch (category){
 			case NOT_ACCESSIBLE -> {
-				color =/*"\u001b[48;2;33;19;13m"*/"\u001b[48;2;117;61;34m";
-				initial=' ';
+				color = "\u001b[48;2;117;61;34m";
+				initial = ' ';
 			}
-			case EMPTY -> {  //"\u001b[48;2;<R code>;<G code>;<B code> + output text" //Formato per usare i colori rgb se serve
-				color ="\033[48;5;94m";
-				initial=' ';
+			case EMPTY -> {
+				color = "\033[48;5;94m";
+				initial = ' ';
 			}
 			case CATS -> {
 				color = "\033[42m";
-				initial='C';
-				image="/Images/item tiles/Gatti1.1.png";
+				initial = 'C';
+				image = "/Images/item tiles/Gatti1.1.png";
 			}
 			case TROPHIES -> {
 				color = "\033[46m";
-				initial='T';
-				image="/Images/item tiles/Trofei1.1.png";
+				initial = 'T';
+				image = "/Images/item tiles/Trofei1.1.png";
 			}
 			case FRAMES -> {
 				color = "\033[44m";
-				initial='F';
-				image="/Images/item tiles/Cornici1.1.png";
+				initial = 'F';
+				image = "/Images/item tiles/Cornici1.1.png";
 			}
 			case PLANTS -> {
 				color = "\033[45m";
-				initial='P';
-				image="/Images/item tiles/Piante1.1.png";
+				initial = 'P';
+				image = "/Images/item tiles/Piante1.1.png";
 			}
 			case BOOKS -> {
 				color = "\033[47m";
-				initial='B';
-				image="/Images/item tiles/Libri1.1.png";
+				initial = 'B';
+				image = "/Images/item tiles/Libri1.1.png";
 			}
 			case GAMES -> {
 				color = "\033[43m";
-				initial='G';
-				image="/Images/item tiles/Giochi1.1.png";
+				initial = 'G';
+				image = "/Images/item tiles/Giochi1.1.png";
 			}
 		}
 	}
@@ -107,7 +106,13 @@ public class Tile {
 	public type getCategory() {
         return this.category;
   	}
+	/** Gets the color of the tile. */
 	public String getColor() { return color;}
+	/** Gets the initial of the tile. */
 	public char getInitial() {return initial;}
+	/** Gets the path of the tile's image. */
+	public String getImage() {
+		return image;
+	}
 }
 

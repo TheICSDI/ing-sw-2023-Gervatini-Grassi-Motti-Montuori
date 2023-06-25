@@ -16,7 +16,7 @@ public class Lobby {
     public final int limit;
     public List<Player> Players = new ArrayList<>();
 
-    /** Create a new lobby given a player "creator" and a unique number automatically generated. */
+    /** Creates a new lobby given a player "creator" and a unique number automatically generated. */
     public Lobby(Player Creator, int limit){
         Players.add(Creator);
         //The static attribute make the id unique
@@ -34,7 +34,7 @@ public class Lobby {
         } else Players.add(Joiner);
     }
 
-    /** Remove a player "leaver" from the lobby.
+    /** Removes a player "leaver" from the lobby.
      * @throws InputMismatchException if the player passed by parameter is not in the lobby. */
     public void Leave(Player Leaver){
         if(!Players.contains(Leaver)) {
@@ -42,14 +42,13 @@ public class Lobby {
         } else Players.remove(Leaver);
     }
 
-    /** Return true only if there is more available space in the lobby.
+    /** Returns true only if there is more available space in the lobby.
      * A lobby is considered full when it reaches 4 players (maximum for the game)*/
     private boolean isLobbyFull(){
         return Players.size() == limit;
     }
 
-    /**
-     * Checks if a certain player is in this lobby.
+    /** Checks if a certain player is in this lobby.
      * @param p player to check
      * @return true only if the given player is in the lobby, false otherwise.
      */

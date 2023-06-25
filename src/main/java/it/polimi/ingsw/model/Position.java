@@ -1,4 +1,5 @@
-/** Represents a pair of indices used to indicate a position on the board */
+/** Represents a pair of indices used to indicate a position on the board.
+ * @author Caterina Motti. */
 package it.polimi.ingsw.model;
 
 import java.util.Objects;
@@ -6,15 +7,19 @@ import java.util.Objects;
 public class Position {
     private final int x;
     private final int y;
+
+    /** It creates a position given a pair of indexes. */
     public Position(int x, int y){
         this.x=x;
         this.y=y;
     }
 
+    /** Gets the x-index of the current position. */
     public int getX() {
         return x;
     }
 
+    /** Gets the y-index of the current position. */
     public int getY() { return y;}
 
     @Override
