@@ -5,6 +5,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.messages.*;
 
 import java.util.*;
@@ -17,13 +18,22 @@ public class clientController{
     private final Map<String, Player> others = new HashMap<>();
     private boolean firstTurn = false;
     private PersonalCard simpleGoal;
-    public List<Integer> cc = new ArrayList<>();
+    private List<Integer> cc = new ArrayList<>();
+    private final int numRows = 6;
+    private final int numCols = 5;
+    private Tile[][] shelf = new Tile[numRows][numCols];
 
     /** It creates a clientController specific for a client given its nickname.
      * @param nickname of the client. */
     public clientController(String nickname){
         this.nickname = nickname;
+        for (int i = 0; i < this.numRows; i++) {
+            for (int j = 0; j < this.numCols; j++) {
+                this.shelf[i][j] = new Tile("empty");
+            }
+        }
     }
+
     /** It creates a generic clientController. */
     public clientController(){}
 
@@ -52,11 +62,13 @@ public class clientController{
                         return new DefaultErrorMessage("Insert number of players (between 2 and 4)");
                     }
                 }
+
                 case SHOWLOBBY -> {
                     if(words.length == 1){
                         return new ShowLobbyMessage(idMex, nickname);
                     }
                 }
+
                 case JOINLOBBY -> {
                     //It contains action and number of lobby
                     if(words.length == 2){
@@ -66,9 +78,11 @@ public class clientController{
                         return new DefaultErrorMessage("Insert a valid lobby number!");
                     }
                 }
+
                 case STARTGAME -> {
                     return new StartGameMessage(idMex, idLobby, nickname);
                 }
+
                 case PT -> {
                     List<Position> pos = new ArrayList<>();
                     //It contains action and between 2 and 6 parameters that are the positions of tiles
@@ -139,6 +153,14 @@ public class clientController{
                 case SHOWOTHERS -> {
                     if(idGame > 0){
                         return new SimpleReply("", Action.SHOWOTHERS);
+                    } else {
+                        return new DefaultErrorMessage("You are not in a game!");
+                    }
+                }
+
+                case SHOWSHELF -> {
+                    if(idGame > 0){
+                        return new UpdateBoardMessage(Action.SHOWSHELF, this.shelf);
                     } else {
                         return new DefaultErrorMessage("You are not in a game!");
                     }
@@ -287,8 +309,16 @@ public class clientController{
     public void setNickname(String nick){
         this.nickname = nick;
     }
-
-    public void setCc(List<Integer> cc) {
-        this.cc = cc;
+    /** It gets the list of common cards' id.*/
+    public List<Integer> getCc() {
+        return this.cc;
+    }
+    /** It gets the shelf of the player. */
+    public Tile[][] getShelf() {
+        return this.shelf;
+    }
+    /** It sets the shelf of the player passed by parameter. */
+    public void setShelf(Tile[][] shelf) {
+        this.shelf = shelf;
     }
 }

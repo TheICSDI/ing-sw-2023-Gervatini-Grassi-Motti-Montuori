@@ -117,6 +117,7 @@ public class Player implements Serializable {
      * It checks if the selected tiles are available to be taken, and after taking the tiles it removes them from the board.
      * @param chosen a set of position that the player has chosen.
      * @param b board from which the player can take the tiles.
+     * @param player the player that is making the move.
      * @return a list of tiles chosen by the player to be taken from the board.
      */
     public List<Tile> pickTiles(List<Position> chosen, Board b, Player player) throws RemoteException {
@@ -286,11 +287,6 @@ public class Player implements Serializable {
         this.totalPoints = totalPoints;
     }
 
-    /** @return true only if the player has the end token, false otherwise. */
-    public boolean getEndToken() {
-        return endToken;
-    }
-
     /** Sets the value of end token of the player. */
     public void setEndToken(boolean value) {
         this.endToken = value;
@@ -349,11 +345,6 @@ public class Player implements Serializable {
     /** Gets the number of columns of the shelf. */
     public int getNumCols() {
         return numCols;
-    }
-
-    /** Gets the number of turn of the player. */
-    public int getTurn() {
-        return turn;
     }
 
     /** Sets the number of turn of the player. */

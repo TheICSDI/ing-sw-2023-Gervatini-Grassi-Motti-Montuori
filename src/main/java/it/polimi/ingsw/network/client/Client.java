@@ -99,11 +99,12 @@ public class Client extends Application {
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
                     virtualView.showPersonal(controller.getSimpleGoal());
-                    virtualView.showCommons(controller.cc);
+                    virtualView.showCommons(controller.getCc());
                 }
             }
-            case UPDATESHELF -> {
+            case UPDATESHELF, SHOWSHELF -> {
                 reply = UpdateBoardMessage.decrypt(message);
+                controller.setShelf(reply.getSimpleBoard());
                 virtualView.showShelf(reply.getSimpleBoard());
             }
             case INGAMEEVENT, ERROR -> {
@@ -127,7 +128,7 @@ public class Client extends Application {
             }
             case SHOWCOMMONS -> {
                 reply = ShowCommonCards.decrypt(message);
-                reply.getCC(controller.cc);
+                reply.getCC(controller.getCc());
             }
             case COMMONCOMPLETED -> {
                 reply = CommonCompletedMessage.decrypt(message);
@@ -195,8 +196,10 @@ public class Client extends Application {
                 virtualView.displayMessage(toSend);
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
                 virtualView.showPersonal(controller.getSimpleGoal());
+            } else if (curr_action.equals(Action.SHOWSHELF)) {
+                virtualView.showShelf(controller.getShelf());
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
-                virtualView.showCommons(controller.cc);
+                virtualView.showCommons(controller.getCc());
             } else if(curr_action.equals(Action.SHOWOTHERS)){
                 virtualView.showOthers(controller.getOthers());
             } else {

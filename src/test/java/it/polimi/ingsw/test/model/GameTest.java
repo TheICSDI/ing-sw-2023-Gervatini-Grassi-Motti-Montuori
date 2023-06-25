@@ -13,14 +13,23 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.client.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+//TODO: migliorare la coverage della classe Game
 
 class GameTest {
     Player p1 = new Player("CLR");
@@ -30,6 +39,44 @@ class GameTest {
     List<Player> playerList = new ArrayList<>();
     gameController GC = new gameController();
     PrintWriter out = new PrintWriter(System.out, true);
+
+    /** Parser for common goal cards. It returns a shelf that completed the given common goal card's id.*/
+    private Tile[][] Parser(int id){
+        Tile[][] shelf = new Tile[6][5];
+        JSONParser parser = new JSONParser();
+        JSONArray CC_test_File = null;
+
+        String name = "00";
+        if(id < 10){
+            name = "0" + id;
+        } else {
+            name = String.valueOf(id);
+        }
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                shelf[i][j] = new Tile("empty");
+            }
+        }
+
+        try {
+            FileInputStream pathFile = new FileInputStream("JSON/CC/CC" + name + "_test.json");
+            CC_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject tmp1 = (JSONObject) CC_test_File.get(0);
+        JSONArray tiles= (JSONArray) tmp1.get("tiles");
+        for(int index = 0; index < tiles.size(); index++) {
+            JSONObject tile = (JSONObject) tiles.get(index);
+            int indexX = Integer.parseInt(tile.get("x").toString());
+            int indexY = Integer.parseInt(tile.get("y").toString());
+            String t = tile.get("type").toString();
+            shelf[indexX][indexY] = new Tile(t,1);
+        }
+        return shelf;
+    }
 
     @Test
     void Game(){
@@ -174,13 +221,29 @@ class GameTest {
     @Test
     void calculateCC() throws RemoteException {
         playerList.add(p1);
+        playerList.add(p2);
         Game g = new Game(playerList, GC);
 
-        //the player has zero points
+        //both players have not completed any common goal card
         g.calculateCC(p1);
-        assertEquals(0, p1.getTotalPoints());
         assertEquals(0, p1.getScoreToken1());
         assertEquals(0, p1.getScoreToken2());
+        g.calculateCC(p2);
+        assertEquals(0, p2.getScoreToken1());
+        assertEquals(0, p2.getScoreToken2());
+
+        //set a shelf that completed the correct common goal card
+        int cc1 = g.getCcId().get(0);
+        int cc2 = g.getCcId().get(1);
+        p1.setShelf(Parser(cc1));
+        p2.setShelf(Parser(cc2));
+
+        g.calculateCC(p1);
+        assertEquals(8, p1.getScoreToken1());
+        assertEquals(0, p1.getScoreToken2());
+        g.calculateCC(p2);
+        assertEquals(0, p2.getScoreToken1());
+        assertEquals(8, p2.getScoreToken2());
     }
 
     @Test

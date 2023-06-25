@@ -22,7 +22,6 @@ public class CCGeneral {
     /**
      * General check for all common cards, reads one or more shelves from a json file and checks if the respective
      * goal is reached.
-     *
      * @param CCard common goal card to be checked.
      * @param JSONName name of the file to read the shelves from.
      */

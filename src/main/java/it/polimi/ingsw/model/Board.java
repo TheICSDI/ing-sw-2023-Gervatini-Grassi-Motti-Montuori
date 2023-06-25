@@ -82,14 +82,11 @@ public class Board {
     private void boardParser(int numPlayers){
         JSONParser parser = new JSONParser();
         JSONArray board_na_File = null;
-
+        //TODO: farlo con Gson
         try {
             FileInputStream pathFile = new FileInputStream("JSON/board_na.json");
             board_na_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
-
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
+        } catch (ParseException | IOException ignored) {}
 
         for(int index=0; index<board_na_File.size(); index++) {
             JSONObject tmp = (JSONObject) board_na_File.get(index);

@@ -21,7 +21,7 @@ public class serverController {
    private static final String RESET = "\u001B[0m";
    private static final String PINK = "\u001B[35m";
    private static final String GREEN = "\u001B[32m";
-   private static final String BLUE= "\u001B[34m";
+   private static final String BLUE = "\u001B[34m";
 
    /** It takes a message from the client and does the requested action.
     * It sends a reply if needed.

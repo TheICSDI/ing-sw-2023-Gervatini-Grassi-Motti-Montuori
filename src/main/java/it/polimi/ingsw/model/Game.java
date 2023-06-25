@@ -22,7 +22,7 @@ public class Game {
     private final Board backupBoard;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
-    private int commonPoints;
+    private final int commonPoints;
     private final List<Integer> ccId = new ArrayList<>();
     private final List<PersonalCard> allPC = new ArrayList<>();
     public final gameController controller;
@@ -301,7 +301,7 @@ public class Game {
         if(!order.isEmpty()) {
             serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
             return toInsert;
-        }else{
+        } else {
             return null;
         }
     }
@@ -399,7 +399,7 @@ public class Game {
         return players;
     }
 
-    /** Gets the list of common goal cards fot the cal. */
+    /** Gets the list of common goal cards of the game. */
     public List<CommonCard> getCommonCards() {
         return CommonCards;
     }
@@ -414,13 +414,13 @@ public class Game {
         return allCC;
     }
 
-    /** Gets the list of all common goal cards by id. */
-    public List<Integer> getCCid() {
-        return ccId;
-    }
-
     /** Gets the board of the game. */
     public Board getBoard() {
         return board;
+    }
+
+    /** Gets the list of common goal cards' id. */
+    public List<Integer> getCcId() {
+        return ccId;
     }
 }
