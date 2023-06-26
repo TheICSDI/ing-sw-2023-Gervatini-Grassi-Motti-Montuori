@@ -84,8 +84,8 @@ public class Board {
         JSONArray board_na_File = null;
         //TODO: farlo con Gson
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/board_na.json");
-            board_na_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/board_na.json");
+            board_na_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/board_na.json"))));
         } catch (ParseException | IOException ignored) {}
 
         for(int index=0; index<board_na_File.size(); index++) {

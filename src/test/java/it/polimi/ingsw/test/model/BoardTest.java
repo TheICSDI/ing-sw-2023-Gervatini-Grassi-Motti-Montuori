@@ -17,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
@@ -29,8 +31,8 @@ class BoardTest {
         JSONArray board_test_File = null;
 
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/board_test.json");
-            board_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/board_test.json");
+            board_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/board_test.json"))));
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();

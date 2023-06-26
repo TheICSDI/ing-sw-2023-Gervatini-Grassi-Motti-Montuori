@@ -42,8 +42,8 @@ class PlayerTest {
         JSONArray shelf_test_File = null;
 
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/shelf_test.json");
-            shelf_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/shelf_test.json");
+            shelf_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/shelf_test.json"))));
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();

@@ -10,6 +10,6 @@ class CC_02Test {
     @Test
     void isCompleted() {
         CCStrategy CC2=new CC_02();
-        CCGeneral.check(CC2,"JSON/CC/CC02_test.json");
+        CCGeneral.check(CC2,"/JSON/CC/CC02_test.json");
     }
 }

@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,8 +61,8 @@ class GameTest {
         }
 
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/CC/CC" + name + "_test.json");
-            CC_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/CC/CC" + name + "_test.json");
+            CC_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/CC/CC" + name + "_test.json"))));
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }

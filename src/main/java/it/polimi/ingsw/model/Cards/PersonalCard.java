@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class PersonalCard{
 	private final int id;
@@ -39,8 +40,8 @@ public class PersonalCard{
 		Tile temp;
 
 		try {
-			FileInputStream pathFile = new FileInputStream("JSON/personal_card.json");
-			personalCardFile = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+			//FileInputStream pathFile = new FileInputStream("JSON/personal_card.json");
+			personalCardFile = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/personal_card.json"))));
 
 		} catch (ParseException | IOException e) {
 			e.printStackTrace();

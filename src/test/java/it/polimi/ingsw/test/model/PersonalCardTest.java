@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -148,8 +149,8 @@ class PersonalCardTest {
         JSONParser parser = new JSONParser();
         JSONArray file = null;
         try{
-            FileInputStream pathFile = new FileInputStream("JSON/personal_card_test.json");
-            file = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/personal_card_test.json");
+            file = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/personal_card_test.json"))));
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }catch (ParseException e){
