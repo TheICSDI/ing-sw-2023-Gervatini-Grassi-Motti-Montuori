@@ -34,7 +34,7 @@ public class Tile {
 				image = "/Images/item tiles/Trofei1." + imageNumber + ".png";
 			}
 			case FRAMES -> {
-				color = "\033[44m";
+				color = "\u001b[48;2;163;163;157m";
 				initial='F';
 				image="/Images/item tiles/Cornici1." + imageNumber + ".png";
 			}
