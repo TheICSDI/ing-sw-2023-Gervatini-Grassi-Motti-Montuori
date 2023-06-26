@@ -489,7 +489,7 @@
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets></Label>
-                        <Label fx:id="YourName" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" text="Label" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                        <Label fx:id="YourName" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin></Label>

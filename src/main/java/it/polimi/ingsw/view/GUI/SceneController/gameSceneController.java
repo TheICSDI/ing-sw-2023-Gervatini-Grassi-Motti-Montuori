@@ -287,82 +287,6 @@ public class gameSceneController implements Initializable {
                 }
             }
         }
-        //
-        /*for (int i = 0; i < this.dim; i++) {
-            for (int j = 0; j < this.dim; j++) {
-                //If the current tile is accessible and different from the local board
-                //its corresponding image is set
-                if(!board[i][j].getCategory().equals(type.NOT_ACCESSIBLE) &&
-                        (!board[i][j].getCategory().equals(this.localBoard[i][j].getCategory()))){
-                    ImageView Tile = new ImageView();
-                    HBox pane= new HBox();
-                    pane.setMaxWidth(47);
-                    pane.setMaxHeight(47);
-                    Tile.setFitHeight(43);
-                    Tile.setFitWidth(43);
-                    //If the tile is now empty the previous image is removed
-                    if(board[i][j].getCategory().equals(type.EMPTY) &&
-                            !(this.localBoard[i][j].getCategory().equals(type.EMPTY))){
-                        //It removes the previous image
-                        int finalI1 = i;
-                        int finalJ1 = j;
-                        Node node = this.board.getChildren().stream()
-                                .filter(child -> GridPane.getColumnIndex(child) == finalI1 && GridPane.getRowIndex(child) == finalJ1)
-                                .findFirst()
-                                .orElse(null);
-
-                        if (node instanceof HBox) {
-                            pane = (HBox) node;
-                        }
-                        //this.board.add(Tile, i, j);
-                        this.board.getChildren().remove(pane);
-                    } else {
-                        Image image = new Image(board[i][j].getImage());
-                        Tile.setImage(image);
-                        pane.getChildren().add(Tile);
-                        pane.setAlignment(Pos.CENTER);
-                        int finalJ = j;
-                        int finalI = i;
-
-                        HBox finalPane = pane;
-                        pane.setOnMouseClicked(event -> {
-                            boolean alreadyChosen=false;
-                            for (Position p:
-                                    this.Chosen) {
-                                if(p.getY()==finalI && p.getX()==finalJ)
-                                {
-                                    finalPane.setStyle("");
-                                    this.Chosen.remove(p);
-                                    alreadyChosen=true;
-                                    break;
-                                }
-                            }
-                            if(!alreadyChosen){
-                                finalPane.setStyle("-fx-background-color: #ff0000;");
-                                if(this.Chosen.size()==3) {
-                                    Node node = this.board.getChildren().stream()
-                                            .filter(child -> GridPane.getColumnIndex(child) == this.Chosen.get(0).getY() && GridPane.getRowIndex(child) == this.Chosen.get(0).getX())
-                                            .findFirst()
-                                            .orElse(null);
-                                    HBox toDes = null;
-                                    if (node instanceof HBox) {
-                                        toDes = (HBox) node;
-                                    }
-                                    toDes.setStyle("");
-                                    this.Chosen.remove(0);
-                                }
-                                this.Chosen.add(new Position(finalJ, finalI));
-                            }
-                        });
-                        this.board.add(pane, i, j);
-                        this.board.setAlignment(Pos.CENTER);
-                    }
-                    this.localBoard[i][j] = board[i][j];
-                }
-            }
-        }*/
-
-
     }
 
     /**
@@ -423,7 +347,7 @@ public class gameSceneController implements Initializable {
     public void showOthers(Map<String, Player> others){
         if(firstOthers){
             firstOthers=false;
-            YourName.setText(gui.nick);
+            setLabelText(YourName,font,12,"Your name: " + gui.nick);
             players.add(gui.nick);
             List<String> names= new ArrayList<>(others.keySet());
             for (String s:
