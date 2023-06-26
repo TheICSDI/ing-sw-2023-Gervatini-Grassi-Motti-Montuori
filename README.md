@@ -12,11 +12,11 @@ java -jar Server.jar -i "Your ip"
 
 ### Run the Client (CLI)
 bash
-java -jar Eriantys.jar -c
+java -jar Client.jar -c
 
 or
 bash
-java -jar Eriantys.jar --cli
+java -jar Client.jar --cli
 
 
 ### Run the Client (GUI)
