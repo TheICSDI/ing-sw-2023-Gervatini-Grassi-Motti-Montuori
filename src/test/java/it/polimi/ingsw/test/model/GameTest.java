@@ -301,12 +301,15 @@ class GameTest {
         p1.setShelf(Parser(cc1));
         p2.setShelf(Parser(cc2));
 
-        //TODO: che succede se anche p1 completa per caso cc2? come faccio ad accorgermene?
-        //bisognerebbe controllare che ogni cc non ne completa anche un'altra qualsiasi
         g.calculateCC(p1);
         assertEquals(8, p1.getScoreToken1());
         g.calculateCC(p2);
-        assertEquals(8, p2.getScoreToken2());
+        //if the first player complete also the second common goal card then the second player gains 4 point
+        if(p1.getScoreToken2() == 8){
+            assertEquals(4, p2.getScoreToken2());
+        } else {
+            assertEquals(8, p2.getScoreToken2());
+        }
     }
 
     @Test
