@@ -56,7 +56,7 @@ class GameTest {
 
         for (int i = 0; i < p1.getNumRows(); i++) {
             for (int j = 0; j < p1.getNumCols(); j++) {
-                shelf[i][j] = new Tile("empty");
+                shelf[i][j] = new Tile("empty", 1);
             }
         }
 

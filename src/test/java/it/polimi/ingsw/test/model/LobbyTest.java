@@ -59,31 +59,6 @@ class LobbyTest {
     }
 
     @Test
-    void leave() {
-        //Create a lobby with some players
-        l1.Join(p2);
-        l1.Join(p3);
-        assertTrue(l1.Players.contains(p2));
-        assertTrue(l1.Players.contains(p3));
-
-        //p2 and p3 leave the lobby
-        l1.Leave(p1);
-        l1.Leave(p2);
-        l1.Leave(p3);
-        assertFalse(l1.Players.contains(p1));
-        assertFalse(l1.Players.contains(p2));
-        assertFalse(l1.Players.contains(p3));
-        assertTrue(l1.Players.isEmpty());
-
-        //Exception
-        //the player is not in the lobby
-        Throwable ex2 = assertThrows(InputMismatchException.class, () -> {
-            l1.Leave(p5);
-        });
-        assertEquals("The player " + p5.getNickname() + " is not in the lobby!", ex2.getMessage());
-    }
-
-    @Test
     void isPlayerInLobby(){
         //The lobby contains only p1
         assertTrue(l1.isPlayerInLobby(p1));

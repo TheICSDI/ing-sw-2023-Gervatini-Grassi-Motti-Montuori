@@ -243,7 +243,7 @@ public class Game {
      * @param p the current player.
      * @return list of chosen tiles. */
     public List<Tile> pickTiles(Player p) throws RemoteException {
-        while(true) {//Ricomincia se non trova return, unico caso shelf piena
+        while(true) {
             List<Position> chosen = controller.chooseTiles(p.getNickname(), id);
             boolean check = false;
             while (!check && p.isConnected()) {

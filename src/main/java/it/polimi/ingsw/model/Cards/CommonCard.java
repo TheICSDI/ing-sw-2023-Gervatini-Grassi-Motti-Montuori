@@ -40,8 +40,8 @@ public class CommonCard{
         }
     }
 
+    /** Gets the points of the common card. */
     public int getPoints() {
         return points;
     }
-
 }

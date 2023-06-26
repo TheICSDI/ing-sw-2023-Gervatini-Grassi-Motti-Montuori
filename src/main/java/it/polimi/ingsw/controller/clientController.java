@@ -34,7 +34,7 @@ public class clientController{
     public void emptyShelf(){
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {
-                this.shelf[i][j] = new Tile("empty");
+                this.shelf[i][j] = new Tile("empty", 1);
             }
         }
     }
