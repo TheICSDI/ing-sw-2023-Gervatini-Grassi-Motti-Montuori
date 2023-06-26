@@ -12,6 +12,10 @@ public class endSceneController {
     public GUI gui;
 
 
+    /**
+     * Shows player's points
+     * @param message player and his points
+     */
     public void showPoints(String message){
         Label playerPoints=new Label();
         playerPoints.setStyle("-fx-font-family: 'Comic Sans MS';"+
@@ -26,16 +30,22 @@ public class endSceneController {
         Points.getChildren().add(playerPoints);
     }
 
+    /**
+     * Shows winner
+     * @param message winner
+     */
     public void setWinner(String message){
         Winner.setStyle("-fx-font-family: 'Comic Sans MS';"+
                 "-fx-font-size: 20 px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #ecd8c4;"
         );
-
         Winner.setText(message);
     }
 
+    /**
+     * Brings back to lobby scene
+     */
     public void BackToLobby() {
         Platform.runLater(() -> gui.openLobbyScene());
     }

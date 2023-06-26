@@ -57,7 +57,6 @@ public class Client extends Application {
 
     /** It listens to the messages received by via socket, and it calls the elaborate method. */
     public static void listenSocket() throws IOException, ParseException, InterruptedException {
-        //TODO: non va bene, da errore con le eccezioni, sarebbe meglio un listener
         while(true) {
             String message = in.readLine();
             elaborate(message);
@@ -247,9 +246,6 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        //Client.connection("192.168.1.194", 23450);
-        //Client.connection("127.0.0.1", 23450);
-        //System.out.println("Chosen IPv4: " + IPv4);
         Client.connection(IPv4, 23450);
         socket = true;
         String username;
@@ -291,7 +287,7 @@ public class Client extends Application {
             try {
                 listenSocket();
             } catch (IOException | ParseException | InterruptedException e) {
-                throw new RuntimeException(e);
+                System.out.println("Connection error");
             }
         });
         ExecutorService executorService = Executors.newFixedThreadPool(3);
@@ -381,16 +377,24 @@ public class Client extends Application {
         }
     }
 
+    /**
+     * Counts pings, catched eventual disconnections
+     * @throws InterruptedException error with Thread sleep
+     */
     private static void ping() throws InterruptedException {
         int x = -1;
         while(x < ping) {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
-        System.out.println("Disconnected"); //TODO dovrebbe essere in view
+        System.out.println("Disconnected");
         connected = false;
     }
 
+    /**
+     * Gets name for rmi protocol
+     * @throws RemoteException rmi errors
+     */
     public static void setName() throws RemoteException {
         String input;
         SetNameMessage nick;
@@ -399,6 +403,10 @@ public class Client extends Application {
         stub.RMIsendName(nick.toString(), RMIclient);
     }
 
+    /**
+     * Javafx thread
+     * @param stage gui stage
+     */
     @Override
     public void start(Stage stage) {
         ((GUI)virtualView).startGuiConnection(stage);

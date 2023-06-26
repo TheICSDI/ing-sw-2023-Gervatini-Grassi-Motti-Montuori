@@ -35,7 +35,6 @@ public class CCGeneral {
         JSONParser parser = new JSONParser();
         JSONArray CC_test_File = null;
         try {
-            //FileInputStream pathFile = new FileInputStream(JSONName);
             CC_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(CCGeneral.class.getResourceAsStream(JSONName))));
 
         } catch (ParseException | IOException e) {

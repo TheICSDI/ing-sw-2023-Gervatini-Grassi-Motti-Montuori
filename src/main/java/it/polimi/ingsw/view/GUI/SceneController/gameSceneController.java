@@ -225,7 +225,10 @@ public class gameSceneController implements Initializable {
     }
 
 
-    /** It updates the board on the panel with the right image. */
+    /**
+     * Loads board in a gridPane.
+     * @param board matrix to show
+     */
     @FXML
     public void showBoard(Tile[][] board){
         //For each element in the board
@@ -362,6 +365,9 @@ public class gameSceneController implements Initializable {
 
     }
 
+    /**
+     * Resets array of the positions or clicked tiles.
+     */
     private void clearChosen() {
         for (Position p:
                 this.Chosen) {
@@ -380,6 +386,10 @@ public class gameSceneController implements Initializable {
         this.Chosen=new ArrayList<>();
     }
 
+    /**
+     * Updates your shelf.
+     * @param shelf matrix to show
+     */
     @FXML
     public void showShelf(Tile[][] shelf) {
         //reset variables for picked tiles
@@ -405,15 +415,17 @@ public class gameSceneController implements Initializable {
     }
 
 
+    /**
+     * Show other player's shelves.
+     * @param others a list of matrixes
+     */
     @FXML
-    //forse ho capito perché funziona solo con le mappe, allora "others" dovrebbe avere dei problemi nel riempimento
-    // ma solo dei player, motivo per cui con un lista non funziona, e la parte delle String lo salva
     public void showOthers(Map<String, Player> others){
         if(firstOthers){
             firstOthers=false;
             YourName.setText(gui.nick);
             players.add(gui.nick);
-            List<String> names= new ArrayList<>(others.keySet());//sperando gli metta in ordine
+            List<String> names= new ArrayList<>(others.keySet());
             for (String s:
                     names) {
                 System.out.println(s);
@@ -467,12 +479,19 @@ public class gameSceneController implements Initializable {
         }
     }
 
+    /**
+     * Sends the recipient of a message to everybody.
+     */
     @FXML
     public void sendAll(){
         recipient="ca ";
         SendTo.setText("All");
     }
 
+    /**
+     * Loads your personal goal image.
+     * @param id number of pc
+     */
     @FXML
     public void showPersonal(int id){
         //Based on the id of the personal card it chooses the right image
@@ -495,6 +514,10 @@ public class gameSceneController implements Initializable {
         this.personal.setImage(image);
     }
 
+    /**
+     * Loads the common goals image, points and descriptions
+     * @param cc list of common ids
+     */
     @FXML
     public void showCommons(List<Integer> cc) {
         Image image1 = null;
@@ -536,8 +559,15 @@ public class gameSceneController implements Initializable {
         }
     }
 
+    /**
+     * Notifies someone completed a common and gives them their points
+     * @param msg Who completed which common
+     * @param whoCompleted player who completed the common
+     * @param first true if it's the first common
+     */
+    @FXML
     public void commonCompleted(String msg, String whoCompleted, boolean first){
-        newMessage(msg);//temporaneo
+        newMessage(msg);
         if(first){
             ImageView pointsWon=new ImageView(CommonPoints.get(c1Index));
             pointsWon.setFitWidth(45);
@@ -581,8 +611,11 @@ public class gameSceneController implements Initializable {
 
     }
 
+    /**
+     * Build pick tiles message.
+     */
     @FXML
-    public void pickTiles(ActionEvent actionEvent) {
+    public void pickTiles() {
         StringBuilder pt= new StringBuilder("pt");
         for (Position p:
                 this.Chosen) {
@@ -596,6 +629,11 @@ public class gameSceneController implements Initializable {
         clearChosen();
     }
 
+    /**
+     * Shows picked tiles before insterting them ready to be ordered
+     * @param tiles tiles to show
+     * @param toOrder true if they are to order
+     */
     @FXML
     public void showChosenTiles(List<Tile> tiles,boolean toOrder) {
         if(this.toShow) {
@@ -653,39 +691,60 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    public void choose1(MouseEvent mouseEvent) {
+    /**
+     * Choose first column
+     */
+    public void choose1() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 1";
             this.gui.Lock.notifyAll();
         }
     }
 
-    public void choose2(MouseEvent mouseEvent) {
+    /**
+     * Choose second column
+     */
+    public void choose2() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 2";
             this.gui.Lock.notifyAll();
         }
     }
-    public void choose3(MouseEvent mouseEvent) {
+
+    /**
+     * Choose third column
+     */
+    public void choose3() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 3";
             this.gui.Lock.notifyAll();
         }
     }
 
-    public void choose4(MouseEvent mouseEvent) {
+    /**
+     * Choose fourth column
+     */
+    public void choose4() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 4";
             this.gui.Lock.notifyAll();
         }
     }
-    public void choose5(MouseEvent mouseEvent) {
+
+    /**
+     * Choose fifth column
+     */
+    public void choose5() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 5";
             this.gui.Lock.notifyAll();
         }
     }
 
+    /**
+     * Prints received message
+     * @param message to print
+     */
     public void newMessage(String message){
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
@@ -693,6 +752,11 @@ public class gameSceneController implements Initializable {
         this.chat.getChildren().add(0,messageLabel);
     }
 
+    /**
+     * Show turn messages.
+     * @param msg message to show
+     * @param firstTurn true if first turn, initializes needed variables
+     */
     public void Turn(String msg,boolean firstTurn){
         if(firstTurn){
             ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
@@ -710,15 +774,20 @@ public class gameSceneController implements Initializable {
             }
         }
         setLabelText(turn,font,50,msg);
-        //turn.setText(cartoonText);
 
     }
 
+    /**
+     * Shows in game events
+     * @param msg event
+     */
     public void setIngameEvents(String msg){
         setLabelText(ingameEvents, font, 24,msg);
-        //this.ingameEvents.setText(msg);
     }
 
+    /**
+     * Sends a message to selected recipient.
+     */
     public void sendChatMessage(){
 
         String message= this.Chat.getText();
@@ -734,10 +803,18 @@ public class gameSceneController implements Initializable {
         }
     }
 
+    /**
+     * Gets a reference of the current gui
+     * @param gui this gui
+     */
     public void setGui(GUI gui) {
         this.gui = gui;
     }
 
+    /**
+     * Assigns end game token to the first player to complete his shelf
+     * @param player player that got the token
+     */
     public void endGameToken(String player) {
         endGameToken.setImage(null);
         ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
@@ -754,43 +831,43 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    public void highlightCol1(MouseEvent mouseEvent) {
+    public void highlightCol1() {
         col1.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
-    public void highlightCol2(MouseEvent mouseEvent) {
+    public void highlightCol2() {
         col2.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
-    public void highlightCol3(MouseEvent mouseEvent) {
+    public void highlightCol3() {
         col3.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
-    public void highlightCol4(MouseEvent mouseEvent) {
+    public void highlightCol4() {
         col4.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
-    public void highlightCol5(MouseEvent mouseEvent) {
+    public void highlightCol5() {
         col5.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
-    public void desCol1(MouseEvent mouseEvent) {
+    public void desCol1() {
         col1.setStyle("");
     }
 
-    public void desCol2(MouseEvent mouseEvent) {
+    public void desCol2() {
         col2.setStyle("");
     }
 
-    public void desCol3(MouseEvent mouseEvent) {
+    public void desCol3() {
         col3.setStyle("");
     }
 
-    public void desCol4(MouseEvent mouseEvent) {
+    public void desCol4() {
         col4.setStyle("");
     }
 
-    public void desCol5(MouseEvent mouseEvent) {
+    public void desCol5() {
         col5.setStyle("");
     }
 

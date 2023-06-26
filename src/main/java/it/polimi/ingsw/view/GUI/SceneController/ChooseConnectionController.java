@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.GUI.SceneController;
 
 import it.polimi.ingsw.view.GUI.GUI;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,7 +12,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -51,8 +49,12 @@ public class ChooseConnectionController implements Initializable {
             }
         });
     }
+
+    /**
+     * Sets connection to socket
+     */
     @FXML
-    protected void socketButtonAction(ActionEvent event)
+    protected void socketButtonAction()
     {
         getText();
         try {
@@ -64,8 +66,12 @@ public class ChooseConnectionController implements Initializable {
         send("1");
         System.out.println("Socket Connection");
     }
+
+    /**
+     * Sets connection to rmi
+     */
     @FXML
-    protected void rmiButtonAction(ActionEvent event)
+    protected void rmiButtonAction()
     {
         getText();
         try {
@@ -78,6 +84,10 @@ public class ChooseConnectionController implements Initializable {
         System.out.println("RMI Connection");
     }
 
+    /**
+     * Sends chosen connection type
+     * @param type chosen type
+     */
     protected void send(String type){
         synchronized (gui.ConnectionLock) {
             gui.connectionChosen = type;
@@ -93,6 +103,11 @@ public class ChooseConnectionController implements Initializable {
         }
     }
 
+    /**
+     * Gets IP
+     * @param msg message
+     * @param color text color
+     */
     @FXML
     public void showIP(String msg, String color){
         Information.setStyle("-fx-text-fill: " + color + ";-fx-background-color: transparent; -fx-prompt-text-fill: " + color);

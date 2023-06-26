@@ -20,6 +20,12 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
         this.CC = CC;
     }
 
+    /**
+     * Sends name message with needed controls
+     * @param m name
+     * @param reply stream for server to respond
+     * @throws RemoteException
+     */
     @Override
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
         Action action;
@@ -48,6 +54,11 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
         }
     }
 
+    /**
+     * Sends message in rmi
+     * @param m message
+     * @throws RemoteException
+     */
     @Override
     public void RMIsend(String m) throws RemoteException {
         try {

@@ -84,6 +84,11 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
         }
     }
 
+    /**
+     * Sends message to client
+     * @param m client
+     * @throws RemoteException
+     */
     @Override
     public void RMIsend(String m) throws RemoteException {
         try {

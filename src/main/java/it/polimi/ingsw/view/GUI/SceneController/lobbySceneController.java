@@ -66,10 +66,18 @@ public class lobbySceneController implements Initializable {
         CreateLobby.setFont(font);
     }
 
+    /**
+     * Display name chosen
+     * @param name Your name
+     */
     public void setName(String name){
         Name.setText("Your name: " + name);
     }
 
+    /**
+     * Show available Lobbies
+     * @param Lobbies to show
+     */
     public void showLobbies(List<Lobby> Lobbies){
         AvailableLobbies = Lobbies;
         this.Lobbies.getItems().clear();
@@ -83,6 +91,10 @@ public class lobbySceneController implements Initializable {
         }
     }
 
+    /**
+     * Ask Server
+     * @throws InterruptedException
+     */
     public void createLobby() throws InterruptedException {
         synchronized (gui.Lock) {
             gui.message = "createlobby " + limit;

@@ -133,6 +133,20 @@ public class CLI implements View{
     @Override
     public void showShelf(Tile[][] shelf){
         out.println("  Your shelf  ");
+        printShelf(shelf);
+    }
+
+    @Override
+    public void showPersonal(PersonalCard PC){
+        out.println("  Your personal goal:  ");
+        printShelf(PC.getCard());
+    }
+
+    /**
+     * Prints a matrix of tiles in a shelf
+     * @param shelf matrix to print
+     */
+    private void printShelf(Tile[][] shelf){
         for (int i = 0; i < shelf.length; i++){
             out.print(RESET + "  ");
             for (int j = -1; j < shelf[0].length; j++) {
@@ -146,12 +160,6 @@ public class CLI implements View{
         }
         out.println("\033[48;5;94m   1   2   3   4   5   " + RESET);
         out.println();
-    }
-
-    @Override
-    public void showPersonal(PersonalCard PC){
-        out.println("  Your personal goal:  ");
-        showShelf(PC.getCard());
     }
 
     @Override

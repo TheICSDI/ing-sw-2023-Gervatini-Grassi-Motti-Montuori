@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,7 +51,7 @@ public class GUI implements View {
                 throw new RuntimeException(e);
             }
         }
-        Platform.runLater(this::startGUI);
+        Platform.runLater(this::openNameScene);
         return connectionChosen;
     }
 
@@ -118,7 +117,7 @@ public class GUI implements View {
                     Lock.notifyAll();
                 }
             } else {
-                nsc.showName("NotAvailable");
+                nsc.unavailable();
             }
         });
     }
@@ -231,45 +230,32 @@ public class GUI implements View {
         }
     }
 
-    /**
-     * Loads an FXML file and returns the associated controller instance.
-     * This method assumes that the FXML file is stored in the "src/resources/fxml/" directory.
-     *
-     * @param fxmlFileName    The name of the FXML file to load.
-     * @param controllerClass The class of the associated controller.
-     * @param <T>             The type of the controller.
-     * @return The controller instance associated with the loaded FXML file.
-     * @throws IOException If an error occurs while loading the FXML file.
-     */
-    private <T> T loadFXML(String fxmlFileName, Class<T> controllerClass) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("fxml/" + fxmlFileName));
-        loader.load();
-        return loader.getController();
-    }
 
+    /**
+     * Opens first gui scene
+     * @param primaryStage stage
+     */
     public void startGuiConnection(Stage primaryStage){
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/ChooseConnectionScene.fxml"));
         Parent root=null;
-
         try{
             root=loader.load();
         }catch(Exception ignored){}
-
         ccc=loader.getController();
         ccc.setGui(currGui);
         stage=primaryStage;
         stage.setTitle("My Shelfie");
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
-        //stage.setFullScreen(true);
-        //stage.setMaximized(true);
         stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
     }
 
-    public void startGUI(){
+    /**
+     * Open name scene
+     */
+    public void openNameScene(){
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
         Parent root=null;
@@ -278,17 +264,17 @@ public class GUI implements View {
         }catch(Exception ignored){}
         nsc=loader.getController();
         nsc.setGUI(this.currGui);
-        //stage=primaryStage;
         stage.setTitle("My Shelfie");
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
-        //stage.setFullScreen(true);
-        //stage.setMaximized(true);
         nPage=2;
         stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
     }
 
+    /**
+     * Open lobby scene
+     */
     public void openLobbyScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
@@ -307,6 +293,9 @@ public class GUI implements View {
         stage.show();
     }
 
+    /**
+     * Open game scene
+     */
     private void openGameScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
@@ -320,20 +309,18 @@ public class GUI implements View {
         if(stage.isIconified()){
             stage.setIconified(false);
         }
-
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
-
         stage.setResizable(false);
-        //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         nPage=4;
-        //stage.setFullScreenExitHint("");
-
         stage.setScene(new Scene(root));
         stage.show();
     }
 
+    /**
+     * Open end scene
+     */
     private void openEndScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
