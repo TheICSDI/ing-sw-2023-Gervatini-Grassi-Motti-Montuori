@@ -144,6 +144,14 @@ class clientControllerTest {
         rsp = CC1.checkMessageShape(mex);
         assertEquals(Action.SHOWOTHERS, rsp.getAction());
 
+        //Case: SHOWSHELF
+        mex = "showshelf";
+        rsp = controller.checkMessageShape(mex); //Error: controller is not bind with a player in a game
+        assertEquals(Action.ERROR, rsp.getAction());
+
+        rsp = CC1.checkMessageShape(mex);
+        assertEquals(Action.SHOWSHELF, rsp.getAction());
+
         //Case: C
         mex = "C Mario ciao";
         rsp = controller.checkMessageShape(mex); //Error: controller is not bind with a player in a game

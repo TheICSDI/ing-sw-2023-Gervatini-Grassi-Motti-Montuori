@@ -97,11 +97,11 @@ public class Game {
         serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, reconnected.getShelf()), reconnected.getNickname());
         for (Player other: players) {
             if(!other.getNickname().equals(reconnected.getNickname())){
-                serverController.sendMessage(new OtherPlayersMessage(other),reconnected.getNickname());
+                serverController.sendMessage(new OtherPlayersMessage(other), reconnected.getNickname());
             }
         }
         if(pTurn.equals(reconnected.getNickname())){
-            serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), reconnected.getNickname());
+            serverController.sendMessage(new SimpleReply("It's your turn!", Action.TURN), reconnected.getNickname());
             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
         } else {
             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
@@ -115,7 +115,6 @@ public class Game {
     /**
      * Manages all the game logic from start to end.
      * It calculates the total points of each player at the end of every turn.
-     * @see Player,Board,CommonCard,PersonalCard
      */
     public void startGame() throws RemoteException, InterruptedException {
         //At the start no player has the endgame token
@@ -188,8 +187,7 @@ public class Game {
                     }
                     if (!p.isConnected()) {
                         this.board.cloneBoard(this.backupBoard);
-                        for (Player p1 :
-                                players) {
+                        for (Player p1 : players) {
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
                         }
                     }

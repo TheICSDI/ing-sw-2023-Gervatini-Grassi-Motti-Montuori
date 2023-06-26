@@ -52,10 +52,13 @@ class BoardTest {
     @Test
     void fillBoard() {
         Board b = new Board(4);
-        for (int i = 0; i < b.getNumCols(); i++) {
+        //Used to check that the method fillBoard does not change the tiles that are not accessibile
+        Boolean[][] check = new Boolean[b.getNumRows()][b.getNumCols()];
+         for (int i = 0; i < b.getNumCols(); i++) {
             for (int j = 0; j < b.getNumRows(); j++) {
                 assertNotNull(b.board[i][j]);
                 assertNotNull(b.board[i][j].getCategory());
+                check[i][j] = b.board[i][j].getCategory().equals(type.NOT_ACCESSIBLE);
             }
         }
         b.fillBoard();
@@ -65,6 +68,11 @@ class BoardTest {
                 assertNotEquals(b.board[i][j].getCategory(), type.EMPTY);
                 assertNotNull(b.board[i][j]);
                 assertNotNull(b.board[i][j].getCategory());
+                if(check[i][j]){
+                    assertEquals(b.board[i][j].getCategory(), type.NOT_ACCESSIBLE);
+                } else {
+                    assertNotEquals(b.board[i][j].getCategory(), type.NOT_ACCESSIBLE);
+                }
             }
         }
     }
