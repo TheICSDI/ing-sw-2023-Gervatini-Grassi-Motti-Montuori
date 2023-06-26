@@ -27,6 +27,11 @@ public class clientController{
      * @param nickname of the client. */
     public clientController(String nickname){
         this.nickname = nickname;
+        emptyShelf();
+    }
+
+    /** It empties the local shelf of the player, that is then updated at each turn. */
+    public void emptyShelf(){
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {
                 this.shelf[i][j] = new Tile("empty");
@@ -320,5 +325,15 @@ public class clientController{
     /** It sets the shelf of the player passed by parameter. */
     public void setShelf(Tile[][] shelf) {
         this.shelf = shelf;
+    }
+
+    /** Gets the number of rows of the shelf. */
+    public int getNumRows() {
+        return numRows;
+    }
+
+    /** Gets the number of columns of the shelf. */
+    public int getNumCols() {
+        return numCols;
     }
 }
