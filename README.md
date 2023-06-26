@@ -1,5 +1,14 @@
-# ProgettoIngSw
-Progetto di Ingegneria del Software
+# Software engineering project
+Final project of **"Software Engineering"**, course of **"Computer Science Engineering"** 
+held at Politecnico di Milano (2022/2023). <br />
+
+**Group**: PSP-35
+
+**The team**: 
+- [Andrea Grassi](https://github.com/Fozyhh)
+- [Marco Gervatini](https://github.com/Shift007)
+- [Giulio Montuori](https://github.com/TheICSDI)
+- [Caterina Motti](https://github.com/mttcrn)
 
 ## Run using the JAR file
 Once installed all requirements and compiled the project, open a terminal and
