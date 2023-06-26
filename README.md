@@ -21,7 +21,7 @@ java -jar Client.jar --cli
 
 ### Run the Client (GUI)
 bash
-java -jar Eriantys.jar
+java -jar Client.jar
 
 To run the Client (GUI) it is also possible to open the JAR file directly from
 the file explorer.
