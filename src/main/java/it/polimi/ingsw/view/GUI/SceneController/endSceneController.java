@@ -13,8 +13,8 @@ public class endSceneController {
 
 
     /**
-     * Shows player's points
-     * @param message player and his points
+     * Shows player's points.
+     * @param message to be shown.
      */
     public void showPoints(String message){
         Label playerPoints=new Label();
@@ -31,8 +31,8 @@ public class endSceneController {
     }
 
     /**
-     * Shows winner
-     * @param message winner
+     * Shows the winner of the game.
+     * @param message to be shown.
      */
     public void setWinner(String message){
         Winner.setStyle("-fx-font-family: 'Comic Sans MS';"+
@@ -43,12 +43,12 @@ public class endSceneController {
         Winner.setText(message);
     }
 
-    /**
-     * Brings back to lobby scene
-     */
+    /** Brings back to lobby scene (the game ended).*/
     public void BackToLobby() {
         Platform.runLater(() -> gui.openLobbyScene());
     }
+
+    /** Sets the GUI passed by parameter */
     public void setGui(GUI gui){
         this.gui=gui;
     }

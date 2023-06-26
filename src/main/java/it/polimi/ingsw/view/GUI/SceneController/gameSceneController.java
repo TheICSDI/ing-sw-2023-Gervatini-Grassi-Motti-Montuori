@@ -21,7 +21,6 @@ import javafx.scene.paint.Paint;
 import java.net.URL;
 import java.util.*;
 
-
 public class gameSceneController implements Initializable {
     @FXML
     public GridPane myShelfToken;
@@ -80,14 +79,12 @@ public class gameSceneController implements Initializable {
     public TextField Chat;
     @FXML
     public MenuButton SendTo;
-
-
-    private String recipient= "ca ";
+    private String recipient = "ca ";
     private boolean firstOthers;
     private final int dim = 9;
     private int pickedTiles;
     private int tilesOrdered;
-    private boolean toShow=true;
+    private boolean toShow = true;
     private final List<Integer> newOrder = new ArrayList<>();
     @FXML
     public Button pickTiles;
@@ -103,9 +100,8 @@ public class gameSceneController implements Initializable {
     private int c2Index;
     @FXML
     public ImageView common2;
-
-    private final List<Image> CommonPoints=new ArrayList<>();
-    private final String[] commonDescs= new String[12];
+    private final List<Image> CommonPoints = new ArrayList<>();
+    private final String[] commonDescs = new String[12];
     @FXML
     public VBox chat;
     @FXML
@@ -132,11 +128,9 @@ public class gameSceneController implements Initializable {
     @FXML
     public GridPane p4Shelf;
     private GUI gui;
-
     private final String font= "Comic Sans MS";
 
     /** It initialises the version of the local board to not_accessible type. */
-    // Non ho capito quando lo chiama però se non lo metto non funziona :P
     public gameSceneController(){
         for (int i = 0; i < this.dim; i++) {
             for (int j = 0; j < this.dim; j++) {
@@ -195,9 +189,9 @@ public class gameSceneController implements Initializable {
                 those of the other square.""";
         commonDescs[4]= """
                 Three columns each formed by 6 tiles Five tiles of the same type forming an X.
-                                        "of maximum three different types. One
-                                        "column can show the same or a different
-                                        "combination of another column.""";
+                "of maximum three different types. One
+                "column can show the same or a different
+                "combination of another column.""";
         commonDescs[5]= """
                 Eight tiles of the same type. There’s no
                 restriction about the position of these""";
@@ -227,7 +221,7 @@ public class gameSceneController implements Initializable {
 
     /**
      * Loads board in a gridPane.
-     * @param board matrix to show
+     * @param board to be showed.
      */
     @FXML
     public void showBoard(Tile[][] board){
@@ -289,12 +283,9 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Resets array of the positions or clicked tiles.
-     */
+    /** Resets array of the positions of clicked (chosen) tiles. */
     private void clearChosen() {
-        for (Position p:
-                this.Chosen) {
+        for (Position p: this.Chosen) {
             Node node = this.board.getChildren().stream()
                     .filter(child -> GridPane.getColumnIndex(child) == p.getY() && GridPane.getRowIndex(child) == p.getX())
                     .findFirst()
@@ -310,10 +301,7 @@ public class gameSceneController implements Initializable {
         this.Chosen=new ArrayList<>();
     }
 
-    /**
-     * Updates your shelf.
-     * @param shelf matrix to show
-     */
+    /** Updates the player's shelf passed by parameter. */
     @FXML
     public void showShelf(Tile[][] shelf) {
         //reset variables for picked tiles
@@ -339,10 +327,7 @@ public class gameSceneController implements Initializable {
     }
 
 
-    /**
-     * Show other player's shelves.
-     * @param others a list of matrixes
-     */
+    /** Show other player's shelves, passed by parameter. */
     @FXML
     public void showOthers(Map<String, Player> others){
         if(firstOthers){
@@ -355,21 +340,20 @@ public class gameSceneController implements Initializable {
                 System.out.println(s);
             }
             setLabelText(p2Name,font, 20, names.get(0) + "'s shelf:");
-            //p2Name.setText(names.get(0) + "'s shelf:");
             players.add(names.get(0));
             common1points.setImage(CommonPoints.get(CommonPoints.size()-1));
             c1Index=CommonPoints.size()-1;
             common2points.setImage(CommonPoints.get(CommonPoints.size()-1));
             c2Index=CommonPoints.size()-1;
-            if(names.size()>1){ //3 giocatori
+            //3 players
+            if(names.size()>1){
                 setLabelText(p3Name,font, 20, names.get(1) + "'s shelf:");
-                //p3Name.setText(names.get(1) + "'s shelf:");
                 players.add(names.get(1));
                 p3ImageShelf.setVisible(true);
             }
-            if(names.size()>2){//4 giocatori
+            //4 players
+            if(names.size()>2){
                 setLabelText(p4Name,font, 20, names.get(2) + "'s shelf:");
-                //p4Name.setText(names.get(2) + "'s shelf:");
                 players.add(names.get(2));
                 p4ImageShelf.setVisible(true);
             }
@@ -403,9 +387,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Sends the recipient of a message to everybody.
-     */
+    /** Sends the recipient of a message to everybody. */
     @FXML
     public void sendAll(){
         recipient="ca ";
@@ -413,8 +395,8 @@ public class gameSceneController implements Initializable {
     }
 
     /**
-     * Loads your personal goal image.
-     * @param id number of pc
+     * Loads the player personal goal image.
+     * @param id of personal goal card.
      */
     @FXML
     public void showPersonal(int id){
@@ -439,8 +421,8 @@ public class gameSceneController implements Initializable {
     }
 
     /**
-     * Loads the common goals image, points and descriptions
-     * @param cc list of common ids
+     * Loads the common goals image, points and descriptions.
+     * @param cc list of common goal cards' ids.
      */
     @FXML
     public void showCommons(List<Integer> cc) {
@@ -448,7 +430,6 @@ public class gameSceneController implements Initializable {
         Image image2 = null;
         for (int id: cc) {
             String commonURL = null;
-
             switch (id){
                 case 1 -> commonURL= "/Images/common goal cards/4.jpg";
                 case 2 -> commonURL = "/Images/common goal cards/8.jpg";
@@ -484,10 +465,10 @@ public class gameSceneController implements Initializable {
     }
 
     /**
-     * Notifies someone completed a common and gives them their points
-     * @param msg Who completed which common
-     * @param whoCompleted player who completed the common
-     * @param first true if it's the first common
+     * Notifies if someone completed a common goal card and gives them their points.
+     * @param msg message to be shown.
+     * @param whoCompleted player who completed the common.
+     * @param first true only if it's the first common goal card of the game, false otherwise.
      */
     @FXML
     public void commonCompleted(String msg, String whoCompleted, boolean first){
@@ -535,9 +516,7 @@ public class gameSceneController implements Initializable {
 
     }
 
-    /**
-     * Build pick tiles message.
-     */
+    /** Builds pick tiles message. */
     @FXML
     public void pickTiles() {
         StringBuilder pt= new StringBuilder("pt");
@@ -554,9 +533,9 @@ public class gameSceneController implements Initializable {
     }
 
     /**
-     * Shows picked tiles before insterting them ready to be ordered
-     * @param tiles tiles to show
-     * @param toOrder true if they are to order
+     * Shows picked tiles before ordering them.
+     * @param tiles tiles chosen.
+     * @param toOrder true only if they must be ordered, false otherwise.
      */
     @FXML
     public void showChosenTiles(List<Tile> tiles,boolean toOrder) {
@@ -564,7 +543,6 @@ public class gameSceneController implements Initializable {
             if(toOrder){
                 this.OrderText.setVisible(true);
                 setLabelText(this.OrderText,font, 20, "Choose insert order: ");
-                //this.OrderText.setText("Choose the order to insert them : ");
             }
             this.ChosenText.setVisible(true);
             this.pickedTiles = tiles.size();
@@ -605,7 +583,6 @@ public class gameSceneController implements Initializable {
                             this.newOrder.clear();
                             this.ChosenText.setVisible(false);
                             setLabelText(this.OrderText,font, 20, "Your ordered Tiles: ");
-                            //this.OrderText.setText("Your ordered Tiles: ");
                         }
                     });
                 }
@@ -615,9 +592,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Choose first column
-     */
+    /** Choose first column. */
     public void choose1() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 1";
@@ -625,9 +600,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Choose second column
-     */
+    /** Choose second column. */
     public void choose2() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 2";
@@ -635,9 +608,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Choose third column
-     */
+    /** Choose third column. */
     public void choose3() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 3";
@@ -645,9 +616,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Choose fourth column
-     */
+    /** Choose fourth column. */
     public void choose4() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 4";
@@ -655,9 +624,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Choose fifth column
-     */
+    /** Choose fifth column. */
     public void choose5() {
         synchronized (this.gui.Lock){
             this.gui.message= "sc 5";
@@ -665,10 +632,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
-    /**
-     * Prints received message
-     * @param message to print
-     */
+    /** Shows the received message, passed by parameter. */
     public void newMessage(String message){
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
@@ -677,9 +641,9 @@ public class gameSceneController implements Initializable {
     }
 
     /**
-     * Show turn messages.
-     * @param msg message to show
-     * @param firstTurn true if first turn, initializes needed variables
+     * Shows turn messages.
+     * @param msg message to be shown.
+     * @param firstTurn true only if first turn (initializes needed variables), false otherwise.
      */
     public void Turn(String msg,boolean firstTurn){
         if(firstTurn){
@@ -701,17 +665,12 @@ public class gameSceneController implements Initializable {
 
     }
 
-    /**
-     * Shows in game events
-     * @param msg event
-     */
+    /**Shows in game events messages, passed by parameter.*/
     public void setIngameEvents(String msg){
         setLabelText(ingameEvents, font, 24,msg);
     }
 
-    /**
-     * Sends a message to selected recipient.
-     */
+    /** Sends a message to a selected recipient. */
     public void sendChatMessage(){
 
         String message= this.Chat.getText();
@@ -725,14 +684,6 @@ public class gameSceneController implements Initializable {
                 this.gui.Lock.notifyAll();
             }
         }
-    }
-
-    /**
-     * Gets a reference of the current gui
-     * @param gui this gui
-     */
-    public void setGui(GUI gui) {
-        this.gui = gui;
     }
 
     /**
@@ -755,46 +706,57 @@ public class gameSceneController implements Initializable {
         }
     }
 
+    /** Sets the style to highlight the first column. */
     public void highlightCol1() {
         col1.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
+    /** Sets the style to highlight the second column. */
     public void highlightCol2() {
         col2.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
+    /** Sets the style to highlight the third column. */
     public void highlightCol3() {
         col3.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
+    /** Sets the style to highlight the fourth column. */
     public void highlightCol4() {
         col4.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
+    /** Sets the style to highlight the fifth column. */
     public void highlightCol5() {
         col5.setStyle("-fx-background-color: rgba(255,251,2,0.42)");
     }
 
+    /** Remove the style to highlight the first column. */
     public void desCol1() {
         col1.setStyle("");
     }
 
+    /** Remove the style to highlight the second column. */
     public void desCol2() {
         col2.setStyle("");
     }
 
+    /** Remove the style to highlight the third column. */
     public void desCol3() {
         col3.setStyle("");
     }
 
+    /** Remove the style to highlight the fourth column. */
     public void desCol4() {
         col4.setStyle("");
     }
 
+    /** Remove the style to highlight the fifth column. */
     public void desCol5() {
         col5.setStyle("");
     }
 
+    /** Sets the text style of the labels.  */
     public void setLabelText(Label label, String font, int size, String msg){
         label.setStyle("-fx-font-family: '"+font+"';"+
                 "-fx-font-size: " + size +"px;" +
@@ -805,8 +767,14 @@ public class gameSceneController implements Initializable {
         label.setText(msg);
     }
 
+    /** "Closes" the pop-ups that shows the common goals. */
     public void closeCommon() {
         commonBack.setVisible(false);
         commonWindow.setVisible(false);
+    }
+
+    /** Sets the GUI passed by parameter */
+    public void setGui(GUI gui) {
+        this.gui = gui;
     }
 }

@@ -83,6 +83,7 @@ public class lobbySceneController implements Initializable {
         }
     }
 
+
     public void createLobby() throws InterruptedException {
         synchronized (gui.Lock) {
             gui.message = "createlobby " + limit;
@@ -134,6 +135,7 @@ public class lobbySceneController implements Initializable {
         }
     }
 
+    /** Sets the GUI passed by parameter */
     public void setGUI(GUI gui){
         this.gui=gui;
     }

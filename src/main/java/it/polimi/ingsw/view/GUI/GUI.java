@@ -29,7 +29,7 @@ public class GUI implements View {
     public final Object NameLock = new Object();
     public final Object IPLock = new Object();
     public final Object Lock = new Object();
-    public ChooseConnectionController ccc;
+    public chooseConnectionController ccc;
     public nameSceneController nsc;
     public lobbySceneController lsc;
     public gameSceneController gsc;
@@ -231,10 +231,7 @@ public class GUI implements View {
     }
 
 
-    /**
-     * Opens first gui scene
-     * @param primaryStage stage
-     */
+    /** Opens first scene in the stage passed by parameter. */
     public void startGuiConnection(Stage primaryStage){
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/ChooseConnectionScene.fxml"));
@@ -252,9 +249,7 @@ public class GUI implements View {
         stage.show();
     }
 
-    /**
-     * Open name scene
-     */
+    /** Opens name scene.*/
     public void openNameScene(){
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/NameScene.fxml"));
