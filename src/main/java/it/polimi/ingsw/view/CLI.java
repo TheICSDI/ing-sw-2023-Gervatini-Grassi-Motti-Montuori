@@ -291,6 +291,7 @@ public class CLI implements View{
                 pt <Row1> <Column1> (pick tiles)
                 so <First> <Second> <Third> (select order)
                 sc <ShelfColumn> (select column)
+                showshelf
                 showothers 
                 showpersonal
                 showcommons

@@ -43,19 +43,19 @@ class GameTest {
 
     /** Parser for common goal cards. It returns a shelf that completed the given common goal card's id.*/
     private Tile[][] Parser(int id){
-        Tile[][] shelf = new Tile[6][5];
+        Tile[][] shelf = new Tile[p1.getNumRows()][p1.getNumCols()];
         JSONParser parser = new JSONParser();
         JSONArray CC_test_File = null;
 
-        String name = "00";
+        String name;
         if(id < 10){
             name = "0" + id;
         } else {
             name = String.valueOf(id);
         }
 
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < p1.getNumRows(); i++) {
+            for (int j = 0; j < p1.getNumCols(); j++) {
                 shelf[i][j] = new Tile("empty");
             }
         }
@@ -152,10 +152,8 @@ class GameTest {
 
         //Select some position from the board
         List<Position> pos = new ArrayList<>();
-        Position pos1 = new Position(3, 0);
-        Position pos2 = new Position(3, 1);
-        pos.add(pos1);
-        pos.add(pos2);
+        pos.add(new Position(3, 0));
+        pos.add( new Position(3, 1));
         GC.pickTiles(p1.getNickname(), pos, g.id, 1);
         GC.pickTiles(p2.getNickname(), pos, g.id, 4);
 
@@ -201,6 +199,68 @@ class GameTest {
     }
 
     @Test
+    void pickTiles() throws RemoteException {
+        playerList.add(p1);
+        playerList.add(p2);
+        playerList.add(p3);
+        p1.setConnected(true);
+        p2.setConnected(true);
+        p3.setConnected(false);
+        connectionType type = new connectionType(true, out, null);
+        serverController.connections.put(p1.getNickname(), type);
+        serverController.connections.put(p2.getNickname(), type);
+        serverController.connections.put(p3.getNickname(), type);
+
+        Game g = new Game(playerList, GC);
+        gameController.allGames.put(g.id, g);
+        gameController.allPlayers.put(p1.getNickname(), p1);
+        gameController.allPlayers.put(p2.getNickname(), p2);
+        gameController.allPlayers.put(p3.getNickname(), p3);
+
+        //Select some position from the board
+        List<Position> pos = new ArrayList<>();
+        //case: chosen tiles are not available
+        pos.add(new Position(1, 1));
+        GC.pickTiles(p1.getNickname(), pos, g.id, 1);
+        pos.clear();
+        pos.add(new Position(3, 1));
+        GC.pickTiles(p1.getNickname(), pos, g.id, 1);
+        g.pickTiles(p1);
+    }
+
+    @Test
+    void selectColumn() throws RemoteException {
+        playerList.add(p1);
+        playerList.add(p2);
+        p1.setConnected(true);
+        p2.setConnected(true);
+        connectionType type = new connectionType(true, out, null);
+        serverController.connections.put(p1.getNickname(), type);
+        serverController.connections.put(p2.getNickname(), type);
+
+        Game g = new Game(playerList, GC);
+        gameController.allGames.put(g.id, g);
+        gameController.allPlayers.put(p1.getNickname(), p1);
+        gameController.allPlayers.put(p2.getNickname(), p2);
+
+        List <Tile> toInsert = new ArrayList<>();
+        toInsert.add(new Tile("plants"));
+
+        //The shelf of p1 is full
+        for (int i = 0; i < p1.getNumRows(); i++) {
+            for (int j = 0; j < p1.getNumCols(); j++) {
+                p1.getShelf()[i][j] = new Tile("games");
+            }
+        }
+
+        GC.selectColumn(p1.getNickname(), 2, g.id, 1);
+
+        p1.getShelf()[5][1] = new Tile("empty");
+        GC.selectColumn(p1.getNickname(), 2, g.id, 1);
+        g.selectColumn(p1, toInsert);
+    }
+
+    @Test
     void checkTiles(){
         Tile t1 = new Tile("games",1);
         Tile t2 = new Tile("games",1);
@@ -236,14 +296,16 @@ class GameTest {
         //set a shelf that completed the correct common goal card
         int cc1 = g.getCcId().get(0);
         int cc2 = g.getCcId().get(1);
+        System.out.println(cc1);
+        System.out.println(cc2);
         p1.setShelf(Parser(cc1));
         p2.setShelf(Parser(cc2));
 
+        //TODO: che succede se anche p1 completa per caso cc2? come faccio ad accorgermene?
+        //bisognerebbe controllare che ogni cc non ne completa anche un'altra qualsiasi
         g.calculateCC(p1);
         assertEquals(8, p1.getScoreToken1());
-        assertEquals(0, p1.getScoreToken2());
         g.calculateCC(p2);
-        assertEquals(0, p2.getScoreToken1());
         assertEquals(8, p2.getScoreToken2());
     }
 
@@ -284,7 +346,7 @@ class GameTest {
         serverController.connections.put(p2.getNickname(), type);
         serverController.connections.put(p3.getNickname(), type);
         p1.setConnected(true);
-        p2.setConnected(true);
+        p2.setConnected(false);
         p3.setConnected(false);
         playerList.add(p1);
         playerList.add(p2);
@@ -296,6 +358,8 @@ class GameTest {
         gameController.allPlayers.put(p3.getNickname(), p3);
 
         typeRMI.changeConnection(true, out, null);
+        g.reconnectPlayer(p1.getNickname());
+        g.reconnectPlayer(p2.getNickname());
         g.reconnectPlayer(p3.getNickname());
     }
 }
