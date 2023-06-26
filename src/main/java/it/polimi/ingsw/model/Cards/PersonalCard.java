@@ -33,6 +33,7 @@ public class PersonalCard{
 	}
 
 	/** A parser for the personal_card.json that contains all 12 personal goal cards. */
+	//TODO: cambiarlo con Gson
 	private void personalCardParser() {
 		JSONParser parser = new JSONParser();
 		JSONArray personalCardFile = null;
@@ -41,10 +42,7 @@ public class PersonalCard{
 		try {
 			FileInputStream pathFile = new FileInputStream("JSON/personal_card.json");
 			personalCardFile = (JSONArray) parser.parse(new InputStreamReader(pathFile));
-
-		} catch (ParseException | IOException e) {
-			e.printStackTrace();
-		}
+		} catch (ParseException | IOException ignored) {}
 
 		//Fill the card with empty tiles
 		for (int i = 0; i < this.numRows; i++) {
