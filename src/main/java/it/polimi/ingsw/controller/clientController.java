@@ -21,7 +21,9 @@ public class clientController{
     private List<Integer> cc = new ArrayList<>();
     private final int numRows = 6;
     private final int numCols = 5;
+    private final int dim = 9;
     private Tile[][] shelf = new Tile[numRows][numCols];
+    private Tile[][] board = new Tile[dim][dim];
 
     /** It creates a clientController specific for a client given its nickname.
      * @param nickname of the client. */
@@ -35,6 +37,11 @@ public class clientController{
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {
                 this.shelf[i][j] = new Tile("empty", 1);
+            }
+        }
+        for (int i = 0; i < dim; i++) {
+            for (int j = 0; j < dim; j++) {
+                this.board[i][j] = new Tile("empty", 1);
             }
         }
     }
@@ -166,6 +173,14 @@ public class clientController{
                 case SHOWSHELF -> {
                     if(idGame > 0){
                         return new UpdateBoardMessage(Action.SHOWSHELF, this.shelf);
+                    } else {
+                        return new DefaultErrorMessage("You are not in a game!");
+                    }
+                }
+
+                case SHOWBOARD -> {
+                    if(idGame > 0){
+                        return new UpdateBoardMessage(Action.SHOWBOARD, this.board);
                     } else {
                         return new DefaultErrorMessage("You are not in a game!");
                     }
@@ -326,14 +341,20 @@ public class clientController{
     public void setShelf(Tile[][] shelf) {
         this.shelf = shelf;
     }
-
     /** Gets the number of rows of the shelf. */
     public int getNumRows() {
         return numRows;
     }
-
     /** Gets the number of columns of the shelf. */
     public int getNumCols() {
         return numCols;
+    }
+    /** It gets the board of the game (in which the player is). */
+    public Tile[][] getBoard() {
+        return board;
+    }
+    /** It sets the board of the game (in which the player is) passed by parameter. */
+    public void setBoard(Tile[][] board) {
+        this.board = board;
     }
 }

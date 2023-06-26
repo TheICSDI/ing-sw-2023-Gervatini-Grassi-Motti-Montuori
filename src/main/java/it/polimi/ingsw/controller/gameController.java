@@ -23,6 +23,7 @@ public class gameController {
     public static List<command> queue = new ArrayList<>();
     public final static Object queueLock = new Object();
     private final static String RED = "\u001B[31m";
+    private static final String RESET = "\u001B[0m";
 
     /** It returns the chosen number of column of the given player in the game.
      * @param player nickname of the player that is choosing the column.
@@ -38,8 +39,6 @@ public class gameController {
      * @param player nickname of the player that is choosing the order.
      * @param gameId id of the game in which the player is playing.
      * @return list of chosen tiles. */
-    //TODO: per come è fatta findThErequest order non sono mai empty -> cambiare in game perchè choseorder
-    // non può mai essere -2
     public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SO);
         assert order.isPresent();
@@ -67,7 +66,7 @@ public class gameController {
         Optional<command> found = Optional.empty();
         synchronized (queueLock) {
             while(found.isEmpty() && p.isConnected()){
-                System.out.println(RED + "Locked queue, finding request " + action);
+                System.out.println(RED + "Locked queue, finding request " + action + RESET);
                 toFind = queue.stream()
                         .filter(ob -> ob.g.id == gameId)
                         .filter(ob -> ob.p.getNickname().equals(player))

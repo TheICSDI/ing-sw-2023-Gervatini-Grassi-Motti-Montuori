@@ -272,9 +272,7 @@ public class GUI implements View {
         stage.show();
     }
 
-    /**
-     * Open lobby scene
-     */
+    /** Opens lobby scene. */
     public void openLobbyScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
@@ -293,9 +291,7 @@ public class GUI implements View {
         stage.show();
     }
 
-    /**
-     * Open game scene
-     */
+    /** Opens game scene. */
     private void openGameScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
@@ -318,9 +314,7 @@ public class GUI implements View {
         stage.show();
     }
 
-    /**
-     * Open end scene
-     */
+    /** Opens end scene. */
     private void openEndScene(){
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;

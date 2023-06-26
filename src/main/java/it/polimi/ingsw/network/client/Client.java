@@ -44,6 +44,9 @@ public class Client extends Application {
     private static final Object SocketLock = new Object();
     private static boolean firstTurn;
     private static String IPv4;
+    private final static String RED = "\u001B[31m";
+    private static final String RESET = "\u001B[0m";
+    private static final String BLUE = "\u001B[34m";
     
     /** It starts the socket connection on the given ip and port.
      * @param ip address of the connection.
@@ -94,8 +97,9 @@ public class Client extends Application {
                 //set the local shelf to empty
                 controller.emptyShelf();
             }
-            case UPDATEBOARD -> {
+            case UPDATEBOARD, SHOWBOARD -> {
                 reply = UpdateBoardMessage.decrypt(message);
+                controller.setBoard(reply.getSimpleBoard());
                 virtualView.showBoard(reply.getSimpleBoard());
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
@@ -144,11 +148,11 @@ public class Client extends Application {
             }
             case C -> {
                 reply = ChatMessage.decrypt(message);
-                virtualView.showChat(reply.getUsername() + " -> You: " + ((ChatMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + " -> you: " + ((ChatMessage)reply).getPhrase());
             }
             case CA -> {
                 reply=BroadcastMessage.decrypt(message);
-                virtualView.showChat(reply.getUsername() + " -> All: " + ((BroadcastMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + " -> all: " + ((BroadcastMessage)reply).getPhrase());
             }
             case POINTS -> {
                 reply = SimpleReply.decrypt(message);
@@ -199,6 +203,8 @@ public class Client extends Application {
                 virtualView.showPersonal(controller.getSimpleGoal());
             } else if (curr_action.equals(Action.SHOWSHELF)) {
                 virtualView.showShelf(controller.getShelf());
+            } else if (curr_action.equals(Action.SHOWBOARD)) {
+                virtualView.showBoard(controller.getBoard());
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
                 virtualView.showCommons(controller.getCc());
             } else if(curr_action.equals(Action.SHOWOTHERS)){
@@ -287,7 +293,7 @@ public class Client extends Application {
             try {
                 listenSocket();
             } catch (IOException | ParseException | InterruptedException e) {
-                System.out.println("Connection error");
+                System.out.println(RED + "Connection error" + RESET);
             }
         });
         ExecutorService executorService = Executors.newFixedThreadPool(3);
@@ -335,16 +341,14 @@ public class Client extends Application {
         executor.shutdown();
     }
 
-    /** It starts the RMI connection with the server. */
+    /** It starts a RMI connection with the server. */
     public static void RMI(){
         controller = new clientController();
         try {
-            //System.out.println("Chosen IPv4:" + IPv4);
-            //Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             Registry registry = LocateRegistry.getRegistry(IPv4, 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
-            System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
+            System.out.println(BLUE + "Welcome to MyShelfie!" + RESET);
             setName();
 
             //Pool of thread for the ping messages
@@ -353,7 +357,7 @@ public class Client extends Application {
                 try {
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 } catch (RemoteException e) {
-                    System.out.println("Server disconnected");
+                    System.out.println(RED + "Server disconnected" + RESET);
                 }
             });
             ExecutorService executor2 = Executors.newSingleThreadExecutor();
@@ -377,24 +381,18 @@ public class Client extends Application {
         }
     }
 
-    /**
-     * Counts pings, catched eventual disconnections
-     * @throws InterruptedException error with Thread sleep
-     */
+    /** Counts pings and catches eventual disconnections of the clients. */
     private static void ping() throws InterruptedException {
         int x = -1;
         while(x < ping) {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
-        System.out.println("Disconnected");
+        System.out.println(RED + "Disconnected" + RESET);
         connected = false;
     }
 
-    /**
-     * Gets name for rmi protocol
-     * @throws RemoteException rmi errors
-     */
+    /** Gets name via RMI connection. */
     public static void setName() throws RemoteException {
         String input;
         SetNameMessage nick;
@@ -404,8 +402,8 @@ public class Client extends Application {
     }
 
     /**
-     * Javafx thread
-     * @param stage gui stage
+     * It starts the GUI's thread.
+     * @param stage current GUI's stage.
      */
     @Override
     public void start(Stage stage) {

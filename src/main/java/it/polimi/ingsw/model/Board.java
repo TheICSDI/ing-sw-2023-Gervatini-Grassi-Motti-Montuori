@@ -153,7 +153,7 @@ public class Board {
         }
     }
 
-    /** It copy the current board into a given one passed by parameter. */
+    /** It copies the current board into a given one passed by parameter. */
     public void cloneBoard(Board newBoard){
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {

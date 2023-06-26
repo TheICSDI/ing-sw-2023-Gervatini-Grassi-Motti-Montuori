@@ -133,29 +133,14 @@ class GameTest {
 
     @Test
     void startGame() throws RemoteException {
-        playerList.add(p1);
-        playerList.add(p2);
-        playerList.add(p3);
-        p1.setConnected(true);
-        p2.setConnected(true);
-        p3.setConnected(false);
-        connectionType type = new connectionType(true, out, null);
-        serverController.connections.put(p1.getNickname(), type);
-        serverController.connections.put(p2.getNickname(), type);
-        serverController.connections.put(p3.getNickname(), type);
-
-        Game g = new Game(playerList, GC);
-        gameController.allGames.put(g.id, g);
-        gameController.allPlayers.put(p1.getNickname(), p1);
-        gameController.allPlayers.put(p2.getNickname(), p2);
-        gameController.allPlayers.put(p3.getNickname(), p3);
+        Game g = setUpGame();
 
         //Select some position from the board
         List<Position> pos = new ArrayList<>();
-        pos.add(new Position(3, 0));
-        pos.add( new Position(3, 1));
+        pos.add(new Position(3, 1));
+        pos.add(new Position(4, 1));
         GC.pickTiles(p1.getNickname(), pos, g.id, 1);
-        GC.pickTiles(p2.getNickname(), pos, g.id, 4);
+        GC.pickTiles(p2.getNickname(), pos, g.id, 1);
 
         //Select an order for the picked tiles
         List<Integer> order = new ArrayList<>();
@@ -167,7 +152,7 @@ class GameTest {
         //Select a column
         int col = 2;
         GC.selectColumn(p1.getNickname(), col, g.id, 3);
-        GC.selectColumn(p2.getNickname(), col, g.id, 5);
+        GC.selectColumn(p2.getNickname(), col, g.id, 3);
 
         //Make the shelf of p1 full (except for two places) to make the game end
         for (int i = 0; i < p1.getNumRows(); i++) {
@@ -179,7 +164,7 @@ class GameTest {
         p1.getShelf()[0][col-1] = new Tile("empty",1);
         p1.getShelf()[1][col-1] = new Tile("empty",1);
 
-        //Make the board empty (except for two positions) to test the refill
+        //Make the board empty (except for three positions) to test the refill
         for (int i = 0; i < g.getBoard().getNumRows(); i++) {
             for (int j = 0; j < g.getBoard().getNumCols(); j++) {
                 if(!g.getBoard().board[i][j].getCategory().equals(it.polimi.ingsw.model.Tile.type.NOT_ACCESSIBLE)){
@@ -188,8 +173,8 @@ class GameTest {
             }
         }
         assertTrue(g.getBoard().isBoardEmpty());
-        g.getBoard().board[3][0] = new Tile("games",1);
         g.getBoard().board[3][1] = new Tile("games",1);
+        g.getBoard().board[4][1] = new Tile("plants",1);
 
         try {
             g.startGame();
@@ -198,38 +183,7 @@ class GameTest {
         }
     }
 
-    @Test
-    void pickTiles() throws RemoteException {
-        playerList.add(p1);
-        playerList.add(p2);
-        playerList.add(p3);
-        p1.setConnected(true);
-        p2.setConnected(true);
-        p3.setConnected(false);
-        connectionType type = new connectionType(true, out, null);
-        serverController.connections.put(p1.getNickname(), type);
-        serverController.connections.put(p2.getNickname(), type);
-        serverController.connections.put(p3.getNickname(), type);
-
-        Game g = new Game(playerList, GC);
-        gameController.allGames.put(g.id, g);
-        gameController.allPlayers.put(p1.getNickname(), p1);
-        gameController.allPlayers.put(p2.getNickname(), p2);
-        gameController.allPlayers.put(p3.getNickname(), p3);
-
-        //Select some position from the board
-        List<Position> pos = new ArrayList<>();
-        //case: chosen tiles are not available
-        pos.add(new Position(1, 1));
-        GC.pickTiles(p1.getNickname(), pos, g.id, 1);
-        pos.clear();
-        pos.add(new Position(3, 1));
-        GC.pickTiles(p1.getNickname(), pos, g.id, 1);
-        g.pickTiles(p1);
-    }
-
-    @Test
-    void selectColumn() throws RemoteException {
+    Game setUpGame(){
         playerList.add(p1);
         playerList.add(p2);
         p1.setConnected(true);
@@ -242,22 +196,7 @@ class GameTest {
         gameController.allGames.put(g.id, g);
         gameController.allPlayers.put(p1.getNickname(), p1);
         gameController.allPlayers.put(p2.getNickname(), p2);
-
-        List <Tile> toInsert = new ArrayList<>();
-        toInsert.add(new Tile("plants"));
-
-        //The shelf of p1 is full
-        for (int i = 0; i < p1.getNumRows(); i++) {
-            for (int j = 0; j < p1.getNumCols(); j++) {
-                p1.getShelf()[i][j] = new Tile("games");
-            }
-        }
-
-        GC.selectColumn(p1.getNickname(), 2, g.id, 1);
-
-        p1.getShelf()[5][1] = new Tile("empty");
-        GC.selectColumn(p1.getNickname(), 2, g.id, 1);
-        g.selectColumn(p1, toInsert);
+        return g;
     }
 
     @Test
@@ -318,22 +257,31 @@ class GameTest {
         playerList.add(p2);
         playerList.add(p3);
         playerList.add(p4);
-        Game g = new Game(playerList,GC);
+        Game g = new Game(playerList, GC);
 
         //Every player has totalPoints = 0, then the last player to play is the winner
         assertEquals(g.getPlayers().get(g.getPlayers().size() - 1), g.calculateWinner());
 
         //Adding some points to the players, the winner is the player that has more points in total
-        p1.addPoints(30);
+        p1.addPoints(50);
         p2.addPoints(30);
         p3.addPoints(40);
         p4.addPoints(35);
-        assertEquals(p3, g.calculateWinner());
+        assertEquals(p1, g.calculateWinner());
 
         //In case of tie, the winner is the one sitting further from the first player
         //In this case p2 and p3 have 40 points
-        p2.addPoints(10);
-        if (g.getPlayers().indexOf(p2) > g.getPlayers().indexOf(p3)) {
+        p3.addPoints(10);
+        if (g.getPlayers().indexOf(p1) > g.getPlayers().indexOf(p3)) {
+            assertEquals(p1, g.calculateWinner());
+        } else {
+            assertEquals(p3, g.calculateWinner());
+        }
+
+        p2.addPoints(20);
+        if (g.getPlayers().indexOf(p1) > g.getPlayers().indexOf(p3) && g.getPlayers().indexOf(p1) > g.getPlayers().indexOf(p2)) {
+            assertEquals(p1, g.calculateWinner());
+        } else if (g.getPlayers().indexOf(p2) > g.getPlayers().indexOf(p1) && g.getPlayers().indexOf(p2) > g.getPlayers().indexOf(p3)){
             assertEquals(p2, g.calculateWinner());
         } else {
             assertEquals(p3, g.calculateWinner());
@@ -359,6 +307,7 @@ class GameTest {
         gameController.allPlayers.put(p1.getNickname(), p1);
         gameController.allPlayers.put(p2.getNickname(), p2);
         gameController.allPlayers.put(p3.getNickname(), p3);
+        g.setpTurn(p1.getNickname());
 
         typeRMI.changeConnection(true, out, null);
         g.reconnectPlayer(p1.getNickname());

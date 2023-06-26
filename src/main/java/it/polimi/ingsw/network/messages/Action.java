@@ -23,6 +23,7 @@ public enum Action {
     CHOSENTILES,
     SHOWPERSONAL,
     SHOWSHELF,
+    SHOWBOARD,
     C,
     CA,
     SHOWCOMMONS,

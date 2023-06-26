@@ -26,8 +26,7 @@ public class PersonalCard{
 	/** Creates a personal goal card based on the id.
 	 * Each card has unique id.
 	 * @param uid represent the number of the card to be created. It goes from 0 to 11. */
-	public PersonalCard(int uid)
-	{
+	public PersonalCard(int uid) {
 		this.id = uid;
 		this.card = new Tile[numRows][numCols]; //fixed size
 		personalCardParser();

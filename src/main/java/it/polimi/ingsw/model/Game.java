@@ -41,8 +41,7 @@ public class Game {
         count++;
         this.id = count;
         this.players = players;
-        for (Player p:
-                players) {
+        for (Player p: players) {
             p.reset();
         }
 
@@ -136,8 +135,7 @@ public class Game {
                 int connectedPlayers=0;
                 while (connectedPlayers<=1) {
                     connectedPlayers = 0;
-                    for (Player pConnectionCheck :
-                            players) {
+                    for (Player pConnectionCheck : players) {
                         if (pConnectionCheck.isConnected()) connectedPlayers++;
                     }
                     if (connectedPlayers <= 1) {
@@ -173,7 +171,6 @@ public class Game {
                         //Handles the action "select order"
                         boolean allTheSame = checkTiles(toInsert);
                         serverController.sendMessage(new ChosenTilesMessage(toInsert, !allTheSame), p.getNickname());
-
                         if (!allTheSame) {
                             toInsert = orderTiles(p, toInsert);
                         }
@@ -182,8 +179,6 @@ public class Game {
                             //Handles the action "select column"
                             selectColumn(p, toInsert);
                         }
-
-
                     }
                     if (!p.isConnected()) {
                         this.board.cloneBoard(this.backupBoard);
@@ -260,8 +255,6 @@ public class Game {
                 if (!toInsert.isEmpty()) {
                     return toInsert;
                 }
-            } else {
-                return null;
             }
         }
     }
@@ -296,12 +289,9 @@ public class Game {
                 }
             }
         }
-        if(!order.isEmpty()) {
-            serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
-            return toInsert;
-        } else {
-            return null;
-        }
+        assert !order.isEmpty();
+        serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
+        return toInsert;
     }
 
     /** Handles the action "select column".
@@ -311,15 +301,13 @@ public class Game {
         int col = -1;
         while(col == -1 && p.isConnected()) {
             col = controller.chooseColumn(p.getNickname(), id);
-            if(col != -2) {
-                try {
-                    p.insertInShelf(toInsert, (col - 1));
-                } catch (InputMismatchException e) {
-                    col = -1;
-                }
+            try {
+                p.insertInShelf(toInsert, (col - 1));
+            } catch (InputMismatchException e) {
+                serverController.sendMessage(new SimpleReply("The chosen column is full!", Action.INGAMEEVENT), p.getNickname());
+                col = -1;
             }
         }
-        if(col==-2){ return;}
         serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
         serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
     }
@@ -338,7 +326,7 @@ public class Game {
                 winner = p;
             } else if (p.getTotalPoints() == winner.getTotalPoints()){
                 //If two players have the same amount of points, then the winner is the one sitting further from
-                // the first player.
+                //the first player.
                 if(players.indexOf(p) > players.indexOf(winner)) {
                     winner = p;
                 }
@@ -422,4 +410,8 @@ public class Game {
         return ccId;
     }
 
+    /** It sets the current turn using the nickname passed by parameter. */
+    public void setpTurn(String nick) {
+        this.pTurn = nick;
+    }
 }
