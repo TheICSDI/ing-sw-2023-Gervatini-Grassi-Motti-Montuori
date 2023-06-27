@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
+/** Controller for the lobby scene.*/
 public class lobbySceneController implements Initializable {
     @FXML
     public Label Name;
@@ -70,20 +71,20 @@ public class lobbySceneController implements Initializable {
     }
 
     /** Show available Lobbies passed by parameter. */
-    public void showLobbies(List<Lobby> Lobbies){
+    public void showLobbies(List<Lobby> Lobbies) {
         AvailableLobbies = Lobbies;
         this.Lobbies.getItems().clear();
         StringBuilder Lobby;
-        for (Lobby l: Lobbies) {
-            Lobby = new StringBuilder("Lobby " + l.lobbyId + " ("+ l.Players.size() + "/" + l.limit + "): ");
-            for (Player p: l.Players){
+        for (Lobby l : Lobbies) {
+            Lobby = new StringBuilder("Lobby " + l.lobbyId + " (" + l.Players.size() + "/" + l.limit + "): ");
+            for (Player p : l.Players) {
                 Lobby.append(p.getNickname()).append(" ");
             }
             this.Lobbies.getItems().add(Lobby.toString());
         }
     }
 
-
+    /** It creates the lobby given the limit by input. */
     public void createLobby() throws InterruptedException {
         synchronized (gui.Lock) {
             gui.message = "createlobby " + limit;
@@ -93,10 +94,12 @@ public class lobbySceneController implements Initializable {
         showLobbies();
     }
 
+    /** It sets the text. */
     public void setText(String text){
         this.text.setText(text);
     }
 
+    /** It shows all available lobbies. */
     public void showLobbies() {
         synchronized (gui.Lock) {
             gui.message = "showlobby";
@@ -104,6 +107,7 @@ public class lobbySceneController implements Initializable {
         }
     }
 
+    /** Manages the join action of a lobby. */
     public void Join() throws InterruptedException {
         ObservableList<Integer> selectedIndices = this.Lobbies.getSelectionModel().getSelectedIndices();
         for(Integer o : selectedIndices){
@@ -117,6 +121,7 @@ public class lobbySceneController implements Initializable {
         showLobbies();
     }
 
+    /** It sets the limit of the lobby created. */
     public void setLimit() {
         if(limit2.isSelected()){
             limit = 2;
@@ -127,6 +132,7 @@ public class lobbySceneController implements Initializable {
         }
     }
 
+    /** It starts the game. */
     @FXML
     public void StartGame() {
         synchronized (gui.Lock) {
@@ -135,7 +141,7 @@ public class lobbySceneController implements Initializable {
         }
     }
 
-    /** Sets the GUI passed by parameter */
+    /** Sets the GUI passed by parameter. */
     public void setGUI(GUI gui){
         this.gui=gui;
     }

@@ -1,8 +1,8 @@
+package it.polimi.ingsw.model.Tile;
+
 /** Represents a tile of the game.
  * @author Marco Gervatini, Giulio Montuori.
  */
-package it.polimi.ingsw.model.Tile;
-
 public class Tile {
 	private final type category;
 	private String color;

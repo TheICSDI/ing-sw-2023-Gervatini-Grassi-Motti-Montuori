@@ -1,11 +1,11 @@
-/** CC_06 class implements the logic for checking if the common goal card number 6 is completed by a player.
- * It requires the player to have eight tiles of the same type.
- * @author Marco Gervatini. */
 package it.polimi.ingsw.model.Cards;
 
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.model.Player;
 
+/** CC_06 class implements the logic for checking if the common goal card number 6 is completed by a player.
+ * It requires the player to have eight tiles of the same type.
+ * @author Marco Gervatini. */
 public class CC_06 implements CCStrategy {
     private final int id=6;
     @Override

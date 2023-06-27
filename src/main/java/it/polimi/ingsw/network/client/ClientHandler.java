@@ -1,5 +1,3 @@
-/** It manages multiple client connections via socket.
- * @author Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.gameController;
@@ -20,11 +18,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/** It manages multiple client connections via socket.
+ * @author Caterina Motti, Andrea Grassi. */
 public class ClientHandler extends Thread{
     private final Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
     private final serverController SC;
+    private static final String RESET = "\u001B[0m";
+    private final static String RED = "\u001B[31m";
 
     /** Constructor that specify the client for the entire class.
      * @param socket the client's socket.
@@ -92,7 +94,7 @@ public class ClientHandler extends Thread{
                         throw new RuntimeException(e);
                     }
                 }
-                System.out.println(finalNickname + " disconnected");
+                System.out.println(RED + finalNickname + " disconnected" + RESET);
                 gameController.allPlayers.get(finalNickname).setConnected(false);
                 gameController.unlockQueue();
             });
@@ -105,14 +107,13 @@ public class ClientHandler extends Thread{
         } catch (IOException e) {
             //If the client disconnects it is notified to the server
             if(nickname != null) {
-                System.out.println(nickname.getUsername() + " has disconnected!");
+                System.out.println(RED + nickname.getUsername() + " has disconnected!" + RESET);
                 if(gameController.allPlayers.containsKey(nickname.getUsername())){
                     gameController.allPlayers.get(nickname.getUsername()).setConnected(false);
-                    //TODO non funziona, not thread owner
                     gameController.unlockQueue();
                 }
             } else {
-                System.out.println("Client has disconnected!");
+                System.out.println(RED + "Client has disconnected!" + RESET);
             }
         } catch (ParseException ignored ){
         } finally {

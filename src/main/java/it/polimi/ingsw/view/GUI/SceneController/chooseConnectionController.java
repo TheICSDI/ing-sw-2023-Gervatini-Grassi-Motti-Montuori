@@ -16,8 +16,8 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** Controller for the connection scene. */
 public class chooseConnectionController implements Initializable {
-
     @FXML
     public Button ConfirmIP;
     @FXML
@@ -86,6 +86,7 @@ public class chooseConnectionController implements Initializable {
         }
     }
 
+    /** Gets the text (chosen IP).*/
     @FXML
     public void getText(){
         synchronized (gui.IPLock) {
@@ -95,9 +96,9 @@ public class chooseConnectionController implements Initializable {
     }
 
     /**
-     * Gets IP
-     * @param msg message
-     * @param color text color
+     * It displays the chosen ip and the outcome of the connection.
+     * @param msg message to be shown.
+     * @param color text color.
      */
     @FXML
     public void showIP(String msg, String color){
@@ -106,6 +107,7 @@ public class chooseConnectionController implements Initializable {
         Information.setFont(font);
     }
 
+    /** Sets the text passed by parameter. */
     public void setText(String text){
         this.Information.setText(text);
     }

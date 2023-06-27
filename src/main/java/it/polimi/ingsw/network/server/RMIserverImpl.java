@@ -1,5 +1,3 @@
-/** It implements the RMIconnection interface, in order to be able to establish RMI connection server side.
- * @author Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.connectionType;
@@ -18,6 +16,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/** It implements the RMIconnection interface, in order to be able to establish RMI connection server side.
+ * @author Caterina Motti, Andrea Grassi. */
 public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection {
     private static final String RESET = "\u001B[0m";
     private final static String RED = "\u001B[31m";

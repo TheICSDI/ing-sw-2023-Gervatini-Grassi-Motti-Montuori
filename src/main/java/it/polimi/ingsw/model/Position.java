@@ -1,9 +1,9 @@
-/** Represents a pair of indices used to indicate a position on the board.
- * @author Caterina Motti. */
 package it.polimi.ingsw.model;
 
 import java.util.Objects;
 
+/** Represents a pair of indices used to indicate a position on the board.
+ * @author Caterina Motti. */
 public class Position {
     private final int x;
     private final int y;

@@ -1,7 +1,3 @@
-/** CC_09 class implements the logic for checking if the common goal card number 9 is completed by a player.
- * It requires the player to have two columns each formed by 6 different types of tiles.
- * @author Marco Gervatini.
- */
 package it.polimi.ingsw.model.Cards;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.type;
@@ -9,6 +5,10 @@ import it.polimi.ingsw.model.Tile.type;
 import java.util.ArrayList;
 import java.util.List;
 
+/** CC_09 class implements the logic for checking if the common goal card number 9 is completed by a player.
+ * It requires the player to have two columns each formed by 6 different types of tiles.
+ * @author Marco Gervatini.
+ */
 public class CC_09 implements CCStrategy {
     private final int id=9;
     @Override

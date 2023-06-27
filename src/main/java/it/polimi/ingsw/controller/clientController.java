@@ -1,5 +1,3 @@
-/** It checks the correctness of the input client side. Each client has an instance of the class.
- * @author Marco Gervatini, Andrea Grassi, Caterina Motti. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
@@ -10,6 +8,8 @@ import it.polimi.ingsw.network.messages.*;
 
 import java.util.*;
 
+/** It checks the correctness of the input client side. Each client has an instance of the class.
+ * @author Marco Gervatini, Andrea Grassi, Caterina Motti. */
 public class clientController{
     private String nickname;
     private int idMex = 0;

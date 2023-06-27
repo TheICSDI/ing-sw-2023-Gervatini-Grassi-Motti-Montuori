@@ -1,8 +1,3 @@
-/** CC_08 class implements the logic for checking if the common goal card number 8 is completed by a player.
- * It requires the player to have four lines each formed by 5 tiles of maximum three different types. One
- * line can show the same or a different combination of another line.
- * @author Andrea Grassi.
- */
 package it.polimi.ingsw.model.Cards;
 
 import it.polimi.ingsw.model.Tile.type;
@@ -11,6 +6,11 @@ import it.polimi.ingsw.model.Player;
 import java.util.HashSet;
 import java.util.Set;
 
+/** CC_08 class implements the logic for checking if the common goal card number 8 is completed by a player.
+ * It requires the player to have four lines each formed by 5 tiles of maximum three different types. One
+ * line can show the same or a different combination of another line.
+ * @author Andrea Grassi.
+ */
 public class CC_08 implements CCStrategy {
     private final int id=8;
     @Override

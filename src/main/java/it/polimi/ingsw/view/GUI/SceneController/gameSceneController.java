@@ -19,6 +19,7 @@ import javafx.scene.paint.Paint;
 import java.net.URL;
 import java.util.*;
 
+/** Controller for game scene. */
 public class gameSceneController implements Initializable {
     @FXML
     public GridPane myShelfToken;
@@ -671,7 +672,7 @@ public class gameSceneController implements Initializable {
 
     }
 
-    /**Shows in game events messages, passed by parameter.*/
+    /** Shows in game events messages, passed by parameter.*/
     public void setIngameEvents(String msg){
         setLabelText(ingameEvents, font, 24,msg);
     }

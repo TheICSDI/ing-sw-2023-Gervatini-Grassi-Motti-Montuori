@@ -1,14 +1,14 @@
+package it.polimi.ingsw.model.Cards;
+
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Tile.type;
+
 /** CC_12 class implements the logic for checking if the common goal card number 12 is completed by a player.
  * It requires the player to have five columns of increasing or decreasing height.
  * Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.
  * Tiles can be of any type.
  * @author Marco Gervatini.
  */
-package it.polimi.ingsw.model.Cards;
-
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Tile.type;
-
 public class CC_12 implements CCStrategy {
     private final int id=12;
     @Override

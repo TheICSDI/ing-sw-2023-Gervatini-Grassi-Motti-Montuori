@@ -6,11 +6,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+/** Controller for end scene. */
 public class endSceneController {
     public Label Winner;
     public VBox Points;
     public GUI gui;
-
 
     /**
      * Shows player's points.

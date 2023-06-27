@@ -1,11 +1,11 @@
-/** CC_07 class implements the logic for checking if the common goal card number 7 is completed by a player.
- * It requires the player to have five tiles of the same type forming a diagonal.
- * @author Marco Gervatini. */
 package it.polimi.ingsw.model.Cards;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.type;
 
+/** CC_07 class implements the logic for checking if the common goal card number 7 is completed by a player.
+ * It requires the player to have five tiles of the same type forming a diagonal.
+ * @author Marco Gervatini. */
 public class CC_07 implements CCStrategy {
     private final int id=7;
     @Override

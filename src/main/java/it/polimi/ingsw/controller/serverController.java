@@ -1,5 +1,3 @@
-/** It interacts with the server and the gameController, in order to modify the instance of the game.
- * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
@@ -13,6 +11,8 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/** It interacts with the server and the gameController, in order to modify the instance of the game.
+ * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 public class serverController {
    /** Map that contains all the connections, the key is the nickname of the client. */
    public static Map<String, connectionType>  connections = new HashMap<>();
@@ -30,7 +30,7 @@ public class serverController {
     */
    public boolean executeMessage(GeneralMessage message) throws RemoteException {
       //Constants to lighten the code
-      final int id = message.getMessage_id();
+      final int id = message.getMessageId();
       final int gameId = message.getGameId();
       final int idLobby = message.getIdLobby();
       final Action action = message.getAction();

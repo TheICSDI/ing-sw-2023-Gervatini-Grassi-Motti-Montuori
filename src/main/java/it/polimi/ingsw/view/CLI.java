@@ -1,4 +1,3 @@
-/** It implements the view interface managing CLI's output.*/
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
@@ -13,6 +12,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** It implements the view interface managing CLI's output.*/
 public class CLI implements View{
     //"\u001b[48;2;<R code>;<G code>;<B code>m" COLORS
     public static final String RESET = "\033[0m";

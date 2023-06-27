@@ -1,5 +1,3 @@
-/** It represents a server able to establish connections with multiple client, both via socket and RMI.
- * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.serverController;
@@ -12,6 +10,8 @@ import java.rmi.registry.Registry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/** It represents a server able to establish connections with multiple client, both via socket and RMI.
+ * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 public class Server {
     private ServerSocket serverSocket;
     private static final serverController SC = new serverController();

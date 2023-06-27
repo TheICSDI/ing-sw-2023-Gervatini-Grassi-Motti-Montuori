@@ -1,4 +1,3 @@
-/** It implements the view interface managing GUI's output.*/
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
@@ -20,6 +19,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** It implements the view interface managing GUI's output.*/
 public class GUI implements View {
     private int nPage=1;
     private Stage stage;

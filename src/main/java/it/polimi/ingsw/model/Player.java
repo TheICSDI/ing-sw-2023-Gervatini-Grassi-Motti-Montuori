@@ -1,6 +1,3 @@
-/** Represents a player. Each player has a shelf and a personal goal card.
- * @Author Caterina Motti, Andrea Grassi, Marco Gervatini.
- */
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.serverController;
@@ -16,6 +13,9 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
+/** Represents a player. Each player has a shelf and a personal goal card.
+ * @Author Caterina Motti, Andrea Grassi, Marco Gervatini.
+ */
 public class Player implements Serializable {
     private final String nickname;
     private final int numRows = 6;

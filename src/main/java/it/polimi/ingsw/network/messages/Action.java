@@ -1,7 +1,7 @@
-/** Enumeration of the possibles type of messages that the clients can send to the server in order to play the game.
- * @author Marco Gervatini, Andrea Grassi, Giulio Montuori. */
 package it.polimi.ingsw.network.messages;
 
+/** Enumeration of the possibles type of messages between client and server.
+ * @author Marco Gervatini, Andrea Grassi, Giulio Montuori. */
 public enum Action {
     CREATELOBBY,
     SHOWLOBBY,

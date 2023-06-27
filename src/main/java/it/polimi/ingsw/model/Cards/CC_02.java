@@ -1,7 +1,3 @@
-/** CC_02 class implements the logic for checking if the common goal card number 2 is completed by a player.
- * It requires four tiles of the same type in the four corners of the bookshelf.
- * @author Marco Gervatini
- */
 package it.polimi.ingsw.model.Cards;
 
 import it.polimi.ingsw.model.Player;
@@ -9,6 +5,10 @@ import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 
 
+/** CC_02 class implements the logic for checking if the common goal card number 2 is completed by a player.
+ * It requires four tiles of the same type in the four corners of the bookshelf.
+ * @author Marco Gervatini
+ */
 public class CC_02 implements CCStrategy {
 	private final int id=2;
 	@Override

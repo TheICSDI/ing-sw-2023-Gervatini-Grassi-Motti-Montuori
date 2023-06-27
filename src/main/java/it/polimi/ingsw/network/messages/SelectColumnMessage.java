@@ -11,38 +11,34 @@ public class SelectColumnMessage extends GeneralMessage {
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param message_id uid of the message
-     * @param username uid of the user
-     * @param col the selected column by the user
+     * @param messageId id of the message.
+     * @param nickname id of the player.
+     * @param col the selected column by the player.
      */
-    public SelectColumnMessage(int message_id, String username, int col,int idGame) {
-        super(message_id, Action.SC, -1, username);
+    public SelectColumnMessage(int messageId, String nickname, int col,int idGame) {
+        super(messageId, Action.SC, -1, nickname);
         this.col = col;
         this.gameId =idGame;
     }
 
     /**
      * Parses a JSON-formatted string to set the message.
-     * @param msg a JSON-formatted string
-     * @return a fully initialized SelectColumnMessage Object
+     * @param msg a JSON-formatted string.
+     * @return a fully initialized SelectColumnMessage Object.
      */
     public static SelectColumnMessage decrypt(String msg){
         return new Gson().fromJson(msg, SelectColumnMessage.class);
     }
 
     /**
-     * Overrides the toString method to provide a custom string representation.
-     */
-    @Override
-    public String toString(){
-        return new Gson().toJson(this);
-    }
-
-    /**
-     * Getter of col
-     * @return this.col
+     * Gets the selected column.
      */
     public int getCol() {
         return col;
+    }
+
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
     }
 }
