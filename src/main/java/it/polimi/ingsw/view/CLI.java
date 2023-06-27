@@ -14,11 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CLI implements View{
-    //"\u001b[48;2;<R code>;<G code>;<B code>m" BACKGROUND COLORS
+    //"\u001b[48;2;<R code>;<G code>;<B code>m" COLORS
     public static final String RESET = "\033[0m";
-
     public static final String DARK_BROWN= "\u001b[48;2;117;61;34m";
-
     private final PrintStream out;
 
     public CLI(){
@@ -45,6 +43,7 @@ public class CLI implements View{
         }
         return reply;
     }
+
     @Override
     public String askIP(){
         // Regex Pattern for well formatted IPv4
@@ -53,7 +52,6 @@ public class CLI implements View{
                 "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
                 "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^0$");
         boolean correct = false;
-        String reply;
         Matcher matcher;
         String ip;
         do {
@@ -66,13 +64,14 @@ public class CLI implements View{
             matcher = correct_ip.matcher(ip);
             // The find() method returns true if the pattern was found in the string and false if it was not found.
             correct = matcher.find();
-        }while(!correct);
+        } while(!correct);
         if(ip.equals("0")){
             ip = "127.0.0.1";
         }
         System.out.println(ip + " chosen");
         return ip;
     }
+
     @Override
     public String askNickname(){
         Scanner input = new Scanner(System.in);
@@ -132,7 +131,21 @@ public class CLI implements View{
 
     @Override
     public void showShelf(Tile[][] shelf){
-        out.println("  Your shelf  ");
+        out.println("  Your shelf:  ");
+        printShelf(shelf);
+    }
+
+    @Override
+    public void showPersonal(PersonalCard PC){
+        out.println("  Your personal goal:  ");
+        printShelf(PC.getCard());
+    }
+
+    /**
+     * Show a generic shelf. Used for both shelves and personal goal cards.
+     * @param shelf to be showed.
+     */
+    private void printShelf(Tile[][] shelf){
         for (int i = 0; i < shelf.length; i++){
             out.print(RESET + "  ");
             for (int j = -1; j < shelf[0].length; j++) {
@@ -149,15 +162,9 @@ public class CLI implements View{
     }
 
     @Override
-    public void showPersonal(PersonalCard PC){
-        out.println("  Your personal goal:  ");
-        showShelf(PC.getCard());
-    }
-
-    @Override
     public void showCommons(List<Integer> cc){
         out.println("Common goals:");
-        int x=1;
+        int x = 1;
         for (int i: cc) {
             switch (i){
                 case(1)-> out.println("Goal " + x + ": Six groups each containing at least\n" +
@@ -223,8 +230,6 @@ public class CLI implements View{
         System.out.println(msg);
     }
 
-
-
     @Override
     public void showOthers(Map<String, Player> others){
         for (String nick: others.keySet()) {
@@ -284,14 +289,16 @@ public class CLI implements View{
                 \u001B[31mThis is the command list:\s
                 createlobby <Number of players>
                 joinlobby <Lobby id>
-                showlobby 
+                showlobby
                 C <recipient name> <message>
                 CA <message>
                 startgame
                 pt <Row1> <Column1> (pick tiles)
                 so <First> <Second> <Third> (select order)
                 sc <ShelfColumn> (select column)
-                showothers 
+                showshelf
+                showboard
+                showothers
                 showpersonal
                 showcommons
                 \u001B[0m""");

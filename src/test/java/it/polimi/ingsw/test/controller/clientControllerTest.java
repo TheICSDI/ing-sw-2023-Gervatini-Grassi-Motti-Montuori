@@ -9,6 +9,8 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.model.Tile.Tile;
+import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.network.messages.Action;
 import it.polimi.ingsw.network.messages.CreateLobbyMessage;
 import it.polimi.ingsw.network.messages.GeneralMessage;
@@ -143,6 +145,14 @@ class clientControllerTest {
 
         rsp = CC1.checkMessageShape(mex);
         assertEquals(Action.SHOWOTHERS, rsp.getAction());
+
+        //Case: SHOWSHELF
+        mex = "showshelf";
+        rsp = controller.checkMessageShape(mex); //Error: controller is not bind with a player in a game
+        assertEquals(Action.ERROR, rsp.getAction());
+
+        rsp = CC1.checkMessageShape(mex);
+        assertEquals(Action.SHOWSHELF, rsp.getAction());
 
         //Case: C
         mex = "C Mario ciao";
@@ -282,5 +292,21 @@ class clientControllerTest {
         assertFalse(controller.isAdjacentOnX(p1, p3));
         assertTrue(controller.isAdjacentOnY(p2, p4));
         assertFalse(controller.isAdjacentOnX(p2, p4));
+    }
+
+    @Test
+    void emptyShelf(){
+        for (int i = 0; i < controller.getNumRows(); i++) {
+            for (int j = 0; j < controller.getNumCols(); j++) {
+                controller.getShelf()[i][j] = new Tile("plants");
+                assertNotEquals(type.EMPTY, controller.getShelf()[i][j].getCategory());
+            }
+        }
+        controller.emptyShelf();
+        for (int i = 0; i < controller.getNumRows(); i++) {
+            for (int j = 0; j < controller.getNumCols(); j++) {
+                assertEquals(type.EMPTY, controller.getShelf()[i][j].getCategory());
+            }
+        }
     }
 }

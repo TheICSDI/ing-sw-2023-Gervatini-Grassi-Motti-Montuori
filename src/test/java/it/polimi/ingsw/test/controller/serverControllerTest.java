@@ -3,12 +3,14 @@
  */
 package it.polimi.ingsw.test.controller;
 
+import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.controller.connectionType;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
+import it.polimi.ingsw.network.client.RMIclientImpl;
 import it.polimi.ingsw.network.messages.*;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
@@ -151,10 +153,6 @@ class serverControllerTest {
     }
 
     @Test
-    void getName() {
-    }
-
-    @Test
     void getMessage() throws ParseException, RemoteException {
         setPlayer();
         GeneralMessage mex;
@@ -194,9 +192,5 @@ class serverControllerTest {
 
         mex = new PingMessage(p1.getNickname());
         assertEquals(Action.PING, SC.getMessage(mex.toString()));
-    }
-
-    @Test
-    void sendMessage() {
     }
 }

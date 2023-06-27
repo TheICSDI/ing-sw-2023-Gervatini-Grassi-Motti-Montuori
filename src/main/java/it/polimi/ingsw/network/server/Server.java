@@ -26,11 +26,6 @@ public class Server {
         }
     }
 
-    /** It closes the socket server. */
-    public void end() throws IOException {
-        serverSocket.close();
-    }
-
     /** It starts the server both via socket and RMI. */
     public static void main(String[] args) throws IOException {
         ExecutorService executor = Executors.newSingleThreadExecutor();

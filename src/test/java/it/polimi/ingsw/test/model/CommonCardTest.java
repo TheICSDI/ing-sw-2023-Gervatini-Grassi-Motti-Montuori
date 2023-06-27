@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,8 +35,8 @@ class CommonCardTest {
         JSONArray common_card_test_File = null;
 
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/common_card_test.json");
-            common_card_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/common_card_test.json");
+            common_card_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/common_card_test.json"))));
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();

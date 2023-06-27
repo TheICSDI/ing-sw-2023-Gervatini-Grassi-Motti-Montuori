@@ -82,14 +82,10 @@ public class Board {
     private void boardParser(int numPlayers){
         JSONParser parser = new JSONParser();
         JSONArray board_na_File = null;
-
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/board_na.json");
-            board_na_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
-
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
+            //FileInputStream pathFile = new FileInputStream("JSON/board_na.json");
+            board_na_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/board_na.json"))));
+        } catch (ParseException | IOException ignored) {}
 
         for(int index=0; index<board_na_File.size(); index++) {
             JSONObject tmp = (JSONObject) board_na_File.get(index);
@@ -157,7 +153,7 @@ public class Board {
         }
     }
 
-    /** It copy the current board into a given one passed by parameter. */
+    /** It copies the current board into a given one passed by parameter. */
     public void cloneBoard(Board newBoard){
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {

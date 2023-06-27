@@ -11,9 +11,15 @@ import java.util.List;
  */
 public class ShowCommonCards extends GeneralMessage{
 
+    /** Used to request the common cards' id when the game starts. */
     public ShowCommonCards(List<Integer> cc){
         super("", Action.SHOWCOMMONS, -1, -1);
         this.cc.addAll(cc);
+    }
+
+    /** Used to show the common cards. */
+    public ShowCommonCards(){
+        super("", Action.SHOWCOMMONS, -1, -1);
     }
 
     /**

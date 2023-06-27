@@ -17,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
@@ -29,8 +31,8 @@ class BoardTest {
         JSONArray board_test_File = null;
 
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/board_test.json");
-            board_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/board_test.json");
+            board_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/board_test.json"))));
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();
@@ -50,10 +52,13 @@ class BoardTest {
     @Test
     void fillBoard() {
         Board b = new Board(4);
-        for (int i = 0; i < b.getNumCols(); i++) {
+        //Used to check that the method fillBoard does not change the tiles that are not accessibile
+        Boolean[][] check = new Boolean[b.getNumRows()][b.getNumCols()];
+         for (int i = 0; i < b.getNumCols(); i++) {
             for (int j = 0; j < b.getNumRows(); j++) {
                 assertNotNull(b.board[i][j]);
                 assertNotNull(b.board[i][j].getCategory());
+                check[i][j] = b.board[i][j].getCategory().equals(type.NOT_ACCESSIBLE);
             }
         }
         b.fillBoard();
@@ -63,6 +68,11 @@ class BoardTest {
                 assertNotEquals(b.board[i][j].getCategory(), type.EMPTY);
                 assertNotNull(b.board[i][j]);
                 assertNotNull(b.board[i][j].getCategory());
+                if(check[i][j]){
+                    assertEquals(b.board[i][j].getCategory(), type.NOT_ACCESSIBLE);
+                } else {
+                    assertNotEquals(b.board[i][j].getCategory(), type.NOT_ACCESSIBLE);
+                }
             }
         }
     }

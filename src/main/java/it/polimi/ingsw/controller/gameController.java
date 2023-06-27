@@ -23,31 +23,35 @@ public class gameController {
     public static List<command> queue = new ArrayList<>();
     public final static Object queueLock = new Object();
     private final static String RED = "\u001B[31m";
+    private static final String RESET = "\u001B[0m";
 
     /** It returns the chosen number of column of the given player in the game.
      * @param player nickname of the player that is choosing the column.
      * @param gameId id of the game in which the player is playing.
-     * @return chosen column (-2 if not found). */
+     * @return chosen column. */
     public int chooseColumn(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SC);
+        assert order.isPresent();
         return order.get().getNumCol();
     }
 
     /** It returns the chosen order of tiles of the given player in the game.
      * @param player nickname of the player that is choosing the order.
      * @param gameId id of the game in which the player is playing.
-     * @return list of chosen tiles (null if not found). */
+     * @return list of chosen tiles. */
     public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SO);
+        assert order.isPresent();
         return order.get().getOrder();
     }
 
     /** It returns the chosen position (regarding the tiles in the board) of the given player in the game.
      * @param player nickname of the player that is choosing the tiles.
      * @param gameId id of the game in which the player is playing.
-     * @return list of positions (null if not found).*/
+     * @return list of positions.*/
     public List<Position> chooseTiles(String player , int gameId) {
-        Optional<command> order = findTheRequest(player,gameId,Action.PT);
+        Optional<command> order = findTheRequest(player, gameId, Action.PT);
+        assert order.isPresent();
         return order.get().getPos();
     }
 
@@ -62,7 +66,7 @@ public class gameController {
         Optional<command> found = Optional.empty();
         synchronized (queueLock) {
             while(found.isEmpty() && p.isConnected()){
-                System.out.println(RED + "Locked queue, finding request " + action);
+                System.out.println(RED + "Locked queue, finding request " + action + RESET);
                 toFind = queue.stream()
                         .filter(ob -> ob.g.id == gameId)
                         .filter(ob -> ob.p.getNickname().equals(player))

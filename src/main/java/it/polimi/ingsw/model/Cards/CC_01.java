@@ -17,21 +17,15 @@ public class CC_01 implements CCStrategy {
      * @param p a player.
      * @return true only if count the player has at least six groups that respect the rule of the card.
      */
-    public boolean isCompleted(Player p)
-    {
+    public boolean isCompleted(Player p) {
         Tile[][] current_shelf = p.getShelf();
         int count = 0;
-        int num_row = current_shelf.length;
-        int num_col = current_shelf[0].length;
-        int new_j, new_i;
+        int num_row = p.getNumRows();
+        int num_col = p.getNumCols();
         type current_tile;
 
-        for(int i = 0; i < num_row; i++)
-        {
-            for(int j = 0; j < num_col; j++)
-            {
-                new_i = 0;
-                new_j = 0;
+        for(int i = 0; i < num_row; i++) {
+            for(int j = 0; j < num_col; j++) {
                 current_tile = current_shelf[i][j].getCategory();
                 if(!current_tile.equals(type.EMPTY)) {
 

@@ -34,14 +34,6 @@ public class Lobby {
         } else Players.add(Joiner);
     }
 
-    /** Removes a player "leaver" from the lobby.
-     * @throws InputMismatchException if the player passed by parameter is not in the lobby. */
-    public void Leave(Player Leaver){
-        if(!Players.contains(Leaver)) {
-            throw new InputMismatchException("The player " + Leaver.getNickname() + " is not in the lobby!");
-        } else Players.remove(Leaver);
-    }
-
     /** Returns true only if there is more available space in the lobby.
      * A lobby is considered full when it reaches 4 players (maximum for the game)*/
     private boolean isLobbyFull(){

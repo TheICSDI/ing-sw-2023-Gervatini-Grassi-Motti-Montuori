@@ -9,6 +9,6 @@ class CC_09Test {
     @Test
     void isCompleted() {
         CCStrategy CC09=new CC_09();
-        CCGeneral.check(CC09,"JSON/CC/CC09_test.json");
+        CCGeneral.check(CC09,"/JSON/CC/CC09_test.json");
     }
 }

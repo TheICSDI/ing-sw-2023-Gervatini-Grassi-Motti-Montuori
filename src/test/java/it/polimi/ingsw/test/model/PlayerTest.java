@@ -3,7 +3,9 @@
  */
 package it.polimi.ingsw.test.model;
 
+import it.polimi.ingsw.controller.connectionType;
 import it.polimi.ingsw.controller.gameController;
+import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Player;
@@ -16,9 +18,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -26,20 +26,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     Player p1 = new Player("CLR");
-    Tile[][] s = p1.getShelf();
     Tile t1 = new Tile("cats");
     Tile t2 = new Tile("plants");
     Tile t3 = new Tile("books");
+    PrintWriter out = new PrintWriter(System.out, true);
 
     /** Parser for shelf_test.json. It returns a player with a full shelf. */
     private Player Parser(){
         Player p = new Player("Jhonny");
+        p.setConnected(true);
+        connectionType type = new connectionType(true, out, null);
+        serverController.connections.put(p.getNickname(), type);
+        gameController.allPlayers.put(p.getNickname(), p);
         JSONParser parser = new JSONParser();
         JSONArray shelf_test_File = null;
 
         try {
-            FileInputStream pathFile = new FileInputStream("JSON/shelf_test.json");
-            shelf_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            //FileInputStream pathFile = new FileInputStream("JSON/shelf_test.json");
+            shelf_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/shelf_test.json"))));
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();
@@ -61,7 +65,7 @@ class PlayerTest {
         List<Tile> selected = new ArrayList<>();
         List<Integer> order = new ArrayList<>();
         List<Tile> ordered;
-        gameController controller= new gameController();
+        gameController controller = new gameController();
         //Empty selected and order
         ordered = p1.orderTiles(selected, order);
         assertTrue(ordered.isEmpty());
@@ -81,17 +85,18 @@ class PlayerTest {
             assertEquals(selected.get(order.get(i) - 1), ordered.get(i));
         }
 
+        p1 = Parser();
         //Mismatch between the inputs
         //case 1: more element in order
         order.add(4);
-        Throwable ex1 = assertThrows(NullPointerException.class, () -> {
+        Throwable ex1 = assertThrows(InputMismatchException.class, () -> {
             List<Tile> o = p1.orderTiles(selected, order);
         });
 
         //case 2: more element in selected
         order.remove(0);
         order.remove(1);
-        Throwable ex2 = assertThrows(NullPointerException.class, () -> {
+        Throwable ex2 = assertThrows(InputMismatchException.class, () -> {
             List<Tile> o = p1.orderTiles(selected, order);
         });
     }
@@ -148,7 +153,6 @@ class PlayerTest {
     void pickTiles() throws RemoteException {
         Board b = new Board(4);
         b.fillBoard();
-        Player p = new Player("Mario");
 
         //Add some available position
         List<Position> chosen = new ArrayList<>();
@@ -160,10 +164,16 @@ class PlayerTest {
         List<Tile> expectedTiles = new ArrayList<>();
         expectedTiles.add(b.getTile(pos1));
         expectedTiles.add(b.getTile(pos2));
-        List<Tile> chosenTiles = p1.pickTiles(chosen, b,p);
+        List<Tile> chosenTiles = p1.pickTiles(chosen, b, p1);
         assertEquals(type.EMPTY, b.getTile(pos1).getCategory());
         assertEquals(type.EMPTY, b.getTile(pos2).getCategory());
         assertEquals(expectedTiles, chosenTiles);
+
+        //Not enough space in shelf: method pick tiles return an empty array
+        p1 = Parser();
+        p1.getShelf()[1][1] = new Tile("empty");
+        chosenTiles = p1.pickTiles(chosen, b, p1);
+        assertTrue(chosenTiles.isEmpty());
     }
 
     @Test

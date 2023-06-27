@@ -22,6 +22,8 @@ public enum Action {
     TURN,
     CHOSENTILES,
     SHOWPERSONAL,
+    SHOWSHELF,
+    SHOWBOARD,
     C,
     CA,
     SHOWCOMMONS,
@@ -29,5 +31,5 @@ public enum Action {
     SHOWOTHERS,
     PING,
     ERROR,
-    RECONNECT
+    RECONNECT;
 }

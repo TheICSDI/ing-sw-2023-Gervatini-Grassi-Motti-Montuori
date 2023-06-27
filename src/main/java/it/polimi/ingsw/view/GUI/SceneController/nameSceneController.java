@@ -20,8 +20,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class nameSceneController implements Initializable {
-    
-    
     @FXML
     public Button ConfirmNickname;
     @FXML
@@ -32,17 +30,12 @@ public class nameSceneController implements Initializable {
     @FXML
     public Pane Button;
     @FXML
-    public Label EnterNick;
-    @FXML
     private TextField GetNickname;
     Font font = null;
-
     private GUI gui;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         try {
             font = Font.loadFont(Objects.requireNonNull(getClass().getResource("/fonts/Poppins-Regular.ttf")).openStream(), 12);
         } catch (IOException e) {
@@ -69,6 +62,7 @@ public class nameSceneController implements Initializable {
         });
     }
 
+    /** Gets the nickname written in the text field. */
     @FXML
     public void getText(){
         synchronized (gui.NameLock) {
@@ -77,26 +71,20 @@ public class nameSceneController implements Initializable {
         }
     }
 
+    /** Notifies if the name is unavailable. */
     @FXML
-    public void showName(String name){
+    public void unavailable(){
         Information.setText("Nickname is not available!");
         Information.setFont(font);
-        //GetNickname.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-padding: 5px;");//figo ma rompe tutto io boh
-        /*try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }*/
-        //GetNickname.setStyle("");
     }
 
-
+    /** Writes the chosen name (if available), passed by parameter. */
     public void setText(String text){
         this.Information.setText(text);
     }
 
+    /** Sets the GUI passed by parameter */
     public void setGUI(GUI gui){
         this.gui=gui;
     }
-
 }

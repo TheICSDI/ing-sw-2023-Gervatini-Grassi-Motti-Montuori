@@ -49,7 +49,13 @@ public class CC_03 implements CCStrategy {
         return limit >= 4;
     }
 
-    //TODO: JAVADOC
+    /**
+     * Counts adjacent tiles of the same type. Recursive
+     * @param c type
+     * @param x starting tile x
+     * @param y starting tile y
+     * @return number of same type tiles in a said direction
+     */
     private int adj(type c, int x, int y) {
         int p = 1;
 

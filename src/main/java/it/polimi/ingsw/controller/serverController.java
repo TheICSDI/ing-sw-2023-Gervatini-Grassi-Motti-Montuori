@@ -21,7 +21,7 @@ public class serverController {
    private static final String RESET = "\u001B[0m";
    private static final String PINK = "\u001B[35m";
    private static final String GREEN = "\u001B[32m";
-   private static final String BLUE= "\u001B[34m";
+   private static final String BLUE = "\u001B[34m";
 
    /** It takes a message from the client and does the requested action.
     * It sends a reply if needed.
@@ -35,7 +35,7 @@ public class serverController {
       final int idLobby = message.getIdLobby();
       final Action action = message.getAction();
       final String player = message.getUsername();
-      System.out.println(PINK + player + " sent a " + action +" message" + RESET);
+      System.out.println(PINK + player + " sent a " + action + " message" + RESET);
       //Based on the message's action type
       switch(action){
          //It creates a new lobby whose first player is who have called the command
@@ -165,7 +165,7 @@ public class serverController {
 
          //Select che column in which to put the tiles
          case SC -> {
-            System.out.println( GREEN + "Adding a select column command to queue" + RESET);
+            System.out.println(GREEN + "Adding a select column command to queue" + RESET);
             int numCol = ((SelectColumnMessage)message).getCol();
             controller.selectColumn(player, numCol, gameId, id);
             return true;
@@ -208,6 +208,11 @@ public class serverController {
                   }
                }
             }
+         }
+
+         case PING -> {
+            connections.get(player).addPing();
+            sendMessage(new PingMessage(""), player);
          }
       }
       return false;
@@ -258,17 +263,13 @@ public class serverController {
          case SC -> mex = SelectColumnMessage.decrypt(input);
          case C -> mex = ChatMessage.decrypt(input);
          case CA -> mex = BroadcastMessage.decrypt(input);
-         case PING -> {
-            mex = PingMessage.decrypt(input);
-            connections.get(mex.getUsername()).addPing();
-            System.out.println("ping to " + mex.getUsername());
-            sendMessage(new PingMessage(""), mex.getUsername());
-         }
+         case PING -> mex = PingMessage.decrypt(input);
       }
       //If the message is valid the command is executed by the serverController
       if (!(mex == null)) {
          this.executeMessage(mex);
       }
+      assert mex != null;
       return mex.getAction();
    }
 
@@ -277,8 +278,8 @@ public class serverController {
     * @param nick the client's nickname. */
    public static void sendMessage(GeneralMessage m, String nick) throws RemoteException {
       if(gameController.allPlayers.get(nick).isConnected()) {
+         System.out.println(BLUE + "Sending message " + m.getAction() + " to " + nick + RESET);
          if (connections.get(nick).isSocket()) {
-            System.out.println(BLUE + "Sending message " + m.getAction() + " to " + nick + RESET);
             connections.get(nick).getOut().println(m);
          } else {
             connections.get(nick).getReply().RMIsend(m.toString());

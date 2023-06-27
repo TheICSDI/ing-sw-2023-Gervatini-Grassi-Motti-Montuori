@@ -22,7 +22,7 @@ public class Game {
     private final Board backupBoard;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
-    private int commonPoints;
+    private final int commonPoints;
     private final List<Integer> ccId = new ArrayList<>();
     private final List<PersonalCard> allPC = new ArrayList<>();
     public final gameController controller;
@@ -41,8 +41,7 @@ public class Game {
         count++;
         this.id = count;
         this.players = players;
-        for (Player p:
-                players) {
+        for (Player p: players) {
             p.reset();
         }
 
@@ -97,11 +96,11 @@ public class Game {
         serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, reconnected.getShelf()), reconnected.getNickname());
         for (Player other: players) {
             if(!other.getNickname().equals(reconnected.getNickname())){
-                serverController.sendMessage(new OtherPlayersMessage(other),reconnected.getNickname());
+                serverController.sendMessage(new OtherPlayersMessage(other), reconnected.getNickname());
             }
         }
         if(pTurn.equals(reconnected.getNickname())){
-            serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), reconnected.getNickname());
+            serverController.sendMessage(new SimpleReply("It's your turn!", Action.TURN), reconnected.getNickname());
             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
         } else {
             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
@@ -115,7 +114,6 @@ public class Game {
     /**
      * Manages all the game logic from start to end.
      * It calculates the total points of each player at the end of every turn.
-     * @see Player,Board,CommonCard,PersonalCard
      */
     public void startGame() throws RemoteException, InterruptedException {
         //At the start no player has the endgame token
@@ -137,8 +135,7 @@ public class Game {
                 int connectedPlayers=0;
                 while (connectedPlayers<=1) {
                     connectedPlayers = 0;
-                    for (Player pConnectionCheck :
-                            players) {
+                    for (Player pConnectionCheck : players) {
                         if (pConnectionCheck.isConnected()) connectedPlayers++;
                     }
                     if (connectedPlayers <= 1) {
@@ -174,7 +171,6 @@ public class Game {
                         //Handles the action "select order"
                         boolean allTheSame = checkTiles(toInsert);
                         serverController.sendMessage(new ChosenTilesMessage(toInsert, !allTheSame), p.getNickname());
-
                         if (!allTheSame) {
                             toInsert = orderTiles(p, toInsert);
                         }
@@ -183,13 +179,10 @@ public class Game {
                             //Handles the action "select column"
                             selectColumn(p, toInsert);
                         }
-
-
                     }
                     if (!p.isConnected()) {
                         this.board.cloneBoard(this.backupBoard);
-                        for (Player p1 :
-                                players) {
+                        for (Player p1 : players) {
                             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
                         }
                     }
@@ -245,7 +238,7 @@ public class Game {
      * @param p the current player.
      * @return list of chosen tiles. */
     public List<Tile> pickTiles(Player p) throws RemoteException {
-        while(true) {//Ricomincia se non trova return, unico caso shelf piena
+        while(true) {
             List<Position> chosen = controller.chooseTiles(p.getNickname(), id);
             boolean check = false;
             while (!check && p.isConnected()) {
@@ -262,8 +255,6 @@ public class Game {
                 if (!toInsert.isEmpty()) {
                     return toInsert;
                 }
-            } else {
-                return null;
             }
         }
     }
@@ -298,12 +289,9 @@ public class Game {
                 }
             }
         }
-        if(!order.isEmpty()) {
-            serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
-            return toInsert;
-        }else{
-            return null;
-        }
+        assert !order.isEmpty();
+        serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
+        return toInsert;
     }
 
     /** Handles the action "select column".
@@ -313,15 +301,13 @@ public class Game {
         int col = -1;
         while(col == -1 && p.isConnected()) {
             col = controller.chooseColumn(p.getNickname(), id);
-            if(col != -2) {
-                try {
-                    p.insertInShelf(toInsert, (col - 1));
-                } catch (InputMismatchException e) {
-                    col = -1;
-                }
+            try {
+                p.insertInShelf(toInsert, (col - 1));
+            } catch (InputMismatchException e) {
+                serverController.sendMessage(new SimpleReply("The chosen column is full!", Action.INGAMEEVENT), p.getNickname());
+                col = -1;
             }
         }
-        if(col==-2){ return;}
         serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
         serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
     }
@@ -340,7 +326,7 @@ public class Game {
                 winner = p;
             } else if (p.getTotalPoints() == winner.getTotalPoints()){
                 //If two players have the same amount of points, then the winner is the one sitting further from
-                // the first player.
+                //the first player.
                 if(players.indexOf(p) > players.indexOf(winner)) {
                     winner = p;
                 }
@@ -399,7 +385,7 @@ public class Game {
         return players;
     }
 
-    /** Gets the list of common goal cards fot the cal. */
+    /** Gets the list of common goal cards of the game. */
     public List<CommonCard> getCommonCards() {
         return CommonCards;
     }
@@ -414,13 +400,18 @@ public class Game {
         return allCC;
     }
 
-    /** Gets the list of all common goal cards by id. */
-    public List<Integer> getCCid() {
-        return ccId;
-    }
-
     /** Gets the board of the game. */
     public Board getBoard() {
         return board;
+    }
+
+    /** Gets the list of common goal cards' id. */
+    public List<Integer> getCcId() {
+        return ccId;
+    }
+
+    /** It sets the current turn using the nickname passed by parameter. */
+    public void setpTurn(String nick) {
+        this.pTurn = nick;
     }
 }

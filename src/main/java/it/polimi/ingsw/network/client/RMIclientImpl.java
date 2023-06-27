@@ -15,11 +15,15 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection {
     clientController CC;
+    /** Creates a RMIserverImpl given a client controller by parameter. */
     public RMIclientImpl(clientController CC) throws RemoteException {
         super();
         this.CC = CC;
     }
 
+    /** It gets the reply to the chosen nickname from the server via RMI connection.
+     * @param m message from the server (JSON format).
+     * @param reply way to talk with the server. */
     @Override
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
         Action action;
@@ -48,6 +52,10 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
         }
     }
 
+    /**
+     * It gets a message from the server and send it to the client, that elaborate the command.
+     * @param m message (JSON format).
+     */
     @Override
     public void RMIsend(String m) throws RemoteException {
         try {

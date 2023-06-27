@@ -13,14 +13,24 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.network.client.RMIclientImpl;
 import it.polimi.ingsw.network.server.RMIconnection;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+//TODO: migliorare la coverage della classe Game
 
 class GameTest {
     Player p1 = new Player("CLR");
@@ -30,6 +40,44 @@ class GameTest {
     List<Player> playerList = new ArrayList<>();
     gameController GC = new gameController();
     PrintWriter out = new PrintWriter(System.out, true);
+
+    /** Parser for common goal cards. It returns a shelf that completed the given common goal card's id.*/
+    private Tile[][] Parser(int id){
+        Tile[][] shelf = new Tile[p1.getNumRows()][p1.getNumCols()];
+        JSONParser parser = new JSONParser();
+        JSONArray CC_test_File = null;
+
+        String name;
+        if(id < 10){
+            name = "0" + id;
+        } else {
+            name = String.valueOf(id);
+        }
+
+        for (int i = 0; i < p1.getNumRows(); i++) {
+            for (int j = 0; j < p1.getNumCols(); j++) {
+                shelf[i][j] = new Tile("empty", 1);
+            }
+        }
+
+        try {
+            //FileInputStream pathFile = new FileInputStream("JSON/CC/CC" + name + "_test.json");
+            CC_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/CC/CC" + name + "_test.json"))));
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject tmp1 = (JSONObject) CC_test_File.get(0);
+        JSONArray tiles= (JSONArray) tmp1.get("tiles");
+        for(int index = 0; index < tiles.size(); index++) {
+            JSONObject tile = (JSONObject) tiles.get(index);
+            int indexX = Integer.parseInt(tile.get("x").toString());
+            int indexY = Integer.parseInt(tile.get("y").toString());
+            String t = tile.get("type").toString();
+            shelf[indexX][indexY] = new Tile(t,1);
+        }
+        return shelf;
+    }
 
     @Test
     void Game(){
@@ -85,31 +133,14 @@ class GameTest {
 
     @Test
     void startGame() throws RemoteException {
-        playerList.add(p1);
-        playerList.add(p2);
-        playerList.add(p3);
-        p1.setConnected(true);
-        p2.setConnected(true);
-        p3.setConnected(false);
-        connectionType type = new connectionType(true, out, null);
-        serverController.connections.put(p1.getNickname(), type);
-        serverController.connections.put(p2.getNickname(), type);
-        serverController.connections.put(p3.getNickname(), type);
-
-        Game g = new Game(playerList, GC);
-        gameController.allGames.put(g.id, g);
-        gameController.allPlayers.put(p1.getNickname(), p1);
-        gameController.allPlayers.put(p2.getNickname(), p2);
-        gameController.allPlayers.put(p3.getNickname(), p3);
+        Game g = setUpGame();
 
         //Select some position from the board
         List<Position> pos = new ArrayList<>();
-        Position pos1 = new Position(3, 0);
-        Position pos2 = new Position(3, 1);
-        pos.add(pos1);
-        pos.add(pos2);
+        pos.add(new Position(3, 1));
+        pos.add(new Position(4, 1));
         GC.pickTiles(p1.getNickname(), pos, g.id, 1);
-        GC.pickTiles(p2.getNickname(), pos, g.id, 4);
+        GC.pickTiles(p2.getNickname(), pos, g.id, 1);
 
         //Select an order for the picked tiles
         List<Integer> order = new ArrayList<>();
@@ -121,7 +152,7 @@ class GameTest {
         //Select a column
         int col = 2;
         GC.selectColumn(p1.getNickname(), col, g.id, 3);
-        GC.selectColumn(p2.getNickname(), col, g.id, 5);
+        GC.selectColumn(p2.getNickname(), col, g.id, 3);
 
         //Make the shelf of p1 full (except for two places) to make the game end
         for (int i = 0; i < p1.getNumRows(); i++) {
@@ -133,7 +164,7 @@ class GameTest {
         p1.getShelf()[0][col-1] = new Tile("empty",1);
         p1.getShelf()[1][col-1] = new Tile("empty",1);
 
-        //Make the board empty (except for two positions) to test the refill
+        //Make the board empty (except for three positions) to test the refill
         for (int i = 0; i < g.getBoard().getNumRows(); i++) {
             for (int j = 0; j < g.getBoard().getNumCols(); j++) {
                 if(!g.getBoard().board[i][j].getCategory().equals(it.polimi.ingsw.model.Tile.type.NOT_ACCESSIBLE)){
@@ -142,14 +173,30 @@ class GameTest {
             }
         }
         assertTrue(g.getBoard().isBoardEmpty());
-        g.getBoard().board[3][0] = new Tile("games",1);
         g.getBoard().board[3][1] = new Tile("games",1);
+        g.getBoard().board[4][1] = new Tile("plants",1);
 
         try {
             g.startGame();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    Game setUpGame(){
+        playerList.add(p1);
+        playerList.add(p2);
+        p1.setConnected(true);
+        p2.setConnected(true);
+        connectionType type = new connectionType(true, out, null);
+        serverController.connections.put(p1.getNickname(), type);
+        serverController.connections.put(p2.getNickname(), type);
+
+        Game g = new Game(playerList, GC);
+        gameController.allGames.put(g.id, g);
+        gameController.allPlayers.put(p1.getNickname(), p1);
+        gameController.allPlayers.put(p2.getNickname(), p2);
+        return g;
     }
 
     @Test
@@ -174,13 +221,34 @@ class GameTest {
     @Test
     void calculateCC() throws RemoteException {
         playerList.add(p1);
+        playerList.add(p2);
         Game g = new Game(playerList, GC);
 
-        //the player has zero points
+        //both players have not completed any common goal card
         g.calculateCC(p1);
-        assertEquals(0, p1.getTotalPoints());
         assertEquals(0, p1.getScoreToken1());
         assertEquals(0, p1.getScoreToken2());
+        g.calculateCC(p2);
+        assertEquals(0, p2.getScoreToken1());
+        assertEquals(0, p2.getScoreToken2());
+
+        //set a shelf that completed the correct common goal card
+        int cc1 = g.getCcId().get(0);
+        int cc2 = g.getCcId().get(1);
+        System.out.println(cc1);
+        System.out.println(cc2);
+        p1.setShelf(Parser(cc1));
+        p2.setShelf(Parser(cc2));
+
+        g.calculateCC(p1);
+        assertEquals(8, p1.getScoreToken1());
+        g.calculateCC(p2);
+        //if the first player complete also the second common goal card then the second player gains 4 point
+        if(p1.getScoreToken2() == 8){
+            assertEquals(4, p2.getScoreToken2());
+        } else {
+            assertEquals(8, p2.getScoreToken2());
+        }
     }
 
     @Test
@@ -189,22 +257,31 @@ class GameTest {
         playerList.add(p2);
         playerList.add(p3);
         playerList.add(p4);
-        Game g = new Game(playerList,GC);
+        Game g = new Game(playerList, GC);
 
         //Every player has totalPoints = 0, then the last player to play is the winner
         assertEquals(g.getPlayers().get(g.getPlayers().size() - 1), g.calculateWinner());
 
         //Adding some points to the players, the winner is the player that has more points in total
-        p1.addPoints(30);
+        p1.addPoints(50);
         p2.addPoints(30);
         p3.addPoints(40);
         p4.addPoints(35);
-        assertEquals(p3, g.calculateWinner());
+        assertEquals(p1, g.calculateWinner());
 
         //In case of tie, the winner is the one sitting further from the first player
         //In this case p2 and p3 have 40 points
-        p2.addPoints(10);
-        if (g.getPlayers().indexOf(p2) > g.getPlayers().indexOf(p3)) {
+        p3.addPoints(10);
+        if (g.getPlayers().indexOf(p1) > g.getPlayers().indexOf(p3)) {
+            assertEquals(p1, g.calculateWinner());
+        } else {
+            assertEquals(p3, g.calculateWinner());
+        }
+
+        p2.addPoints(20);
+        if (g.getPlayers().indexOf(p1) > g.getPlayers().indexOf(p3) && g.getPlayers().indexOf(p1) > g.getPlayers().indexOf(p2)) {
+            assertEquals(p1, g.calculateWinner());
+        } else if (g.getPlayers().indexOf(p2) > g.getPlayers().indexOf(p1) && g.getPlayers().indexOf(p2) > g.getPlayers().indexOf(p3)){
             assertEquals(p2, g.calculateWinner());
         } else {
             assertEquals(p3, g.calculateWinner());
@@ -220,7 +297,7 @@ class GameTest {
         serverController.connections.put(p2.getNickname(), type);
         serverController.connections.put(p3.getNickname(), type);
         p1.setConnected(true);
-        p2.setConnected(true);
+        p2.setConnected(false);
         p3.setConnected(false);
         playerList.add(p1);
         playerList.add(p2);
@@ -230,8 +307,11 @@ class GameTest {
         gameController.allPlayers.put(p1.getNickname(), p1);
         gameController.allPlayers.put(p2.getNickname(), p2);
         gameController.allPlayers.put(p3.getNickname(), p3);
+        g.setpTurn(p1.getNickname());
 
         typeRMI.changeConnection(true, out, null);
+        g.reconnectPlayer(p1.getNickname());
+        g.reconnectPlayer(p2.getNickname());
         g.reconnectPlayer(p3.getNickname());
     }
 }

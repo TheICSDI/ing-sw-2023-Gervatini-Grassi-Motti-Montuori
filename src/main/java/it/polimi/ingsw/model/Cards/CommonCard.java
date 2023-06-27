@@ -30,22 +30,18 @@ public class CommonCard{
         if(this.points > 0){
             //If it is the first card of the game then it will modify the first score token
             if(this.firstCard){
-                //if(p.getScoreToken1() == 0){
-                    p.setScoreToken1(points);
-                    this.points = points - commonPoints;
-                //}
+                p.setScoreToken1(points);
+                this.points = points - commonPoints;
             } else {
                 //Otherwise it will modify the second score token
-                //if(p.getScoreToken2() == 0){
-                    p.setScoreToken2(points);
-                    this.points = points - commonPoints;
-                //}
+                p.setScoreToken2(points);
+                this.points = points - commonPoints;
             }
         }
     }
 
+    /** Gets the points of the common card. */
     public int getPoints() {
         return points;
     }
-
 }

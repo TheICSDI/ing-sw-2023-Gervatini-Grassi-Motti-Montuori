@@ -40,10 +40,13 @@ public class Client extends Application {
     private static int ping = 0;
     private static final int pingTime = 15;
     public static boolean connected = true;
-    private static boolean socket=false;
-    private static final Object SocketLock=new Object();
+    private static boolean socket = false;
+    private static final Object SocketLock = new Object();
     private static boolean firstTurn;
     private static String IPv4;
+    private final static String RED = "\u001B[31m";
+    private static final String RESET = "\u001B[0m";
+    private static final String BLUE = "\u001B[34m";
     
     /** It starts the socket connection on the given ip and port.
      * @param ip address of the connection.
@@ -57,7 +60,6 @@ public class Client extends Application {
 
     /** It listens to the messages received by via socket, and it calls the elaborate method. */
     public static void listenSocket() throws IOException, ParseException, InterruptedException {
-        //TODO: non va bene, da errore con le eccezioni, sarebbe meglio un listener
         while(true) {
             String message = in.readLine();
             elaborate(message);
@@ -92,18 +94,22 @@ public class Client extends Application {
                 controller.setFirstTurn(true);
                 virtualView.startGame(reply.getMessage());
                 firstTurn = true;
+                //set the local shelf to empty
+                controller.emptyShelf();
             }
-            case UPDATEBOARD -> {
+            case UPDATEBOARD, SHOWBOARD -> {
                 reply = UpdateBoardMessage.decrypt(message);
+                controller.setBoard(reply.getSimpleBoard());
                 virtualView.showBoard(reply.getSimpleBoard());
                 if(controller.isFirstTurn()){
                     controller.setFirstTurn(false);
                     virtualView.showPersonal(controller.getSimpleGoal());
-                    virtualView.showCommons(controller.cc);
+                    virtualView.showCommons(controller.getCc());
                 }
             }
-            case UPDATESHELF -> {
+            case UPDATESHELF, SHOWSHELF -> {
                 reply = UpdateBoardMessage.decrypt(message);
+                controller.setShelf(reply.getSimpleBoard());
                 virtualView.showShelf(reply.getSimpleBoard());
             }
             case INGAMEEVENT, ERROR -> {
@@ -127,7 +133,7 @@ public class Client extends Application {
             }
             case SHOWCOMMONS -> {
                 reply = ShowCommonCards.decrypt(message);
-                reply.getCC(controller.cc);
+                reply.getCC(controller.getCc());
             }
             case COMMONCOMPLETED -> {
                 reply = CommonCompletedMessage.decrypt(message);
@@ -142,11 +148,11 @@ public class Client extends Application {
             }
             case C -> {
                 reply = ChatMessage.decrypt(message);
-                virtualView.showChat(reply.getUsername() + " -> You: " + ((ChatMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + " -> you: " + ((ChatMessage)reply).getPhrase());
             }
             case CA -> {
                 reply=BroadcastMessage.decrypt(message);
-                virtualView.showChat(reply.getUsername() + " -> All: " + ((BroadcastMessage)reply).getPhrase());
+                virtualView.showChat(reply.getUsername() + " -> all: " + ((BroadcastMessage)reply).getPhrase());
             }
             case POINTS -> {
                 reply = SimpleReply.decrypt(message);
@@ -195,8 +201,12 @@ public class Client extends Application {
                 virtualView.displayMessage(toSend);
             } else if (curr_action.equals(Action.SHOWPERSONAL)) {
                 virtualView.showPersonal(controller.getSimpleGoal());
+            } else if (curr_action.equals(Action.SHOWSHELF)) {
+                virtualView.showShelf(controller.getShelf());
+            } else if (curr_action.equals(Action.SHOWBOARD)) {
+                virtualView.showBoard(controller.getBoard());
             } else if (curr_action.equals(Action.SHOWCOMMONS)) {
-                virtualView.showCommons(controller.cc);
+                virtualView.showCommons(controller.getCc());
             } else if(curr_action.equals(Action.SHOWOTHERS)){
                 virtualView.showOthers(controller.getOthers());
             } else {
@@ -242,9 +252,6 @@ public class Client extends Application {
     /** It starts a socket connection with the server. */
     public static void socket() throws IOException {
         Client Client = new Client();
-        //Client.connection("192.168.1.194", 23450);
-        //Client.connection("127.0.0.1", 23450);
-        //System.out.println("Chosen IPv4: " + IPv4);
         Client.connection(IPv4, 23450);
         socket = true;
         String username;
@@ -286,7 +293,7 @@ public class Client extends Application {
             try {
                 listenSocket();
             } catch (IOException | ParseException | InterruptedException e) {
-                throw new RuntimeException(e);
+                System.out.println(RED + "Connection error" + RESET);
             }
         });
         ExecutorService executorService = Executors.newFixedThreadPool(3);
@@ -334,14 +341,14 @@ public class Client extends Application {
         executor.shutdown();
     }
 
-    /** It starts the RMI connection with the server. */
+    /** It starts a RMI connection with the server. */
     public static void RMI(){
         controller = new clientController();
         try {
             Registry registry = LocateRegistry.getRegistry(IPv4, 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
-            System.out.println("\u001b[34mWelcome to MyShelfie!\u001b[0m");
+            System.out.println(BLUE + "Welcome to MyShelfie!" + RESET);
             setName();
 
             //Pool of thread for the ping messages
@@ -350,7 +357,7 @@ public class Client extends Application {
                 try {
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 } catch (RemoteException e) {
-                    System.out.println("Server disconnected");
+                    System.out.println(RED + "Server disconnected" + RESET);
                 }
             });
             ExecutorService executor2 = Executors.newSingleThreadExecutor();
@@ -374,16 +381,18 @@ public class Client extends Application {
         }
     }
 
+    /** Counts pings and catches eventual disconnections of the clients. */
     private static void ping() throws InterruptedException {
         int x = -1;
         while(x < ping) {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
-        System.out.println("Disconnected"); //TODO dovrebbe essere in view
+        System.out.println(RED + "Disconnected" + RESET);
         connected = false;
     }
 
+    /** Gets name via RMI connection. */
     public static void setName() throws RemoteException {
         String input;
         SetNameMessage nick;
@@ -392,6 +401,10 @@ public class Client extends Application {
         stub.RMIsendName(nick.toString(), RMIclient);
     }
 
+    /**
+     * It starts the GUI's thread.
+     * @param stage current GUI's stage.
+     */
     @Override
     public void start(Stage stage) {
         ((GUI)virtualView).startGuiConnection(stage);

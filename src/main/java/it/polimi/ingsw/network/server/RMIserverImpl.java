@@ -19,26 +19,31 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection {
+    private static final String RESET = "\u001B[0m";
+    private final static String RED = "\u001B[31m";
     serverController SC;
+
+    /** Creates a RMIserverImpl given a server controller by parameter. */
     public RMIserverImpl(serverController SC) throws RemoteException {
         super();
         this.SC = SC;
     }
 
-    /** It gets a nickname from the server via RMI connection.
+    /** It gets a nickname from the client via RMI connection.
      * If the nickname is not already taken it is putted in the list of players (in gameController) and in the map of
-     * connections (in this class). Otherwise, it replies with false. */
+     * connections (in this class). Otherwise, it replies with false.
+     * @param m message from the client (JSON format).
+     * @param reply way to talk with the client. */
     @Override
     public void RMIsendName(String m, RMIconnection reply) throws RemoteException {
         GeneralMessage mex;
         mex = SetNameMessage.decrypt(m);
-        System.out.println(mex);
         if (gameController.allPlayers.containsKey(mex.getUsername())) {
             if (gameController.allPlayers.get(mex.getUsername()).isConnected()) {
                 //Nickname already taken
                 reply.RMIsendName(new SetNameMessage("Nickname already taken!", false).toString(), null);
             } else {
-                //Riconnessione
+                //Reconnection
                 gameController.allPlayers.get(mex.getUsername()).setConnected(true);
                 serverController.connections.get(mex.getUsername()).changeConnection(false, null, reply);
                 int lobbyId = -1;
@@ -77,13 +82,17 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                         throw new RuntimeException(e);
                     }
                 }
-                System.out.println(mex.getUsername() + " disconnected");
+                System.out.println(RED + mex.getUsername() + " disconnected" + RESET);
                 gameController.allPlayers.get(mex.getUsername()).setConnected(false);
                 gameController.unlockQueue();
             });
         }
     }
 
+    /**
+     * It gets a message from the client and sends it to the server, that execute the command.
+     * @param m message (JSON format).
+     */
     @Override
     public void RMIsend(String m) throws RemoteException {
         try {

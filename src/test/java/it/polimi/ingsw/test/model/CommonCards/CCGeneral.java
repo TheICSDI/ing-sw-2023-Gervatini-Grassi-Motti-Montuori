@@ -14,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,7 +23,6 @@ public class CCGeneral {
     /**
      * General check for all common cards, reads one or more shelves from a json file and checks if the respective
      * goal is reached.
-     *
      * @param CCard common goal card to be checked.
      * @param JSONName name of the file to read the shelves from.
      */
@@ -35,8 +35,7 @@ public class CCGeneral {
         JSONParser parser = new JSONParser();
         JSONArray CC_test_File = null;
         try {
-            FileInputStream pathFile = new FileInputStream(JSONName);
-            CC_test_File = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+            CC_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(CCGeneral.class.getResourceAsStream(JSONName))));
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();

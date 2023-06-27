@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class PersonalCard{
 	private final int id;
@@ -25,8 +26,7 @@ public class PersonalCard{
 	/** Creates a personal goal card based on the id.
 	 * Each card has unique id.
 	 * @param uid represent the number of the card to be created. It goes from 0 to 11. */
-	public PersonalCard(int uid)
-	{
+	public PersonalCard(int uid) {
 		this.id = uid;
 		this.card = new Tile[numRows][numCols]; //fixed size
 		personalCardParser();
@@ -39,8 +39,8 @@ public class PersonalCard{
 		Tile temp;
 
 		try {
-			FileInputStream pathFile = new FileInputStream("JSON/personal_card.json");
-			personalCardFile = (JSONArray) parser.parse(new InputStreamReader(pathFile));
+			//FileInputStream pathFile = new FileInputStream("JSON/personal_card.json");
+			personalCardFile = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/personal_card.json"))));
 
 		} catch (ParseException | IOException e) {
 			e.printStackTrace();

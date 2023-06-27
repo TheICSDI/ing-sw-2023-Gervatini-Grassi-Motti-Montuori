@@ -42,9 +42,7 @@ public class lobbySceneController implements Initializable {
     public Label createLobbytext;
     private List<Lobby> AvailableLobbies;
     private int limit = 2;
-
     private GUI gui;
-
     Font font;
 
     @Override
@@ -66,10 +64,12 @@ public class lobbySceneController implements Initializable {
         CreateLobby.setFont(font);
     }
 
+    /** Display the chosen name passed by parameter. */
     public void setName(String name){
         Name.setText("Your name: " + name);
     }
 
+    /** Show available Lobbies passed by parameter. */
     public void showLobbies(List<Lobby> Lobbies){
         AvailableLobbies = Lobbies;
         this.Lobbies.getItems().clear();
@@ -83,12 +83,12 @@ public class lobbySceneController implements Initializable {
         }
     }
 
+
     public void createLobby() throws InterruptedException {
         synchronized (gui.Lock) {
             gui.message = "createlobby " + limit;
             gui.Lock.notifyAll();
         }
-        //showLobbies(gameController.allLobbies);
         TimeUnit.MILLISECONDS.sleep(250);
         showLobbies();
     }
@@ -135,6 +135,7 @@ public class lobbySceneController implements Initializable {
         }
     }
 
+    /** Sets the GUI passed by parameter */
     public void setGUI(GUI gui){
         this.gui=gui;
     }

@@ -11,47 +11,47 @@ public class Tile {
 
 	/** Creates a tile according to a given type.
 	 * @param any name of the tile's type.
-	 * @param it number of the image. */
-	public Tile(String any , int it) {
+	 * @param imageNumber number of the image. */
+	public Tile(String any , int imageNumber) {
 		this.category = type.valueOf(any.toUpperCase());
 		switch (category){
 			case NOT_ACCESSIBLE -> {
 				color = "\u001b[48;2;117;61;34m";
-				initial=' ';
+				initial = ' ';
 			}
 			case EMPTY -> {
 				color ="\033[48;5;94m";
-				initial=' ';
+				initial = ' ';
 			}
 			case CATS -> {
 				color = "\033[42m";
-				initial='C';
-				image="/Images/item tiles/Gatti1." + it + ".png";
+				initial = 'C';
+				image = "/Images/item tiles/Gatti1." + imageNumber + ".png";
 			}
 			case TROPHIES -> {
 				color = "\033[46m";
-				initial='T';
-				image="/Images/item tiles/Trofei1." + it + ".png";
+				initial = 'T';
+				image = "/Images/item tiles/Trofei1." + imageNumber + ".png";
 			}
 			case FRAMES -> {
 				color = "\033[44m";
 				initial='F';
-				image="/Images/item tiles/Cornici1." + it + ".png";
+				image="/Images/item tiles/Cornici1." + imageNumber + ".png";
 			}
 			case PLANTS -> {
 				color = "\033[45m";
-				initial='P';
-				image="/Images/item tiles/Piante1." + it + ".png";
+				initial = 'P';
+				image = "/Images/item tiles/Piante1." + imageNumber + ".png";
 			}
 			case BOOKS -> {
-				color = "\033[47m";
-				initial='B';
-				image="/Images/item tiles/Libri1." + it + ".png";
+				color = "\u001b[48;2;163;163;157m";
+				initial = 'B';
+				image = "/Images/item tiles/Libri1." + imageNumber + ".png";
 			}
 			case GAMES -> {
 				color = "\033[43m";
-				initial='G';
-				image="/Images/item tiles/Giochi1." + it + ".png";
+				initial = 'G';
+				image = "/Images/item tiles/Giochi1." + imageNumber + ".png";
 			}
 		}
 	}
@@ -72,32 +72,26 @@ public class Tile {
 			case CATS -> {
 				color = "\033[42m";
 				initial = 'C';
-				image = "/Images/item tiles/Gatti1.1.png";
 			}
 			case TROPHIES -> {
 				color = "\033[46m";
 				initial = 'T';
-				image = "/Images/item tiles/Trofei1.1.png";
 			}
 			case FRAMES -> {
 				color = "\033[44m";
 				initial = 'F';
-				image = "/Images/item tiles/Cornici1.1.png";
 			}
 			case PLANTS -> {
 				color = "\033[45m";
 				initial = 'P';
-				image = "/Images/item tiles/Piante1.1.png";
 			}
 			case BOOKS -> {
 				color = "\033[47m";
 				initial = 'B';
-				image = "/Images/item tiles/Libri1.1.png";
 			}
 			case GAMES -> {
 				color = "\033[43m";
 				initial = 'G';
-				image = "/Images/item tiles/Giochi1.1.png";
 			}
 		}
 	}
