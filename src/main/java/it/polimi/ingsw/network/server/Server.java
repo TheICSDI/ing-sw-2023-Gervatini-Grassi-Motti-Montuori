@@ -38,9 +38,9 @@ public class Server {
         for (String arg : args) {
             if (arg.equals("--ip") || arg.equals("-i")) {
                 ip = args[i + 1];
-                i++;
                 break;
             }
+            i++;
         }
         executor.submit(() ->{
             try{

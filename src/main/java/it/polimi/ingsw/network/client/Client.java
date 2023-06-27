@@ -338,8 +338,6 @@ public class Client extends Application {
     public static void RMI(){
         controller = new clientController();
         try {
-            //System.out.println("Chosen IPv4:" + IPv4);
-            //Registry registry = LocateRegistry.getRegistry("127.0.0.1", 23451);
             Registry registry = LocateRegistry.getRegistry(IPv4, 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
