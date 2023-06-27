@@ -303,7 +303,7 @@ public class GUI implements View {
         stage.setFullScreen(false);
         stage.setX(0);
         stage.setY(0);
-        stage.setResizable(false);
+        stage.setResizable(true);
         nPage=4;
         stage.setScene(new Scene(root));
         stage.show();
