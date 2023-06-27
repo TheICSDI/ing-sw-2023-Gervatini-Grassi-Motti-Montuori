@@ -32,8 +32,7 @@ public class Server {
         int i = 0;
         for (String arg : args) {
             if (arg.equals("--ip") || arg.equals("-i")) {
-                ip = args[i+1];
-
+                ip = args[i + 1];
                 break;
             }
             i++;
