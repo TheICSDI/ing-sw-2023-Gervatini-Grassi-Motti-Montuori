@@ -158,6 +158,7 @@ public class gameSceneController implements Initializable {
         setLabelText(goalText,font, 20,"Your personal goal");
         setLabelText(yourShelfText,font, 20, "Your shelf:");
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
+
         if(players.size()==4) {
             CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
         }
