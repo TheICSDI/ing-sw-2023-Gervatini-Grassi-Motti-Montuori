@@ -1,6 +1,3 @@
-/** It is used by the server controller to modify the games/lobbies created.
- * It is used by the started game to get the useful information.
- * @author Marco Gervatini, Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
@@ -12,6 +9,9 @@ import it.polimi.ingsw.network.messages.Action;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/** It is used by the server controller to modify the games/lobbies created.
+ * It is used by the started game to get the useful information.
+ * @author Marco Gervatini, Caterina Motti, Andrea Grassi. */
 public class gameController {
     /** Map that contains all connected players, the nickname is the key. */
     public static Map<String, Player> allPlayers = new HashMap<>();

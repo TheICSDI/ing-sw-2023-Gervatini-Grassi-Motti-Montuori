@@ -11,8 +11,8 @@ public class OtherPlayersMessage extends GeneralMessage{
     private final Player p;
 
     /**
-     * Class constructor and set all needed attributes
-     * @param p all the information of the player
+     * Constructor that initializes a message with the provided parameters.
+     * @param p a player.
      */
     public OtherPlayersMessage(Player p) {
         super("", Action.SHOWOTHERS, -1, -1);
@@ -21,26 +21,22 @@ public class OtherPlayersMessage extends GeneralMessage{
 
     /**
      * Parses a JSON-formatted string to set the message.
-     * @param json a JSON-formatted string
-     * @return a fully initialized OtherPlayersMessage Object
+     * @param json a JSON-formatted string.
+     * @return a fully initialized OtherPlayersMessage Object.
      */
     public static OtherPlayersMessage decrypt(String json){
         return new Gson().fromJson(json,OtherPlayersMessage.class);
     }
 
     /**
-     * Overrides the toString method to provide a custom string representation.
-     */
+     * Gets the player.
+     * */
+    public Player getP() {
+        return this.p;
+    }
+
     @Override
     public String toString(){
         return new Gson().toJson(this);
-    }
-
-    /**
-     * Getter for p
-     * @return this.p
-     */
-    public Player getP() {
-        return this.p;
     }
 }

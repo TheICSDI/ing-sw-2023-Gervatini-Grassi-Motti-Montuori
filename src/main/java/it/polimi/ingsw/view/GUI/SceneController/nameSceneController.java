@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** Controller for name scene */
 public class nameSceneController implements Initializable {
     @FXML
     public Button ConfirmNickname;
@@ -43,12 +44,6 @@ public class nameSceneController implements Initializable {
         }
         //Setting the font
         GetNickname.setFont(font);
-        /*try {
-            font = Font.loadFont(Objects.requireNonNull(getClass().getResource("/fonts/Poppins-Black.ttf")).openStream(), 12);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ConfirmNickname.setFont(font);*/
         //Setting color of the text
         GetNickname.setPromptText("Enter your nickname");
         GetNickname.setFocusTraversable(false);

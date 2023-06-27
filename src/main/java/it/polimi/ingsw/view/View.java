@@ -1,5 +1,3 @@
-/** Interface that declare all methods necessary for display the game.
- * All available client's views (GUI and CLI) implements this interface.*/
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
@@ -10,6 +8,8 @@ import it.polimi.ingsw.model.Tile.Tile;
 import java.util.List;
 import java.util.Map;
 
+/** Interface that declare all methods necessary for display the game.
+ * All available client's views (GUI and CLI) implements this interface.*/
 public interface View {
     /** It enables the client to choose the type of connection (socket or RMI).
      * @return "1" for socket, "2" for RMI. */

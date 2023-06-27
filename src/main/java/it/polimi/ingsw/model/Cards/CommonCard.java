@@ -1,8 +1,8 @@
-/** Represents a common goal card.
- * @author Marco Gervatini, Caterina Motti */
 package it.polimi.ingsw.model.Cards;
 import it.polimi.ingsw.model.Player;
 
+/** Represents a common goal card.
+ * @author Marco Gervatini, Caterina Motti */
 public class CommonCard{
     private int points;
     private final boolean firstCard;

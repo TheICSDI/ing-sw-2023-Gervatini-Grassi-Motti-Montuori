@@ -1,7 +1,3 @@
-/** Represents a game. It is identified by a unique id.
- * Each game has some players (from 2 to 4), a board, 12 common goal cards and 12 personal goal cards.
- * @author Andrea Grassi, Caterina Motti.
- */
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.gameController;
@@ -13,6 +9,10 @@ import it.polimi.ingsw.network.messages.*;
 import java.rmi.RemoteException;
 import java.util.*;
 
+/** Represents a game. It is identified by a unique id.
+ * Each game has some players (from 2 to 4), a board, 12 common goal cards and 12 personal goal cards.
+ * @author Andrea Grassi, Caterina Motti.
+ */
 public class Game {
     private static int count = 0;
     public int id;

@@ -1,5 +1,3 @@
-/** Represent the board of a game. It has to be declared in each game.
- * @author Caterina Motti. */
 package it.polimi.ingsw.model;
 
 import java.io.*;
@@ -13,6 +11,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/** Represent the board of a game. It has to be declared in each game.
+ * @author Caterina Motti. */
 public class Board {
     private final int numCols = 9;
     private final int numRows = 9;

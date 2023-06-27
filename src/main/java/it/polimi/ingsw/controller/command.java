@@ -1,5 +1,3 @@
-/** It manages the pending commands not yet fully executed.
- * @author Marco Gervatini. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
@@ -9,6 +7,8 @@ import it.polimi.ingsw.network.messages.Action;
 
 import java.util.List;
 
+/** It manages the pending commands not yet fully executed.
+ * @author Marco Gervatini. */
 public class command {
     public Game g;
     public Player p;

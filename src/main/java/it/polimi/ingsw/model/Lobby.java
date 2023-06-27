@@ -1,15 +1,14 @@
-/** Represent a lobby in the game. Players can join or leave lobbies whenever they want.
- * In the lobby the game has not  yet. It is possible to show each lobby to see which people are
- * participating.
- * Each lobby is represented by a unique number.
- * @author Andrea Grassi, Caterina Motti */
 package it.polimi.ingsw.model;
-
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
+/** Represent a lobby in the game. Players can join or leave lobbies whenever they want.
+ * In the lobby the game has not  yet. It is possible to show each lobby to see which people are
+ * participating.
+ * Each lobby is represented by a unique number.
+ * @author Andrea Grassi, Caterina Motti */
 public class Lobby {
     private static int count = 0;
     public final int lobbyId;

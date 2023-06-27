@@ -1,13 +1,13 @@
-/** CC_03 class implements the logic for checking if the common goal card number 3 is completed by a player.
- * It requires four groups of tiles each containing at least 4 tiles of the same type.
- * The tiles of one group can be different from those of another group.
- * @author Andrea Grassi
- */
 package it.polimi.ingsw.model.Cards;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Tile.Tile;
 
+/** CC_03 class implements the logic for checking if the common goal card number 3 is completed by a player.
+ * It requires four groups of tiles each containing at least 4 tiles of the same type.
+ * The tiles of one group can be different from those of another group.
+ * @author Andrea Grassi
+ */
 public class CC_03 implements CCStrategy {
     private final int id=3;
     @Override
@@ -50,11 +50,11 @@ public class CC_03 implements CCStrategy {
     }
 
     /**
-     * Counts adjacent tiles of the same type. Recursive
-     * @param c type
-     * @param x starting tile x
-     * @param y starting tile y
-     * @return number of same type tiles in a said direction
+     * Counts adjacent tiles of the same type.
+     * @param c type of the tile.
+     * @param x x-index of the starting tile.
+     * @param y y-index of the starting tile.
+     * @return number of same type tiles in a said direction.
      */
     private int adj(type c, int x, int y) {
         int p = 1;

@@ -15,17 +15,17 @@ public class ShowLobbyMessage extends GeneralMessage{
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param message_id uid of the message
-     * @param username uid of the user
+     * @param messageId id of the message
+     * @param nickname of the player
      */
-    public ShowLobbyMessage(int message_id, String username) {
-        super(message_id, Action.SHOWLOBBY, -1, username);
+    public ShowLobbyMessage(int messageId, String nickname) {
+        super(messageId, Action.SHOWLOBBY, -1, nickname);
     }
 
     /**
-     * Class construcor and set all needed attributes
-     * @param msg the message to display
-     * @param Lobbies list of all the lobby
+     * Class constructor and set all needed attributes.
+     * @param msg the message to display.
+     * @param Lobbies list of all the lobby.
      */
     public ShowLobbyMessage(String msg, List<Lobby> Lobbies) {
         super(msg, Action.SHOWLOBBY, -1, -1);
@@ -34,26 +34,22 @@ public class ShowLobbyMessage extends GeneralMessage{
 
     /**
      * Parses a JSON-formatted string to set the message.
-     * @param json a JSON-formatted string
-     * @return a fully initialized ShowLobbyMessage Object
+     * @param json a JSON-formatted string.
+     * @return a fully initialized ShowLobbyMessage Object.
      */
     public static ShowLobbyMessage decrypt(String json){
         return new Gson().fromJson(json, ShowLobbyMessage.class);
     }
 
     /**
-     * Overrides the toString method to provide a custom string representation.
-     */
-    @Override
-    public String toString(){
-        return new Gson().toJson(this);
-    }
-
-    /**
-     * Getter of lobbies
-     * @return this.lobbies
+     * Getter the list of availavle lobbies.
      */
     public List<Lobby> getLobbies() {
         return this.Lobbies;
+    }
+
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
     }
 }

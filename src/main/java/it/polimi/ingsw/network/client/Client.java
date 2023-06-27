@@ -1,5 +1,3 @@
-/** It represents a client that is able to establish connection with a sever, both via socket and RMI (exclusive).
- * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
@@ -29,6 +27,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/** It represents a client that is able to establish connection with a sever, both via socket and RMI (exclusive).
+ * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
 public class Client extends Application {
     private Socket clientSocket;
     private static clientController controller;

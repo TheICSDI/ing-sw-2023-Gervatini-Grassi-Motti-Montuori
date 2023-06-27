@@ -1,11 +1,11 @@
-/** Represent a connection with is type (socket or RMI) and the way to talk with the client (PrintWriter or RMIconnection).
- * @author Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.network.server.RMIconnection;
 
 import java.io.PrintWriter;
 
+/** Represent a connection with is type (socket or RMI) and the way to talk with the client (PrintWriter or RMIconnection).
+ * @author Caterina Motti, Andrea Grassi. */
 public class connectionType {
     private boolean socket;
     private PrintWriter out;

@@ -10,17 +10,17 @@ public class StartGameMessage extends GeneralMessage {
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param message_id uid of the message
-     * @param username uid of the user
+     * @param messageId id of the message.
+     * @param nickname of the player.
      */
-    public StartGameMessage(int message_id,int idLobby, String username) {
-        super(message_id, Action.STARTGAME, idLobby, username);
+    public StartGameMessage(int messageId, int idLobby, String nickname) {
+        super(messageId, Action.STARTGAME, idLobby, nickname);
     }
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param msg the message to display
-     * @param idGame uid of the game
+     * @param msg the message to display.
+     * @param idGame id of the game.
      */
     public StartGameMessage(String msg,int idGame){
         super(msg, Action.STARTGAME, -1, idGame);
@@ -29,16 +29,13 @@ public class StartGameMessage extends GeneralMessage {
     
     /**
      * Parses a JSON-formatted string to set the message.
-     * @param msg a JSON-formatted string
-     * @return a fully initialized StartGameMessage Object
+     * @param msg a JSON-formatted string.
+     * @return a fully initialized StartGameMessage Object.
      */
     public static StartGameMessage decrypt(String msg){
         return new Gson().fromJson(msg, StartGameMessage.class);
     }
 
-    /**
-     * Overrides the toString method to provide a custom string representation.
-     */
     @Override
     public String toString(){
         return new Gson().toJson(this);

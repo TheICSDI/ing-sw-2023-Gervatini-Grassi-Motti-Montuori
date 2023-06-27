@@ -12,11 +12,10 @@ import java.util.List;
 
 /**
  * This abstract class represents a general message in a client-server communication.
- * It implements the Serializable interface to allow for object serialization.
+ * It implements the Serializable interface to allow object serialization.
  */
 public abstract class GeneralMessage implements Serializable {
-
-    private int message_id;
+    private int messageId;
     private final Action action;
     protected int lobbyId;
     private String message;
@@ -29,38 +28,38 @@ public abstract class GeneralMessage implements Serializable {
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param message_id the unique identification of the message
-     * @param action the type of message
-     * @param username the unique identification of the user
-     * @param lobby_id the unique identification of the lobby
+     * @param message_id the id of the message.
+     * @param action the type of message.
+     * @param nickname of the player.
+     * @param lobbyId the id of the lobby.
      */
     //The old general message
-    public GeneralMessage(int message_id, Action action, int lobby_id, String username)
-    {
-        this.message_id = message_id;
+    public GeneralMessage(int message_id, Action action, int lobbyId, String nickname) {
+        this.messageId = message_id;
         this.action = action;
-        this.lobbyId = lobby_id;
-        this.username = username;
-    }
-    /**
-     * Constructor that initializes a message with the provided parameters.
-     * @param msg the message to display
-     * @param action the type of the message
-     * @param lobby_id the unique identification of the lobby
-     * @param game_id the unique identification of the game
-     */
-    //The old ReplyMessage
-    public GeneralMessage(String msg, Action action, int lobby_id, int game_id){
-        this.message = msg;
-        this.action = action;
-        this.lobbyId = lobby_id;
-        this.gameId = game_id;
+        this.lobbyId = lobbyId;
+        this.username = nickname;
     }
 
     /**
-     * Reads only the action of the message
-     * @param msg Message received
-     * @return action of the msg
+     * Constructor that initializes a message with the provided parameters.
+     * @param msg the message to display.
+     * @param action the type of the message.
+     * @param lobbyId the unique identification of the lobby.
+     * @param gameId the unique identification of the game.
+     */
+    //The old ReplyMessage
+    public GeneralMessage(String msg, Action action, int lobbyId, int gameId){
+        this.message = msg;
+        this.action = action;
+        this.lobbyId = lobbyId;
+        this.gameId = gameId;
+    }
+
+    /**
+     * Reads only the action of the message.
+     * @param msg Message received.
+     * @return action of the msg.
      */
     public static Action identify(String msg) throws ParseException {
         JSONParser parser = new JSONParser();
@@ -69,75 +68,69 @@ public abstract class GeneralMessage implements Serializable {
     }
 
     /**
-     * Getter for message_id
-     * @return this.message_id
+     * Gets the id of the message.
      */
-    public int getMessage_id() {
-        return this.message_id;
+    public int getMessageId() {
+        return this.messageId;
     }
 
     /**
-     * Getter for action
-     * @return this.action
+     * Gets the action of the message.
      */
     public Action getAction() {
         return this.action;
     }
 
     /**
-     * Getter for lobbyId
-     * @return this.lobbyId
+     * Gets the lobby id.
      */
     public int getIdLobby() {
         return this.lobbyId;
     }
 
     /**
-     * Getter for username
-     * @return this.username
+     * Gets the nickname of the player.
      */
     public String getUsername() {
         return this.username;
     }
 
     /**
-     * Getter for gameId
-     * @return this.gameId
+     * Gets the gameId.
      */
     public int getGameId() {
-        return gameId;//Da sistemare
+        return gameId;
     }
 
     /**
-     * Getter for message
-     * @return this.message
+     * Gets the message.
      */
     public String getMessage(){
         return this.message;
     }
 
     /**
-     * Getter for simpleBoard
-     * @return this.simpleBoard
+     * Gets the simpleBoard.
      */
     public Tile[][] getSimpleBoard() {
         return this.simpleBoard;
     }
 
      /**
-     * Getter for tiles
+     * Gets the tiles.
      */
     public void getTiles(List<Tile> tiles) {
         tiles.addAll(this.tiles);
     }
 
     /**
-     * Getter for cc
+     * Gets the list of common goal cards' ids.
      */
     public void getCC(List<Integer> cc){
         cc.addAll(this.cc);
     }
 
+    /** Gets the value about the availability of the chosen nickname. */
     public boolean isAvailable(){return true;}
 
     @Override

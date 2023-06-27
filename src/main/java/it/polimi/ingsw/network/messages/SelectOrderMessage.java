@@ -10,42 +10,38 @@ import java.util.List;
  * It extends the GeneralMessage class to include specific behavior for selecting the order of the tile.
  */
 public class SelectOrderMessage extends GeneralMessage{
-
-    private List<Integer> order = new ArrayList<>();
+    private List<Integer> order;
 
     /**
      * Constructor that initializes a message with the provided parameters.
-     * @param message_id uid of the message
-     * @param username uid of the user
-     * @param order a list with the position in the chosen order
+     * @param messageId id of the message.
+     * @param nickname of the player.
+     * @param order a list with the position in the chosen order.
      */
-    public SelectOrderMessage(int message_id, String username, List<Integer> order,int idGame) {
-        super(message_id, Action.SO,-1, username);
+    public SelectOrderMessage(int messageId, String nickname, List<Integer> order,int idGame) {
+        super(messageId, Action.SO,-1, nickname);
         this.order = order;
         this.gameId = idGame;
     }
 
     /**
      * Parses a JSON-formatted string to set the message.
-     * @param msg a JSON-formatted string
-     * @return a fully initialized SelectOrderMessage Object
+     * @param msg a JSON-formatted string.
+     * @return a fully initialized SelectOrderMessage Object.
      */
     public static SelectOrderMessage decrypt(String msg){
         return new Gson().fromJson(msg, SelectOrderMessage.class);
     }
 
     /**
-     * Overrides the toString method to provide a custom string representation.
-     */
-    @Override
-    public String toString(){
-        return new Gson().toJson(this);
-    }
-
-    /**
-     * Getter of order
+     * Gets the selected order.
      */
     public void getOrder(List<Integer> order) {
         order.addAll(this.order);
+    }
+
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
     }
 }

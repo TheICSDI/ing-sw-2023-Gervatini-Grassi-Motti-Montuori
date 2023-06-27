@@ -1,5 +1,3 @@
-/** It implements the RMIconnection interface, in order to be able to establish RMI connection client side.
- * @author Caterina Motti, Andrea Grassi. */
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.clientController;
@@ -13,6 +11,8 @@ import org.json.simple.parser.ParseException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+/** It implements the RMIconnection interface, in order to be able to establish RMI connection client side.
+ * @author Caterina Motti, Andrea Grassi. */
 public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection {
     clientController CC;
     /** Creates a RMIserverImpl given a client controller by parameter. */
