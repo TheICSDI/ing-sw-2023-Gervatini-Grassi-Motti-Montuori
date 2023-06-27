@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.Position;
 import it.polimi.ingsw.model.Tile.Tile;
 import it.polimi.ingsw.model.Tile.type;
 import it.polimi.ingsw.view.GUI.GUI;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -14,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 
@@ -226,6 +224,14 @@ public class gameSceneController implements Initializable {
     @FXML
     public void showBoard(Tile[][] board){
         //For each element in the board
+        for (Node node: this.board.getChildren()) {
+            HBox box= (HBox) node;
+            for (Node n:
+                 box.getChildren()) {
+                ImageView im=(ImageView) n;
+                im.setImage(null);
+            }
+        }
         this.board.getChildren().clear();
         clearChosen();
         for (int i = 0; i < this.dim; i++) {
