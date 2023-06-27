@@ -138,6 +138,7 @@ public class gameSceneController implements Initializable {
         }
     }
 
+    /** It initializes the FXML variable that needs it */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         myShelfToken.setAlignment(Pos.CENTER);
@@ -153,12 +154,14 @@ public class gameSceneController implements Initializable {
                 sendChatMessage();
             }
         });
+        // set label
         setLabelText(this.ChosenText,font,20,"Your Tiles:");
         this.ChosenText.setVisible(false);
         setLabelText(goalText,font, 20,"Your personal goal");
         setLabelText(yourShelfText,font, 20, "Your shelf:");
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
 
+        // set the scoring token
         if(players.size()==4) {
             CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
         }
@@ -168,6 +171,7 @@ public class gameSceneController implements Initializable {
         }
         CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
 
+        // written description of the common cards
         commonDescs[0]= """
                 Six groups each containing at least
                 2 tiles of the same type (not necessarily
@@ -228,8 +232,7 @@ public class gameSceneController implements Initializable {
         //For each element in the board
         for (Node node: this.board.getChildren()) {
             HBox box= (HBox) node;
-            for (Node n:
-                 box.getChildren()) {
+            for (Node n: box.getChildren()) {
                 ImageView im=(ImageView) n;
                 im.setImage(null);
             }
@@ -374,9 +377,9 @@ public class gameSceneController implements Initializable {
                 SendTo.getItems().add(player);
             }
         }
+        // show tiles in the correct position on the shelf
         int k=0;
-        for (String s:
-                others.keySet()) {
+        for (String s: others.keySet()) {
             Tile[][] shelf=others.get(s).getShelf();
             for (int i = 0; i < shelf.length; i++) {
                 for (int j = 0; j < shelf[0].length; j++) {

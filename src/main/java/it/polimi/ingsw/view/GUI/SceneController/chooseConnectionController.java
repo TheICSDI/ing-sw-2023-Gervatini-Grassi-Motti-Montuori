@@ -27,6 +27,7 @@ public class chooseConnectionController implements Initializable {
     private GUI gui;
     Font font = null;
 
+    /** It initializes the FXML variable that needs it */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {

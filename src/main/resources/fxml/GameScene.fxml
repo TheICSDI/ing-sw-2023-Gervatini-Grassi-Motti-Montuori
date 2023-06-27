@@ -132,7 +132,7 @@
                                         <Insets left="33.0" />
                                     </padding>
                                 </GridPane>
-                                <ImageView fx:id="p4ImageShelf" fitHeight="289.0" fitWidth="292.0" pickOnBounds="true" preserveRatio="true" styleClass="ImageView">
+                                <ImageView fx:id="p4ImageShelf" fitHeight="289.0" fitWidth="292.0" pickOnBounds="true" preserveRatio="true" styleClass="ImageView" visible="false">
                                     <image>
                                         <Image url="@../Images/boards/bookshelf.png" />
                                     </image>
@@ -507,10 +507,10 @@
             <Insets top="20.0" />
          </padding>
         </GridPane>
-        <Pane fx:id="commonBack" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#closeCommon" opacity="0.6" prefHeight="1040.0" prefWidth="1700.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        <BorderPane fx:id="commonWindow" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#closeCommon" prefHeight="1040.0" prefWidth="1700.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Pane fx:id="commonBack" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#closeCommon" opacity="0.6" prefHeight="1040.0" prefWidth="1700.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <BorderPane fx:id="commonWindow" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#closeCommon" prefHeight="1040.0" prefWidth="1700.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
-                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="455.0" BorderPane.alignment="CENTER">
+                <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="455.0" BorderPane.alignment="CENTER">
                     <children>
                         <Pane maxHeight="-Infinity" maxWidth="455.0" prefHeight="134.0" prefWidth="455.0">
                             <children>
@@ -519,7 +519,7 @@
                                         <Image url="@../Images/misc/base_pagina2.jpg" />
                                     </image>
                                 </ImageView>
-                                <VBox alignment="CENTER" prefHeight="134.0" prefWidth="455.0" spacing="10.0">
+                                <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="134.0" prefWidth="455.0" spacing="10.0">
                                     <children>
                                         <Label fx:id="commonDescription" alignment="TOP_LEFT">
                                             <VBox.margin>

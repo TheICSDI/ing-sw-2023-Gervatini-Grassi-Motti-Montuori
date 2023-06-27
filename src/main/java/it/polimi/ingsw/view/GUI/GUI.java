@@ -85,7 +85,7 @@ public class GUI implements View {
                 IPv4 = "127.0.0.1";
             }
             Platform.runLater(() -> {
-                ccc.showIP("DONE", "GREEN");
+                ccc.showIP("Ip correctly formatted", "GREEN");
             });
             return IPv4;
         }
