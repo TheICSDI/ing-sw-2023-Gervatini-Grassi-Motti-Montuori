@@ -90,6 +90,7 @@ public class Client extends Application {
             case STARTGAME -> {
                 controller.setIdLobby(0);
                 reply = StartGameMessage.decrypt(message);
+                controller.setNPlayers(((StartGameMessage) reply).getNPlayers());
                 controller.setIdGame(reply.getGameId());
                 controller.setFirstTurn(true);
                 virtualView.startGame(reply.getMessage());
@@ -144,7 +145,13 @@ public class Client extends Application {
                 String nick = ((OtherPlayersMessage) reply).getP().getNickname();
                 Player p = ((OtherPlayersMessage) reply).getP();
                 controller.getOthers().put(nick,p);
-                virtualView.showOthers(controller.getOthers());
+                if((controller.getNPlayers()-1)== controller.getOthers().keySet().size()){
+                    virtualView.showOthers(controller.getOthers());
+                }
+            }
+            case TOKENS -> {
+                reply= ReloadTokensMessage.decrypt(message);
+                virtualView.reloadTokens(((ReloadTokensMessage) reply).getYourself());
             }
             case C -> {
                 reply = ChatMessage.decrypt(message);

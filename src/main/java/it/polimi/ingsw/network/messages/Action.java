@@ -31,5 +31,6 @@ public enum Action {
     SHOWOTHERS,
     PING,
     ERROR,
+    TOKENS,
     RECONNECT;
 }

@@ -17,6 +17,7 @@ public class clientController{
     private int idGame = 0;
     private final Map<String, Player> others = new HashMap<>();
     private boolean firstTurn = false;
+    private int nPlayers;
     private PersonalCard simpleGoal;
     private List<Integer> cc = new ArrayList<>();
     private final int numRows = 6;
@@ -356,5 +357,15 @@ public class clientController{
     /** It sets the board of the game (in which the player is) passed by parameter. */
     public void setBoard(Tile[][] board) {
         this.board = board;
+    }
+
+    /**Sets number of players in the game.*/
+    public int getNPlayers() {
+        return nPlayers;
+    }
+
+    /**Gets number of players in the game.*/
+    public void setNPlayers(int nPlayers) {
+        this.nPlayers = nPlayers;
     }
 }

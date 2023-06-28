@@ -173,6 +173,13 @@ public class GUI implements View {
     }
 
     @Override
+    public void reloadTokens(Player p) {
+        Platform.runLater(()->{
+            gsc.yourTokens(p);
+        });
+    }
+
+    @Override
     public void endGameToken(String player) {
         Platform.runLater(() -> gsc.endGameToken(player));
     }

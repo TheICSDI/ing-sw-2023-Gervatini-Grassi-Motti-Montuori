@@ -251,6 +251,10 @@ public class CLI implements View{
         }
     }
 
+    @Override
+    public void reloadTokens(Player p) {
+        System.out.println("Tokens reloaded");
+    }
 
     @Override
     public void endGameToken(String player) {

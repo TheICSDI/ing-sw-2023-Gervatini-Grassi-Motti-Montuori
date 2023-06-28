@@ -22,6 +22,7 @@ public class Game {
     private final Board backupBoard;
     private final List<CCStrategy> allCC = new ArrayList<>();
     private final List<CommonCard> CommonCards = new ArrayList<>();
+    private final Map<String, Boolean> whoCompletedCC=new HashMap<>();
     private final int commonPoints;
     private final List<Integer> ccId = new ArrayList<>();
     private final List<PersonalCard> allPC = new ArrayList<>();
@@ -83,14 +84,14 @@ public class Game {
     /** It manages the reconnection to the game of a player that has previously disconnected.
      * @param player nickname of the player that is reconnecting. */
     public void reconnectPlayer(String player) throws RemoteException {
-        serverController.sendMessage(new StartGameMessage("You reconnected!", this.id), player);
+        serverController.sendMessage(new StartGameMessage("You reconnected!", this.id,players.size()), player);
         Player reconnected=null;
         for (Player p: players) {
             if(p.getNickname().equals(player)){
                 reconnected = p;
             }
         }
-        assert reconnected != null;
+
         String personalId = String.valueOf(reconnected.getPersonalCard().getId());
         serverController.sendMessage(new ShowPersonalCardMessage(personalId), reconnected.getNickname());
         serverController.sendMessage(new ShowCommonCards(ccId), reconnected.getNickname());
@@ -100,6 +101,7 @@ public class Game {
                 serverController.sendMessage(new OtherPlayersMessage(other), reconnected.getNickname());
             }
         }
+        serverController.sendMessage(new ReloadTokensMessage(reconnected),reconnected.getNickname());
         if(pTurn.equals(reconnected.getNickname())){
             serverController.sendMessage(new SimpleReply("It's your turn!", Action.TURN), reconnected.getNickname());
             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
@@ -107,6 +109,7 @@ public class Game {
             serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), reconnected.getNickname());
             serverController.sendMessage(new SimpleReply("It's " + pTurn + "'s turn!",Action.TURN), reconnected.getNickname());
         }
+
         synchronized (lockWaitPLayers){
             lockWaitPLayers.notifyAll();
         }
@@ -356,6 +359,7 @@ public class Game {
      * @param p given player. */
     public void calculateCC(Player p) throws RemoteException {
         if(CommonCards.get(0).control(p) && p.getScoreToken1()==0){
+            whoCompletedCC.put(p.getNickname(),true);
             for (Player pcc : players) {
                 serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the first " +
                         "common goal and gained " + CommonCards.get(0).getPoints() + "! Points for this goal are being " +
@@ -364,6 +368,7 @@ public class Game {
             CommonCards.get(0).givePoints(p,commonPoints);
         }
         if(CommonCards.get(1).control(p) && p.getScoreToken2()==0){
+            whoCompletedCC.put(p.getNickname(),false);
             for (Player pcc : players) {
                 serverController.sendMessage(new CommonCompletedMessage(p.getNickname() + " completed the second" +
                         " common goal and gained " + CommonCards.get(1).getPoints() + "! Points for this goal are being " +

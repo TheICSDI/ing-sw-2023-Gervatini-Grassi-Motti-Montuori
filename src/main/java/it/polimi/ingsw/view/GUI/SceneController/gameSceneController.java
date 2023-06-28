@@ -128,6 +128,7 @@ public class gameSceneController implements Initializable {
     public GridPane p4Shelf;
     private GUI gui;
     private final String font= "Comic Sans MS";
+    private boolean reconnected=false;
 
     /** It initialises the version of the local board to not_accessible type. */
     public gameSceneController(){
@@ -160,16 +161,6 @@ public class gameSceneController implements Initializable {
         setLabelText(goalText,font, 20,"Your personal goal");
         setLabelText(yourShelfText,font, 20, "Your shelf:");
         this.scrollChat.setMaxHeight(Double.MAX_VALUE);
-
-        // set the scoring token
-        if(players.size()==4) {
-            CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
-        }
-        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
-        if(players.size()>=3) {
-            CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
-        }
-        CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
 
         // written description of the common cards
         commonDescs[0]= """
@@ -346,10 +337,16 @@ public class gameSceneController implements Initializable {
             setLabelText(YourName,font,12,"Your name: " + gui.nick);
             players.add(gui.nick);
             List<String> names= new ArrayList<>(others.keySet());
-            for (String s:
-                    names) {
-                System.out.println(s);
+            // set the scoring token
+            if(others.size()==3) {
+                CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
             }
+            CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+            if(others.size()>=2) {
+                CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+            }
+            CommonPoints.add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+
             setLabelText(p2Name,font, 20, names.get(0) + "'s shelf:");
             players.add(names.get(0));
             common1points.setImage(CommonPoints.get(CommonPoints.size()-1));
@@ -376,6 +373,8 @@ public class gameSceneController implements Initializable {
                 });
                 SendTo.getItems().add(player);
             }
+            resetTokens(names,others);
+
         }
         // show tiles in the correct position on the shelf
         int k=0;
@@ -396,6 +395,68 @@ public class gameSceneController implements Initializable {
             }
             k++;
         }
+    }
+
+    public void yourTokens(Player p){
+        myShelfToken.getChildren().clear();
+        if(p.getFirstToken()){
+            ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
+            firstPlayerToken.setFitHeight(45);
+            firstPlayerToken.setFitWidth(45);
+            myShelfToken.add(firstPlayerToken,0,1);
+        }
+        if(p.getEndToken()){
+            endGameToken.setImage(null);
+            ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
+            endToken.setFitHeight(45);
+            endToken.setFitWidth(45);
+            myShelfToken.add(endToken,1,1);
+        }
+        if(p.getScoreToken1()>0){
+            c1Index--;
+            ImageView pointsWon=null;
+            switch (p.getScoreToken1()){
+                case 2 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                }
+                case 4 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                }
+                case 6 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                }case 8 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                }
+            }
+            pointsWon.setFitWidth(45);
+            pointsWon.setFitHeight(45);
+            myShelfToken.add(pointsWon,0,0);
+        }
+        if(p.getScoreToken2()>0){
+            c2Index--;
+            ImageView pointsWon=null;
+            switch (p.getScoreToken2()){
+                case 2 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                }
+                case 4 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                }
+                case 6 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                }
+                case 8 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                }
+            }
+            pointsWon.setFitWidth(45);
+            pointsWon.setFitHeight(45);
+            myShelfToken.add(pointsWon,0,1);
+        }
+
+        common1points.setImage(CommonPoints.get(c1Index));
+        common2points.setImage(CommonPoints.get(c2Index));
+        reconnected=true;
     }
 
     /** Sends the recipient of a message to everybody. */
@@ -657,11 +718,10 @@ public class gameSceneController implements Initializable {
      * @param firstTurn true only if first turn (initializes needed variables), false otherwise.
      */
     public void Turn(String msg,boolean firstTurn){
-        if(firstTurn){
+        if(firstTurn && !reconnected){
             ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
             firstPlayerToken.setFitHeight(45);
             firstPlayerToken.setFitWidth(45);
-            System.out.println(msg.toString());
             if(msg.equals("It's your turn!")){
                 myShelfToken.add(firstPlayerToken,0,1);
             }else if(msg.equals("It's " + players.get(1) + "'s turn!")){
@@ -779,6 +839,186 @@ public class gameSceneController implements Initializable {
     public void closeCommon() {
         commonBack.setVisible(false);
         commonWindow.setVisible(false);
+    }
+
+
+    /**Resets tokens in case of reconnections*/
+    private void resetTokens(List<String> names,Map<String,Player> others){
+        p2Token.getChildren().clear();
+        Player p=others.get(names.get(0));
+        if(p.getFirstToken()){
+            ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
+            firstPlayerToken.setFitHeight(45);
+            firstPlayerToken.setFitWidth(45);
+            p2Token.add(firstPlayerToken,1,1);
+        }
+        if(p.getEndToken()){
+            endGameToken.setImage(null);
+            ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
+            endToken.setFitHeight(45);
+            endToken.setFitWidth(45);
+            p2Token.add(endToken,0,1);
+        }
+        if(p.getScoreToken1()>0){
+            c1Index--;
+            ImageView pointsWon=null;
+            switch (p.getScoreToken1()){
+                case 2 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                }
+                case 4 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                }
+                case 6 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                }case 8 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                }
+            }
+            pointsWon.setFitWidth(45);
+            pointsWon.setFitHeight(45);
+            p2Token.add(pointsWon,0,0);
+        }
+        if(p.getScoreToken2()>0){
+            c2Index--;
+            ImageView pointsWon=null;
+            switch (p.getScoreToken2()){
+                case 2 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                }
+                case 4 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                }
+                case 6 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                }
+                case 8 ->{
+                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                }
+            }
+            pointsWon.setFitWidth(45);
+            pointsWon.setFitHeight(45);
+            p2Token.add(pointsWon,1,0);
+        }
+
+        if(names.size()>2){
+            p3Token.getChildren().clear();
+            p=others.get(names.get(1));
+            if(p.getFirstToken()){
+                ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
+                firstPlayerToken.setFitHeight(45);
+                firstPlayerToken.setFitWidth(45);
+                p3Token.add(firstPlayerToken,1,1);
+            }
+            if(p.getEndToken()){
+                endGameToken.setImage(null);
+                ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
+                endToken.setFitHeight(45);
+                endToken.setFitWidth(45);
+                p3Token.add(endToken,0,1);
+            }
+            if(p.getScoreToken1()>0){
+                c1Index--;
+                ImageView pointsWon=null;
+                switch (p.getScoreToken1()){
+                    case 2 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                    }
+                    case 4 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                    }
+                    case 6 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                    }case 8 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                    }
+                }
+                pointsWon.setFitWidth(45);
+                pointsWon.setFitHeight(45);
+                p3Token.add(pointsWon,0,0);
+            }
+            if(p.getScoreToken2()>0){
+                c2Index--;
+                ImageView pointsWon=null;
+                switch (p.getScoreToken2()){
+                    case 2 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                    }
+                    case 4 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                    }
+                    case 6 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                    }
+                    case 8 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                    }
+                }
+                pointsWon.setFitWidth(45);
+                pointsWon.setFitHeight(45);
+                p3Token.add(pointsWon,1,0);
+            }
+
+        }
+        if(names.size()>3){
+            p4Token.getChildren().clear();
+            p=others.get(names.get(2));
+            if(p.getFirstToken()){
+                ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
+                firstPlayerToken.setFitHeight(45);
+                firstPlayerToken.setFitWidth(45);
+                p4Token.add(firstPlayerToken,0,1);
+            }
+            if(p.getEndToken()){
+                endGameToken.setImage(null);
+                ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
+                endToken.setFitHeight(45);
+                endToken.setFitWidth(45);
+                p4Token.add(endToken,1,1);
+            }
+            if(p.getScoreToken1()>0){
+                c1Index--;
+                ImageView pointsWon=null;
+                switch (p.getScoreToken1()){
+                    case 2 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                    }
+                    case 4 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                    }
+                    case 6 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                    }case 8 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                    }
+                }
+                pointsWon.setFitWidth(45);
+                pointsWon.setFitHeight(45);
+                p4Token.add(pointsWon,0,0);
+            }
+            if(p.getScoreToken2()>0){
+                c2Index--;
+                ImageView pointsWon=null;
+                switch (p.getScoreToken2()){
+                    case 2 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                    }
+                    case 4 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                    }
+                    case 6 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                    }
+                    case 8 ->{
+                        pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                    }
+                }
+                pointsWon.setFitWidth(45);
+                pointsWon.setFitHeight(45);
+                p4Token.add(pointsWon,1,0);
+            }
+        }
+
     }
 
     /** Sets the GUI passed by parameter */

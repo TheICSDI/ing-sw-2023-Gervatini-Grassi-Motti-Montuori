@@ -291,6 +291,8 @@ public class Player implements Serializable {
     public void setEndToken(boolean value) {
         this.endToken = value;
     }
+    /**Gets the end token*/
+    public boolean getEndToken(){return this.endToken;}
 
     /** Gets the nickname of the player. */
     public String getNickname() {
@@ -371,5 +373,6 @@ public class Player implements Serializable {
     public void setShelf(Tile[][] shelf) {
         Shelf = shelf;
     }
+
 
 }

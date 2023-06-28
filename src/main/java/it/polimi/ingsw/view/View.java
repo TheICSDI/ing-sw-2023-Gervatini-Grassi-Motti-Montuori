@@ -99,5 +99,10 @@ public interface View {
      * Handles disconnections from server.
      */
     void disconnected();
+
+    /**
+     * Reloads tokens
+     */
+    void reloadTokens(Player p);
 }
 

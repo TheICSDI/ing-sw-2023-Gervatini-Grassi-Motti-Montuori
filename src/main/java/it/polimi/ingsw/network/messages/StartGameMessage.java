@@ -8,6 +8,8 @@ import com.google.gson.Gson;
  */
 public class StartGameMessage extends GeneralMessage {
 
+    private int nPlayers;
+
     /**
      * Constructor that initializes a message with the provided parameters.
      * @param messageId id of the message.
@@ -22,9 +24,10 @@ public class StartGameMessage extends GeneralMessage {
      * @param msg the message to display.
      * @param idGame id of the game.
      */
-    public StartGameMessage(String msg,int idGame){
+    public StartGameMessage(String msg,int idGame, int nPlayers){
         super(msg, Action.STARTGAME, -1, idGame);
         this.gameStart = true;
+        this.nPlayers=nPlayers;
     }
     
     /**
@@ -34,6 +37,11 @@ public class StartGameMessage extends GeneralMessage {
      */
     public static StartGameMessage decrypt(String msg){
         return new Gson().fromJson(msg, StartGameMessage.class);
+    }
+
+    /** Gets number of players.*/
+    public int getNPlayers() {
+        return nPlayers;
     }
 
     @Override

@@ -112,11 +112,12 @@ public class serverController {
                   notInLobby = false;
                   //If the lobby is full, the game is created
                   if(l.Players.size() == l.limit){
+                     int nPlayers=l.Players.size();
                      Game g = new Game(l.Players, controller);
                      gameController.allGames.put(g.id,g);
                      gameController.allLobbies.remove(l);
                      for (Player p: l.Players) {
-                        sendMessage(new StartGameMessage(player + " started the game!" , g.id), p.getNickname());
+                        sendMessage(new StartGameMessage(player + " started the game!" , g.id , nPlayers), p.getNickname());
                      }
                      executorsService.submit(() ->{
                         try{
