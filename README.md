@@ -1,6 +1,7 @@
 # Software engineering project
 Final project of **"Software Engineering"**, course of **"Computer Science Engineering"** 
 held at Politecnico di Milano (2022/2023). <br />
+The project consists in the implementation of a distributed system composed of a single server capable of managing more games at a time and multiple clients (one per player) using the MVC pattern (Model-View-Controller ). 
 
 **Group**: PSP-35
 
