@@ -346,14 +346,14 @@
                     <children>
                         <ImageView fx:id="common1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <ImageView fx:id="common2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <ImageView fx:id="common1points" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" rotate="-8.0">
+                        <ImageView fx:id="common1points" fitHeight="55.0" fitWidth="55.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" rotate="-8.0">
                             <GridPane.margin>
-                                <Insets bottom="7.0" left="177.0" />
+                                <Insets bottom="10.0" left="172.0" />
                             </GridPane.margin>
                         </ImageView>
-                        <ImageView fx:id="common2points" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" rotate="-8.0" GridPane.columnIndex="1">
+                        <ImageView fx:id="common2points" fitHeight="55.0" fitWidth="55.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" rotate="-8.0" GridPane.columnIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="7.0" left="177.0" />
+                                <Insets bottom="10.0" left="172.0" />
                             </GridPane.margin>
                         </ImageView>
                     </children>
