@@ -270,8 +270,6 @@ public class gameSceneController implements Initializable {
                                 if(toDes!=null) {
                                     toDes.setStyle("");
                                     this.Chosen.remove(0);
-                                }else{
-                                    System.out.println("toDes == null");
                                 }
                             }
                             this.Chosen.add(new Position(finalJ, finalI));
@@ -602,7 +600,6 @@ public class gameSceneController implements Initializable {
                 this.Chosen) {
             pt.append(" ").append(p.getY()).append(" ").append(p.getX());
         }
-        System.out.println(pt);
         synchronized (gui.Lock){
             gui.message= String.valueOf(pt);
             gui.Lock.notifyAll();
@@ -652,7 +649,6 @@ public class gameSceneController implements Initializable {
                                     this.newOrder) {
                                 so.append(" ").append(o);
                             }
-                            System.out.println(so);
                             synchronized (this.gui.Lock) {
                                 this.gui.message = String.valueOf(so);
                                 this.gui.Lock.notifyAll();
@@ -755,7 +751,6 @@ public class gameSceneController implements Initializable {
         this.Chat.setText("");
         if(!Objects.equals(message, "")) {
             message= recipient + message;
-            System.out.println(message);
             synchronized (this.gui.Lock) {
                 this.gui.message = message;
                 this.gui.Lock.notifyAll();
