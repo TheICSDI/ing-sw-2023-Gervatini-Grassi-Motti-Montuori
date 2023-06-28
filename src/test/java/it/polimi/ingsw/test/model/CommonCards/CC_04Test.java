@@ -1,6 +1,3 @@
-/** Tests for class CC04.java.
- * @author Giulio Montuori.
- */
 package it.polimi.ingsw.test.model.CommonCards;
 
 import it.polimi.ingsw.model.Cards.CCStrategy;

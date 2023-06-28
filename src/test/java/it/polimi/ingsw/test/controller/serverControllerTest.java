@@ -1,16 +1,11 @@
-/** Tests for class serverController.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.controller;
 
-import it.polimi.ingsw.controller.clientController;
 import it.polimi.ingsw.controller.connectionType;
 import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Position;
-import it.polimi.ingsw.network.client.RMIclientImpl;
 import it.polimi.ingsw.network.messages.*;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
@@ -22,6 +17,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Tests for class serverController.java.
+ * @author Caterina Motti.
+ */
 class serverControllerTest {
     Player p1 = new Player("Mario");
     Player p2 = new Player("Luigi");

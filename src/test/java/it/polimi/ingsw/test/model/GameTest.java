@@ -1,6 +1,3 @@
-/** Tests for class Game.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.controller.clientController;
@@ -30,8 +27,9 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//TODO: migliorare la coverage della classe Game
-
+/** Tests for class Game.java.
+ * @author Caterina Motti.
+ */
 class GameTest {
     Player p1 = new Player("CLR");
     Player p2 = new Player("Jhonny");

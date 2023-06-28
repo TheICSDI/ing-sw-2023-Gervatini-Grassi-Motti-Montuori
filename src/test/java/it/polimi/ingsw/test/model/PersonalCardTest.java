@@ -2,7 +2,6 @@ package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.model.Cards.PersonalCard;
 import it.polimi.ingsw.model.Tile.Tile;
-import it.polimi.ingsw.model.Tile.type;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,16 +11,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/** Tests for class PersonalCard.java
- * @author Giulio Montuori
+/** Tests for class PersonalCard.java.
+ * @author Giulio Montuori.
  */
 class PersonalCardTest {
 

@@ -1,6 +1,3 @@
-/** Tests for class Lobby.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.model.Lobby;
@@ -11,6 +8,9 @@ import java.util.InputMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Tests for class Lobby.java.
+ * @author Caterina Motti.
+ */
 class LobbyTest {
     Player p1 = new Player("CLR");
     Player p2 = new Player("Jhonny");

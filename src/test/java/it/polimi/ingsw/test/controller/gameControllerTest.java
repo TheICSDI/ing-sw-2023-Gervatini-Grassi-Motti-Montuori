@@ -1,6 +1,3 @@
-/** Tests for class gameController.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.controller;
 
 import it.polimi.ingsw.controller.gameController;
@@ -13,6 +10,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Tests for class gameController.java.
+ * @author Caterina Motti.
+ */
 class gameControllerTest {
     gameController controller = new gameController();
 

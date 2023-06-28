@@ -1,6 +1,3 @@
-/** Tests for class clientController.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.controller;
 
 import it.polimi.ingsw.controller.clientController;
@@ -21,6 +18,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Tests for class clientController.java.
+ * @author Caterina Motti.
+ */
 class clientControllerTest {
     clientController controller = new clientController();
     Player p1 = new Player("Mario");

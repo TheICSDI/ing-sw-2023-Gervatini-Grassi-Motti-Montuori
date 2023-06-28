@@ -1,13 +1,12 @@
-/** Tests for class CC_08.java.
- * @author Andrea Grassi.
- */
 package it.polimi.ingsw.test.model.CommonCards;
 
 import it.polimi.ingsw.model.Cards.CCStrategy;
 import it.polimi.ingsw.model.Cards.CC_08;
 import org.junit.jupiter.api.Test;
 
-
+/** Tests for class CC_08.java.
+ * @author Andrea Grassi.
+ */
 class CC_08Test {
 
     @Test

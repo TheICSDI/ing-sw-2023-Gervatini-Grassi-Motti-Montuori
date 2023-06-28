@@ -1,6 +1,3 @@
-/** Parser for JSON files. Used to test common goal cards.
- * @author Andrea Grassi, Giulio Montuori.
- */
 package it.polimi.ingsw.test.model.CommonCards;
 
 import it.polimi.ingsw.model.Cards.CCStrategy;
@@ -19,6 +16,9 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** Parser for JSON files. Used to test common goal cards.
+ * @author Andrea Grassi, Giulio Montuori.
+ */
 public class CCGeneral {
     /**
      * General check for all common cards, reads one or more shelves from a json file and checks if the respective

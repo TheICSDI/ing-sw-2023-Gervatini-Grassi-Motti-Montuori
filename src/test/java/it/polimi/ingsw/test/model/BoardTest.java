@@ -1,6 +1,3 @@
-/** Tests for class Board.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.model.Board;
@@ -21,6 +18,9 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Tests for class Board.java.
+ * @author Caterina Motti.
+ */
 class BoardTest {
 
     /** Parser for board_test.json. It returns a board with tiles shaped like a chessboard.

@@ -1,6 +1,3 @@
-/** Tests for class Player.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.controller.connectionType;
@@ -24,6 +21,9 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Tests for class Player.java.
+ * @author Caterina Motti.
+ */
 class PlayerTest {
     Player p1 = new Player("CLR");
     Tile t1 = new Tile("cats");

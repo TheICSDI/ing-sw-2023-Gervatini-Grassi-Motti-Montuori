@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Cards.CCStrategy;
 import it.polimi.ingsw.model.Cards.CC_06;
 import org.junit.jupiter.api.Test;
 
+/** Tests for class CC_06.java.
+ * @author Andrea Grassi.
+ */
 class CC_06Test {
 
     @Test

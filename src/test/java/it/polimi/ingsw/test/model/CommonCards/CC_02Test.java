@@ -4,9 +4,10 @@ import it.polimi.ingsw.model.Cards.CCStrategy;
 import it.polimi.ingsw.model.Cards.CC_02;
 import org.junit.jupiter.api.Test;
 
-
+/** Tests for class CC_02.java.
+ * @author Andrea Grassi.
+ */
 class CC_02Test {
-
     @Test
     void isCompleted() {
         CCStrategy CC2=new CC_02();

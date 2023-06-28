@@ -1,6 +1,3 @@
-/** Tests for class CommonCard.java.
- * @author Caterina Motti.
- */
 package it.polimi.ingsw.test.model;
 
 import it.polimi.ingsw.model.Cards.*;
@@ -12,13 +9,15 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Tests for class CommonCard.java.
+ * @author Caterina Motti.
+ */
 class CommonCardTest {
     CCStrategy n2 = new CC_02();
     CCStrategy n6 = new CC_06();
@@ -28,14 +27,13 @@ class CommonCardTest {
     CommonCard c3 = new CommonCard(n11, false);
     Player p1 = new Player("CLR");
 
-    /** Parser for shelf_test.json. It returns a player with a full shelf. */
+    /** Parser for shelf_test.json. It returns a player with a full shelf that complete common card goal n2 and n6. */
     private Player Parser(){
         Player p = new Player("Jhonny");
         JSONParser parser = new JSONParser();
         JSONArray common_card_test_File = null;
 
         try {
-            //FileInputStream pathFile = new FileInputStream("JSON/common_card_test.json");
             common_card_test_File = (JSONArray) parser.parse(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/JSON/common_card_test.json"))));
 
         } catch (ParseException | IOException e) {
@@ -60,11 +58,11 @@ class CommonCardTest {
         assertFalse(c2.control(p1));
         assertFalse(c3.control(p1));
 
-        //Full shelf that completed the common goal card n3 and n6, but no c11
+        //Full shelf that completed the common goal card n2 and n6, but no c11
         p1 = Parser();
         assertTrue(c1.control(p1));
         assertTrue(c2.control(p1));
-        assertFalse(c3.control(p1)); //DA PROBLEMI DA RIGUARDARE
+        assertFalse(c3.control(p1));
     }
 
     @Test
@@ -73,13 +71,13 @@ class CommonCardTest {
         assertEquals(0, p1.getScoreToken1());
         assertEquals(0, p1.getScoreToken2());
 
-        //Full shelf that completed the common goal card n3 and n6
+        //Full shelf that completed the common goal card n2 and n6
         p1 = Parser();
         c1.givePoints(p1,4);
         c2.givePoints(p1,4);
         assertEquals(8, p1.getScoreToken1());
         assertEquals(8, p1.getScoreToken2());
-        Player p2=Parser();
+        Player p2 = Parser();
         c1.givePoints(p2,4);
         assertEquals(4, p2.getScoreToken1());
     }
