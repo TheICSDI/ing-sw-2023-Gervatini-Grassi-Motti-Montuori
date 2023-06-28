@@ -1,8 +1,9 @@
 # Software engineering project
-Final project of Software Engineering, course of Computer Science Engineering held at Politecnico di Milano (2022/2023). <br />
-It consists in the implementation of a distributed system composed of a single server capable of managing more games at a time and multiple clients (one per player) using the MVC pattern (Model-View-Controller). 
+<img src="src/main/resources/Images/logo.png" width=350ppx height=350px align="right"  alt="MyShelfie Logo"/>
+Final project of Software Engineering, course of Computer Science Engineering held at Politecnico di Milano (2022/2023). <br/>
+It consists in the implementation of a distributed system composed of a single server capable of managing more games at a time and multiple clients (one per player) using the MVC pattern (Model-View-Controller). <br/>
 
-**Group**: PSP-35
+<br/> **Group**: PSP-35
 
 **The team**: 
 - [Andrea Grassi](https://github.com/Fozyhh)
