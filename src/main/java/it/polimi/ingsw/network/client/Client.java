@@ -357,7 +357,7 @@ public class Client extends Application {
                 try {
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 } catch (RemoteException e) {
-                    System.out.println(RED + "Server disconnected" + RESET);
+                    virtualView.disconnected();
                 }
             });
             ExecutorService executor2 = Executors.newSingleThreadExecutor();
@@ -388,7 +388,7 @@ public class Client extends Application {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
-        System.out.println(RED + "Disconnected" + RESET);
+        virtualView.disconnected();
         connected = false;
     }
 

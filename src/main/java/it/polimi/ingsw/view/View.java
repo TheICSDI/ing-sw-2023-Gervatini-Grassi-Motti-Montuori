@@ -94,5 +94,10 @@ public interface View {
 
     /** It sends the input to the server. */
     String getInput();
+
+    /**
+     * Handles disconnections from server.
+     */
+    void disconnected();
 }
 

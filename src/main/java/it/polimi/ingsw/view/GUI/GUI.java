@@ -230,6 +230,13 @@ public class GUI implements View {
         }
     }
 
+    @Override
+    public void disconnected() {
+        nPage=0;
+        Platform.runLater(()->{
+            startGuiConnection(stage);
+        });
+    }
 
     /** Opens first scene in the stage passed by parameter. */
     public void startGuiConnection(Stage primaryStage){

@@ -17,6 +17,7 @@ public class CLI implements View{
     //"\u001b[48;2;<R code>;<G code>;<B code>m" COLORS
     public static final String RESET = "\033[0m";
     public static final String DARK_BROWN= "\u001b[48;2;117;61;34m";
+    private final static String RED = "\u001B[31m";
     private final PrintStream out;
 
     public CLI(){
@@ -308,5 +309,10 @@ public class CLI implements View{
     public String getInput() {
         Scanner input = new Scanner(System.in);
         return input.nextLine();
+    }
+
+    @Override
+    public void disconnected() {
+        System.out.println(RED + "Disconnected from server." + RESET);
     }
 }
