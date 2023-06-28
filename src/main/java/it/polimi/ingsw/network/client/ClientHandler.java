@@ -121,7 +121,7 @@ public class ClientHandler extends Thread{
                 //If the client disconnect the socket connection is closed
                 in.close();
                 out.close();
-                clientSocket.close();
+                //clientSocket.close();
             } catch (IOException ignored) {}
         }
     }

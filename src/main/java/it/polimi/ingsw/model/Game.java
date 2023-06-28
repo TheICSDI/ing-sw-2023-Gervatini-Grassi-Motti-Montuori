@@ -27,6 +27,7 @@ public class Game {
     private final List<PersonalCard> allPC = new ArrayList<>();
     public final gameController controller;
     private final static Object lockWaitPLayers = new Object();
+    private boolean turnNotDone;
 
     /** Creates a game given a list of players.
      * It initializes the board for the first time.
@@ -131,91 +132,98 @@ public class Game {
         }
         //Start turns
         while(!endGame){
-            for (Player p: players) {
-                int connectedPlayers=0;
-                while (connectedPlayers<=1) {
-                    connectedPlayers = 0;
-                    for (Player pConnectionCheck : players) {
-                        if (pConnectionCheck.isConnected()) connectedPlayers++;
+            for (Player p : players) {
+                turnNotDone=true;
+                    while (turnNotDone) {
+                        if(players.size()>2){
+                            turnNotDone=false;
+                        }
+                    int connectedPlayers = 0;
+                    while (connectedPlayers <= 1) {
+                        connectedPlayers = 0;
+                        for (Player pConnectionCheck : players) {
+                            if (pConnectionCheck.isConnected()) connectedPlayers++;
+                        }
+                        if (connectedPlayers <= 1) {
+                            for (Player waiters : players) {
+                                if (waiters.isConnected()) {
+                                    serverController.sendMessage(new SimpleReply("Waiting for players...", Action.TURN), waiters.getNickname());
+                                }
+                            }
+                            synchronized (lockWaitPLayers) {
+                                lockWaitPLayers.wait();
+                            }
+                            connectedPlayers++;
+                        }
                     }
-                    if (connectedPlayers <= 1) {
-                        for (Player waiters : players) {
-                            if (waiters.isConnected()) {
-                                serverController.sendMessage(new SimpleReply("Waiting for players...", Action.TURN), waiters.getNickname());
+                    if (p.isConnected()) {
+                        this.backupBoard.cloneBoard(this.board);
+                        pTurn = p.getNickname();
+                        for (Player p1 : players) {
+                            if (p1.getNickname().equals(p.getNickname())) {
+                                serverController.sendMessage(new SimpleReply("It's your turn!", Action.TURN), p1.getNickname());
+                                serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
+                            } else {
+                                serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
+                                serverController.sendMessage(new SimpleReply("It's " + p.getNickname() + "'s turn!", Action.TURN), p1.getNickname());
                             }
                         }
-                        synchronized (lockWaitPLayers) {
-                            lockWaitPLayers.wait();
-                        }
-                        connectedPlayers++;
-                    }
-                }
-                if(p.isConnected()){
-                    this.backupBoard.cloneBoard(this.board);
-                    pTurn = p.getNickname();
-                    for (Player p1: players) {
-                        if(p1.getNickname().equals(p.getNickname())){
-                            serverController.sendMessage(new SimpleReply("It's your turn!",Action.TURN), p1.getNickname());
-                            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
-                        } else {
-                            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
-                            serverController.sendMessage(new SimpleReply("It's " + p.getNickname() + "'s turn!",Action.TURN), p1.getNickname());
-                        }
-                    }
-                    serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
-                    serverController.sendMessage(new SimpleReply("Select tile you want to pick: ", Action.INGAMEEVENT), p.getNickname());
+                        serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
+                        serverController.sendMessage(new SimpleReply("Select tile you want to pick: ", Action.INGAMEEVENT), p.getNickname());
 
-                    //Handles the action "pick tiles"
-                    List<Tile> toInsert = pickTiles(p);
-                    if(toInsert!=null) {
-                        //Handles the action "select order"
-                        boolean allTheSame = checkTiles(toInsert);
-                        serverController.sendMessage(new ChosenTilesMessage(toInsert, !allTheSame), p.getNickname());
-                        if (!allTheSame) {
-                            toInsert = orderTiles(p, toInsert);
+                        //Handles the action "pick tiles"
+                        List<Tile> toInsert = pickTiles(p);
+                        if (toInsert != null) {
+                            //Handles the action "select order"
+                            boolean allTheSame = checkTiles(toInsert);
+                            serverController.sendMessage(new ChosenTilesMessage(toInsert, !allTheSame), p.getNickname());
+                            if (!allTheSame) {
+                                toInsert = orderTiles(p, toInsert);
+                            }
+                            if (toInsert != null) {
+                                serverController.sendMessage(new SimpleReply("Choose column: ", Action.INGAMEEVENT), p.getNickname());
+                                //Handles the action "select column"
+                                selectColumn(p, toInsert);
+                            }
                         }
-                        if(toInsert!= null) {
-                            serverController.sendMessage(new SimpleReply("Choose column: ", Action.INGAMEEVENT), p.getNickname());
-                            //Handles the action "select column"
-                            selectColumn(p, toInsert);
+                        if (!p.isConnected()) {
+                            this.board.cloneBoard(this.backupBoard);
+                            for (Player p1 : players) {
+                                serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
+                            }
                         }
-                    }
-                    if (!p.isConnected()) {
-                        this.board.cloneBoard(this.backupBoard);
-                        for (Player p1 : players) {
-                            serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p1.getNickname());
+                        for (Player other : players) {
+                            if (!other.getNickname().equals(p.getNickname())) {
+                                serverController.sendMessage(new OtherPlayersMessage(p), other.getNickname());
+                            }
                         }
-                    }
-                    for (Player other: players) {
-                        if(!other.getNickname().equals(p.getNickname())){
-                            serverController.sendMessage(new OtherPlayersMessage(p),other.getNickname());
+                        //If the board is empty it will be randomically filled
+                        if (board.isBoardEmpty()) {
+                            board.fillBoard();
+                            for (Player pb : players) {
+                                serverController.sendMessage(new SimpleReply("Board has been refilled!", Action.INGAMEEVENT), pb.getNickname());
+                            }
                         }
-                    }
-                    //If the board is empty it will be randomically filled
-                    if(board.isBoardEmpty()){
-                        board.fillBoard();
-                        for (Player pb : players) {
-                            serverController.sendMessage(new SimpleReply("Board has been refilled!",Action.INGAMEEVENT), pb.getNickname());
-                        }
-                    }
 
-                    //At each turn the common card goals are calculated
-                    calculateCC(p);
+                        //At each turn the common card goals are calculated
+                        calculateCC(p);
 
-                    //If the end game token has not been assigned and the current player has completed his shelf
-                    //it assigns the end token and add 1 point
-                    if (!check && p.isShelfFull()) {
-                        for (Player pe : players) {
-                            serverController.sendMessage(new SimpleReply(p.getNickname() , Action.ENDGAMETOKEN), pe.getNickname());
+                        //If the end game token has not been assigned and the current player has completed his shelf
+                        //it assigns the end token and add 1 point
+                        if (!check && p.isShelfFull()) {
+                            for (Player pe : players) {
+                                serverController.sendMessage(new SimpleReply(p.getNickname(), Action.ENDGAMETOKEN), pe.getNickname());
+                            }
+                            p.setEndToken(true);
+                            p.addPoints(1);
+                            check = true;
+                            endGame = true;
                         }
-                        p.setEndToken(true);
-                        p.addPoints(1);
-                        check = true;
-                        endGame = true;
                     }
                 }
             }
         }
+
         for(Player p : players){
             p.calculateGeneralPoints();
             p.calculatePCPoint();
@@ -254,9 +262,9 @@ public class Game {
                 serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
                 if (!toInsert.isEmpty()) {
                     return toInsert;
-                } else {
-                    return null;
                 }
+            } else {
+                return null;
             }
         }
     }
@@ -317,6 +325,7 @@ public class Game {
         if(col == -2) return;
         serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
         serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
+        turnNotDone=false;
     }
 
     /** Returns the winner of the game.
