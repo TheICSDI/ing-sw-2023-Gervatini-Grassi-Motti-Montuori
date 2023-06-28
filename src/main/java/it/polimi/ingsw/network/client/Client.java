@@ -38,7 +38,7 @@ public class Client extends Application {
     private static RMIclientImpl RMIclient;
     private static View virtualView;
     private static int ping = 0;
-    private static final int pingTime = 15;
+    private static final int pingTime = 5;
     public static boolean connected = true;
     private static boolean socket = false;
     private static final Object SocketLock = new Object();

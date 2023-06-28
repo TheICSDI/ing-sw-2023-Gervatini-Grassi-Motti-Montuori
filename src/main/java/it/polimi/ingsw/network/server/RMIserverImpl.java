@@ -46,6 +46,10 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                 //Reconnection
                 gameController.allPlayers.get(mex.getUsername()).setConnected(true);
                 serverController.connections.get(mex.getUsername()).changeConnection(false, null, reply);
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.submit(() -> {
+                    ping(mex);
+                });
                 int lobbyId = -1;
                 for (Lobby L :
                         gameController.allLobbies) {
@@ -73,18 +77,7 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
             serverController.connections.put(mex.getUsername(), new connectionType(false, null, reply));
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(() -> {
-                int x = -1;
-                while (x < serverController.connections.get(mex.getUsername()).getPing()) {
-                    x = serverController.connections.get(mex.getUsername()).getPing();
-                    try {
-                        TimeUnit.SECONDS.sleep(15);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                System.out.println(RED + mex.getUsername() + " disconnected" + RESET);
-                gameController.allPlayers.get(mex.getUsername()).setConnected(false);
-                gameController.unlockQueue();
+                ping(mex);
             });
         }
     }
@@ -100,6 +93,21 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void ping(GeneralMessage mex){
+        int x = -1;
+        while (x < serverController.connections.get(mex.getUsername()).getPing()) {
+            x = serverController.connections.get(mex.getUsername()).getPing();
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println(RED + mex.getUsername() + " disconnected" + RESET);
+        gameController.allPlayers.get(mex.getUsername()).setConnected(false);
+        gameController.unlockQueue();
     }
 }
 
