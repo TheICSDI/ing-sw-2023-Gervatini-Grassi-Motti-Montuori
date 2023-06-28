@@ -28,31 +28,40 @@ public class gameController {
     /** It returns the chosen number of column of the given player in the game.
      * @param player nickname of the player that is choosing the column.
      * @param gameId id of the game in which the player is playing.
-     * @return chosen column. */
+     * @return chosen column (-2 if not present). */
     public int chooseColumn(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SC);
-        assert order.isPresent();
-        return order.get().getNumCol();
+        if(order.isEmpty()){
+            return -2;
+        } else {
+            return order.get().getNumCol();
+        }
     }
 
     /** It returns the chosen order of tiles of the given player in the game.
      * @param player nickname of the player that is choosing the order.
      * @param gameId id of the game in which the player is playing.
-     * @return list of chosen tiles. */
+     * @return list of chosen tiles (null if not present). */
     public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SO);
-        assert order.isPresent();
-        return order.get().getOrder();
+        if(order.isEmpty()){
+            return null;
+        } else {
+            return order.get().getOrder();
+        }
     }
 
     /** It returns the chosen position (regarding the tiles in the board) of the given player in the game.
      * @param player nickname of the player that is choosing the tiles.
      * @param gameId id of the game in which the player is playing.
-     * @return list of positions.*/
+     * @return list of positions (null if not present).*/
     public List<Position> chooseTiles(String player , int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.PT);
-        assert order.isPresent();
-        return order.get().getPos();
+        if(order.isEmpty()){
+            return null;
+        } else {
+            return order.get().getPos();
+        }
     }
 
     /** It finds the request of the given player in the queue of commands.

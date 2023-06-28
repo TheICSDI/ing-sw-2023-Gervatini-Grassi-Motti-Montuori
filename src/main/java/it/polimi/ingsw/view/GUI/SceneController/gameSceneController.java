@@ -673,7 +673,6 @@ public class gameSceneController implements Initializable {
             }
         }
         setLabelText(turn,font,50,msg);
-
     }
 
     /** Shows in game events messages, passed by parameter.*/
@@ -683,7 +682,6 @@ public class gameSceneController implements Initializable {
 
     /** Sends a message to a selected recipient. */
     public void sendChatMessage(){
-
         String message= this.Chat.getText();
         newMessage("You -> " + SendTo.getText() + ": " + message);
         this.Chat.setText("");
@@ -774,7 +772,6 @@ public class gameSceneController implements Initializable {
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #ecd8c4;"
                 );
-
         label.setText(msg);
     }
 

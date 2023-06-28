@@ -308,6 +308,7 @@ public class Game {
                 col = -1;
             }
         }
+        if(col == -2) return;
         serverController.sendMessage(new SimpleReply("Tiles inserted ",Action.INGAMEEVENT), p.getNickname());
         serverController.sendMessage(new UpdateBoardMessage(Action.UPDATESHELF, p.getShelf()), p.getNickname());
     }
@@ -315,6 +316,7 @@ public class Game {
     /** Returns the winner of the game.
      * The player who scored most points wins the game. In case of a tie, the player sitting further from the
      * first one wins the game.
+     * @return winner of the game.
      */
     public Player calculateWinner(){
         //By default, the winner is the last player to play
