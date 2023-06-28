@@ -451,11 +451,18 @@ public class gameSceneController implements Initializable {
             }
             pointsWon.setFitWidth(45);
             pointsWon.setFitHeight(45);
-            myShelfToken.add(pointsWon,0,1);
+            myShelfToken.add(pointsWon,1,0);
         }
-
-        common1points.setImage(CommonPoints.get(c1Index));
-        common2points.setImage(CommonPoints.get(c2Index));
+        if(c1Index>=0) {
+            common1points.setImage(CommonPoints.get(c1Index));
+        }else{
+            common1points.setImage(null);
+        }
+        if(c2Index>=0) {
+            common2points.setImage(CommonPoints.get(c2Index));
+        }else{
+            common2points.setImage(null);
+        }
         reconnected=true;
     }
 
@@ -737,7 +744,9 @@ public class gameSceneController implements Initializable {
 
     /** Shows in game events messages, passed by parameter.*/
     public void setIngameEvents(String msg){
-        setLabelText(ingameEvents, font, 24,msg);
+        if(!msg.equals("Invalid command")) {
+            setLabelText(ingameEvents, font, 24, msg);
+        }
     }
 
     /** Sends a message to a selected recipient. */

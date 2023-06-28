@@ -86,10 +86,15 @@ public class ClientHandler extends Thread{
             String finalNickname = nickname.getUsername();
             executor.submit(() -> {
                 int x = -1;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 while (x < serverController.connections.get(finalNickname).getPing()) {
                     x = serverController.connections.get(finalNickname).getPing();
                     try {
-                        TimeUnit.SECONDS.sleep(15);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -121,7 +126,7 @@ public class ClientHandler extends Thread{
                 //If the client disconnect the socket connection is closed
                 in.close();
                 out.close();
-                //clientSocket.close();
+                clientSocket.close();
             } catch (IOException ignored) {}
         }
     }

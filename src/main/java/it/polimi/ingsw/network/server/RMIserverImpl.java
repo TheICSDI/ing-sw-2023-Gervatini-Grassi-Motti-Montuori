@@ -97,10 +97,15 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
 
     private void ping(GeneralMessage mex){
         int x = -1;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         while (x < serverController.connections.get(mex.getUsername()).getPing()) {
             x = serverController.connections.get(mex.getUsername()).getPing();
             try {
-                TimeUnit.SECONDS.sleep(5);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

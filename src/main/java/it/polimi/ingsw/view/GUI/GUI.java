@@ -241,7 +241,7 @@ public class GUI implements View {
     public void disconnected() {
         nPage=0;
         Platform.runLater(()->{
-            startGuiConnection(stage);
+            System.exit(0);
         });
     }
 
