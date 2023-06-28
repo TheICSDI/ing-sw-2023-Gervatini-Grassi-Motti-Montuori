@@ -252,6 +252,9 @@ public class GUI implements View {
         stage.setTitle("My Shelfie");
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/Publisher material/Box 280x280px.png"))));
         stage.setResizable(false);
+        primaryStage.setOnCloseRequest(e->
+                System.exit(0)
+        );
         stage.setScene(new Scene(root));
         stage.show();
     }
