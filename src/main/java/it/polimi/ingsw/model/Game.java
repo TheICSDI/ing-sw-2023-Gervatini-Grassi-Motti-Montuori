@@ -254,6 +254,8 @@ public class Game {
                 serverController.sendMessage(new UpdateBoardMessage(Action.UPDATEBOARD, board.board), p.getNickname());
                 if (!toInsert.isEmpty()) {
                     return toInsert;
+                } else {
+                    return null;
                 }
             }
         }
@@ -289,9 +291,12 @@ public class Game {
                 }
             }
         }
-        assert !order.isEmpty();
-        serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
-        return toInsert;
+        if(!order.isEmpty()) {
+            serverController.sendMessage(new ChosenTilesMessage(toInsert, false), p.getNickname());
+            return toInsert;
+        } else {
+            return null;
+        }
     }
 
     /** Handles the action "select column".
@@ -301,11 +306,12 @@ public class Game {
         int col = -1;
         while(col == -1 && p.isConnected()) {
             col = controller.chooseColumn(p.getNickname(), id);
-            try {
-                p.insertInShelf(toInsert, (col - 1));
-            } catch (InputMismatchException e) {
-                serverController.sendMessage(new SimpleReply("The chosen column is full!", Action.INGAMEEVENT), p.getNickname());
-                col = -1;
+            if (col != -2) {
+                try {
+                    p.insertInShelf(toInsert, (col - 1));
+                } catch (InputMismatchException e) {
+                    col = -1;
+                }
             }
         }
         if(col == -2) return;
