@@ -183,10 +183,10 @@ public class gameSceneController implements Initializable {
                  of one square can be different from
                 those of the other square.""";
         commonDescs[4]= """
-                Three columns each formed by 6 tiles Five tiles of the same type forming an X.
-                "of maximum three different types. One
-                "column can show the same or a different
-                "combination of another column.""";
+                Three columns each formed by 6 tiles
+                of maximum three different types. One
+                column can show the same or a different
+                combination of another column.""";
         commonDescs[5]= """
                 Eight tiles of the same type. There’s no
                 restriction about the position of these""";
@@ -220,7 +220,6 @@ public class gameSceneController implements Initializable {
      */
     @FXML
     public void showBoard(Tile[][] board){
-        //For each element in the board
         for (Node node: this.board.getChildren()) {
             HBox box= (HBox) node;
             for (Node n: box.getChildren()) {
