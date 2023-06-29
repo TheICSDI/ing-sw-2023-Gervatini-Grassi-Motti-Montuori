@@ -47,7 +47,23 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                 serverController.connections.get(mex.getUsername()).changeConnection(false, null, reply);
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(() -> {
-                    ping(mex);
+                    int x = -1;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    while (x < serverController.connections.get(mex.getUsername()).getPing()) {
+                        x = serverController.connections.get(mex.getUsername()).getPing();
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    System.out.println(RED + mex.getUsername() + " disconnected" + RESET);
+                    gameController.allPlayers.get(mex.getUsername()).setConnected(false);
+                    gameController.unlockQueue();
                 });
                 int lobbyId = -1;
                 for (Lobby L :
@@ -76,7 +92,23 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
             serverController.connections.put(mex.getUsername(), new connectionType(false, null, reply));
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(() -> {
-                ping(mex);
+                int x = -1;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                while (x < serverController.connections.get(mex.getUsername()).getPing()) {
+                    x = serverController.connections.get(mex.getUsername()).getPing();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                System.out.println(RED + mex.getUsername() + " disconnected" + RESET);
+                gameController.allPlayers.get(mex.getUsername()).setConnected(false);
+                gameController.unlockQueue();
             });
         }
     }
@@ -92,26 +124,6 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private void ping(GeneralMessage mex){
-        int x = -1;
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        while (x < serverController.connections.get(mex.getUsername()).getPing()) {
-            x = serverController.connections.get(mex.getUsername()).getPing();
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        System.out.println(RED + mex.getUsername() + " disconnected" + RESET);
-        gameController.allPlayers.get(mex.getUsername()).setConnected(false);
-        gameController.unlockQueue();
     }
 }
 

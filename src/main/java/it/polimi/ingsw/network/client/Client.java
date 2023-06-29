@@ -37,7 +37,7 @@ public class Client extends Application {
     private static RMIclientImpl RMIclient;
     private static View virtualView;
     private static int ping = 0;
-    private static final int pingTime = 10;
+    private static final int pingTime = 5;
     public static boolean connected = true;
     private static boolean socket = false;
     private static final Object SocketLock = new Object();
@@ -351,6 +351,7 @@ public class Client extends Application {
     public static void RMI(){
         controller = new clientController();
         try {
+            System.setProperty("sun.rmi.transport.tcp.responseTimeout", "10000");
             Registry registry = LocateRegistry.getRegistry(IPv4, 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
@@ -399,6 +400,7 @@ public class Client extends Application {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
+        System.out.printf("Ping non arrivato");
         virtualView.disconnected();
         connected = false;
     }
