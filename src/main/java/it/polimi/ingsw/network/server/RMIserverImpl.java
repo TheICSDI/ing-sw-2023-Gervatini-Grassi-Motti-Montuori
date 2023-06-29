@@ -49,10 +49,10 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(() -> {
                     int x = -1;
-                    while (x < serverController.connections.get(mex.getUsername()).getPing()) {
-                        x = serverController.connections.get(mex.getUsername()).getPing();
+                    while (serverController.connections.get(mex.getUsername()).getPing()) {
+                        serverController.connections.get(mex.getUsername()).setPing(false);
                         try {
-                            Thread.sleep(Client.pingTime*1000);
+                            Thread.sleep(Client.pingTime*2000);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -89,10 +89,10 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(() -> {
                 int x = -1;
-                while (x < serverController.connections.get(mex.getUsername()).getPing()) {
-                    x = serverController.connections.get(mex.getUsername()).getPing();
+                while (serverController.connections.get(mex.getUsername()).getPing()) {
+                    serverController.connections.get(mex.getUsername()).setPing(false);
                     try {
-                        Thread.sleep(Client.pingTime*1000);
+                        Thread.sleep(Client.pingTime*2000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

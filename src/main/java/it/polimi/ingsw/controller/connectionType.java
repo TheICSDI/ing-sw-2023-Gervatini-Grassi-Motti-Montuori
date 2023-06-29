@@ -10,7 +10,7 @@ public class connectionType {
     private boolean socket;
     private PrintWriter out;
     private RMIconnection reply;
-    private int ping;
+    private boolean ping;
 
     /** It creates a connectionType by specify the type (socket or RMI) and the way to talk with the client.
      * @param socket true only if the connection is of type socket.
@@ -20,7 +20,7 @@ public class connectionType {
        this.socket = socket;
        this.out = out;
        this.reply = reply;
-       this.ping = 0;
+       this.ping = true;
     }
 
     /** It changes the connectionType. It is used when a clients reconnect after disconnection.
@@ -47,8 +47,8 @@ public class connectionType {
     public RMIconnection getReply() {return reply;}
 
     /** Gets the value of ping. */
-    public int getPing(){return ping;}
+    public boolean getPing(){return ping;}
 
     /** Increments the ping value by one. */
-    public void addPing(){ping++;}
+    public void setPing(boolean value){ping=value;}
 }

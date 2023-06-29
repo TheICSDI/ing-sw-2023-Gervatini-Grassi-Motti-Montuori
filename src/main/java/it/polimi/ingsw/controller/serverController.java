@@ -212,7 +212,7 @@ public class serverController {
          }
 
          case PING -> {
-            connections.get(player).addPing();
+            connections.get(player).setPing(true);
             sendMessage(new PingMessage(""), player);
          }
       }

@@ -85,10 +85,10 @@ public class ClientHandler extends Thread{
             String finalNickname = nickname.getUsername();
             executor.submit(() -> {
                 int x = -1;
-                while (x < serverController.connections.get(finalNickname).getPing()) {
-                    x = serverController.connections.get(finalNickname).getPing();
+                while (serverController.connections.get(finalNickname).getPing()) {
+                    serverController.connections.get(finalNickname).setPing(false);
                     try {
-                        Thread.sleep(Client.pingTime*1000);
+                        Thread.sleep(Client.pingTime*2000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
