@@ -36,7 +36,7 @@ public class Client extends Application {
     private static RMIconnection stub;
     private static RMIclientImpl RMIclient;
     private static View virtualView;
-    private static int ping = 0;
+    private static boolean ping = true;
     public static final int pingTime = 5;
     public static boolean connected = true;
     private static boolean socket = false;
@@ -179,7 +179,7 @@ public class Client extends Application {
             }
             case PING -> {
                 //RMI
-                ping++;
+                ping=true;
                 /*if(!socket){
                     Thread.sleep(pingTime*1000);
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
@@ -418,10 +418,9 @@ public class Client extends Application {
 
     /** Counts pings and catches eventual disconnections of the clients. */
     private static void ping() throws InterruptedException {
-        int x = -1;
-        while(x < ping) {
-            x = ping;
-            Thread.sleep(pingTime*1000);
+        while(ping) {
+            ping=false;
+            Thread.sleep(pingTime*2000);
         }
         virtualView.disconnected();
         connected = false;
