@@ -357,6 +357,14 @@ public class Client extends Application {
             System.out.println(BLUE + "Welcome to MyShelfie!" + RESET);
             setName();
 
+            ExecutorService rmiListener =Executors.newSingleThreadExecutor();
+            rmiListener.submit(() -> {
+                try {
+                    rmiReadMessage();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
             //Pool of thread for the ping messages
             ExecutorService executor1 = Executors.newSingleThreadExecutor();
             executor1.submit(()-> {
@@ -387,6 +395,24 @@ public class Client extends Application {
         }
     }
 
+    private static void rmiReadMessage() throws InterruptedException {
+        while(connected){
+            if(!controller.messageQueue.isEmpty()){
+                String m=controller.messageQueue.get(0);
+                System.out.println(m);
+                try {
+                    Client.elaborate(m);
+                } catch (ParseException | InterruptedException | RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+                controller.messageQueue.remove(0);
+            }else{
+                System.out.println("coda vuota");
+            }
+            Thread.sleep(500);
+        }
+    }
+
     /** Counts pings and catches eventual disconnections of the clients. */
     private static void ping() throws InterruptedException {
         int x = -1;
@@ -394,8 +420,7 @@ public class Client extends Application {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
-        System.out.printf("Ping non arrivato");
-        //virtualView.disconnected();
+        virtualView.disconnected();
         connected = false;
     }
 

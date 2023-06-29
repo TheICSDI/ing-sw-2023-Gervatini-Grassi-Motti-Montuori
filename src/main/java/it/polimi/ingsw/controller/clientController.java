@@ -26,6 +26,8 @@ public class clientController{
     private Tile[][] shelf = new Tile[numRows][numCols];
     private Tile[][] board = new Tile[dim][dim];
 
+    public List<String> messageQueue=new ArrayList<>();
+
     /** It creates a clientController specific for a client given its nickname.
      * @param nickname of the client. */
     public clientController(String nickname){

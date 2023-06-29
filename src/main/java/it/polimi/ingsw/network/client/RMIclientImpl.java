@@ -58,10 +58,12 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
      */
     @Override
     public void RMIsend(String m) throws RemoteException {
-        try {
+        CC.messageQueue.add(m);
+        System.out.println("added " + m);
+        /*try {
             Client.elaborate(m);
         } catch (ParseException | InterruptedException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 }
