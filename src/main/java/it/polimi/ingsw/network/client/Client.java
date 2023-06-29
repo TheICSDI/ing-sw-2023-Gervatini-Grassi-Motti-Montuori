@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /** It represents a client that is able to establish connection with a sever, both via socket and RMI (exclusive).
  * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
@@ -181,7 +180,7 @@ public class Client extends Application {
                 //RMI
                 ping++;
                 if(!socket){
-                    TimeUnit.SECONDS.sleep(pingTime);
+                    Thread.sleep(pingTime*1000);
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 }
             }
@@ -391,16 +390,12 @@ public class Client extends Application {
     /** Counts pings and catches eventual disconnections of the clients. */
     private static void ping() throws InterruptedException {
         int x = -1;
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         while(x < ping) {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
-        virtualView.disconnected();
+        System.out.printf("Ping non arrivato");
+        //virtualView.disconnected();
         connected = false;
     }
 

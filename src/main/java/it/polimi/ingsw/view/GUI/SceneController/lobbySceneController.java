@@ -90,7 +90,7 @@ public class lobbySceneController implements Initializable {
             gui.message = "createlobby " + limit;
             gui.Lock.notifyAll();
         }
-        TimeUnit.MILLISECONDS.sleep(250);
+        Thread.sleep(250);
         showLobbies();
     }
 
