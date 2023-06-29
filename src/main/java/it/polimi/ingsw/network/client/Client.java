@@ -351,7 +351,6 @@ public class Client extends Application {
     public static void RMI(){
         controller = new clientController();
         try {
-            System.setProperty("sun.rmi.transport.tcp.responseTimeout", "10000");
             Registry registry = LocateRegistry.getRegistry(IPv4, 23451);
             stub = (RMIconnection) registry.lookup("RMIServer");
             RMIclient = new RMIclientImpl(controller);
@@ -391,17 +390,12 @@ public class Client extends Application {
     /** Counts pings and catches eventual disconnections of the clients. */
     private static void ping() throws InterruptedException {
         int x = -1;
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         while(x < ping) {
             x = ping;
             Thread.sleep(pingTime*1000);
         }
         System.out.printf("Ping non arrivato");
-        virtualView.disconnected();
+        //virtualView.disconnected();
         connected = false;
     }
 
