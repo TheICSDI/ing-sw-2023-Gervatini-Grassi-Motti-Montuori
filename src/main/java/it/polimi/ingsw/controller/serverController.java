@@ -129,7 +129,7 @@ public class serverController {
                      gameStarted = true;
                      break;
                   } else {
-                     sendMessage(new SimpleReply("Not enough or too many players", Action.ERROR), player);
+                     sendMessage(new SimpleReply("Not enough players", Action.ERROR), player);
                   }
                }
             }

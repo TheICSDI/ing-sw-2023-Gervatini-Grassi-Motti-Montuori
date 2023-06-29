@@ -227,7 +227,7 @@ public class clientController{
             idMex--;
             return new DefaultErrorMessage("Invalid command: Write /help for commands list");
         }
-        return null;
+        return new DefaultErrorMessage("Invalid command: Write /help for commands list");
     }
 
     /** It checks if the given order is correct.
