@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.gameController;
 import it.polimi.ingsw.controller.serverController;
 import it.polimi.ingsw.model.Lobby;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.messages.GeneralMessage;
 import it.polimi.ingsw.network.messages.ReconnectMessage;
 import it.polimi.ingsw.network.messages.SetNameMessage;
@@ -51,7 +52,7 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                     while (x < serverController.connections.get(mex.getUsername()).getPing()) {
                         x = serverController.connections.get(mex.getUsername()).getPing();
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(Client.pingTime*1000);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -91,7 +92,7 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                 while (x < serverController.connections.get(mex.getUsername()).getPing()) {
                     x = serverController.connections.get(mex.getUsername()).getPing();
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(Client.pingTime*1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

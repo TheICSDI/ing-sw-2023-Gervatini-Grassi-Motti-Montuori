@@ -49,6 +49,11 @@ public class clientController{
         }
     }
 
+    public void resetCards(){
+        this.cc=new ArrayList<>();
+
+    }
+
     /** It creates a generic clientController. */
     public clientController(){}
 

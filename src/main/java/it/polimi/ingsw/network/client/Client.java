@@ -37,7 +37,7 @@ public class Client extends Application {
     private static RMIclientImpl RMIclient;
     private static View virtualView;
     private static int ping = 0;
-    private static final int pingTime = 10;
+    public static final int pingTime = 15;
     public static boolean connected = true;
     private static boolean socket = false;
     private static final Object SocketLock = new Object();
@@ -96,6 +96,7 @@ public class Client extends Application {
                 firstTurn = true;
                 //set the local shelf to empty
                 controller.emptyShelf();
+                controller.resetCards();
             }
             case UPDATEBOARD, SHOWBOARD -> {
                 reply = UpdateBoardMessage.decrypt(message);
@@ -179,10 +180,10 @@ public class Client extends Application {
             case PING -> {
                 //RMI
                 ping++;
-                if(!socket){
+                /*if(!socket){
                     Thread.sleep(pingTime*1000);
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
-                }
+                }*/
             }
             default -> reply = SimpleReply.decrypt(message);
         }
@@ -369,9 +370,14 @@ public class Client extends Application {
             ExecutorService executor1 = Executors.newSingleThreadExecutor();
             executor1.submit(()-> {
                 try {
-                    stub.RMIsend(new PingMessage(controller.getNickname()).toString());
+                    while(connected) {
+                        stub.RMIsend(new PingMessage(controller.getNickname()).toString());
+                        Thread.sleep(pingTime*1000);
+                    }
                 } catch (RemoteException e) {
                     virtualView.disconnected();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             });
             ExecutorService executor2 = Executors.newSingleThreadExecutor();
