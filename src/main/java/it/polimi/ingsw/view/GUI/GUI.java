@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** It implements the view interface managing GUI's output.*/
+/** It implements the view interface managing GUI's output. */
 public class GUI implements View {
     private int nPage=1;
     private Stage stage;
