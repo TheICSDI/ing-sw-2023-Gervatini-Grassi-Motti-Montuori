@@ -49,6 +49,65 @@
                 <RowConstraints />
             </rowConstraints>
             <children>
+                <GridPane alignment="BOTTOM_CENTER" stylesheets="@../CSS/GameSceneStyle.css" GridPane.rowIndex="2">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="280.0" prefWidth="280.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="402.0" minHeight="10.0" prefHeight="402.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="402.0" minHeight="10.0" prefHeight="402.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <padding>
+                        <Insets bottom="30.0" top="10.0" />
+                    </padding>
+                    <children>
+                        <Label fx:id="yourShelfText" styleClass="Label" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
+                        <Label fx:id="p4Name" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
+                        <ImageView fx:id="personal" fitHeight="242.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                            <GridPane.margin>
+                                <Insets bottom="40.0" />
+                            </GridPane.margin></ImageView>
+                        <GridPane fx:id="chosenTiles" hgap="3.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="64.0" minHeight="64.0" prefHeight="64.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <GridPane.margin>
+                                <Insets left="44.0" right="44.0" top="30.0" />
+                            </GridPane.margin>
+                        </GridPane>
+                        <Label fx:id="goalText" styleClass="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                            <padding>
+                                <Insets top="15.0" />
+                            </padding>
+                        </Label>
+                        <GridPane fx:id="orderedTiles" hgap="3.0" GridPane.rowIndex="2">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="64.0" minHeight="64.0" prefHeight="64.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <GridPane.margin>
+                                <Insets bottom="87.0" left="44.0" right="44.0" top="80.0" />
+                            </GridPane.margin>
+                        </GridPane>
+                        <Label fx:id="ChosenText" styleClass="Label" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <Label fx:id="OrderText" styleClass="Label" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                    </children>
+                </GridPane>
                 <HBox GridPane.rowIndex="4">
                     <children>
                         <Pane prefHeight="316.0" prefWidth="286.0">
@@ -408,65 +467,6 @@
                     <GridPane.margin>
                         <Insets />
                     </GridPane.margin>
-                </GridPane>
-                <GridPane alignment="BOTTOM_CENTER" stylesheets="@../CSS/GameSceneStyle.css" GridPane.rowIndex="2">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="280.0" prefWidth="280.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="402.0" minHeight="10.0" prefHeight="402.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="402.0" minHeight="10.0" prefHeight="402.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <padding>
-                        <Insets bottom="30.0" top="10.0" />
-                    </padding>
-                    <children>
-                        <Label fx:id="yourShelfText" styleClass="Label" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
-                        <Label fx:id="p4Name" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES" />
-                        <ImageView fx:id="personal" fitHeight="242.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
-                            <GridPane.margin>
-                                <Insets bottom="40.0" />
-                            </GridPane.margin></ImageView>
-                        <GridPane fx:id="chosenTiles" hgap="3.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints maxHeight="64.0" minHeight="64.0" prefHeight="64.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <GridPane.margin>
-                                <Insets left="44.0" right="44.0" top="30.0" />
-                            </GridPane.margin>
-                        </GridPane>
-                        <Label fx:id="goalText" styleClass="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
-                            <GridPane.margin>
-                                <Insets />
-                            </GridPane.margin>
-                            <padding>
-                                <Insets top="15.0" />
-                            </padding>
-                        </Label>
-                        <GridPane fx:id="orderedTiles" hgap="3.0" GridPane.rowIndex="2">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="64.0" minWidth="64.0" prefWidth="64.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints maxHeight="64.0" minHeight="64.0" prefHeight="64.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <GridPane.margin>
-                                <Insets bottom="87.0" left="44.0" right="44.0" top="80.0" />
-                            </GridPane.margin>
-                        </GridPane>
-                        <Label fx:id="ChosenText" styleClass="Label" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                        <Label fx:id="OrderText" styleClass="Label" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-                    </children>
                 </GridPane>
                 <GridPane stylesheets="@../CSS/GameSceneStyle.css" GridPane.columnIndex="2">
                     <columnConstraints>
