@@ -30,11 +30,11 @@ Almost all `model` and `controller` classes have a class and method coverage of 
 
 | Package      | Class              | Coverage (lines) |
 |--------------|--------------------|------------------|
-| Model        | Entire Package     | 96% (793/825)    |
-| Controller   | Entire Package     | 92% (356/386)    |
-| Controller   | clientController   | 89% (132/148)    |
-| Controller   | gameController     | 91% (57/62)      |
-| Controller   | serverController   | 95% (143/150)    | 
+| Model        | Entire Package     | 95% (821/856)    |
+| Controller   | Entire Package     | 92% (364/395)    |
+| Controller   | clientController   | 91% (140/153)    |
+| Controller   | gameController     | 87% (57/65)      |
+| Controller   | serverController   | 94% (143/151)    | 
 
 ## Requirements
 In order to successfully execute the `.jar` applications, Windows and Java 20 are required. To compile the project, the following dependencies are necessary: `java-20-openjdk` and `javafx-sdk-20.0.1`.
