@@ -399,17 +399,14 @@ public class Client extends Application {
         while(connected){
             if(!controller.messageQueue.isEmpty()){
                 String m=controller.messageQueue.get(0);
-                System.out.println(m);
                 try {
-                    Client.elaborate(m);
+                    elaborate(m);
                 } catch (ParseException | InterruptedException | RemoteException e) {
                     throw new RuntimeException(e);
                 }
                 controller.messageQueue.remove(0);
-            }else{
-                System.out.println("coda vuota");
             }
-            Thread.sleep(500);
+            Thread.sleep(100);
         }
     }
 
