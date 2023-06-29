@@ -37,11 +37,17 @@ Almost all `model` and `controller` classes have a class and method coverage of 
 | Controller   | serverController   | 94% (143/151)    | 
 
 ## Requirements
-In order to successfully execute the `.jar` applications, Windows and Java 20 are required. To compile the project, the following dependencies are necessary: `java-20-openjdk` and `javafx-sdk-20.0.1`.
+To successfully execute the `.jar` applications, which it can be found [here](https://github.com/TheICSDI/ing-sw-2023-Gervatini-Grassi-Motti-Montuori/tree/main/deliverables/final/jar), both Windows and Java 20 are required.
+
+If you wish to compile the project independently, it is necessary to either download the GitHub repository or clone it using the following command:
+```properties
+git clone https://github.com/TheICSDI/ing-sw-2023-Gervatini-Grassi-Motti-Montuori.git
+```
+Afterwards, it can be compiled using your IDE of choice, provided with the required dependencies, `java-20-openjdk` and `javafx-sdk-20.0.1`.
 
 ## Run using the JAR file
-Once installed all requirements and compiled the project, open a terminal and
-go to the project target directory. 
+Once installed all requirements and/or compiled the project, open a terminal and
+go to the `.jar` files directory. 
 Once there it is possible to choose to run the server or the client (CLI or GUI):
 
 ### Run the Server
