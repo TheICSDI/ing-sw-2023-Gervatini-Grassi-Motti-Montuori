@@ -30,16 +30,16 @@
         <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1040.0" prefWidth="1700.0" stylesheets="@../CSS/GameSceneStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="460.0" />
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="10.0" />
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="10.0" />
                 <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="760.0" />
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="10.0" />
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="10.0" />
                 <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="460.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="270.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="460.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="270.0" vgrow="SOMETIMES" />
                 <RowConstraints />
                 <RowConstraints />
@@ -387,7 +387,7 @@
                                 <Insets />
                             </GridPane.margin>
                             <children>
-                                <ScrollPane fx:id="scrollChat" hbarPolicy="NEVER" styleClass="ScrollPane" stylesheets="@../CSS/GameSceneStyle.css">
+                                <ScrollPane fx:id="scrollChat" styleClass="ScrollPane" stylesheets="@../CSS/GameSceneStyle.css">
                                     <content>
                                         <VBox fx:id="chat" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.9" prefHeight="333.0" prefWidth="456.0" styleClass="ScrollPane" stylesheets="@../CSS/GameSceneStyle.css" />
                                     </content>
@@ -493,7 +493,7 @@
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets></Label>
-                        <Label fx:id="YourName" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                        <Label fx:id="YourName" styleClass="Label" stylesheets="@../CSS/GameSceneStyle.css" visible="false" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin></Label>
@@ -503,9 +503,9 @@
                     </GridPane.margin>
                 </GridPane>
             </children>
-         <padding>
-            <Insets top="20.0" />
-         </padding>
+            <padding>
+                <Insets top="20.0" />
+            </padding>
         </GridPane>
         <Pane fx:id="commonBack" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#closeCommon" opacity="0.6" prefHeight="1040.0" prefWidth="1700.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
         <BorderPane fx:id="commonWindow" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#closeCommon" prefHeight="1040.0" prefWidth="1700.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
