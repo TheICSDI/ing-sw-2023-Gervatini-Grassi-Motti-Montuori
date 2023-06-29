@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.server;
+package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.controller.connectionType;
 import it.polimi.ingsw.controller.gameController;
@@ -93,7 +93,7 @@ public class ClientHandler extends Thread{
                 while (x < serverController.connections.get(finalNickname).getPing()) {
                     x = serverController.connections.get(finalNickname).getPing();
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

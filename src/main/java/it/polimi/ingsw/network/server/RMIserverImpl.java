@@ -14,7 +14,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /** It implements the RMIconnection interface, in order to be able to establish RMI connection server side.
  * @author Caterina Motti, Andrea Grassi. */
@@ -105,7 +104,7 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
         while (x < serverController.connections.get(mex.getUsername()).getPing()) {
             x = serverController.connections.get(mex.getUsername()).getPing();
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

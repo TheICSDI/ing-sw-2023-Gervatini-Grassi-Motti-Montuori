@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /** It represents a client that is able to establish connection with a sever, both via socket and RMI (exclusive).
  * @author Caterina Motti, Andrea Grassi, Marco Gervatini. */
@@ -38,7 +37,7 @@ public class Client extends Application {
     private static RMIclientImpl RMIclient;
     private static View virtualView;
     private static int ping = 0;
-    private static final int pingTime = 5;
+    private static final int pingTime = 10;
     public static boolean connected = true;
     private static boolean socket = false;
     private static final Object SocketLock = new Object();
@@ -181,7 +180,7 @@ public class Client extends Application {
                 //RMI
                 ping++;
                 if(!socket){
-                    TimeUnit.SECONDS.sleep(pingTime);
+                    Thread.sleep(pingTime*1000);
                     stub.RMIsend(new PingMessage(controller.getNickname()).toString());
                 }
             }
