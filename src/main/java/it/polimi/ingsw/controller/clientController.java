@@ -25,18 +25,17 @@ public class clientController{
     private final int dim = 9;
     private Tile[][] shelf = new Tile[numRows][numCols];
     private Tile[][] board = new Tile[dim][dim];
-
     public List<String> messageQueue=new ArrayList<>();
 
     /** It creates a clientController specific for a client given its nickname.
      * @param nickname of the client. */
     public clientController(String nickname){
         this.nickname = nickname;
-        emptyShelf();
+        reset();
     }
 
-    /** It empties the local shelf of the player, that is then updated at each turn. */
-    public void emptyShelf(){
+    /** It resets the local parameter (board, shelf and common cards.) */
+    public void reset(){
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numCols; j++) {
                 this.shelf[i][j] = new Tile("empty", 1);
@@ -47,11 +46,7 @@ public class clientController{
                 this.board[i][j] = new Tile("empty", 1);
             }
         }
-    }
-
-    public void resetCards(){
         this.cc=new ArrayList<>();
-
     }
 
     /** It creates a generic clientController. */
@@ -339,6 +334,8 @@ public class clientController{
     public List<Integer> getCc() {
         return this.cc;
     }
+    /** It sets the list of common cards' id.*/
+    public void setCC(List<Integer> cc){this.cc = cc;}
     /** It gets the shelf of the player. */
     public Tile[][] getShelf() {
         return this.shelf;
@@ -354,6 +351,10 @@ public class clientController{
     /** Gets the number of columns of the shelf. */
     public int getNumCols() {
         return numCols;
+    }
+    /** Gets the dimension of the board. */
+    public int getDim(){
+        return this.dim;
     }
     /** It gets the board of the game (in which the player is). */
     public Tile[][] getBoard() {
