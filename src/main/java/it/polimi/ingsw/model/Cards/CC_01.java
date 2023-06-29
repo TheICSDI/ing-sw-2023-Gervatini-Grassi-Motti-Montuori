@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.Tile.type;
  * @author Giulio Montuori */
 public class CC_01 implements CCStrategy {
     private final int id=1;
+    private Tile[][] Shelf;
     @Override
     public int getId(){return this.id;}
 
@@ -18,40 +19,68 @@ public class CC_01 implements CCStrategy {
      * @return true only if count the player has at least six groups that respect the rule of the card.
      */
     public boolean isCompleted(Player p) {
-        Tile[][] current_shelf = p.getShelf();
+        this.Shelf = p.getShelf();
         int count = 0;
-        int num_row = p.getNumRows();
-        int num_col = p.getNumCols();
-        type current_tile;
+        int numRows = p.getNumRows();
+        int numCols = p.getNumCols();
+        int c = 0;
 
-        for(int i = 0; i < num_row; i++) {
-            for(int j = 0; j < num_col; j++) {
-                current_tile = current_shelf[i][j].getCategory();
-                if(!current_tile.equals(type.EMPTY)) {
 
-                    if (!(
-                            // The current tile is not the same as the tile to the left
-                            (j != 0 && current_shelf[i][j - 1].getCategory() == current_tile)
-                                    // The current tile is not the same as the tile above
-                                    || (i != 0 && current_shelf[i - 1][j].getCategory() == current_tile)
-                                    // The next tile to the right is not the same as the tile to its right
-                                    || (j + 2 < num_col && current_shelf[i][j + 1].getCategory() == current_tile && current_shelf[i][j + 2].getCategory() == current_tile)
-                                    // The next tile down is not the same as the tile below it
-                                    || (i + 2 < num_row && current_shelf[i + 1][j].getCategory() == current_tile && current_shelf[i + 2][j].getCategory() == current_tile))
-                            && (
-                            // The current tile is the same as the tile to the right
-                            (j + 1 < num_col && current_shelf[i][j + 1].getCategory() == current_tile)
-                                    // The current tile is the same as the tile below
-                                    || (i + 1 < num_row && current_shelf[i + 1][j].getCategory() == current_tile))) {
-
-                        count++;
-                        if (count == 6) {
-                            return true;
-                        }
-                    }
-                }
+        boolean[][] checked = new boolean[numRows][numCols];
+        //Remove all element from checked before starting the calculation
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                checked[i][j] = false;
             }
         }
+        //For every tile in the shelf
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                int currClusterDimension = 0;
+                //If the tile does not already belong to a cluster, adds it to the checked tiles
+                if (!checked[i][j]) {
+                    checked[i][j] = true;
+                    //If the tile is not empty, it calls clusteringRes that research for a cluster of tiles of the same type
+                    if (!this.Shelf[i][j].getCategory().equals(type.EMPTY)) {
+                        currClusterDimension = clusteringRes(i, j, checked);
+                    }
+                }
+                //It assigns points based on the dimension of the found cluster
+                if (currClusterDimension >= 2) c++;
+            }
+            if (c >= 6) return true;
+        }
         return false;
+    }
+
+    private int clusteringRes(int x, int y, boolean[][] checked){
+        Tile t = this.Shelf[x][y];
+        int clusterDim = 1;
+        //Explores the shelf in every direction, if the tile is of the same type as t it calls itself recursively
+        try {
+            if (!checked[x][y + 1] && t.getCategory().equals(this.Shelf[x][y + 1].getCategory())) {
+                checked[x][y + 1] = true;
+                clusterDim = clusterDim + clusteringRes(x, y + 1, checked);
+            }
+        } catch (IndexOutOfBoundsException ignored){}
+        try {
+            if (!checked[x + 1][y] && t.getCategory().equals(this.Shelf[x + 1][y].getCategory())) {
+                checked[x + 1][y] = true;
+                clusterDim = clusterDim + clusteringRes(x + 1, y, checked);
+            }
+        } catch (IndexOutOfBoundsException ignored){}
+        try {
+            if (!checked[x][y - 1] && t.getCategory().equals(this.Shelf[x][y - 1].getCategory())) {
+                checked[x][y - 1] = true;
+                clusterDim = clusterDim + clusteringRes(x, y - 1, checked);
+            }
+        } catch (IndexOutOfBoundsException ignored){}
+        try {
+            if (!checked[x - 1][y] && t.getCategory().equals(this.Shelf[x - 1][y].getCategory())) {
+                checked[x - 1][y] = true;
+                clusterDim = clusterDim + clusteringRes(x - 1, y, checked);
+            }
+        } catch (IndexOutOfBoundsException ignored){}
+        return clusterDim;
     }
 }
