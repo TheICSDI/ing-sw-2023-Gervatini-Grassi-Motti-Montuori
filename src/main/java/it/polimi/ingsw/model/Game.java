@@ -91,7 +91,6 @@ public class Game {
                 reconnected = p;
             }
         }
-
         String personalId = String.valueOf(reconnected.getPersonalCard().getId());
         serverController.sendMessage(new ShowPersonalCardMessage(personalId), reconnected.getNickname());
         serverController.sendMessage(new ShowCommonCards(ccId), reconnected.getNickname());

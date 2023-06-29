@@ -202,7 +202,7 @@ public class gameSceneController implements Initializable {
         commonDescs[9]= """
                 Two lines each formed by 5 different
                 types of tiles. One line can show the
-                "same or a different combination of the
+                same or a different combination of the
                 other line.""";
         commonDescs[10]="Five tiles of the same type forming an X.";
         commonDescs[11]= """
