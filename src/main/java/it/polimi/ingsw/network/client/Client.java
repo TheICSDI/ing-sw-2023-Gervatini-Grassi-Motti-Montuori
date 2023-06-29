@@ -94,9 +94,7 @@ public class Client extends Application {
                 controller.setFirstTurn(true);
                 virtualView.startGame(reply.getMessage());
                 firstTurn = true;
-                //set the local shelf to empty
-                controller.emptyShelf();
-                controller.resetCards();
+                controller.reset();
             }
             case UPDATEBOARD, SHOWBOARD -> {
                 reply = UpdateBoardMessage.decrypt(message);

@@ -13,8 +13,8 @@ import it.polimi.ingsw.network.messages.CreateLobbyMessage;
 import it.polimi.ingsw.network.messages.GeneralMessage;
 import org.junit.jupiter.api.Test;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -153,6 +153,14 @@ class clientControllerTest {
 
         rsp = CC1.checkMessageShape(mex);
         assertEquals(Action.SHOWSHELF, rsp.getAction());
+
+        //Case: SHOWBOARD
+        mex = "showboard";
+        rsp = controller.checkMessageShape(mex); //Error: controller is not bind with a player in a game
+        assertEquals(Action.ERROR, rsp.getAction());
+
+        rsp = CC1.checkMessageShape(mex);
+        assertEquals(Action.SHOWBOARD, rsp.getAction());
 
         //Case: C
         mex = "C Mario ciao";
@@ -295,18 +303,36 @@ class clientControllerTest {
     }
 
     @Test
-    void emptyShelf(){
+    void reset(){
         for (int i = 0; i < controller.getNumRows(); i++) {
             for (int j = 0; j < controller.getNumCols(); j++) {
                 controller.getShelf()[i][j] = new Tile("plants");
                 assertNotEquals(type.EMPTY, controller.getShelf()[i][j].getCategory());
             }
         }
-        controller.emptyShelf();
+        for (int i = 0; i < controller.getDim(); i++) {
+            for (int j = 0; j < controller.getDim(); j++) {
+                controller.getBoard()[i][j] = new Tile("plants");
+                assertNotEquals(type.EMPTY, controller.getBoard()[i][j].getCategory());
+            }
+        }
+        List<Integer> cc = new ArrayList<>();
+        cc.add(1);
+        cc.add(2);
+        controller.setCC(cc);
+        assertTrue(controller.getCc().contains(cc.get(0)));
+        assertTrue(controller.getCc().contains(cc.get(1)));
+        controller.reset();
         for (int i = 0; i < controller.getNumRows(); i++) {
             for (int j = 0; j < controller.getNumCols(); j++) {
                 assertEquals(type.EMPTY, controller.getShelf()[i][j].getCategory());
             }
         }
+        for (int i = 0; i < controller.getDim(); i++) {
+            for (int j = 0; j < controller.getDim(); j++) {
+                assertEquals(type.EMPTY, controller.getBoard()[i][j].getCategory());
+            }
+        }
+        assertTrue(controller.getCc().isEmpty());
     }
 }

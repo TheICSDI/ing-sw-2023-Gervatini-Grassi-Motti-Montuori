@@ -139,8 +139,7 @@ class PlayerTest {
             }
         }
 
-        //Wrong column selected
-        //column is full
+        //Wrong column selected (column in full)
         p1 = Parser();
         Throwable ex2 = assertThrows(InputMismatchException.class, () -> p1.insertInShelf(toInsert, col));
         assertEquals("Selected column has not enough space!", ex2.getMessage());
