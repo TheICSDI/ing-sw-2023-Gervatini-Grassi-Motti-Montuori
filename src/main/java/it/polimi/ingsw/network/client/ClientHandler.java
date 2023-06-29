@@ -88,7 +88,7 @@ public class ClientHandler extends Thread{
                 while (x < serverController.connections.get(finalNickname).getPing()) {
                     x = serverController.connections.get(finalNickname).getPing();
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

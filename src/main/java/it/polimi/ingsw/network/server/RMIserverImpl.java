@@ -51,7 +51,7 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                     while (x < serverController.connections.get(mex.getUsername()).getPing()) {
                         x = serverController.connections.get(mex.getUsername()).getPing();
                         try {
-                            Thread.sleep(5000);
+                            Thread.sleep(10000);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -91,7 +91,7 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
                 while (x < serverController.connections.get(mex.getUsername()).getPing()) {
                     x = serverController.connections.get(mex.getUsername()).getPing();
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
