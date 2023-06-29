@@ -45,10 +45,10 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
             } else {
                 //Reconnection
                 gameController.allPlayers.get(mex.getUsername()).setConnected(true);
+                serverController.connections.get(mex.getUsername()).setPing(true);
                 serverController.connections.get(mex.getUsername()).changeConnection(false, null, reply);
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(() -> {
-                    int x = -1;
                     while (serverController.connections.get(mex.getUsername()).getPing()) {
                         serverController.connections.get(mex.getUsername()).setPing(false);
                         try {
@@ -88,7 +88,6 @@ public class RMIserverImpl extends UnicastRemoteObject implements RMIconnection 
             serverController.connections.put(mex.getUsername(), new connectionType(false, null, reply));
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(() -> {
-                int x = -1;
                 while (serverController.connections.get(mex.getUsername()).getPing()) {
                     serverController.connections.get(mex.getUsername()).setPing(false);
                     try {

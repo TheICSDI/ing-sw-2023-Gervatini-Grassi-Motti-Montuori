@@ -178,12 +178,7 @@ public class Client extends Application {
                 virtualView.endGameToken(reply.getMessage());
             }
             case PING -> {
-                //RMI
                 ping=true;
-                /*if(!socket){
-                    Thread.sleep(pingTime*1000);
-                    stub.RMIsend(new PingMessage(controller.getNickname()).toString());
-                }*/
             }
             default -> reply = SimpleReply.decrypt(message);
         }

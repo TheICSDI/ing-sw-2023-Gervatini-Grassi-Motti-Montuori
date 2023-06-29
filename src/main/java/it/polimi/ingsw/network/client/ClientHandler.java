@@ -56,6 +56,7 @@ public class ClientHandler extends Thread{
             }
             if(gameController.allPlayers.containsKey(nickname.getUsername()) && !gameController.allPlayers.get(nickname.getUsername()).isConnected()){
                 gameController.allPlayers.get(nickname.getUsername()).setConnected(true);
+                serverController.connections.get(nickname.getUsername()).setPing(true);
                 serverController.connections.get(nickname.getUsername()).changeConnection(true, out,null);
                 int lobbyId = -1;
                 for (Lobby L: gameController.allLobbies) {
@@ -84,7 +85,6 @@ public class ClientHandler extends Thread{
             ExecutorService executor = Executors.newSingleThreadExecutor();
             String finalNickname = nickname.getUsername();
             executor.submit(() -> {
-                int x = -1;
                 while (serverController.connections.get(finalNickname).getPing()) {
                     serverController.connections.get(finalNickname).setPing(false);
                     try {
