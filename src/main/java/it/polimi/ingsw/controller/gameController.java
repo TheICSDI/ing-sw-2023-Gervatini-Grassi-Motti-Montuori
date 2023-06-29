@@ -45,7 +45,7 @@ public class gameController {
     public List<Integer> chooseOrder(String player, int gameId) {
         Optional<command> order = findTheRequest(player, gameId, Action.SO);
         if(order.isEmpty()){
-            return null;
+            return new ArrayList<>();
         } else {
             return order.get().getOrder();
         }
