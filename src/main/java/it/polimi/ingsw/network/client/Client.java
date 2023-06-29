@@ -413,7 +413,6 @@ public class Client extends Application {
     /** Counts pings and catches eventual disconnections of the clients. */
     private static void ping() throws InterruptedException {
         int x = -1;
-        Thread.sleep(1000);
         while(x < ping) {
             x = ping;
             Thread.sleep(pingTime*1000);
