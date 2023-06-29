@@ -84,6 +84,7 @@ public class CLI implements View{
     public void checkNickname(String nickname, boolean isAvailable){
         if(isAvailable) {
             out.println("Username set correctly\n");
+            out.println("Write /help to see commands list.");
         } else {
             out.println("Username not available\n");
         }

@@ -77,9 +77,7 @@ public class clientController{
                 }
 
                 case SHOWLOBBY -> {
-                    if(words.length == 1){
-                        return new ShowLobbyMessage(idMex, nickname);
-                    }
+                    return new ShowLobbyMessage(idMex, nickname);
                 }
 
                 case JOINLOBBY -> {

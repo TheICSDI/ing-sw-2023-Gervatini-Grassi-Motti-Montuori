@@ -95,10 +95,8 @@ public class Player implements Serializable {
      * @throws InputMismatchException if the selected column has no enough space.
      */
     public void insertInShelf(List<Tile> toInsert, int col) throws InputMismatchException {
-        if(col < 0 || col >= this.getNumCols()){
-            throw new InputMismatchException("Selected column is out of bound!");
-        } else if(!checkColumn(toInsert.size(), col)){
-            throw new InputMismatchException("Selected column has no enough space!");
+        if(!checkColumn(toInsert.size(), col)){
+            throw new InputMismatchException("Selected column has not enough space!");
         } else {
             //For each tile in toInsert
             for(Tile t : toInsert){

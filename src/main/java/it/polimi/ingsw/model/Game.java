@@ -320,6 +320,7 @@ public class Game {
                 try {
                     p.insertInShelf(toInsert, (col - 1));
                 } catch (InputMismatchException e) {
+                    serverController.sendMessage(new SimpleReply(e.getMessage(),Action.INGAMEEVENT),p.getNickname());
                     col = -1;
                 }
             }

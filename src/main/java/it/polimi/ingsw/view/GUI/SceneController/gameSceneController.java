@@ -904,7 +904,7 @@ public class gameSceneController implements Initializable {
             p2Token.add(pointsWon,1,0);
         }
 
-        if(names.size()>2){
+        if(names.size()>=2){
             p3Token.getChildren().clear();
             p=others.get(names.get(1));
             if(p.getFirstToken()){
@@ -963,7 +963,7 @@ public class gameSceneController implements Initializable {
             }
 
         }
-        if(names.size()>3){
+        if(names.size()>=3){
             p4Token.getChildren().clear();
             p=others.get(names.get(2));
             if(p.getFirstToken()){
