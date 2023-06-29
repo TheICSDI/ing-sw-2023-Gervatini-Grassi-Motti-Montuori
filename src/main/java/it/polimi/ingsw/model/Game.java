@@ -243,7 +243,7 @@ public class Game {
             gameController.allGames.remove(id);
         }
     }
-
+    //TODO rivedere crash dopo picktiles
     /** Handles the action "pick tiles".
      * @param p the current player.
      * @return list of chosen tiles. */

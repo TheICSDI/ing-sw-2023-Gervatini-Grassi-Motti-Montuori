@@ -410,7 +410,7 @@ public class gameSceneController implements Initializable {
             myShelfToken.add(endToken,1,1);
         }
         if(p.getScoreToken1()>0){
-            // c1Index--;
+            c1Index--;
             ImageView pointsWon = null;
             switch (p.getScoreToken1()){
                 case 2 ->{
@@ -430,7 +430,7 @@ public class gameSceneController implements Initializable {
             myShelfToken.add(pointsWon,0,0);
         }
         if(p.getScoreToken2()>0){
-            // c2Index--;
+            c2Index--;
             ImageView pointsWon=null;
             switch (p.getScoreToken2()){
                 case 2 ->{
