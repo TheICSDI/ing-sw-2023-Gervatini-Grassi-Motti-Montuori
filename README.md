@@ -37,7 +37,7 @@ Almost all `model` and `controller` classes have a class and method coverage of 
 | Controller   | serverController   | 95% (143/150)    | 
 
 ## Requirements
-In order to properly run and compile the project, the following dependencies are required: `java-20-openjdk` and `javafx-sdk-20.0.1`.
+In order to successfully execute the `.jar` applications, Java 20 is required. To compile the project, the following dependencies are necessary: `java-20-openjdk` and `javafx-sdk-20.0.1`.
 
 ## Run using the JAR file
 Once installed all requirements and compiled the project, open a terminal and

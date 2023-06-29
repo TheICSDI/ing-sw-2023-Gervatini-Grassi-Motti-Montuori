@@ -347,9 +347,9 @@ public class gameSceneController implements Initializable {
             setLabelText(p2Name,font, 20, names.get(0) + "'s shelf:");
             players.add(names.get(0));
             common1points.setImage(CommonPoints.get(CommonPoints.size()-1));
-            c1Index=CommonPoints.size()-1;
+            c1Index = CommonPoints.size() - 1;
             common2points.setImage(CommonPoints.get(CommonPoints.size()-1));
-            c2Index=CommonPoints.size()-1;
+            c2Index = CommonPoints.size() - 1;
             //3 players
             if(names.size()>1){
                 setLabelText(p3Name,font, 20, names.get(1) + "'s shelf:");
@@ -404,25 +404,25 @@ public class gameSceneController implements Initializable {
         }
         if(p.getEndToken()){
             endGameToken.setImage(null);
-            ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
+            ImageView endToken = new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
             endToken.setFitHeight(45);
             endToken.setFitWidth(45);
             myShelfToken.add(endToken,1,1);
         }
         if(p.getScoreToken1()>0){
-            c1Index--;
-            ImageView pointsWon=null;
+            // c1Index--;
+            ImageView pointsWon = null;
             switch (p.getScoreToken1()){
                 case 2 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
                 }
                 case 4 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
                 }
                 case 6 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
                 }case 8 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
                 }
             }
             pointsWon.setFitWidth(45);
@@ -430,7 +430,7 @@ public class gameSceneController implements Initializable {
             myShelfToken.add(pointsWon,0,0);
         }
         if(p.getScoreToken2()>0){
-            c2Index--;
+            // c2Index--;
             ImageView pointsWon=null;
             switch (p.getScoreToken2()){
                 case 2 ->{
@@ -460,7 +460,7 @@ public class gameSceneController implements Initializable {
         }else{
             common2points.setImage(null);
         }
-        reconnected=true;
+        reconnected = true;
     }
 
     /** Sends the recipient of a message to everybody. */
@@ -550,7 +550,7 @@ public class gameSceneController implements Initializable {
     public void commonCompleted(String msg, String whoCompleted, boolean first){
         newMessage(msg);
         if(first){
-            ImageView pointsWon=new ImageView(CommonPoints.get(c1Index));
+            ImageView pointsWon = new ImageView(CommonPoints.get(c1Index));
             pointsWon.setFitWidth(45);
             pointsWon.setFitHeight(45);
             if(whoCompleted.equals(players.get(0))){
@@ -563,13 +563,13 @@ public class gameSceneController implements Initializable {
                 p4Token.add(pointsWon,0,0);
             }
             c1Index--;
-            if(c1Index>=0){
+            if(c1Index >= 0){
                 common1points.setImage(CommonPoints.get(c1Index));
             }else{
                 common1points.setImage(null);
             }
         }else{
-            ImageView pointsWon=new ImageView(CommonPoints.get(c2Index));
+            ImageView pointsWon = new ImageView(CommonPoints.get(c2Index));
             pointsWon.setFitWidth(45);
             pointsWon.setFitHeight(45);
             if(whoCompleted.equals(players.get(0))){
@@ -582,7 +582,7 @@ public class gameSceneController implements Initializable {
                 p4Token.add(pointsWon,1,0);
             }
             c2Index--;
-            if(c2Index>=0){
+            if(c2Index >= 0){
                 common2points.setImage(CommonPoints.get(c2Index));
             }else{
                 common2points.setImage(null);
@@ -601,7 +601,7 @@ public class gameSceneController implements Initializable {
             pt.append(" ").append(p.getY()).append(" ").append(p.getX());
         }
         synchronized (gui.Lock){
-            gui.message= String.valueOf(pt);
+            gui.message = String.valueOf(pt);
             gui.Lock.notifyAll();
         }
         clearChosen();
@@ -721,7 +721,7 @@ public class gameSceneController implements Initializable {
      */
     public void Turn(String msg,boolean firstTurn){
         if(firstTurn && !reconnected){
-            ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
+            ImageView firstPlayerToken = new ImageView(new Image("/Images/misc/firstplayertoken.png"));
             firstPlayerToken.setFitHeight(45);
             firstPlayerToken.setFitWidth(45);
             if(msg.equals("It's your turn!")){
@@ -848,7 +848,7 @@ public class gameSceneController implements Initializable {
     /**Resets tokens in case of reconnections*/
     private void resetTokens(List<String> names,Map<String,Player> others){
         p2Token.getChildren().clear();
-        Player p=others.get(names.get(0));
+        Player p = others.get(names.get(0));
         if(p.getFirstToken()){
             ImageView firstPlayerToken=new ImageView(new Image("/Images/misc/firstplayertoken.png"));
             firstPlayerToken.setFitHeight(45);
@@ -857,25 +857,25 @@ public class gameSceneController implements Initializable {
         }
         if(p.getEndToken()){
             endGameToken.setImage(null);
-            ImageView endToken=new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
+            ImageView endToken = new ImageView(new Image("/Images/scoring tokens/end game.jpg"));
             endToken.setFitHeight(45);
             endToken.setFitWidth(45);
             p2Token.add(endToken,0,1);
         }
         if(p.getScoreToken1()>0){
             c1Index--;
-            ImageView pointsWon=null;
+            ImageView pointsWon = null;
             switch (p.getScoreToken1()){
                 case 2 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_2.jpg"))));
                 }
                 case 4 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_4.jpg"))));
                 }
                 case 6 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_6.jpg"))));
                 }case 8 ->{
-                    pointsWon=new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
+                    pointsWon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/scoring tokens/scoring_8.jpg"))));
                 }
             }
             pointsWon.setFitWidth(45);

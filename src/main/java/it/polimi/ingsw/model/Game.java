@@ -184,7 +184,7 @@ public class Game {
                                 toInsert = orderTiles(p, toInsert);
                             }
                             if (toInsert != null) {
-                                serverController.sendMessage(new SimpleReply("Choose column: ", Action.INGAMEEVENT), p.getNickname());
+                                serverController.sendMessage(new SimpleReply("Select column: ", Action.INGAMEEVENT), p.getNickname());
                                 //Handles the action "select column"
                                 selectColumn(p, toInsert);
                             }
