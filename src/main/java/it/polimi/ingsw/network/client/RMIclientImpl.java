@@ -53,7 +53,7 @@ public class RMIclientImpl extends UnicastRemoteObject implements RMIconnection 
     }
 
     /**
-     * It gets a message from the server and send it to the client, that elaborate the command.
+     * It gets a message from the server and adds it to a message queue in client control, elaborates it directly if it's a ping.
      * @param m message (JSON format).
      */
     @Override

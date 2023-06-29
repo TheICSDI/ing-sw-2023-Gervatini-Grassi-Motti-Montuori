@@ -394,6 +394,10 @@ public class Client extends Application {
         }
     }
 
+    /**
+     * While connected, extract messages from the queue (if present) and elaborates them
+     * @throws InterruptedException
+     */
     private static void rmiReadMessage() throws InterruptedException {
         while(connected){
             if(!controller.messageQueue.isEmpty()){
